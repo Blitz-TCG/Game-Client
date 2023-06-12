@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Login_Reg.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 0816a8b809c87d84989253e579ed65df
+  - enabled: 1
+    path: Assets/Scenes/Deck Builder.unity
+    guid: 1927f1c24c7cb474abd8f2dffc2eba93
+  - enabled: 1
+    path: Assets/Scenes/Skirmish.unity
+    guid: 8ed080e241c20f2429e04ae80bc5f38c
+  - enabled: 1
+    path: Assets/Scenes/Gameboard.unity
+    guid: dba806b0929124841b7ac5c96053f826
+  m_configObjects: {}
