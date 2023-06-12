@@ -1,0 +1,1232 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8022256210553369991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8022256210553369985}
+  - component: {fileID: 8022256210553369990}
+  m_Layer: 0
+  m_Name: CardDataBase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8022256210553369985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8022256210553369991}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8022256210553369990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8022256210553369991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e85b561260084f74e8d70f066fce10b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardDetails:
+  - id: 1
+    ergoTokenId: 30974274078845f263b4f21787e33cc99e9ec19a17ad85a5bc6da2cca91c5a2e
+    ergoTokenAmount: 0
+    cardName: WT_ADA
+    cardDescription: Hello and thank you for testing Blitz
+    attack: 1
+    HP: 4
+    gold: 3
+    XP: 2
+    race: 1
+    levelRequired: Level 1
+    clan: Cardano
+    cardClass: 1
+    cardImage: {fileID: 21300000, guid: 98abb504f8229174db4b79aeecf5e3d5, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 2
+    ergoTokenId: fbbaac7337d051c10fc3da0ccb864f4d32d40027551e1c3ea3ce361f39b91e40
+    ergoTokenAmount: 0
+    cardName: Kushti
+    cardDescription: The UI is not finished and there are no sound effects
+    attack: 10
+    HP: 9
+    gold: 8
+    XP: 7
+    race: 6
+    levelRequired: Level 5
+    clan: Ergo
+    cardClass: 1
+    cardImage: {fileID: 21300000, guid: 751394e5dd4209042bb4564048cf74bd, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 3
+    ergoTokenId: ef802b475c06189fdbf844153cdc1d449a5ba87cce13d11bb47b5a539f27f12b
+    ergoTokenAmount: 0
+    cardName: WT_ERG
+    cardDescription: Play around and try to break things!
+    attack: 1
+    HP: 2
+    gold: 3
+    XP: 4
+    race: 5
+    levelRequired: Level 6
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 21300000, guid: fb1aebf285f7aff47b0fba708d07ef14, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 4
+    ergoTokenId: e91cbc48016eb390f8f872aa2962772863e2e840708517d1ab85e57451f91bed
+    ergoTokenAmount: 0
+    cardName: Ergold
+    cardDescription: Select Mios's deck to use this card
+    attack: 1
+    HP: 2
+    gold: 3
+    XP: 4
+    race: 5
+    levelRequired: Level 6
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 21300000, guid: 1410287b86eedfd4ea8d268f5325ce15, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 5
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_5
+    cardDescription: Card_5
+    attack: 1
+    HP: 3
+    gold: 5
+    XP: 7
+    race: 9
+    levelRequired: Level 7
+    clan: Factionless
+    cardClass: 0
+    cardImage: {fileID: 1306624806, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 6
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_6
+    cardDescription: Card_6
+    attack: 4
+    HP: 5
+    gold: 6
+    XP: 7
+    race: 8
+    levelRequired: Level 9
+    clan: Factionless
+    cardClass: 0
+    cardImage: {fileID: 648587001, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 7
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_7
+    cardDescription: Card_7
+    attack: 2
+    HP: 4
+    gold: 6
+    XP: 8
+    race: 6
+    levelRequired: Level 4
+    clan: Factionless
+    cardClass: 0
+    cardImage: {fileID: 225385897, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 8
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_8
+    cardDescription: Card_8
+    attack: 5
+    HP: 8
+    gold: 4
+    XP: 6
+    race: 3
+    levelRequired: Level 8
+    clan: Factionless
+    cardClass: 0
+    cardImage: {fileID: 826491672, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 9
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_9
+    cardDescription: Card_9
+    attack: 9
+    HP: 6
+    gold: 3
+    XP: 8
+    race: 5
+    levelRequired: Level 2
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: -157011035, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+  - id: 10
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_10
+    cardDescription: Card_10
+    attack: 7
+    HP: 4
+    gold: 1
+    XP: 8
+    race: 5
+    levelRequired: Level 2
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+  - id: 11
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_11
+    cardDescription: Card_11
+    attack: 5
+    HP: 4
+    gold: 5
+    XP: 4
+    race: 3
+    levelRequired: Level 1
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+  - id: 12
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_12
+    cardDescription: Card_12
+    attack: 9
+    HP: 2
+    gold: 4
+    XP: 3
+    race: 7
+    levelRequired: Level 2
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+  - id: 13
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_13
+    cardDescription: Card_13
+    attack: 2
+    HP: 4
+    gold: 5
+    XP: 6
+    race: 3
+    levelRequired: Level 3
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 14
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_14
+    cardDescription: Card_14
+    attack: 7
+    HP: 8
+    gold: 5
+    XP: 4
+    race: 9
+    levelRequired: Level 4
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 15
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_15
+    cardDescription: Card_15
+    attack: 9
+    HP: 2
+    gold: 4
+    XP: 3
+    race: 5
+    levelRequired: Level 5
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 16
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_16
+    cardDescription: Card_16
+    attack: 5
+    HP: 8
+    gold: 6
+    XP: 4
+    race: 8
+    levelRequired: Level 6
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 17
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_17
+    cardDescription: Card_17
+    attack: 3
+    HP: 4
+    gold: 4
+    XP: 7
+    race: 1
+    levelRequired: Level 7
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 18
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_18
+    cardDescription: Card_18
+    attack: 4
+    HP: 5
+    gold: 7
+    XP: 5
+    race: 3
+    levelRequired: Level 8
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 19
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_19
+    cardDescription: Card_19
+    attack: 7
+    HP: 5
+    gold: 5
+    XP: 8
+    race: 7
+    levelRequired: Level 9
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 20
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_20
+    cardDescription: Card_20
+    attack: 8
+    HP: 7
+    gold: 4
+    XP: 2
+    race: 9
+    levelRequired: Level 10
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 21
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_21
+    cardDescription: Card_21
+    attack: 7
+    HP: 5
+    gold: 6
+    XP: 2
+    race: 9
+    levelRequired: Level 1
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 22
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_22
+    cardDescription: Card_22
+    attack: 6
+    HP: 8
+    gold: 4
+    XP: 9
+    race: 7
+    levelRequired: Level 2
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 23
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_23
+    cardDescription: Card_23
+    attack: 9
+    HP: 7
+    gold: 5
+    XP: 4
+    race: 3
+    levelRequired: Level 3
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 24
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_24
+    cardDescription: Card_24
+    attack: 9
+    HP: 8
+    gold: 4
+    XP: 1
+    race: 9
+    levelRequired: Level 4
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 25
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_25
+    cardDescription: Card_25
+    attack: 8
+    HP: 4
+    gold: 4
+    XP: 3
+    race: 3
+    levelRequired: Level 5
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 26
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_26
+    cardDescription: Card_26
+    attack: 7
+    HP: 4
+    gold: 6
+    XP: 8
+    race: 4
+    levelRequired: Level 6
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 27
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_27
+    cardDescription: Card_27
+    attack: 9
+    HP: 5
+    gold: 4
+    XP: 4
+    race: 7
+    levelRequired: Level 7
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 28
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_28
+    cardDescription: Card_28
+    attack: 6
+    HP: 8
+    gold: 9
+    XP: 7
+    race: 7
+    levelRequired: Level 8
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 29
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_29
+    cardDescription: Card_29
+    attack: 8
+    HP: 5
+    gold: 9
+    XP: 2
+    race: 2
+    levelRequired: Level 9
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 30
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_30
+    cardDescription: Card_30
+    attack: 8
+    HP: 7
+    gold: 9
+    XP: 5
+    race: 7
+    levelRequired: Level 10
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 31
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_31
+    cardDescription: Card_31
+    attack: 9
+    HP: 5
+    gold: 1
+    XP: 7
+    race: 1
+    levelRequired: Level 1
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 32
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_32
+    cardDescription: Card_32
+    attack: 8
+    HP: 7
+    gold: 6
+    XP: 7
+    race: 9
+    levelRequired: Level 2
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 33
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_33
+    cardDescription: Card_33
+    attack: 8
+    HP: 4
+    gold: 7
+    XP: 3
+    race: 7
+    levelRequired: Level 3
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 34
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_34
+    cardDescription: Card_34
+    attack: 7
+    HP: 8
+    gold: 9
+    XP: 4
+    race: 5
+    levelRequired: Level 4
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 35
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_35
+    cardDescription: Card_35
+    attack: 7
+    HP: 4
+    gold: 5
+    XP: 1
+    race: 9
+    levelRequired: Level 5
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 36
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_36
+    cardDescription: Card_36
+    attack: 8
+    HP: 5
+    gold: 9
+    XP: 6
+    race: 7
+    levelRequired: Level 6
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 37
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_37
+    cardDescription: Card_37
+    attack: 7
+    HP: 4
+    gold: 6
+    XP: 4
+    race: 1
+    levelRequired: Level 7
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 38
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_38
+    cardDescription: Card_38
+    attack: 7
+    HP: 5
+    gold: 4
+    XP: 9
+    race: 8
+    levelRequired: Level 8
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 39
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_39
+    cardDescription: Card_39
+    attack: 3
+    HP: 5
+    gold: 8
+    XP: 7
+    race: 8
+    levelRequired: Level 9
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 40
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_40
+    cardDescription: Card_40
+    attack: 8
+    HP: 7
+    gold: 7
+    XP: 9
+    race: 8
+    levelRequired: Level 10
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 41
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_41
+    cardDescription: Card_41
+    attack: 6
+    HP: 5
+    gold: 8
+    XP: 9
+    race: 1
+    levelRequired: Level 1
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 42
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_42
+    cardDescription: Card_42
+    attack: 5
+    HP: 7
+    gold: 9
+    XP: 7
+    race: 3
+    levelRequired: Level 2
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 43
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_43
+    cardDescription: Card_43
+    attack: 9
+    HP: 7
+    gold: 3
+    XP: 7
+    race: 8
+    levelRequired: Level 3
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+  - id: 44
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_44
+    cardDescription: Card_44
+    attack: 3
+    HP: 5
+    gold: 4
+    XP: 7
+    race: 4
+    levelRequired: Level 4
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+  - id: 45
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_45
+    cardDescription: Card_45
+    attack: 7
+    HP: 8
+    gold: 9
+    XP: 4
+    race: 8
+    levelRequired: Level 5
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+  - id: 46
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_46
+    cardDescription: Card_46
+    attack: 1
+    HP: 5
+    gold: 7
+    XP: 8
+    race: 9
+    levelRequired: Level 6
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+  - id: 47
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_47
+    cardDescription: Card_47
+    attack: 3
+    HP: 4
+    gold: 7
+    XP: 5
+    race: 8
+    levelRequired: Level 7
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 48
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_48
+    cardDescription: Card_48
+    attack: 9
+    HP: 7
+    gold: 8
+    XP: 5
+    race: 4
+    levelRequired: Level 8
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 49
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_49
+    cardDescription: Card_49
+    attack: 9
+    HP: 7
+    gold: 7
+    XP: 8
+    race: 9
+    levelRequired: Level 9
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 50
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_50
+    cardDescription: Card_50
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 10
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 51
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_51
+    cardDescription: Card_51
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 1
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 52
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_52
+    cardDescription: Card_52
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 2
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 53
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_53
+    cardDescription: Card_53
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 3
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 54
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_54
+    cardDescription: Card_54
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 4
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 55
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_55
+    cardDescription: Card_55
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 5
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 56
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_56
+    cardDescription: Card_56
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 6
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 57
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_57
+    cardDescription: Card_57
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 7
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 58
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_58
+    cardDescription: Card_58
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 8
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 59
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_59
+    cardDescription: Card_59
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 9
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 60
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_60
+    cardDescription: Card_60
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 10
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 61
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_61
+    cardDescription: Card_61
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 1
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 62
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_62
+    cardDescription: Card_62
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 2
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 63
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_63
+    cardDescription: Card_63
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 3
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 64
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_64
+    cardDescription: Card_64
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 4
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 65
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_65
+    cardDescription: Card_65
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 5
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 66
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_66
+    cardDescription: Card_66
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 6
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+  - id: 67
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_67
+    cardDescription: Card_67
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 7
+    clan: Fairytales
+    cardClass: 3
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 68
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_68
+    cardDescription: Card_68
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 8
+    clan: Dark Matter
+    cardClass: 4
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 69
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_69
+    cardDescription: Card_69
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 9
+    clan: Dark Matter
+    cardClass: 4
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 70
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_70
+    cardDescription: Card_70
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 10
+    clan: Dark Matter
+    cardClass: 4
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+  - id: 71
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_71
+    cardDescription: Card_71
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 1
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 72
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_72
+    cardDescription: Card_72
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 2
+    clan: Masquerades
+    cardClass: 1
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 73
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_73
+    cardDescription: Card_73
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 3
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 74
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_74
+    cardDescription: Card_74
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 4
+    clan: The Old Kingdom
+    cardClass: 2
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+  - id: 75
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_75
+    cardDescription: Card_75
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 5
+    clan: Dark Matter
+    cardClass: 4
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+  - id: 76
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_76
+    cardDescription: Card_76
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 6
+    clan: Dark Matter
+    cardClass: 4
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+  - id: 77
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_77
+    cardDescription: Card_77
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 7
+    clan: Tinkerers
+    cardClass: 5
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+  - id: 78
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_78
+    cardDescription: Card_78
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 8
+    clan: Tinkerers
+    cardClass: 5
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+  - id: 78
+    ergoTokenId: 
+    ergoTokenAmount: 0
+    cardName: Card_78
+    cardDescription: Card_78
+    attack: 7
+    HP: 4
+    gold: 8
+    XP: 9
+    race: 4
+    levelRequired: Level 8
+    clan: Tinkerers
+    cardClass: 5
+    cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
+    cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
