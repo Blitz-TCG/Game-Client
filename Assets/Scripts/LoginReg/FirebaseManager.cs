@@ -115,7 +115,7 @@ public class FirebaseManager : MonoBehaviour
 
     private void Awake()
     {
-        currentVersionText.text = "Build Version: " + versionCheck;
+        currentVersionText.text = "Blitz TCG" + "\n" + "Build Version: " + versionCheck;
 
         AuthUI = GameObject.FindGameObjectWithTag("AuthUIManager"); //accesing a gameobject via tags, could pick something better
         RememberMe = GameObject.FindGameObjectWithTag("RememberMe");
