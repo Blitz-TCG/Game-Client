@@ -4,7 +4,7 @@ using UnityEngine;
 public class TimeLeft : MonoBehaviour
 {
     public int timerLeft = 60;
-    public static bool timeUp = false;
+    public bool timeUp = false;
 
     private int currentTime;
     private Coroutine timerCoroutine;
