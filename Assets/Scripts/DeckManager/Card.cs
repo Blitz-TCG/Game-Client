@@ -111,14 +111,17 @@ public class Card : MonoBehaviour
         image.sprite = cImage;
     }
 
-    public void DealDamage(int damage, GameObject card)
+    public bool DealDamage(int damage, GameObject card)
     {
+        bool destroyed = false;
         HP -= damage;
         if(HP <= 0)
         {
             Destroy(card.gameObject);
+            destroyed = true;
         }
         HPText.SetText(HP.ToString());
+        return destroyed;
     }
 
     public bool IsAttack()

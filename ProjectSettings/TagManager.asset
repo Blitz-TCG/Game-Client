@@ -27,6 +27,13 @@ TagManager:
   - UI
   - Effects
   - AudioAndCursor
+  - CardList
+  - Front Line Enemy
+  - Back Line Player
+  - Back Line Enemy
+  - Front Line Player
+  - PlayerWall
+  - EnemyWall
   layers:
   - Default
   - TransparentFX
