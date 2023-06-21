@@ -5,6 +5,8 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+using System.IO;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
@@ -18,6 +20,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private bool connected = false;
     private ExitGames.Client.Photon.Hashtable customProp = new ExitGames.Client.Photon.Hashtable();
+    private ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
     private SkirmishManager skirmishManager;
 
     private void Start()
@@ -169,12 +172,35 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         customProp["enterdNum"] = 0;
         int deckGeneralId = ErgoQuery.instance.deckGeneralStore[skirmishManager.deckId - 1];
-        
+        string deckGeneralField = ErgoQuery.instance.gameboardCurrentStore[skirmishManager.deckId - 1];
+
         customProp["deckId"] = deckGeneralId;
+        customProp["deckField"] = deckGeneralField;
+
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProp);
         if(PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 1)
         {
             Invoke("LeaveTheRoom", 60f);
+        }
+
+        string path = Path.Combine(Application.streamingAssetsPath, "PlayerData.json");
+        string jsonData = File.ReadAllText(path);
+
+        PlayerData data = JsonConvert.DeserializeObject<PlayerData>(jsonData);
+        Debug.LogError(data.gold + " gold data " + data.xp + " xp data ");
+
+        int currentPlayerXP = PlayerPrefs.GetInt("totalXP", 0);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            properties["masterGold"] = 500;
+            properties["masterXP"] = data.xp;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+        }
+        else if (!PhotonNetwork.IsMasterClient)
+        {
+            properties["clientGold"] = 500;
+            properties["clientXP"] = data.xp;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
     }
 
