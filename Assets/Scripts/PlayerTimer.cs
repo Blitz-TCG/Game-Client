@@ -60,8 +60,6 @@ public class PlayerTimer : MonoBehaviour
     public void PauseTimer(string dir)
     {
         StopAllCoroutines();
-        if (timerCoroutine != null)
-            StopCoroutine(timerCoroutine);
         if (dir == "down")
         {
             PlayerPrefs.SetInt("Down", currentTime);

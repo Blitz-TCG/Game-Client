@@ -58,12 +58,6 @@ MonoBehaviour:
   - UpdateTime
   - DebugTime
   - RefreshTimer
-  - AttackDeck
-  - AttackWall
-  - CalculateScore
-  - GetGameResult
-  - SetGoldValue
-  - SetProgessBar
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -7,8 +7,6 @@ using TMPro;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Photon.Pun;
-
 
 public class MainMenuUIManager : MonoBehaviour
 
@@ -353,10 +351,7 @@ public class MainMenuUIManager : MonoBehaviour
             PresenceCheck();
             StartCoroutine(RetrieveFriendsforMessaging());
         }
-        if (PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.Disconnect();
-        }
+
     }
 
     IEnumerator RetrieveFriendsforMessaging()
