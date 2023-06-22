@@ -23,8 +23,6 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     public static bool isClicked = false;
     public static int clickCounter = 0;
     public static GameObject cardParent;
-
-    private ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
     #endregion
 
     private void Awake()
@@ -157,28 +155,8 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     card.name = cardClicked.cardName;
                     card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
 
-                    if (PhotonNetwork.IsMasterClient)
-                    {
-                        int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
-                        int availableGold = getGold - cardClicked.gold;
-                        Gold.instance.SetGold(availableGold);
-                        properties["masterGold"] = availableGold;
-                        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-
-                        //Invoke("UpdatedProperties", 1f);
-                    }
-                    else if (!PhotonNetwork.IsMasterClient)
-                    {
-                        int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
-                        int availableGold = getGold - cardClicked.gold;
-                        Gold.instance.SetGold(availableGold);
-                        properties["clientGold"] = availableGold;
-                        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                        //Debug.LogError("available client " + availableGold);
-
-                        //Invoke("UpdatedProperties", 1f);
-                    }
-
+                    int availableGold = Gold.instance.GetGold() - cardClicked.gold;
+                    Gold.instance.SetGold(availableGold);
                     break;
                 }
             }
@@ -206,12 +184,6 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         }
     }
     #endregion
-
-    //private void UpdatedProperties()
-    //{
-    //    Debug.LogError("1s photon master custom properties:- " + PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
-    //    Debug.LogError("1s Photon client custom properties:- " + PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
-    //}
 
     public void ResetAnimation()
     {
