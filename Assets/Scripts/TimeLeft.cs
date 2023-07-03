@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class TimeLeft : MonoBehaviour
 {
     public int timerLeft = 60;
-    public static bool timeUp = false;
+    public bool timeUp = false;
 
     private int currentTime;
     private Coroutine timerCoroutine;
@@ -13,7 +14,9 @@ public class TimeLeft : MonoBehaviour
     {
         if (timerCoroutine != null) StopCoroutine(timerCoroutine);
 
+        Debug.LogError("Start time " + DateTime.Now);
         timerLeft = time;
+        Debug.LogError(time + " time value " + timerLeft);
 
         currentTime = timerLeft;
         timerCoroutine = StartCoroutine(Timers());
@@ -33,6 +36,7 @@ public class TimeLeft : MonoBehaviour
 
         if (currentTime < 0)
         {
+            Debug.LogError("End time " + DateTime.Now);
             timeUp = true;
         }
         else
