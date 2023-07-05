@@ -63,7 +63,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField]
-    private GameObject settingsUI;
+    public GameObject settingsUI;
     [SerializeField]
     public GameObject settingsResolutionClosed;
     [SerializeField]
@@ -99,15 +99,9 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField]
     private GameObject settingsFullscreenEnabled;
     [SerializeField]
-    private GameObject settingsFullscreenDisabled;
-    [SerializeField]
     public GameObject settingsHelpTextEnabled;
     [SerializeField]
-    public GameObject settingsHelpTextDisabled;
-    [SerializeField]
     public GameObject settingsDeleteDeckEnabled;
-    [SerializeField]
-    public GameObject settingsDeleteDeckDisabled;
     [Space(5f)]
 
     [Header("Friends List")]
@@ -214,7 +208,7 @@ public class MainMenuUIManager : MonoBehaviour
     public BlockedScrollViewAdapter blockedScrollViewAdapter;
 
     //CursorAudio
-    public GameObject audioAndCursor;
+    public CursorManager cursorManager;
     private void Awake()
     {
         //PlayerPrefs.DeleteAll(); //for testing settings values
@@ -240,23 +234,20 @@ public class MainMenuUIManager : MonoBehaviour
             whisperEnableUI.SetActive(true);
         }
 
-        if (PlayerPrefs.HasKey("tooltipDisabled") == true) //settings player prefs - fullscreen
+        if (PlayerPrefs.HasKey("tooltipDisabled") == true) 
         {
-            settingsHelpTextEnabled.SetActive(false);
-            settingsHelpTextDisabled.SetActive(true);
+            settingsHelpTextEnabled.SetActive(true);
         }
 
-        if (PlayerPrefs.HasKey("fullscreenDisabled") == true) //settings player prefs - fullscreen
+        if (PlayerPrefs.HasKey("fullscreenDisabled") == true) 
         {
-            settingsFullscreenDisabled.SetActive(true);
             settingsFullscreenEnabled.SetActive(false);
         }
 
-        if (PlayerPrefs.GetString("DisableDeleteDeckWarning") == "T") //settings player prefs - fullscreen
+        if (PlayerPrefs.GetString("DisableDeleteDeckWarning") == "T") 
         {
             Debug.Log(PlayerPrefs.GetString("DisableDeleteDeckWarning"));
-            settingsDeleteDeckDisabled.SetActive(true);
-            settingsDeleteDeckEnabled.SetActive(false);
+            settingsDeleteDeckEnabled.SetActive(true);
         }
 
         if (PlayerPrefs.HasKey("Resolution") == false) //settings player prefs - load resolution when a player has never set it manually
@@ -332,9 +323,6 @@ public class MainMenuUIManager : MonoBehaviour
         {
             settingsQuality.text = "Med (MSSA 2x)"; //default quality is medium
         }
-
-        audioAndCursor = GameObject.FindWithTag("AudioAndCursor");
-
     }
 
     private void Start()
@@ -397,11 +385,13 @@ public class MainMenuUIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !changePfpUI.activeSelf && !profileDropdown.activeSelf && generalChatDropdown.activeSelf)
         {
             generalChatDropdown.SetActive(false);
+            cursorManager.AudioClickButtonStandard();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !changePfpUI.activeSelf && profileDropdown.activeSelf)
         {
             profileDropdown.SetActive(false);
+            cursorManager.AudioClickButtonStandard();
         }
 
         if (changePfpUI.activeSelf && changePfpUI != null)
@@ -410,6 +400,7 @@ public class MainMenuUIManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf)
             {
                 changePfpUI.SetActive(false);
+                cursorManager.AudioClickButtonStandard();
                 ClearUI();
             }
         }
@@ -468,6 +459,7 @@ public class MainMenuUIManager : MonoBehaviour
 
         if (settingsUI.activeSelf && Input.GetKeyDown(KeyCode.Escape))
         {
+            cursorManager.AudioClickButtonStandard();
             SettingsBack();
         }
 
@@ -482,6 +474,7 @@ public class MainMenuUIManager : MonoBehaviour
 
         if (friendsUI.activeSelf && Input.GetKeyDown(KeyCode.Escape))
         {
+            cursorManager.AudioClickButtonStandard();
             FriendsBack();
         }
 
@@ -648,10 +641,12 @@ public class MainMenuUIManager : MonoBehaviour
         if (changePfpUI.activeSelf)
         {
             changePfpUI.SetActive(false);
+            profileDropdown.SetActive(false);
         }
         else if (!changePfpUI.activeSelf)
         {
             changePfpUI.SetActive(true);
+            profileDropdown.SetActive(false);
         }
 
         ClearUI();
@@ -659,7 +654,6 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void ManageWallet() //profile dropdown ui interactions
     {
-
         Application.OpenURL("https://blitztcg.com/home");
         profileDropdown.SetActive(false);
         ClearUI();
@@ -680,14 +674,14 @@ public class MainMenuUIManager : MonoBehaviour
         yield return new WaitUntil(predicate: () => logOut.IsCompleted); //todo maybe add some exception checking
         if (logOut.IsFaulted)
         {
-            Debug.Log("could not cleanly terminate session");
+            cursorManager.CursorNormal();
             RemoveListener();
             FirebaseManager.instance.auth.SignOut();
             GameManager.instance.ChangeScene(0);
         }
         else if (logOut.IsCompleted) //if we were able to query successfully, save query results into a datasnapshot and send it to a list
         {
-            Debug.Log("logged out");
+            cursorManager.CursorNormal();
             RemoveListener();
             FirebaseManager.instance.auth.SignOut();
             GameManager.instance.ChangeScene(0);
@@ -702,6 +696,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     private IEnumerator ExitUIEnumerator()
     {
+        cursorManager.CursorNormal();
         var logOut = FirebaseDatabase.DefaultInstance.GetReference("users").Child(userID).Child("online").SetValueAsync("F");
         yield return new WaitUntil(predicate: () => logOut.IsCompleted); //todo maybe add some exception checking
         if (logOut.IsFaulted)
@@ -727,6 +722,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void SettingsBack() //closer settings and all related ui
     {
+        cursorManager.CursorNormal();
         settingsUI.SetActive(false);
         settingsResolutionClosed.SetActive(true);
         settingsResolutionOpen.SetActive(false);
@@ -2165,7 +2161,7 @@ public class MainMenuUIManager : MonoBehaviour
             Screen.SetResolution(1024, 576, FullScreenMode.FullScreenWindow);
             settingsResolution.text = "1024x576";
         }
-        else if (settingsFullscreenDisabled.activeSelf)
+        else if (!settingsFullscreenEnabled.activeSelf)
         {
             Screen.SetResolution(1024, 576, false);
             settingsResolution.text = "1024x576";
@@ -2186,7 +2182,7 @@ public class MainMenuUIManager : MonoBehaviour
             Screen.SetResolution(1280, 720, FullScreenMode.FullScreenWindow);
             settingsResolution.text = "1280x720";
         }
-        else if (settingsFullscreenDisabled.activeSelf)
+        else if (!settingsFullscreenEnabled.activeSelf)
         {
             Screen.SetResolution(1280, 720, false);
             settingsResolution.text = "1280x720";
@@ -2207,7 +2203,7 @@ public class MainMenuUIManager : MonoBehaviour
             Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
             settingsResolution.text = "1920x1080";
         }
-        else if (settingsFullscreenDisabled.activeSelf)
+        else if (!settingsFullscreenEnabled.activeSelf)
         {
             Screen.SetResolution(1920, 1080, false);
             settingsResolution.text = "1920x1080";
@@ -2228,7 +2224,7 @@ public class MainMenuUIManager : MonoBehaviour
             Screen.SetResolution(2560, 1440, FullScreenMode.FullScreenWindow);
             settingsResolution.text = "2560x1440";
         }
-        else if (settingsFullscreenDisabled.activeSelf)
+        else if (!settingsFullscreenEnabled.activeSelf)
         {
             Screen.SetResolution(2560, 1440, false);
             settingsResolution.text = "2560x1440";
@@ -2248,7 +2244,7 @@ public class MainMenuUIManager : MonoBehaviour
             Screen.SetResolution(3840, 2160, FullScreenMode.FullScreenWindow);
             settingsResolution.text = "3840x2160";
         }
-        else if (settingsFullscreenDisabled.activeSelf)
+        else if (!settingsFullscreenEnabled.activeSelf)
         {
             Screen.SetResolution(3840, 2160, false);
             settingsResolution.text = "3840x2160";
@@ -2308,11 +2304,8 @@ public class MainMenuUIManager : MonoBehaviour
         PlayerPrefs.SetString("DisableDeleteDeckWarning", "F");
 
         settingsFullscreenEnabled.SetActive(true);
-        settingsFullscreenDisabled.SetActive(false);
-        settingsHelpTextEnabled.SetActive(true);
-        settingsHelpTextDisabled.SetActive(false);
-        settingsDeleteDeckEnabled.SetActive(true);
-        settingsDeleteDeckDisabled.SetActive(false);
+        settingsHelpTextEnabled.SetActive(false);
+        settingsDeleteDeckEnabled.SetActive(false);
 
         ResolutionSettingsDynamic();
 
@@ -2378,16 +2371,14 @@ public class MainMenuUIManager : MonoBehaviour
     {
         if (settingsFullscreenEnabled.activeSelf)
         {
-            settingsFullscreenDisabled.SetActive(true);
             settingsFullscreenEnabled.SetActive(false);
             Debug.Log("fullscreen disabled");
             PlayerPrefs.SetString("fullscreenDisabled", "1");
             Screen.fullScreen = false;
         }
-        else if (settingsFullscreenDisabled.activeSelf)
+        else if (!settingsFullscreenEnabled.activeSelf)
         {
             settingsFullscreenEnabled.SetActive(true);
-            settingsFullscreenDisabled.SetActive(false);
             Debug.Log("fullscreen enabled");
             PlayerPrefs.DeleteKey("fullscreenDisabled");
             Screen.fullScreen = true;
@@ -2398,42 +2389,54 @@ public class MainMenuUIManager : MonoBehaviour
     {
         if (settingsHelpTextEnabled.activeSelf)
         {
-            PlayerPrefs.SetString("tooltipDisabled", "1");
+            PlayerPrefs.DeleteKey("tooltipDisabled");
+            Debug.Log("helptext enabled");
             PlayerPrefs.Save();
-            settingsHelpTextDisabled.SetActive(true);
             settingsHelpTextEnabled.SetActive(false);
         }
-        else if (settingsHelpTextDisabled.activeSelf)
+        else if (!settingsHelpTextEnabled.activeSelf)
         {
-            PlayerPrefs.DeleteKey("tooltipDisabled");
+            PlayerPrefs.SetString("tooltipDisabled", "1");
+            Debug.Log("helptext disabled");
             settingsHelpTextEnabled.SetActive(true);
-            settingsHelpTextDisabled.SetActive(false);
         }
     }
     public void DisableDecktSetting()
     {
         if (settingsDeleteDeckEnabled.activeSelf)
         {
-            PlayerPrefs.SetString("DisableDeleteDeckWarning", "T");
+            PlayerPrefs.SetString("DisableDeleteDeckWarning", "F");
+            Debug.Log("deck warnings will show");
             PlayerPrefs.Save();
-            settingsDeleteDeckDisabled.SetActive(true);
             settingsDeleteDeckEnabled.SetActive(false);
         }
-        else if (settingsDeleteDeckDisabled.activeSelf)
+        else if (!settingsDeleteDeckEnabled.activeSelf)
         {
-            PlayerPrefs.SetString("DisableDeleteDeckWarning", "F");
+            PlayerPrefs.SetString("DisableDeleteDeckWarning", "T");
+            Debug.Log("deck warnings will not show");
             PlayerPrefs.Save();
             settingsDeleteDeckEnabled.SetActive(true);
-            settingsDeleteDeckDisabled.SetActive(false);
         }
+    }
+
+    public void ResAndQualityDropdownClose()
+    {
+        settingsQualityClosed.SetActive(true);
+        settingsQualityOpen.SetActive(false);
+        settingsQualityGrouper.SetActive(false);
+        settingsResolutionClosed.SetActive(true);
+        settingsResolutionOpen.SetActive(false);
+        settingsResolutionGrouper.SetActive(false);
     }
     public void Skirmish()
     {
+        cursorManager.CursorNormal();
         RemoveListener();
         GameManager.instance.ChangeScene(3);
     }
     public void DeckBuilder()
     {
+        cursorManager.CursorNormal();
         RemoveListener();
         GameManager.instance.ChangeScene(2);
     }
