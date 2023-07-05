@@ -5612,8 +5612,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 173, y: 222.01376, z: 1}
-  m_Center: {x: 0, y: -20.006914, z: 0}
+  m_Size: {x: 179.9357, y: 179.82117, z: 1}
+  m_Center: {x: 0.000020116564, y: 9.181039, z: 0}
 --- !u!114 &348524414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8798,7 +8798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -15155,8 +15155,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 258.10846, y: 225.18944, z: 1}
-  m_Center: {x: 0.63512015, y: -21.59475, z: 0}
+  m_Size: {x: 178.92493, y: 181.84082, z: 1}
+  m_Center: {x: 3.2359908, y: 7.0151086, z: 0}
 --- !u!114 &933336549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18160,8 +18160,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 265.0948, y: 227.73001, z: 1}
-  m_Center: {x: 4.1284018, y: -22.86503, z: 0}
+  m_Size: {x: 174.9297, y: 178.27371, z: 1}
+  m_Center: {x: 1.816405, y: 9.011778, z: 0}
 --- !u!114 &1102331795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18702,7 +18702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -26790,7 +26790,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -32927,7 +32927,6 @@ MonoBehaviour:
   cardButtonUI: {fileID: 165047975}
   cardPrefabs: {fileID: 4276069275343109782, guid: ed21395fa28b3481e8eb8c7614c1a0ea, type: 3}
   cardHideParent: {fileID: 119525873}
-  deckId: -1
   disableColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
   gameboardButtonUI: {fileID: 2030459034}
   gameboardUI: {fileID: 1093040101}

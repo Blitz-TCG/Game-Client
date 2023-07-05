@@ -15,7 +15,7 @@ public class CursorManager : MonoBehaviour
     public AudioSource audioHoverButtonStandard;
     public AudioSource audioClickButtonStandard;
 
-        public void CursorIbeam()
+    public void CursorIbeam()
     {
         Cursor.SetCursor(cursorTextureIbeam, hotspotIbeam, cursorMode);
     }

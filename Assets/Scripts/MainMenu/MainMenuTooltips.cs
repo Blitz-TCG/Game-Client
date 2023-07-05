@@ -15,7 +15,7 @@ public class MainMenuTooltips : MonoBehaviour, IPointerEnterHandler, IPointerExi
         //Debug.Log("Cursor Entering " + name + " GameObject");
         if (MainMenuUIManager.instance != null)
         {
-            if (!MainMenuUIManager.instance.settingsHelpTextDisabled.activeSelf)
+            if (!MainMenuUIManager.instance.settingsHelpTextEnabled.activeSelf)
             {
                 if (name == "Skirmish")
                 {
@@ -39,7 +39,7 @@ public class MainMenuTooltips : MonoBehaviour, IPointerEnterHandler, IPointerExi
         //Debug.Log("Cursor Exiting " + name + " GameObject");
         if (MainMenuUIManager.instance != null)
         {
-            if (!MainMenuUIManager.instance.settingsHelpTextDisabled.activeSelf)
+            if (!MainMenuUIManager.instance.settingsHelpTextEnabled.activeSelf)
             {
                 if (name == "Skirmish")
                 {
