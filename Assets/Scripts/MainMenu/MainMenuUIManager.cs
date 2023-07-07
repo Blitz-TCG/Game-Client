@@ -414,6 +414,7 @@ public class MainMenuUIManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
+                cursorManager.AudioClickButtonStandard();
                 AddFriendsButton();
             }
         }
@@ -427,6 +428,7 @@ public class MainMenuUIManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
+                cursorManager.AudioClickButtonStandard();
                 RemoveFriendsButton();
             }
         }
@@ -440,6 +442,7 @@ public class MainMenuUIManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
+                cursorManager.AudioClickButtonStandard();
                 AddFriendsButton();
             }
         }
@@ -453,6 +456,7 @@ public class MainMenuUIManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
+                cursorManager.AudioClickButtonStandard();
                 RemoveFriendsButton();
             }
         }
@@ -468,6 +472,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
             {
+                cursorManager.AudioClickButtonStandard();
                 ChatMessengerSend();
             }
         }
@@ -799,7 +804,7 @@ public class MainMenuUIManager : MonoBehaviour
     {
         if (!friendsBlockedUI.activeSelf)
         {
-
+            cursorManager.CursorNormal();
             StartCoroutine(RetrieveBlockedUsers());
             friendsObjectHolder.SetActive(false);
             friendsBlockedUI.SetActive(true);
@@ -821,6 +826,7 @@ public class MainMenuUIManager : MonoBehaviour
     {
         if (!friendsObjectHolder.activeSelf)
         {
+            cursorManager.CursorNormal();
             friendsObjectHolder.SetActive(true);
             friendsBlockedUI.SetActive(false);
             friendsListTabOff.SetActive(false);
