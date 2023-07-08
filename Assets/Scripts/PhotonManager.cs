@@ -183,23 +183,23 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             Invoke("LeaveTheRoom", 60f);
         }
 
-        string path = Path.Combine(Application.streamingAssetsPath, "PlayerData.json");
-        string jsonData = File.ReadAllText(path);
+        //string path = Path.Combine(Application.streamingAssetsPath, "PlayerData.json");
+        //string jsonData = File.ReadAllText(path);
 
-        PlayerData data = JsonConvert.DeserializeObject<PlayerData>(jsonData);
-        Debug.LogError(data.gold + " gold data " + data.xp + " xp data ");
+        //PlayerData data = JsonConvert.DeserializeObject<PlayerData>(jsonData);
+        //Debug.LogError(data.gold + " gold data " + data.xp + " xp data ");
 
         int currentPlayerXP = PlayerPrefs.GetInt("totalXP", 0);
         if (PhotonNetwork.IsMasterClient)
         {
             properties["masterGold"] = 500;
-            properties["masterXP"] = data.xp;
+            properties["masterXP"] = 0;
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
         else if (!PhotonNetwork.IsMasterClient)
         {
             properties["clientGold"] = 500;
-            properties["clientXP"] = data.xp;
+            properties["clientXP"] = 0;
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
     }
@@ -216,7 +216,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void LeaveTheRoom()
     {
-        CancelMatch();
+        if(loadingPanel.activeSelf)
+            CancelMatch();
     }
 
 }

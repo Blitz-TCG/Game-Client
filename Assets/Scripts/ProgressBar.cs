@@ -10,15 +10,13 @@ public class ProgressBar : MonoBehaviour
 
     private void Start()
     {
-       
+        progressImage = GetComponent<Image>();
     }
 
     public void SetFillValue(float value)
     {
-        Debug.Log(" value " + value);
-        float fillAmount = value / totalValue;
         progressImage = GetComponent<Image>();
-        Debug.Log(progressImage + " progress image ");
+        float fillAmount = value / totalValue;
         progressImage.fillAmount = fillAmount;
     }
 }
