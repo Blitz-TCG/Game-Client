@@ -41,7 +41,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             initialLoading.SetActive(false);
         }
-        if(GameBoardManager.connectUsing)
+        if (GameBoardManager.connectUsing)
         {
             GameBoardManager.connectUsing = false;
             if (PhotonNetwork.InRoom)
@@ -178,7 +178,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         customProp["deckField"] = deckGeneralField;
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProp);
-        if(PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 1)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 1)
         {
             Invoke("LeaveTheRoom", 60f);
         }
@@ -208,7 +208,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-             PhotonNetwork.LoadLevel(4);
+            PhotonNetwork.LoadLevel(4);
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
@@ -216,8 +216,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void LeaveTheRoom()
     {
-        CancelMatch();
+        if (loadingPanel.activeSelf)
+            CancelMatch();
     }
-
 }
-    
