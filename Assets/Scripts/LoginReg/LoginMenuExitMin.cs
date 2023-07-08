@@ -36,6 +36,7 @@ public class LoginMenuExitMin : MonoBehaviour
 
     public void MinimizeButton()
     {
+        cursorManager.CursorNormal();
         cursorManager.AudioClickButtonStandard();
         ShowWindow(GetActiveWindow(), 2);
     }

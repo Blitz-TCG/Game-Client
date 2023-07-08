@@ -3,13 +3,14 @@ using UnityEngine.Audio;
 
 public class MainMenuUIVolume : MonoBehaviour
 {
+
+    //this is awful and lazy code, but i'm just too lazy to fix it :)
+
     public static MainMenuUIVolume instance;
 
     [Header("Master Volume UI")]
     [SerializeField]
-    private GameObject MasterVolumeOn;
-    [SerializeField]
-    private GameObject MasterVolumeOff;
+    private GameObject MasterVolumeEnabled;
     [SerializeField]
     private GameObject MasterVolume1;
     [SerializeField]
@@ -40,9 +41,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     [Header("Music Volume UI")]
     [SerializeField]
-    private GameObject MusicVolumeOn;
-    [SerializeField]
-    private GameObject MusicVolumeOff;
+    private GameObject MusicVolumeEnabled;
     [SerializeField]
     private GameObject MusicVolume1;
     [SerializeField]
@@ -73,9 +72,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     [Header("Effects Volume UI")]
     [SerializeField]
-    private GameObject EffectsVolumeOn;
-    [SerializeField]
-    private GameObject EffectsVolumeOff;
+    private GameObject EffectsVolumeEnabled;
     [SerializeField]
     private GameObject EffectsVolume1;
     [SerializeField]
@@ -129,8 +126,7 @@ public class MainMenuUIVolume : MonoBehaviour
         {
             if (PlayerPrefs.GetFloat("MasterVolumeTier") == 0)
             {
-                MasterVolumeOff.SetActive(true);
-                MasterVolumeOn.SetActive(false);
+                MasterVolumeEnabled.SetActive(false);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -147,8 +143,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 1)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(true);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -165,8 +160,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 2)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(true);
                 MasterVolume3.SetActive(false);
@@ -183,8 +177,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 3)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(true);
@@ -201,8 +194,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 4)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -219,8 +211,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 5)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -237,8 +228,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 6)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -255,8 +245,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 7)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -273,8 +262,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 8)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -291,8 +279,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 9)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -309,8 +296,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 10)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -327,8 +313,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 11)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -345,8 +330,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 12)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -363,8 +347,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MasterVolumeTier") == 13)
             {
-                MasterVolumeOff.SetActive(false);
-                MasterVolumeOn.SetActive(true);
+                MasterVolumeEnabled.SetActive(true);
                 MasterVolume1.SetActive(false);
                 MasterVolume2.SetActive(false);
                 MasterVolume3.SetActive(false);
@@ -385,8 +368,7 @@ public class MainMenuUIVolume : MonoBehaviour
         {
             if (PlayerPrefs.GetFloat("MusicVolumeTier") == 0)
             {
-                MusicVolumeOff.SetActive(true);
-                MusicVolumeOn.SetActive(false);
+                MusicVolumeEnabled.SetActive(false);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -403,8 +385,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 1)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(true);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -421,8 +402,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 2)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(true);
                 MusicVolume3.SetActive(false);
@@ -439,8 +419,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 3)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(true);
@@ -457,8 +436,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 4)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -475,8 +453,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 5)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -493,8 +470,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 6)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -511,8 +487,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 7)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -529,8 +504,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 8)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -547,8 +521,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 9)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -565,8 +538,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 10)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -583,8 +555,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 11)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -601,8 +572,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 12)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -619,8 +589,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("MusicVolumeTier") == 13)
             {
-                MusicVolumeOff.SetActive(false);
-                MusicVolumeOn.SetActive(true);
+                MusicVolumeEnabled.SetActive(true);
                 MusicVolume1.SetActive(false);
                 MusicVolume2.SetActive(false);
                 MusicVolume3.SetActive(false);
@@ -641,8 +610,7 @@ public class MainMenuUIVolume : MonoBehaviour
         {
             if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 0)
             {
-                EffectsVolumeOff.SetActive(true);
-                EffectsVolumeOn.SetActive(false);
+                EffectsVolumeEnabled.SetActive(false);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -659,8 +627,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 1)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(true);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -677,8 +644,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 2)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(true);
                 EffectsVolume3.SetActive(false);
@@ -695,8 +661,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 3)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(true);
@@ -713,8 +678,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 4)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -731,8 +695,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 5)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -749,8 +712,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 6)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -767,8 +729,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 7)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -785,8 +746,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 8)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -803,8 +763,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 9)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -821,8 +780,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 10)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -839,8 +797,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 11)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -857,8 +814,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 12)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -875,8 +831,7 @@ public class MainMenuUIVolume : MonoBehaviour
             }
             else if (PlayerPrefs.GetFloat("EffectsVolumeTier") == 13)
             {
-                EffectsVolumeOff.SetActive(false);
-                EffectsVolumeOn.SetActive(true);
+                EffectsVolumeEnabled.SetActive(true);
                 EffectsVolume1.SetActive(false);
                 EffectsVolume2.SetActive(false);
                 EffectsVolume3.SetActive(false);
@@ -895,17 +850,14 @@ public class MainMenuUIVolume : MonoBehaviour
     }
     public void EnableMasterVolume()
     {
-        if (MasterVolumeOff.activeSelf)
+        if (!MasterVolumeEnabled.activeSelf)
         {
-            MasterVolumeOn.SetActive(true);
-            MasterVolumeOff.SetActive(false);
+            MasterVolumeEnabled.SetActive(true);
             SetMasterVolume1();
         }
-        else if (MasterVolumeOn.activeSelf)
+        else if (MasterVolumeEnabled.activeSelf)
         {
-
-            MasterVolumeOff.SetActive(true);
-            MasterVolumeOn.SetActive(false);
+            MasterVolumeEnabled.SetActive(false);
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
             MasterVolume3.SetActive(false);
@@ -930,17 +882,14 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void EnableMusicVolume()
     {
-        if (MusicVolumeOff.activeSelf)
+        if (!MusicVolumeEnabled.activeSelf)
         {
-            MusicVolumeOn.SetActive(true);
-            MusicVolumeOff.SetActive(false);
+            MusicVolumeEnabled.SetActive(true);
             SetMusicVolume1();
         }
-        else if (MusicVolumeOn.activeSelf)
+        else if (MusicVolumeEnabled.activeSelf)
         {
-
-            MusicVolumeOff.SetActive(true);
-            MusicVolumeOn.SetActive(false);
+            MusicVolumeEnabled.SetActive(false);
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
             MusicVolume3.SetActive(false);
@@ -965,17 +914,14 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void EnableEffectsVolume()
     {
-        if (EffectsVolumeOff.activeSelf)
+        if (!EffectsVolumeEnabled.activeSelf)
         {
-            EffectsVolumeOn.SetActive(true);
-            EffectsVolumeOff.SetActive(false);
+            EffectsVolumeEnabled.SetActive(true);
             SetEffectsVolume1();
         }
-        else if (EffectsVolumeOn.activeSelf)
+        else if (EffectsVolumeEnabled.activeSelf)
         {
-
-            EffectsVolumeOff.SetActive(true);
-            EffectsVolumeOn.SetActive(false);
+            EffectsVolumeEnabled.SetActive(false);
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
             EffectsVolume3.SetActive(false);
@@ -999,7 +945,7 @@ public class MainMenuUIVolume : MonoBehaviour
     }
     public void SetMasterVolume1()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(true);
             MasterVolume2.SetActive(false);
@@ -1024,7 +970,7 @@ public class MainMenuUIVolume : MonoBehaviour
     }
     public void SetMasterVolume2()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(true);
@@ -1050,7 +996,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume3()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1076,7 +1022,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume4()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1102,7 +1048,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume5()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1128,7 +1074,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume6()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1154,7 +1100,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume7()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1180,7 +1126,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume8()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1206,7 +1152,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume9()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1232,7 +1178,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume10()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1258,7 +1204,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume11()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1284,7 +1230,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume12()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1310,7 +1256,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMasterVolume13()
     {
-        if (MasterVolumeOn.activeSelf)
+        if (MasterVolumeEnabled.activeSelf)
         {
             MasterVolume1.SetActive(false);
             MasterVolume2.SetActive(false);
@@ -1336,7 +1282,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume1()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(true);
             MusicVolume2.SetActive(false);
@@ -1361,7 +1307,7 @@ public class MainMenuUIVolume : MonoBehaviour
     }
     public void SetMusicVolume2()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(true);
@@ -1387,7 +1333,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume3()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1413,7 +1359,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume4()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1439,7 +1385,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume5()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1465,7 +1411,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume6()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1491,7 +1437,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume7()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1517,7 +1463,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume8()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1543,7 +1489,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume9()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1569,7 +1515,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume10()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1595,7 +1541,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume11()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1621,7 +1567,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume12()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1647,7 +1593,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetMusicVolume13()
     {
-        if (MusicVolumeOn.activeSelf)
+        if (MusicVolumeEnabled.activeSelf)
         {
             MusicVolume1.SetActive(false);
             MusicVolume2.SetActive(false);
@@ -1673,7 +1619,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume1()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(true);
             EffectsVolume2.SetActive(false);
@@ -1698,7 +1644,7 @@ public class MainMenuUIVolume : MonoBehaviour
     }
     public void SetEffectsVolume2()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(true);
@@ -1724,7 +1670,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume3()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1750,7 +1696,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume4()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1776,7 +1722,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume5()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1802,7 +1748,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume6()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1828,7 +1774,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume7()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1854,7 +1800,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume8()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1880,7 +1826,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume9()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1906,7 +1852,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume10()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1932,7 +1878,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume11()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1958,7 +1904,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume12()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);
@@ -1984,7 +1930,7 @@ public class MainMenuUIVolume : MonoBehaviour
 
     public void SetEffectsVolume13()
     {
-        if (EffectsVolumeOn.activeSelf)
+        if (EffectsVolumeEnabled.activeSelf)
         {
             EffectsVolume1.SetActive(false);
             EffectsVolume2.SetActive(false);

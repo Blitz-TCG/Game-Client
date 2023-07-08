@@ -41,7 +41,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             initialLoading.SetActive(false);
         }
-        if(GameBoardManager.connectUsing)
+        if (GameBoardManager.connectUsing)
         {
             GameBoardManager.connectUsing = false;
             if (PhotonNetwork.InRoom)
@@ -178,28 +178,28 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         customProp["deckField"] = deckGeneralField;
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProp);
-        if(PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 1)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 1)
         {
             Invoke("LeaveTheRoom", 60f);
         }
 
-        //string path = Path.Combine(Application.streamingAssetsPath, "PlayerData.json");
-        //string jsonData = File.ReadAllText(path);
+        string path = Path.Combine(Application.streamingAssetsPath, "PlayerData.json");
+        string jsonData = File.ReadAllText(path);
 
-        //PlayerData data = JsonConvert.DeserializeObject<PlayerData>(jsonData);
-        //Debug.LogError(data.gold + " gold data " + data.xp + " xp data ");
+        PlayerData data = JsonConvert.DeserializeObject<PlayerData>(jsonData);
+        Debug.LogError(data.gold + " gold data " + data.xp + " xp data ");
 
         int currentPlayerXP = PlayerPrefs.GetInt("totalXP", 0);
         if (PhotonNetwork.IsMasterClient)
         {
             properties["masterGold"] = 500;
-            properties["masterXP"] = 0;
+            properties["masterXP"] = data.xp;
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
         else if (!PhotonNetwork.IsMasterClient)
         {
             properties["clientGold"] = 500;
-            properties["clientXP"] = 0;
+            properties["clientXP"] = data.xp;
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
     }
@@ -208,7 +208,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-             PhotonNetwork.LoadLevel(4);
+            PhotonNetwork.LoadLevel(4);
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
@@ -216,9 +216,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void LeaveTheRoom()
     {
-        if(loadingPanel.activeSelf)
+        if (loadingPanel.activeSelf)
             CancelMatch();
     }
-
 }
-    
