@@ -65,6 +65,10 @@ MonoBehaviour:
   - SetGoldValue
   - SetProgessBar
   - SetUserSpendTime
+  - GetParentName
+  - DistributeGoldAndXP
+  - UpdateXP
+  - SetXPOnOther
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

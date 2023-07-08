@@ -59,9 +59,9 @@ public class PlayerTimer : MonoBehaviour
 
     public void PauseTimer(string dir)
     {
-        Debug.LogError(" Pause timer called with direction " + dir);
+        //Debug.LogError(" Pause timer called with direction " + dir);
         StopAllCoroutines();
-        Debug.LogError(" timer coroutine " + timerCoroutine);
+        //Debug.LogError(" timer coroutine " + timerCoroutine);
         if (timerCoroutine != null)
             StopCoroutine(timerCoroutine);
         if (dir == "down")
