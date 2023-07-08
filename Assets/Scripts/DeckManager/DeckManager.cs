@@ -15,6 +15,7 @@ public class DeckManager : MonoBehaviour
 {
 
     public static DeckManager instance;
+    public CursorManager cursorManager;
     public bool IsSelected { get; private set; } = false;
     public GameObject m_MyGameObject;
     public GameObject notesGameObject;
@@ -233,11 +234,13 @@ public class DeckManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) && popUpPanel.activeSelf)
         {
+            cursorManager.AudioClickButtonStandard();
             OnBackFromPopUp();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) && generalSelectLarge.activeSelf)
         {
+            cursorManager.AudioClickButtonStandard();
             generalSelectLarge.SetActive(false);
             generalSelectSmall.SetActive(false);
             deckProfile.enabled = true;
@@ -1238,6 +1241,7 @@ public class DeckManager : MonoBehaviour
 
     public void OnClickEditDeck() // User click edit deck button, all current and available card instantiate
     {
+        cursorManager.CursorNormal();
         Debug.Log(deckId);
         isEdit = true;
         int availableCardLength = ErgoQuery.instance.cardIdAvailableStore[deckId - 1].Length;
@@ -1599,6 +1603,7 @@ public class DeckManager : MonoBehaviour
 
     public void OnClickBack()
     {
+        cursorManager.CursorNormal();
         if (deckId >= 1)
         {
             StoreNotes(deckNotesTitleSelected.text, deckNotesBodySelected.text, deckId);
@@ -1707,6 +1712,7 @@ public class DeckManager : MonoBehaviour
 
     private void Init() // Initilize when user click on new deck
     {
+        cursorManager.CursorNormal();
         matchedCardListForAvailable.Clear();
         unmatchedCardListForAvailable.Clear();
         availableCards.Clear();
