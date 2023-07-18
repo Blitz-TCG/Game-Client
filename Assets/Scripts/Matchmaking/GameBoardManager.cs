@@ -175,54 +175,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GetRandomWinner();
         countDownPanel.SetActive(true);
 
-
-        //int masterXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterXP"];	
-        //int clientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];	
-        //Debug.LogError("master xp " + masterXP );	
-        //Debug.LogError("client xp " + clientXP );	
-        //if (PhotonNetwork.IsMasterClient)	
-        //{	
-        //    initialGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];	
-        //    Debug.Log(" player " + playerXPProgressBar + " client " + enemyXPProgressBar);	
-        //    playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(masterXP);	
-        //    enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(clientXP);	
-        //    Debug.Log(" master ");	
-        //}else if (!PhotonNetwork.IsMasterClient)	
-        //{	
-        //    initialGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];	
-        //    Debug.Log(" player " + playerXPProgressBar + " client " + enemyXPProgressBar);	
-        //    enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(masterXP);	
-        //    playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(clientXP);	
-        //    Debug.Log(" client ");	
-        //}	
-        //////Debug.LogError("player deck properties " + (int)PhotonNetwork.LocalPlayer.CustomProperties["deckId"]);	
-        ////int playerDeckProfileId = (int)PhotonNetwork.LocalPlayer.CustomProperties["deckId"] - 1;	
-        ////string playerField = (string)PhotonNetwork.LocalPlayer.CustomProperties["deckField"];	
-        ////Player currPlayer = PhotonNetwork.LocalPlayer;	
-        ////Player nextPlayer = currPlayer.GetNext();	
-        //////Debug.LogError("next deck properties " + (int)nextPlayer.CustomProperties["deckId"]);	
-        ////int opponentDeckProfileId = (int)nextPlayer.CustomProperties["deckId"] - 1;	
-        ////string opponentField = (string)nextPlayer.CustomProperties["deckField"];	
-        ////Debug.LogError(playerDeckProfileId + " deck id " + playerField + " field name");	
-        ////Debug.LogError(opponentDeckProfileId + " deck id " + opponentField + " field name");	
-        ////Debug.LogError("master xp " + (int)PhotonNetwork.CurrentRoom.CustomProperties["masterXP"]);	
-        ////Debug.LogError("client xp " + (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"]);	
-        ////int playerId = GetFieldIndex(playerField);	
-        ////int opponentId = GetFieldIndex(opponentField);	
-        ////bottomImage = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Game Play Field Border").Find("Bottom Field").GetComponent<Image>();	
-        ////topImage = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Game Play Field Border").Find("Top Field").GetComponent<Image>();	
-        ////Debug.Log(bottomImage.name + " image name " + bottomImage.transform.parent.parent.parent.name + " parent name ");	
-        ////Debug.Log(topImage.name + " image name " + topImage.transform.parent.parent.parent.name + " parent name ");	
-        ////bottomImage.sprite = playerFields[playerId];	
-        ////topImage.sprite = playerFields[opponentId];	
-        ////Debug.Log(playerId + " player id " + opponentId + " oppenent id");	
-        ////bottomImage.GetComponent<SetFieldPosition>().SetObjectSize(playerId);	
-        ////bottomImage.GetComponent<SetFieldPosition>().SetObjectPosition(playerId, "down");	
-        ////topImage.GetComponent<SetFieldPosition>().SetObjectSize(opponentId);	
-        ////topImage.GetComponent<SetFieldPosition>().SetObjectPosition(opponentId, "up");	
-        ////downProfileIamge.GetComponent<Image>().sprite = profileImages[playerDeckProfileId];	
-        ////upProfileImage.GetComponent<Image>().sprite = profileImages[opponentDeckProfileId];
-
         if (pv.IsMine)
         {
             playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
@@ -513,7 +465,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         int enemyHealth = int.Parse(enemyProfile.transform.Find("Enemy Deck Health").Find("Remaining Health").GetComponent<TMP_Text>().text);
         xpSlider = resultPanel.transform.GetChild(0).Find("XP Progress Bar").GetComponent<Slider>();
         xpSlider.interactable = false;
-        PlayerData data = new PlayerData();
         string winnerName = "";
 
         if (PhotonNetwork.IsMasterClient)
@@ -522,8 +473,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             int totalPlayerGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
             int gainedMasterXp = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"];
             int totalMasterXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterXP"];
-            data.gold = totalPlayerGold;
-            data.xp = totalMasterXP;
             Debug.Log(" master xp " + gainedMasterXp + " gained " + totalMasterXP + " total " + totalPlayerGold + " total gold");
             xpSlider.value = (totalMasterXP / 2000f);
             PlayerPrefs.SetInt("totalGold", totalPlayerGold);
@@ -556,8 +505,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log(" client xp " + gainedClientXp + " gained " + totalClientXP + " total " + totalClientGold + " total client gold");
             PlayerPrefs.SetInt("totalGold", totalClientGold);
             PlayerPrefs.SetInt("totalXP", totalClientXP);
-            data.gold = totalClientGold;
-            data.xp = totalClientXP;
             Debug.LogError(" player health " + playerHealth + " enemy health " + enemyHealth);
 
             if (playerHealth > enemyHealth)
@@ -582,10 +529,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         //<----- Here set the xp for player to the database (playerController.totalXP) ------->
 
-        string jsonData = JsonConvert.SerializeObject(data);
-        string path = Path.Combine(Application.streamingAssetsPath, "PlayerData.json");
-        File.WriteAllText(path, jsonData);
-        Debug.LogError(data.xp + " xp value " + data.gold + " gold ");
         //if (PhotonNetwork.IsMasterClient)	
         //{	
         //    //Debug.LogError("master turn " + turnCountMaster);	
@@ -611,8 +554,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         timeDown.PauseTimer("down");
         timeUp.PauseTimer("up");
         StopAllCoroutines();
-        Debug.LogError(" time up parent " + timeUp.transform.parent.parent.parent.name + " down " + timeDown.transform.parent.parent.parent);
-        Debug.LogError(" previous end game value " + endGame + " player name " + PhotonNetwork.LocalPlayer);
 
         endGame = true;
         PhotonNetwork.AutomaticallySyncScene = false;
@@ -687,64 +628,71 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             if (destroyPlayer)
             {
-                int goldPlayer = attacking.gold;
-                int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
-                int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"]);
-                goldGainedOther += goldPlayer;
-                //gainedGoldEnemy += goldPlayer;	
-                int totalGoldForOtherDeck = goldPlayer + goldOtherDeck;
-                //PhotonNetwork.CurrentRoom.CustomProperties["clientGold"] = totalGoldForOtherDeck;	
-                //PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"] = goldGainedOther;	
-                properties["clientGold"] = totalGoldForOtherDeck;
-                properties["clientGainedGold"] = goldGainedOther;
-                //Debug.LogError(" gained gold enemy " + gainedGoldEnemy + " destroyplayer master " + attacking.gold);	
-                int xpPlayer = attacking.XP;
-                int xpOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientXP"]);
-                int xpGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"]);
-                xpGainedOther += xpPlayer;
-                int totalXPForOtherDeck = xpPlayer + xpOtherDeck;
-                //PhotonNetwork.CurrentRoom.CustomProperties["clientXP"] = totalXPForOtherDeck;	
-                properties["clientXP"] = totalXPForOtherDeck;
-                properties["clientGainedXP"] = xpGainedOther;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                Debug.LogError(" gained xp other " + xpGainedOther + " destroyplayer master " + attacking.XP);
-                Debug.LogError(" enemy progress bar parent " + enemyXPProgressBar.transform.parent.parent.name + " is master " + PhotonNetwork.IsMasterClient);
-                enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXPForOtherDeck);
-                pv.RPC("SetProgessBar", RpcTarget.Others, totalXPForOtherDeck, "player");
-                pv.RPC("SetGoldValue", RpcTarget.Others, "master");
+                enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
+                //enemyController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
+                enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "master");
+                //int goldPlayer = attacking.gold;
+                //int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
+                //int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"]);
+                //goldGainedOther += goldPlayer;
+                ////gainedGoldEnemy += goldPlayer;	
+                //int totalGoldForOtherDeck = goldPlayer + goldOtherDeck;
+                ////PhotonNetwork.CurrentRoom.CustomProperties["clientGold"] = totalGoldForOtherDeck;	
+                ////PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"] = goldGainedOther;	
+                //properties["clientGold"] = totalGoldForOtherDeck;
+                //properties["clientGainedGold"] = goldGainedOther;
+                ////Debug.LogError(" gained gold enemy " + gainedGoldEnemy + " destroyplayer master " + attacking.gold);	
+                //int xpPlayer = attacking.XP;
+                //int xpOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientXP"]);
+                //int xpGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"]);
+                //xpGainedOther += xpPlayer;
+                //int totalXPForOtherDeck = xpPlayer + xpOtherDeck;
+                ////PhotonNetwork.CurrentRoom.CustomProperties["clientXP"] = totalXPForOtherDeck;	
+                //properties["clientXP"] = totalXPForOtherDeck;
+                //properties["clientGainedXP"] = xpGainedOther;
+                //PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+                //Debug.LogError(" gained xp other " + xpGainedOther + " destroyplayer master " + attacking.XP);
+                //Debug.LogError(" enemy progress bar parent " + enemyXPProgressBar.transform.parent.parent.name + " is master " + PhotonNetwork.IsMasterClient);
+                //enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXPForOtherDeck);
+                //pv.RPC("SetProgessBar", RpcTarget.Others, totalXPForOtherDeck, "player");
+                //pv.RPC("SetGoldValue", RpcTarget.Others, "master");
 
-                //enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
-                //enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "master");
+                ////enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
+                ////enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "master");
             }
 
             if (destroyEnemy)
             {
-                int goldEnemy = target.gold;
-                int goldPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
-                int goldGainedPlayer = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"]);
-                goldGainedPlayer += goldEnemy;
-                int totalGoldForOtherPlayer = goldEnemy + goldPlayerDeck;
-                Gold.instance.SetGold(totalGoldForOtherPlayer);
-                properties["masterGold"] = totalGoldForOtherPlayer;
-                properties["masterGainedGold"] = goldGainedPlayer;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                //Debug.LogError(" gained gold player " + gainedGoldPlayer + " destroy enemy master " + target.gold);	
-                int xpEnemy = target.XP;
-                int xpPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterXP"]);
-                int xpGainedPlayer = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"]);
-                xpGainedPlayer += xpEnemy;
-                int totalXPForOtherPlayer = xpEnemy + xpPlayerDeck;
-                //Gold.instance.SetGold(totalGoldForOtherPlayer);	
-                properties["masterXP"] = totalXPForOtherPlayer;
-                properties["masterGainedXP"] = xpGainedPlayer;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                //Debug.LogError(" gained xp player " + gainedXPPlayer + " destroy enemy master " + target.XP);	
-                Debug.LogError(" player progress bar parent " + playerXPProgressBar.transform.parent.parent.name + " is master " + PhotonNetwork.IsMasterClient);
-                playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXPForOtherPlayer);
-                pv.RPC("SetProgessBar", RpcTarget.Others, totalXPForOtherPlayer, "enemy");
+                Debug.LogError(" Destroy enemy called mastyer");
+                playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+                //playerController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
+                playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
+                //int goldEnemy = target.gold;
+                //int goldPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
+                //int goldGainedPlayer = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"]);
+                //goldGainedPlayer += goldEnemy;
+                //int totalGoldForOtherPlayer = goldEnemy + goldPlayerDeck;
+                //Gold.instance.SetGold(totalGoldForOtherPlayer);
+                //properties["masterGold"] = totalGoldForOtherPlayer;
+                //properties["masterGainedGold"] = goldGainedPlayer;
+                //PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+                ////Debug.LogError(" gained gold player " + gainedGoldPlayer + " destroy enemy master " + target.gold);	
+                //int xpEnemy = target.XP;
+                //int xpPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterXP"]);
+                //int xpGainedPlayer = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"]);
+                //xpGainedPlayer += xpEnemy;
+                //int totalXPForOtherPlayer = xpEnemy + xpPlayerDeck;
+                ////Gold.instance.SetGold(totalGoldForOtherPlayer);	
+                //properties["masterXP"] = totalXPForOtherPlayer;
+                //properties["masterGainedXP"] = xpGainedPlayer;
+                //PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+                ////Debug.LogError(" gained xp player " + gainedXPPlayer + " destroy enemy master " + target.XP);	
+                //Debug.LogError(" player progress bar parent " + playerXPProgressBar.transform.parent.parent.name + " is master " + PhotonNetwork.IsMasterClient);
+                //playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXPForOtherPlayer);
+                //pv.RPC("SetProgessBar", RpcTarget.Others, totalXPForOtherPlayer, "enemy");
 
-                //playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
-                //playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
+                ////playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+                ////playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
             }
 
             attackingcard.SetAttackValue(true);
@@ -763,60 +711,68 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             if (destroyPlayer)
             {
-                int goldPlayer = attacking.gold;
-                int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
-                int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"]);
-                goldGainedOther += goldPlayer;
-                int totalGoldForOtherDeck = goldPlayer + goldOtherDeck;
-                properties["masterGold"] = totalGoldForOtherDeck;
-                properties["masterGainedGold"] = goldGainedOther;
-                //Debug.LogError(" gained gold enemy " + gainedGoldEnemy + " destroy player in client " + attacking.gold);	
-                int xpPlayer = attacking.XP;
-                int xpOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterXP"]);
-                int xpGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"]);
-                xpGainedOther += xpPlayer;
-                int totalXPForOtherDeck = xpPlayer + xpOtherDeck;
-                properties["masterXP"] = totalXPForOtherDeck;
-                properties["masterGainedXP"] = xpGainedOther;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                //Debug.LogError(" gained xp enemy " + gainedXPEnemy + " destroy player in client " + attacking.XP);	
-                Debug.LogError(" enemy progress bar parent " + enemyXPProgressBar.transform.parent.parent.name + " is master " + PhotonNetwork.IsMasterClient);
-                enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXPForOtherDeck);
-                pv.RPC("SetProgessBar", RpcTarget.Others, totalXPForOtherDeck, "player");
-                //pv.RPC("SetGoldValue", RpcTarget.Others, "client", gainedGoldEnemy, totalGoldForOtherDeck, gainedXPEnemy, totalXPForOtherDeck);
+                Debug.LogError(" Destroy player called client ");
+                enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
+                //enemyController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
+                enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
+                //int goldPlayer = attacking.gold;
+                //int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
+                //int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"]);
+                //goldGainedOther += goldPlayer;
+                //int totalGoldForOtherDeck = goldPlayer + goldOtherDeck;
+                //properties["masterGold"] = totalGoldForOtherDeck;
+                //properties["masterGainedGold"] = goldGainedOther;
+                ////Debug.LogError(" gained gold enemy " + gainedGoldEnemy + " destroy player in client " + attacking.gold);	
+                //int xpPlayer = attacking.XP;
+                //int xpOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterXP"]);
+                //int xpGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"]);
+                //xpGainedOther += xpPlayer;
+                //int totalXPForOtherDeck = xpPlayer + xpOtherDeck;
+                //properties["masterXP"] = totalXPForOtherDeck;
+                //properties["masterGainedXP"] = xpGainedOther;
+                //PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+                ////Debug.LogError(" gained xp enemy " + gainedXPEnemy + " destroy player in client " + attacking.XP);	
+                //Debug.LogError(" enemy progress bar parent " + enemyXPProgressBar.transform.parent.parent.name + " is master " + PhotonNetwork.IsMasterClient);
+                //enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXPForOtherDeck);
+                //pv.RPC("SetProgessBar", RpcTarget.Others, totalXPForOtherDeck, "player");
+                ////pv.RPC("SetGoldValue", RpcTarget.Others, "client", gainedGoldEnemy, totalGoldForOtherDeck, gainedXPEnemy, totalXPForOtherDeck);
 
-                //enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
-                //enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
+                ////enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
+                ////enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
             }
 
             if (destroyEnemy)
             {
-                int goldEnemy = target.gold;
-                int goldPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
-                int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"]);
-                goldGainedOther += goldEnemy;
-                int totalGoldForOtherPlayer = goldEnemy + goldPlayerDeck;
-                //Debug.LogError(" gained gold player " + gainedGoldPlayer + " destroy enemy in client " + target.gold);	
-                Gold.instance.SetGold(totalGoldForOtherPlayer);
-                properties["clientGold"] = totalGoldForOtherPlayer;
-                properties["clientGainedGold"] = goldGainedOther;
-                //PhotonNetwork.CurrentRoom.SetCustomProperties(properties);	
-                int xpEnemy = target.XP;
-                int xpPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientXP"]);
-                int xpGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"]);
-                xpGainedOther += xpEnemy;
-                int totalXPForOtherPlayer = xpEnemy + xpPlayerDeck;
-                //Debug.LogError(" gained xp player " + gainedXPPlayer + " destroy enemy in client " + target.XP);	
-                //Gold.instance.SetGold(totalGoldForOtherPlayer);	
-                properties["clientXP"] = totalXPForOtherPlayer;
-                properties["clientGainedXP"] = xpGainedOther;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                Debug.LogError(" player progress bar parent " + playerXPProgressBar.transform.parent.parent.name + " is master " + PhotonNetwork.IsMasterClient);
-                playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXPForOtherPlayer);
-                pv.RPC("SetProgessBar", RpcTarget.Others, totalXPForOtherPlayer, "enemy");
+                Debug.LogError(" destroy enemy called ");
+                playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+                //playerController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
+                playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
+                //int goldEnemy = target.gold;
+                //int goldPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
+                //int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"]);
+                //goldGainedOther += goldEnemy;
+                //int totalGoldForOtherPlayer = goldEnemy + goldPlayerDeck;
+                ////Debug.LogError(" gained gold player " + gainedGoldPlayer + " destroy enemy in client " + target.gold);	
+                //Gold.instance.SetGold(totalGoldForOtherPlayer);
+                //properties["clientGold"] = totalGoldForOtherPlayer;
+                //properties["clientGainedGold"] = goldGainedOther;
+                ////PhotonNetwork.CurrentRoom.SetCustomProperties(properties);	
+                //int xpEnemy = target.XP;
+                //int xpPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientXP"]);
+                //int xpGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"]);
+                //xpGainedOther += xpEnemy;
+                //int totalXPForOtherPlayer = xpEnemy + xpPlayerDeck;
+                ////Debug.LogError(" gained xp player " + gainedXPPlayer + " destroy enemy in client " + target.XP);	
+                ////Gold.instance.SetGold(totalGoldForOtherPlayer);	
+                //properties["clientXP"] = totalXPForOtherPlayer;
+                //properties["clientGainedXP"] = xpGainedOther;
+                //PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+                //Debug.LogError(" player progress bar parent " + playerXPProgressBar.transform.parent.parent.name + " is master " + PhotonNetwork.IsMasterClient);
+                //playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXPForOtherPlayer);
+                //pv.RPC("SetProgessBar", RpcTarget.Others, totalXPForOtherPlayer, "enemy");
 
-                //playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
-                //playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
+                ////playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+                ////playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
             }
 
             attackingcard.SetAttackValue(true);
@@ -825,42 +781,42 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
     }
 
-    [PunRPC]
-    private void SetProgessBar(int progressValue, string name)
-    {
-        if (name == "player")
-        {
-            playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(progressValue);
-            Debug.LogError(" player progress bar parent " + playerXPProgressBar.transform.parent.parent.name + " master or client " + PhotonNetwork.IsMasterClient + " progress value " + progressValue);
-        }
-        else if (name == "enemy")
-        {
-            enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(progressValue);
-            Debug.LogError(" enemy progress bar parent " + enemyXPProgressBar.transform.parent.parent.name + " master or client " + PhotonNetwork.IsMasterClient + " progress value " + progressValue);
-        }
-    }
-    [PunRPC]
-    private void SetGoldValue(string player)
-    {
-        //Debug.LogError("SetGoldValue called " + player + " player " + gold  +  " gold value " + totalGold + " total gold value " + xp + " xp value " + totalXP + " total xp value " );	
-        if (player == "master")
-        {
-            Debug.LogError(" inside master in SetGoldValue");
-            int totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
-            int totalXP = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientXP"]); ;
-            Gold.instance.SetGold(totalGold);
-            Debug.LogError("master gold " + totalGold + " xp " + totalXP);
-        }
-        else if (player == "client")
-        {
-            Debug.LogError(" inside client in SetGoldValue");
-            //gainedGoldEnemy = gold;	
-            int totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
-            int totalXP = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterXP"]);
-            Gold.instance.SetGold(totalGold);
-            Debug.LogError("master client " + totalGold + " xp " + totalXP);
-        }
-    }
+    //[PunRPC]
+    //private void SetProgessBar(int progressValue, string name)
+    //{
+    //    if (name == "player")
+    //    {
+    //        playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(progressValue);
+    //        Debug.LogError(" player progress bar parent " + playerXPProgressBar.transform.parent.parent.name + " master or client " + PhotonNetwork.IsMasterClient + " progress value " + progressValue);
+    //    }
+    //    else if (name == "enemy")
+    //    {
+    //        enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(progressValue);
+    //        Debug.LogError(" enemy progress bar parent " + enemyXPProgressBar.transform.parent.parent.name + " master or client " + PhotonNetwork.IsMasterClient + " progress value " + progressValue);
+    //    }
+    //}
+    //[PunRPC]
+    //private void SetGoldValue(string player)
+    //{
+    //    //Debug.LogError("SetGoldValue called " + player + " player " + gold  +  " gold value " + totalGold + " total gold value " + xp + " xp value " + totalXP + " total xp value " );	
+    //    if (player == "master")
+    //    {
+    //        Debug.LogError(" inside master in SetGoldValue");
+    //        int totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
+    //        int totalXP = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientXP"]); ;
+    //        Gold.instance.SetGold(totalGold);
+    //        Debug.LogError("master gold " + totalGold + " xp " + totalXP);
+    //    }
+    //    else if (player == "client")
+    //    {
+    //        Debug.LogError(" inside client in SetGoldValue");
+    //        //gainedGoldEnemy = gold;	
+    //        int totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
+    //        int totalXP = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterXP"]);
+    //        Gold.instance.SetGold(totalGold);
+    //        Debug.LogError("master client " + totalGold + " xp " + totalXP);
+    //    }
+    //}
 
     [PunRPC]
     private void AttackCardRPC(int attackId, int targetId)
