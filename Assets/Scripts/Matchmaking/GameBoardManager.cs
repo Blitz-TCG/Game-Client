@@ -1,12 +1,9 @@
-using Newtonsoft.Json;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -139,6 +136,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         timeUp = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Timer").GetChild(0).GetComponent<PlayerTimer>();
         Debug.LogError("timer down " + timeDown + " time up " + timeUp);
 
+        customProp["totalTurnCount"] = 0;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
+        Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"] + " photon player name " + PhotonNetwork.LocalPlayer.NickName);
+
         if (PhotonNetwork.IsMasterClient)
         {
             customProp["master"] = true;
@@ -179,7 +180,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
             enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
-        }
+        } 
     }
 
     private void Update()
@@ -469,6 +470,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         if (PhotonNetwork.IsMasterClient)
         {
+            Debug.LogError(PlayerPrefs.GetInt("masterCount") + " master value " + PhotonNetwork.LocalPlayer.NickName);
             totalTurnText.SetText(PlayerPrefs.GetInt("masterCount") + " Turns.");
             int totalPlayerGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
             int gainedMasterXp = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"];
@@ -501,6 +503,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             int gainedClientXp = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"];
             int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
             xpSlider.value = (totalClientXP / 2000f);
+            Debug.LogError(PlayerPrefs.GetInt("clientCount") + " client value " + PhotonNetwork.LocalPlayer.NickName);
             totalTurnText.SetText(PlayerPrefs.GetInt("clientCount") + " Turns.");
             Debug.Log(" client xp " + gainedClientXp + " gained " + totalClientXP + " total " + totalClientGold + " total client gold");
             PlayerPrefs.SetInt("totalGold", totalClientGold);
@@ -523,6 +526,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             }
             mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer("client"));
         }
+
+        int turnCounter = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"];
+        Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"] + " photon player name " + PhotonNetwork.LocalPlayer.NickName + " TURN counter " + turnCounter);
 
         playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
         enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
@@ -1531,6 +1537,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             if (iAmActive)
             {
+                int turnCounter = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"];
+                turnCounter++;
+                customProp["totalTurnCount"] = turnCounter;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
+                Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"] + " photon player name " + PhotonNetwork.LocalPlayer.NickName + " TURN counter " + turnCounter);
+
                 string minText = downMinText.text;
                 string secText = downSecText.text;
                 if (coroutine != null)
