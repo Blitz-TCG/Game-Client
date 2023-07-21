@@ -27,8 +27,6 @@ TagManager:
   - UI
   - Effects
   - AudioAndCursor
-  - DisabledButtonEdit
-  - DisabledButtonDelete
   layers:
   - Default
   - TransparentFX

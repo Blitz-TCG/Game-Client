@@ -49,12 +49,20 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private Button[] buttons;
     [SerializeField] private Button saveButton;
     [SerializeField] private Button deleteButton;
-    [SerializeField] private Button addOrRemove;
-    [SerializeField] private Button backButton;
+    //[SerializeField] private Button addOrRemove;
+    //[SerializeField] private Button backButton;
 
     [Header("Game objects")]
     [SerializeField] private GameObject addDeckObject;
+    [SerializeField] private GameObject addDeckButtonEnabled;
+    [SerializeField] private GameObject addDeckButtonDisabled;
     [SerializeField] public GameObject editDeckObject;
+    [SerializeField] private GameObject editDeckButtonEnabled;
+    [SerializeField] private GameObject editDeckButtonDisabled;
+    [SerializeField] private GameObject saveDeckButtonEnabled;
+    [SerializeField] private GameObject saveDeckButtonDisabled;
+    [SerializeField] private GameObject deleteDeckButtonEnabled;
+    [SerializeField] private GameObject deleteDeckButtonDisabled;
 
     [SerializeField] public GameObject selectedDeck1;
     [SerializeField] public GameObject selectedDeck2;
@@ -178,7 +186,6 @@ public class DeckManager : MonoBehaviour
     private void Start()
     {
         cardDetails = CardDataBase.instance.cardDetails;
-        EnableOrDisable(editDeck, disableColor, false);
 
         DeckCount();
 
@@ -218,18 +225,21 @@ public class DeckManager : MonoBehaviour
 
     private void Update()
     {
-        if (isEdit && !deleteButton.enabled)
+        if (isEdit && !deleteDeckButtonEnabled.activeSelf)
         {
-            EnableOrDisable(deleteButton, enableColor, true);
+            deleteDeckButtonEnabled.SetActive(true);
+            deleteDeckButtonDisabled.SetActive(false);
         }
 
-        if (currentListOfCard.transform.childCount < 10 && saveButton.enabled)
+        if (currentListOfCard.transform.childCount < 10 && saveDeckButtonEnabled.activeSelf)
         {
-            EnableOrDisable(saveButton, disableColor, false);
+            saveDeckButtonEnabled.SetActive(false);
+            saveDeckButtonDisabled.SetActive(true);
         }
-        else if (currentListOfCard.transform.childCount >= 10 && !saveButton.enabled)
+        else if (currentListOfCard.transform.childCount >= 10 && !saveDeckButtonEnabled.activeSelf)
         {
-           EnableOrDisable(saveButton, enableColor, true);
+            saveDeckButtonEnabled.SetActive(true);
+            saveDeckButtonDisabled.SetActive(false);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) && popUpPanel.activeSelf)
@@ -409,7 +419,8 @@ public class DeckManager : MonoBehaviour
                             buttons[deckId - 1].spriteState = spriteState;
 
                             deckId = -1;
-                            EnableOrDisable(editDeck, disableColor, false);
+                            editDeckButtonEnabled.SetActive(false);
+                            editDeckButtonDisabled.SetActive(true);
                             EventSystem.current.SetSelectedGameObject(null);
 
                             if (!IsMouseOverDeck())
@@ -451,7 +462,8 @@ public class DeckManager : MonoBehaviour
                 Debug.Log(hit.collider);
                 IsSelected = false;
                 deckId = -1;
-                EnableOrDisable(editDeck, disableColor, false);
+                editDeckButtonEnabled.SetActive(false);
+                editDeckButtonDisabled.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(null);
                 deckNotes.SetActive(false);
                 deckProfile.sprite = unknownDeckPreview.sprite;
@@ -866,9 +878,12 @@ public class DeckManager : MonoBehaviour
         deckProfile.sprite = unknownDeckPreview.sprite;
 
         isAdd = true;
-        EnableOrDisable(saveButton, disableColor, false);
-        EnableOrDisable(deleteButton, disableColor, false);
-        EnableOrDisable(editDeck, disableColor, false);
+        deleteDeckButtonEnabled.SetActive(false);
+        deleteDeckButtonDisabled.SetActive(true);
+        saveDeckButtonEnabled.SetActive(false);
+        saveDeckButtonDisabled.SetActive(true);
+        editDeckButtonEnabled.SetActive(false);
+        editDeckButtonDisabled.SetActive(true);
 
         isEdit = false;
     }
@@ -1187,7 +1202,8 @@ public class DeckManager : MonoBehaviour
             deckNotesTitleSelected.text = ErgoQuery.instance.deckTitleStore[id - 1];
             deckNotesBodySelected.text = ErgoQuery.instance.deckBodyStore[id - 1];
         }
-        EnableOrDisable(editDeck, enableColor, true);
+        editDeckButtonEnabled.SetActive(true);
+        editDeckButtonDisabled.SetActive(false);
 
         generalsIndexStatic = generalsIndex; //to assist with resetting the hovering previews
         deckProfile.enabled = true;
@@ -1250,8 +1266,8 @@ public class DeckManager : MonoBehaviour
         tempAvailCard = new int[ErgoQuery.instance.cardIdAvailableStore[deckId - 1].Length];
         tempCurrCard = new int[ErgoQuery.instance.cardIdCurrentStore[deckId - 1].Length];
 
-
-        EnableOrDisable(editDeck, disableColor, false);
+        editDeckButtonEnabled.SetActive(false);
+        editDeckButtonDisabled.SetActive(true);
         currentCards.Clear();
         availableCards.Clear();
 
@@ -1697,6 +1713,7 @@ public class DeckManager : MonoBehaviour
 
     public void OnEditBack() // Back from edit deck screen to add deck builder
     {
+        cursorManager.AudioClickButtonStandard();
         editDeckObject.SetActive(false);
         addDeckObject.SetActive(true);
         deckNotes.SetActive(false);
@@ -1850,11 +1867,13 @@ public class DeckManager : MonoBehaviour
 
         if (deckCount == 5)
         {
-            EnableOrDisable(addDeck, disableColor, false);
+            addDeckButtonEnabled.SetActive(false);
+            addDeckButtonDisabled.SetActive(true);
         }
         else
         {
-            EnableOrDisable(addDeck, enableColor, true);
+            addDeckButtonEnabled.SetActive(true);
+            addDeckButtonDisabled.SetActive(false);
         }
 
         if (deckCount > 0)
@@ -1870,13 +1889,6 @@ public class DeckManager : MonoBehaviour
             images[i].enabled = false;
         }
     }
-
-    private void EnableOrDisable(Button button, Color color, bool value) // Enable or disable button in all screen
-    {
-        button.GetComponent<Image>().color = color;
-        button.enabled = value;
-    }
-
     private void ClearCards() // Clear the list of cards (List<Card>)
     {
         availableCards.Clear();
