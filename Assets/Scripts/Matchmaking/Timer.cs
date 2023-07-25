@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using TMPro;
 using UnityEngine;
 
@@ -32,6 +33,8 @@ public class Timer : MonoBehaviourPunCallbacks
         if (!this.isTimerRunning) return;
         if(PhotonNetwork.IsMasterClient)
         {
+            Debug.LogError(" master " + PhotonNetwork.IsMasterClient);
+            Debug.LogError(" Timer " + TimeRemaining());
             float countdown = TimeRemaining();
             if (countdown > 0.0f)
             {
@@ -69,7 +72,7 @@ public class Timer : MonoBehaviourPunCallbacks
         }
     }
 
-    private void OnTimerRuns()
+    public void OnTimerRuns()
     {
         this.isTimerRunning = true;
         this.enabled = true;
@@ -91,6 +94,7 @@ public class Timer : MonoBehaviourPunCallbacks
         {
             if (name == "GC")
             {
+                Debug.LogError(name + " panel name " + time + " time ");
                 isGlobalCountDown = true;
                 Countdown = time;
                 SetStartTime();
@@ -98,6 +102,7 @@ public class Timer : MonoBehaviourPunCallbacks
             }
             else if (name == "BT")
             {
+                Debug.LogError(name + " panel name " + time + " time ");
                 isBiddingTime = true;
                 Countdown = time;
                 SetStartTime();
@@ -105,6 +110,7 @@ public class Timer : MonoBehaviourPunCallbacks
             }
             else if (name == "CB")
             {
+                Debug.LogError(name + " panel name " + time + " time ");
                 isCompletedBid = true;
                 Countdown = time;
                 SetStartTime();
@@ -117,14 +123,19 @@ public class Timer : MonoBehaviourPunCallbacks
 
     private void Initialize()
     {
+        Debug.Log("initialize called ");
         int propStartTime;
         if (TryGetStartTime(out propStartTime))
         {
+            Debug.Log(propStartTime + " start prop time ");
             this.startTime = propStartTime;
             this.isTimerRunning = TimeRemaining() > 0;
 
             if (this.isTimerRunning)
+            {
+                Debug.Log("inside time remainig ");
                 OnTimerRuns();
+            }
         }
     }
 
@@ -136,12 +147,16 @@ public class Timer : MonoBehaviourPunCallbacks
 
     public static bool TryGetStartTime(out int startTimestamp)
     {
+        Debug.Log(" try get start time");
         startTimestamp = PhotonNetwork.ServerTimestamp;
 
         object startTimeFromProps;
+        Debug.Log(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CountdownStartTime, out startTimeFromProps) + " value");
         if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CountdownStartTime, out startTimeFromProps))
         {
+            Debug.Log(startTimestamp + " start stamp ");
             startTimestamp = (int)startTimeFromProps;
+            Debug.Log(startTimestamp + " start stamp ");
             return true;
         }
         return false;
@@ -151,6 +166,7 @@ public class Timer : MonoBehaviourPunCallbacks
     {
         int startTime = 0;
         bool wasSet = TryGetStartTime(out startTime);
+        Debug.Log(startTime + " start time " + wasSet);
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
             {
                 {Timer.CountdownStartTime, (int)PhotonNetwork.ServerTimestamp}

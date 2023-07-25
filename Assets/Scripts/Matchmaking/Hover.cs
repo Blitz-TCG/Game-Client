@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     #region Variables
     [SerializeField] private Card infoCard;
     [SerializeField] private GameObject miniCardParent;
+    
 
     private GameObject cardUI;
     private GameObject goldErrorTooltip;
@@ -23,6 +25,10 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     public static bool isClicked = false;
     public static int clickCounter = 0;
     public static GameObject cardParent;
+    private PlayerController playerController;
+    private EnemyController enemyController;
+    private GameObject gameBoardParent;
+    private TMP_Text error;
 
     private ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
     #endregion
@@ -30,7 +36,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     private void Awake()
     {
         canvas = GameObject.FindGameObjectWithTag("Canvas");
-        cardUI = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Cards UI").gameObject;
+        cardUI = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("StoreUI").gameObject;
         goldErrorTooltip = cardUI.transform.GetChild(cardUI.transform.childCount - 1).gameObject;
     }
 
@@ -48,6 +54,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
     private void Start()
     {
+        gameBoardParent = GameObject.Find("Game Board Parent");
         cardDetails = CardDataBase.instance.cardDetails;
         GetParent();
     }
@@ -124,6 +131,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         else
         {
             goldErrorTooltip.SetActive(true);
+            goldErrorTooltip.transform.Find("Gold Error Text").GetComponent<TMP_Text>().SetText("You can not buy card more than gold you have.");
             Invoke("DisableGoldErrorTooltip", 1f);
         }
     }
@@ -137,6 +145,9 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     [PunRPC]
     public void Recruit(int id)
     {
+        playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+        enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
+
         pv = gameObject.transform.GetComponent<PhotonView>();
         if (pv.IsMine)
         {
@@ -144,40 +155,89 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             {
                 if (hand.transform.GetChild(i).childCount == 0)
                 {
+                    Debug.Log(playerController.totalXP + " player total xp " + enemyController.totalXP + " enemy's XP");
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
-                    GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
-                    miniCard.transform.SetParent(hand.transform.GetChild(i));
-                    miniCard.transform.position = hand.transform.GetChild(i).transform.position;
-                    miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
-                    miniCard.GetComponent<DragMiniCards>().enabled = true;
-                    //miniCard.AddComponent<DragMiniCards>();
-                    //miniCard.AddComponent<PhotonView>();
-                    Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                    card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount ,cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
-                    card.name = cardClicked.cardName;
-                    card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-
-                    if (PhotonNetwork.IsMasterClient)
+                    Debug.Log(cardClicked.levelRequired + " level req");
+                    int level = int.Parse(cardClicked.levelRequired.Split(" ")[1]);
+                    if (IsRecruit(playerController.totalXP, level))
                     {
-                        int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
-                        int availableGold = getGold - cardClicked.gold;
-                        Gold.instance.SetGold(availableGold);
-                        properties["masterGold"] = availableGold;
-                        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+                        GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
+                        miniCard.transform.SetParent(hand.transform.GetChild(i));
+                        miniCard.transform.position = hand.transform.GetChild(i).transform.position;
+                        miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+                        miniCard.GetComponent<DragMiniCards>().enabled = true;
+                        //miniCard.AddComponent<DragMiniCards>();
+                        //miniCard.AddComponent<PhotonView>();
+                        Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
+                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
+                        card.name = cardClicked.cardName;
+                        card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
 
-                        //Invoke("UpdatedProperties", 1f);
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+                            int availableGold = getGold - cardClicked.gold;
+                            Gold.instance.SetGold(availableGold);
+                            properties["masterGold"] = availableGold;
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+
+                            //Invoke("UpdatedProperties", 1f);
+                        }
+                        else if (!PhotonNetwork.IsMasterClient)
+                        {
+                            int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+                            int availableGold = getGold - cardClicked.gold;
+                            Gold.instance.SetGold(availableGold);
+                            properties["clientGold"] = availableGold;
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+                            //Debug.LogError("available client " + availableGold);
+
+                            //Invoke("UpdatedProperties", 1f);
+                        }
                     }
-                    else if (!PhotonNetwork.IsMasterClient)
+                    else
                     {
-                        int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
-                        int availableGold = getGold - cardClicked.gold;
-                        Gold.instance.SetGold(availableGold);
-                        properties["clientGold"] = availableGold;
-                        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                        //Debug.LogError("available client " + availableGold);
-
-                        //Invoke("UpdatedProperties", 1f);
+                        Debug.Log(" else called ");
+                        Debug.Log(" Gold error tool tip " + goldErrorTooltip);
+                        Debug.Log(" gold text name " + goldErrorTooltip.transform.Find("Gold Error Text").name);
+                        Debug.Log(" parent name " + goldErrorTooltip.transform.parent.name + " back ground " + goldErrorTooltip.transform.parent.parent.name + " game board " + goldErrorTooltip.transform.parent.parent.parent.name);
+                        goldErrorTooltip.SetActive(true);
+                        goldErrorTooltip.transform.Find("Gold Error Text").GetComponent<TMP_Text>().SetText("You can not recruit this card!!!");
+                        Invoke("DisableGoldErrorTooltip", 1f);
                     }
+                    //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
+                    //miniCard.transform.SetParent(hand.transform.GetChild(i));
+                    //miniCard.transform.position = hand.transform.GetChild(i).transform.position;
+                    //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+                    //miniCard.GetComponent<DragMiniCards>().enabled = true;
+                    ////miniCard.AddComponent<DragMiniCards>();
+                    ////miniCard.AddComponent<PhotonView>();
+                    //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
+                    //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount ,cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
+                    //card.name = cardClicked.cardName;
+                    //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+
+                    //if (PhotonNetwork.IsMasterClient)
+                    //{
+                    //    int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+                    //    int availableGold = getGold - cardClicked.gold;
+                    //    Gold.instance.SetGold(availableGold);
+                    //    properties["masterGold"] = availableGold;
+                    //    PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+
+                    //    //Invoke("UpdatedProperties", 1f);
+                    //}
+                    //else if (!PhotonNetwork.IsMasterClient)
+                    //{
+                    //    int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+                    //    int availableGold = getGold - cardClicked.gold;
+                    //    Gold.instance.SetGold(availableGold);
+                    //    properties["clientGold"] = availableGold;
+                    //    PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+                    //    //Debug.LogError("available client " + availableGold);
+
+                    //    //Invoke("UpdatedProperties", 1f);
+                    //}
 
                     break;
                 }
@@ -189,17 +249,33 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             {
                 if (enemyHand.transform.GetChild(i).childCount == 0)
                 {
+                    Debug.Log(playerController.totalXP + " player total xp " + enemyController.totalXP + " enemy's XP");
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
-                    GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
-                    miniCard.transform.SetParent(enemyHand.transform.GetChild(i));
-                    miniCard.transform.position = enemyHand.transform.GetChild(i).transform.position;
-                    miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
-                    miniCard.AddComponent<DragMiniCards>();
-                    Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                    card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId , cardClicked.ergoTokenAmount , cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
-                    card.name = cardClicked.cardName;
-                    card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-                    miniCard.SetActive(false);
+                    Debug.Log(cardClicked.levelRequired + " level required");
+                    int level = int.Parse(cardClicked.levelRequired.Split(" ")[1]);
+                    if (IsRecruit(playerController.totalXP, level))
+                    {
+                        GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
+                        miniCard.transform.SetParent(enemyHand.transform.GetChild(i));
+                        miniCard.transform.position = enemyHand.transform.GetChild(i).transform.position;
+                        miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+                        miniCard.AddComponent<DragMiniCards>();
+                        Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
+                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
+                        card.name = cardClicked.cardName;
+                        card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+                        miniCard.SetActive(false);
+                    }
+                    //    GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
+                    //miniCard.transform.SetParent(enemyHand.transform.GetChild(i));
+                    //miniCard.transform.position = enemyHand.transform.GetChild(i).transform.position;
+                    //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+                    //miniCard.AddComponent<DragMiniCards>();
+                    //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
+                    //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId , cardClicked.ergoTokenAmount , cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
+                    //card.name = cardClicked.cardName;
+                    //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+                    //miniCard.SetActive(false);
                     break;
                 }
             }
@@ -254,5 +330,45 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             Animator anim = gameObject.GetComponent<Animator>();
             anim.SetBool("Scale", true);
         }
+    }
+
+    public bool IsRecruit(int playerXP, int level)
+    {
+        if(playerXP >= 0 && playerXP < 200)
+        {
+            if(level <= 1)
+            {
+                Debug.Log(level + " level value");
+                return true;
+            }
+        }
+        else if(playerXP >= 0 && playerXP < 400)
+        {
+            if(level <= 4)
+            {
+                Debug.Log(level + " level value");
+                return true;
+            }
+        }
+        else if (playerXP >= 0 && playerXP < 600)
+        {
+            if (level <= 8)
+            {
+                Debug.Log(level + " level value");
+                return true;
+            }
+        }
+        else if (playerXP >= 600)
+        {
+            Debug.Log(level + " level value");
+            return true;
+
+        }
+        else
+        {
+            Debug.Log(level + " level value");
+            return false;
+        }
+        return false;
     }
 }
