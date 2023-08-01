@@ -121,6 +121,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private int masterPlayerXP = 0;
     private int clientPlayerXP = 0;
     private bool isComp = false;
+    private MatchStatus status;
+    private MatchData matchData;
+    private GameMode mode;
+    string masterID = "", clientId = "";
+    int masterMmr = 0, clientMmr = 0;
+    DeckGeneral masterDeck = DeckGeneral.Unknown, clientDeck = DeckGeneral.Unknown;
+    string matchId = "ABCD";
 
     #endregion
 
@@ -187,7 +194,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
             enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
         }
-
+        mode = GameMode.OpenToPlay;
         Debug.Log("start called " + PhotonNetwork.IsMasterClient + " photon player " + PhotonNetwork.LocalPlayer.NickName);
     }
 
@@ -238,6 +245,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             //resultPanel.SetActive(true);
             //winTimer.InitTimers(30);
             endGame = true;
+            status = MatchStatus.Normal;
             PhotonNetwork.AutomaticallySyncScene = false;
             CalculateWinner();
             pv.RPC("CompleteGame", RpcTarget.Others);
@@ -476,6 +484,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         xpSlider.interactable = false;
         string winnerName = "";
         int turnCounter = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"];
+        string winnerId = "", loserId = "";
+        int winnerXP = 0, loserXP = 0, winnerMmrChange = 0, loserMmrChange = 0;
+        DeckGeneral winnerDeck = DeckGeneral.Unknown, loserDeck = DeckGeneral.Unknown;
+        string matchId = "ABCD";
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -496,6 +508,26 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerPlayerName.SetText(winnerName + " is Victorious!");
                 masterPlayerXP += 100;
                 clientPlayerXP += 25;
+                winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
+                loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
+
+                string playerField = (string)PhotonNetwork.LocalPlayer.CustomProperties["deckField"];
+                Player currPlayer = PhotonNetwork.LocalPlayer;
+                Player nextPlayer = currPlayer.GetNext();
+                string opponentField = (string)nextPlayer.CustomProperties["deckField"];
+
+                winnerDeck = GetDeckGeneral(playerField);
+                loserDeck = GetDeckGeneral(opponentField);
+
+                Debug.LogError(winnerDeck + " winner deck");
+                Debug.LogError(loserDeck + " loser deck");
+
+                winnerXP = masterPlayerXP;
+                loserXP = clientPlayerXP;
+
+                winnerMmrChange = 0;
+                loserMmrChange = 0;
+                //winnerDeck = PhotonNetwork.LocalPlayer.GetNext();
                 xpSlider.value = (masterPlayerXP / 2000f);
             }
             else if (enemyHealth > playerHealth)
@@ -504,6 +536,26 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerPlayerName.SetText(winnerName + " is Victorious!");
                 clientPlayerXP += 100;
                 masterPlayerXP += 25;
+                winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
+                loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
+
+                string playerField = (string)PhotonNetwork.LocalPlayer.CustomProperties["deckField"];
+                Player currPlayer = PhotonNetwork.LocalPlayer;
+                Player nextPlayer = currPlayer.GetNext();
+                string opponentField = (string)nextPlayer.CustomProperties["deckField"];
+
+                winnerDeck = GetDeckGeneral(opponentField);
+                loserDeck = GetDeckGeneral(playerField);
+
+                Debug.LogError(winnerDeck + " winner deck");
+                Debug.LogError(loserDeck + " loser deck");
+
+                winnerXP = clientPlayerXP;
+                loserXP = masterPlayerXP;
+
+                winnerMmrChange = 0;
+                loserMmrChange = 0;
+
                 xpSlider.value = (masterPlayerXP / 2000f);
             }
             else if (playerHealth == enemyHealth)
@@ -511,6 +563,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerPlayerName.SetText(" It's Draw!");
                 masterPlayerXP += 25;
                 clientPlayerXP += 25;
+
+                winnerMmrChange = 0;
+                loserMmrChange = 0;
+
                 xpSlider.value = (masterPlayerXP / 2000f);
             }
             //mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer("master"));
@@ -535,6 +591,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerPlayerName.SetText(winnerName + " is Victorious!");
                 clientPlayerXP += 100;
                 masterPlayerXP += 25;
+                //winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
+                //loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
                 xpSlider.value = (clientPlayerXP / 2000f);
             }
             else if (enemyHealth > playerHealth)
@@ -543,6 +601,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerPlayerName.SetText(winnerName + " is Victorious!");
                 masterPlayerXP += 100;
                 clientPlayerXP += 25;
+                //winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
+                //loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
                 xpSlider.value = (clientPlayerXP / 2000f);
             }
             else if (playerHealth == enemyHealth)
@@ -576,6 +636,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         endTime = DateTime.Now;
         int totalSeconds = (int)(endTime - initialStartTime).TotalSeconds;
+        status = MatchStatus.Normal;
+        endGame = true;
+        timeDown.PauseTimer("down");
+        timeUp.PauseTimer("up");
+        StopAllCoroutines();
         //int minutes = (int)totalSeconds / 60;
         //int seconds = (int)totalSeconds % 60;
         //Debug.LogError(" minutes " + minutes + " seconds " + seconds);	
@@ -584,13 +649,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         if (PhotonNetwork.IsMasterClient)
         {
             pv.RPC("SetUserSpendTime", RpcTarget.All, totalSeconds);
+            matchData = new MatchData(matchId, mode, winnerId, loserId, winnerDeck, loserDeck, winnerXP, loserXP, winnerMmrChange, loserMmrChange, totalSeconds, turnCounter, status);
+            // Here you need to store the data
         }
 
-        timeDown.PauseTimer("down");
-        timeUp.PauseTimer("up");
-        StopAllCoroutines();
-
-        endGame = true;
         PhotonNetwork.AutomaticallySyncScene = false;
 
         Debug.LogError("End game after " + endGame + " player name " + PhotonNetwork.LocalPlayer);
@@ -1345,6 +1407,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     public void CompleteGame()
     {
         endGame = true;
+        status = MatchStatus.Normal;
         PhotonNetwork.AutomaticallySyncScene = false;
         StopAllCoroutines();
         timeUp.PauseTimer("up");
@@ -1533,6 +1596,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     playerController.totalXP = currentPlayerXP;
                     enemyController.totalGold = opponentGold;
                     enemyController.totalXP = opponentXP;
+
+                    string playerField = (string)PhotonNetwork.LocalPlayer.CustomProperties["deckField"];
+                    Player currPlayer = PhotonNetwork.LocalPlayer;
+                    Player nextPlayer = currPlayer.GetNext();
+                    string opponentField = (string)nextPlayer.CustomProperties["deckField"];
+
+                    masterDeck = GetDeckGeneral(playerField);
+                    clientDeck = GetDeckGeneral(opponentField);
                 }
                 else if (!PhotonNetwork.IsMasterClient)
                 {
@@ -1552,7 +1623,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     playerController.totalXP = currentPlayerXP;
                     enemyController.totalGold = opponentGold;
                     enemyController.totalXP = opponentXP;
+
+                    string playerField = (string)PhotonNetwork.LocalPlayer.CustomProperties["deckField"];
+                    Player currPlayer = PhotonNetwork.LocalPlayer;
+                    Player nextPlayer = currPlayer.GetNext();
+                    string opponentField = (string)nextPlayer.CustomProperties["deckField"];
+
+                    masterDeck = GetDeckGeneral(opponentField);
+                    clientDeck = GetDeckGeneral(playerField);
                 }
+
+                masterID = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
+                clientId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
+                masterMmr = 0;
+                clientMmr = 0;
+                matchId = "ABCD";
             }
         }
 
@@ -1647,8 +1732,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 totalTurnText.SetText(turnCounter.ToString() + " Turns.");
                 masterPlayerXP += 100;
                 xpSlider.value = (masterPlayerXP / 2000f);
-                
-
             }
             else if (!PhotonNetwork.IsMasterClient)
             {
@@ -1674,6 +1757,37 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             timeUp.PauseTimer("up");
             StopAllCoroutines();
 
+            status = MatchStatus.PlayerQuit;
+
+            string winnerId = "", loserId = "";
+            int winnerXP = 0, loserXP = 0, winnerMmrChange = 0, loserMmrChange = 0;
+            DeckGeneral winnerDeck = DeckGeneral.Unknown, loserDeck = DeckGeneral.Unknown;
+            string matchId = "ABCD";
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                winnerId = masterID; 
+                loserId = clientId;
+                winnerXP = masterPlayerXP;
+                loserXP = clientPlayerXP;
+                winnerMmrChange = masterMmr;
+                loserMmrChange = clientMmr;
+                winnerDeck = masterDeck;
+                loserDeck = clientDeck;
+            }
+            else
+            {
+                winnerId = clientId;
+                loserId = masterID;
+                winnerXP = clientPlayerXP;
+                loserXP = masterPlayerXP;
+                winnerMmrChange = clientMmr;
+                loserMmrChange = masterMmr;
+                winnerDeck = clientDeck;
+                loserDeck = masterDeck;
+            }
+            matchData = new MatchData(matchId, mode, winnerId, loserId, winnerDeck, loserDeck, winnerXP, loserXP, winnerMmrChange, loserMmrChange, totalSeconds, turnCounter, status);
+
             PhotonNetwork.AutomaticallySyncScene = false;
             endGame = true;
             StopTimers();
@@ -1685,6 +1799,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             GameObject mainMenu = resultPanel.transform.GetChild(0).Find("Main Menu").gameObject;
             mainMenu.GetComponent<Button>().onClick.AddListener(() => LeaveRemainigPlayer());
+            status = MatchStatus.Normal;
         }
     }
 
@@ -1777,6 +1892,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
     }
 
+    DeckGeneral GetDeckGeneral(string name)
+    {
+        Debug.LogError(name + " General name");
+        switch(name)
+        {
+            case "Green Field": return DeckGeneral.GreenField;
+            case "Purple Moon": return DeckGeneral.PurpleField;
+            case "Dark Matter": return DeckGeneral.DarkMatter;
+            case "Fairytales": return DeckGeneral.Fairytales;
+            case "Masquerades": return DeckGeneral.Masquerades;
+            case "The Old Kingdom": return DeckGeneral.OldKingdom;
+            case "Tinkerers": return DeckGeneral.Tinkerers;
+            default: return DeckGeneral.Unknown;
+        }
+    }
+
     public void GetDamegeToWall()
     {
         //Debug.LogError("Damage called");	
@@ -1819,6 +1950,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private void LeaveBothPlayer()
     {
         Debug.LogError("called in both  " + PhotonNetwork.LocalPlayer.NickName + " end game value " + endGame);
+        status = MatchStatus.Normal;
         SceneManager.LoadScene(1);
     }
 

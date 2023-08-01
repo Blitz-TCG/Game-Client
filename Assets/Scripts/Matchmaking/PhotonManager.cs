@@ -22,6 +22,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private ExitGames.Client.Photon.Hashtable customProp = new ExitGames.Client.Photon.Hashtable();
     private ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
     private SkirmishManager skirmishManager;
+    private MatchData matchData;
 
     private void Start()
     {
@@ -187,12 +188,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             properties["masterGold"] = 500;
             properties["masterXP"] = 0;
+            properties["masterUserId"] = "123"; // here give dummy id but you need to get id from firebase
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
         else if (!PhotonNetwork.IsMasterClient)
         {
             properties["clientGold"] = 500;
             properties["clientXP"] = 0;
+            properties["clientUserId"] = "456"; // here give dummy id but you need to get id from firebase
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
     }

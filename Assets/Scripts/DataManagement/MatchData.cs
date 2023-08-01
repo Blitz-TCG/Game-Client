@@ -1,3 +1,7 @@
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
+using System.Security.Cryptography;
+using UnityEngine;
+
 [System.Serializable]
 public class MatchData
 {
@@ -14,6 +18,23 @@ public class MatchData
     public float matchLength;
     public int totalTurns;
     public MatchStatus matchStatus;
+
+    public MatchData(string id, GameMode mode, string winnerId, string loserId, DeckGeneral winnerDeckGeneral, DeckGeneral loserDeckGeneral, int winnerXP, int loserXP, int winnerMmrValue, int loserMmrValue, float matchLengthValue, int turns, MatchStatus currentStatus)
+    {
+        matchid = id;
+        this.gameMode = mode;
+        this.winner = winnerId;
+        this.loser = loserId;
+        this.winnerDeck = winnerDeckGeneral;
+        this.loserDeck = loserDeckGeneral;
+        this.winnerXp = winnerXP;
+        this.loserXp = loserXP;
+        this.winnerMmrChange = winnerMmrValue;
+        this.loserMmrChange = loserMmrValue;
+        this.matchLength = matchLengthValue;
+        this.totalTurns = turns;
+        this.matchStatus = currentStatus;
+    }
 }
 
 public enum MatchStatus
@@ -33,9 +54,12 @@ public enum GameMode
 
 public enum DeckGeneral
 {
+    GreenField,
+    PurpleField,
     Masquerades,
     OldKingdom,
     Tinkerers,
     DarkMatter, 
-    Fairytales
+    Fairytales, 
+    Unknown
 }
