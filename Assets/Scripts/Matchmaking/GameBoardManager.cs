@@ -128,6 +128,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     int masterMmr = 0, clientMmr = 0;
     DeckGeneral masterDeck = DeckGeneral.Unknown, clientDeck = DeckGeneral.Unknown;
     string matchId = "ABCD";
+    private string leavePlayer;
 
     #endregion
 
@@ -240,7 +241,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             timeUp = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Timer").GetChild(0).GetComponent<PlayerTimer>();
             timeDown.PauseTimer("down");
             timeUp.PauseTimer("up");
-            Debug.LogError(" time up parent " + timeUp.transform.parent.parent.parent.name + " down " + timeDown.transform.parent.parent.parent);
+            //Debug.LogError(" time up parent " + timeUp.transform.parent.parent.parent.name + " down " + timeDown.transform.parent.parent.parent);
             StopAllCoroutines();
             //resultPanel.SetActive(true);
             //winTimer.InitTimers(30);
@@ -253,9 +254,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         if (winTimer.timeUp && endGame)
         {
-            Debug.LogError("the timer up and end game called before " + endGame + " " + PhotonNetwork.LocalPlayer.NickName);
+            //Debug.LogError("the timer up and end game called before " + endGame + " " + PhotonNetwork.LocalPlayer.NickName);
             endGame = false;
-            Debug.LogError("the timer up and end game called after " + endGame + " " + PhotonNetwork.LocalPlayer.NickName);
+            //Debug.LogError("the timer up and end game called after " + endGame + " " + PhotonNetwork.LocalPlayer.NickName);
             LeaveBothPlayer();
         }
 
@@ -561,8 +562,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             else if (playerHealth == enemyHealth)
             {
                 winnerPlayerName.SetText(" It's Draw!");
-                masterPlayerXP += 25;
-                clientPlayerXP += 25;
+                masterPlayerXP += 50;
+                clientPlayerXP += 50;
 
                 winnerMmrChange = 0;
                 loserMmrChange = 0;
@@ -650,6 +651,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             pv.RPC("SetUserSpendTime", RpcTarget.All, totalSeconds);
             matchData = new MatchData(matchId, mode, winnerId, loserId, winnerDeck, loserDeck, winnerXP, loserXP, winnerMmrChange, loserMmrChange, totalSeconds, turnCounter, status);
+            Debug.Log("leave player name " + PhotonNetwork.IsMasterClient + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + status);
             // Here you need to store the data
         }
 
@@ -657,10 +659,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         Debug.LogError("End game after " + endGame + " player name " + PhotonNetwork.LocalPlayer);
 
-        Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"] + " mgg ");
-        Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"] + " cgg ");
-        Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"] + " mgx ");
-        Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"] + " cgx ");
+        //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"] + " mgg ");
+        //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"] + " cgg ");
+        //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"] + " mgx ");
+        //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"] + " cgx ");
     }
 
     [PunRPC]
@@ -1727,13 +1729,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             winnerPlayerName.SetText(winnerName + " is Victorious!");
             int turnCounter = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"];
 
-            if (PhotonNetwork.IsMasterClient)
+            if (leavePlayer == "master")
             {
                 totalTurnText.SetText(turnCounter.ToString() + " Turns.");
                 masterPlayerXP += 100;
                 xpSlider.value = (masterPlayerXP / 2000f);
             }
-            else if (!PhotonNetwork.IsMasterClient)
+            else if (leavePlayer == "client")
             {
                 clientPlayerXP += 100;
                 xpSlider.value = (masterPlayerXP / 2000f);
@@ -1764,8 +1766,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             DeckGeneral winnerDeck = DeckGeneral.Unknown, loserDeck = DeckGeneral.Unknown;
             string matchId = "ABCD";
 
-            if (PhotonNetwork.IsMasterClient)
+            Debug.Log(" leave player name " + leavePlayer);
+            if (leavePlayer == "client")
             {
+                Debug.Log(masterID + " master id " + clientId + " client id " + masterPlayerXP + " master player xp " + clientPlayerXP + " client player xp " + masterDeck + " master deck " + clientDeck + " client deck ");
                 winnerId = masterID; 
                 loserId = clientId;
                 winnerXP = masterPlayerXP;
@@ -1775,8 +1779,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerDeck = masterDeck;
                 loserDeck = clientDeck;
             }
-            else
+            else if(leavePlayer == "master")
             {
+
+                Debug.Log(masterID + " master id " + clientId + " client id " + masterPlayerXP + " master player xp " + clientPlayerXP + " client player xp " + masterDeck + " master deck " + clientDeck + " client deck ");
                 winnerId = clientId;
                 loserId = masterID;
                 winnerXP = clientPlayerXP;
@@ -1786,6 +1792,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerDeck = clientDeck;
                 loserDeck = masterDeck;
             }
+            Debug.Log("leave player name " + leavePlayer + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + status);
             matchData = new MatchData(matchId, mode, winnerId, loserId, winnerDeck, loserDeck, winnerXP, loserXP, winnerMmrChange, loserMmrChange, totalSeconds, turnCounter, status);
 
             PhotonNetwork.AutomaticallySyncScene = false;
@@ -1920,10 +1927,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         PhotonNetwork.AutomaticallySyncScene = false;
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
+            leavePlayer = "master";
+            Debug.LogError(leavePlayer + " leave player master ");
             Player foundPlayer = null;
             string clientName = PhotonNetwork.LocalPlayer.GetNext().NickName;
             bool playerFound = FindPlayerByNickname(clientName, out foundPlayer);
-
+            pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer);
             if (playerFound)
             {
                 Player targetPlayer = foundPlayer;
@@ -1937,7 +1946,20 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log("Player with nickname '" + clientName + "' not found.");
             }
         }
+        else if(!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            leavePlayer = "client";
+            Debug.LogError(leavePlayer + " leave player client ");
+            pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer);
+        }
         SceneManager.LoadScene(1);
+    }
+
+    [PunRPC]
+    private void SetLeavePlayer(string playerName)
+    {
+        leavePlayer = playerName;
+        Debug.LogError(" leave palyer " + leavePlayer + " player name " + playerName);
     }
 
     public void LeaveRemainigPlayer()

@@ -159,6 +159,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
                     Debug.Log(cardClicked.levelRequired + " level req");
                     int level = int.Parse(cardClicked.levelRequired.Split(" ")[1]);
+                    Debug.LogError("level " + level + " total xp " + playerController.totalXP);
                     if (IsRecruit(playerController.totalXP, level))
                     {
                         GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
@@ -253,6 +254,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
                     Debug.Log(cardClicked.levelRequired + " level required");
                     int level = int.Parse(cardClicked.levelRequired.Split(" ")[1]);
+                    Debug.LogError("level " + level + " total xp " + playerController.totalXP);
                     if (IsRecruit(playerController.totalXP, level))
                     {
                         GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);

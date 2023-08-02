@@ -33,8 +33,8 @@ public class Timer : MonoBehaviourPunCallbacks
         if (!this.isTimerRunning) return;
         if(PhotonNetwork.IsMasterClient)
         {
-            Debug.LogError(" master " + PhotonNetwork.IsMasterClient);
-            Debug.LogError(" Timer " + TimeRemaining());
+            //Debug.LogError(" master " + PhotonNetwork.IsMasterClient);
+            //Debug.LogError(" Timer " + TimeRemaining());
             float countdown = TimeRemaining();
             if (countdown > 0.0f)
             {
@@ -94,7 +94,7 @@ public class Timer : MonoBehaviourPunCallbacks
         {
             if (name == "GC")
             {
-                Debug.LogError(name + " panel name " + time + " time ");
+                //Debug.LogError(name + " panel name " + time + " time ");
                 isGlobalCountDown = true;
                 Countdown = time;
                 SetStartTime();
@@ -102,7 +102,7 @@ public class Timer : MonoBehaviourPunCallbacks
             }
             else if (name == "BT")
             {
-                Debug.LogError(name + " panel name " + time + " time ");
+                //Debug.LogError(name + " panel name " + time + " time ");
                 isBiddingTime = true;
                 Countdown = time;
                 SetStartTime();
@@ -110,7 +110,7 @@ public class Timer : MonoBehaviourPunCallbacks
             }
             else if (name == "CB")
             {
-                Debug.LogError(name + " panel name " + time + " time ");
+                //Debug.LogError(name + " panel name " + time + " time ");
                 isCompletedBid = true;
                 Countdown = time;
                 SetStartTime();
@@ -154,9 +154,9 @@ public class Timer : MonoBehaviourPunCallbacks
         Debug.Log(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CountdownStartTime, out startTimeFromProps) + " value");
         if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CountdownStartTime, out startTimeFromProps))
         {
-            Debug.Log(startTimestamp + " start stamp ");
+            //Debug.Log(startTimestamp + " start stamp ");
             startTimestamp = (int)startTimeFromProps;
-            Debug.Log(startTimestamp + " start stamp ");
+            //Debug.Log(startTimestamp + " start stamp ");
             return true;
         }
         return false;
