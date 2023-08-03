@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using System;
 using UnityEngine.UI;
 
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler//, IPointerEnterHandler, IPointerExitHandler
+public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     DeckManager deckManagerDrag;
     DropZone dropZoneCurrent;
