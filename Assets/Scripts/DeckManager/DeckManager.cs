@@ -1566,6 +1566,7 @@ public class DeckManager : MonoBehaviour
         if (deleteDeckPopup.activeSelf)
         {
             deleteDeckPopup.SetActive(false);
+            cursorManager.CursorNormal();
         }
     }
 
@@ -1626,6 +1627,7 @@ public class DeckManager : MonoBehaviour
 
         isEdit = false;
         isAdd = false;
+        cursorManager.CursorNormal();
         deleteDeckPopup.SetActive(false);
         editDeckObject.SetActive(false);
         addDeckObject.SetActive(true);
@@ -2059,6 +2061,8 @@ public class DeckManager : MonoBehaviour
     public void uiSelectCards()
     {
         cursorManager.CursorNormal();
+        availableListOfCard.SetActive(true);
+        currentListOfCard.SetActive(true);
         cardButtonUIon.SetActive(true);
         cardButtonUIoff.SetActive(false);
         gameboardButtonUIon.SetActive(false);
@@ -2080,6 +2084,9 @@ public class DeckManager : MonoBehaviour
             cardSorting.SortChildrenByNameGameboardsDefault();
         }
 
+        availableListOfCard.SetActive(false);
+        currentListOfCard.SetActive(false);
+
         cursorManager.CursorNormal();
         cardHideParent.SetActive(false);
         gameboardHideParent.SetActive(true);
@@ -2097,6 +2104,9 @@ public class DeckManager : MonoBehaviour
     }
     public void uiSelectGenerals()
     {
+        availableListOfCard.SetActive(false);
+        currentListOfCard.SetActive(false);
+
         cursorManager.CursorNormal();
         cardButtonUIon.SetActive(false);
         gameboardButtonUIon.SetActive(false);

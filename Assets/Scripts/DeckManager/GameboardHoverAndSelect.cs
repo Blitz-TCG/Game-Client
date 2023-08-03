@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameboardHoverAndSelect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public CursorManager cursorManagerGameboard;
+
     public Image gameboardImage;
     public Image gameboardSelected;
 
@@ -18,6 +20,8 @@ public class GameboardHoverAndSelect : MonoBehaviour, IPointerEnterHandler, IPoi
         if (gameboardImage != null && !gameboardImage.color.ToString().Contains("0.502"))
         {
             gameboardImage.color = new Vector4(255f / 255f, 255f / 255f, 0f / 255f, 255f / 255f);
+            cursorManagerGameboard.CursorSelect();
+            cursorManagerGameboard.AudioHoverButtonStandard();
         }
         else if (gameboardImage != null && gameboardImage.color.ToString().Contains("0.502"))
         {
@@ -35,6 +39,8 @@ public class GameboardHoverAndSelect : MonoBehaviour, IPointerEnterHandler, IPoi
         {
             gameboardsPopup.SetActive(false);
         }
+
+        cursorManagerGameboard.CursorNormal();
     }
 
     public void SelectGameboard()
@@ -43,6 +49,7 @@ public class GameboardHoverAndSelect : MonoBehaviour, IPointerEnterHandler, IPoi
         {
             gameboardSelected.sprite = gameboardImage.sprite;
             gameboardNameSelected.text = gameboardNameAvailable.text;
+            cursorManagerGameboard.AudioClickButtonStandard();
         }
     }
 }

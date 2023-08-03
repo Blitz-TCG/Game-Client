@@ -2,13 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class CardHover : MonoBehaviour//, IPointerEnterHandler, IPointerExitHandler
+public class CardHover : MonoBehaviour
 {
 
     public Image[] cardImages;
     public Image imageResult;
     public Image frameResult;
     private bool isMouseOver = false;
+
+    public CursorMode cursorMode = CursorMode.Auto;
+    public Texture2D cursorTextureCardSelect;
+    public Vector2 hotSpotSelect = Vector2.zero;
 
     public void Start()
     {
@@ -25,6 +29,7 @@ public class CardHover : MonoBehaviour//, IPointerEnterHandler, IPointerExitHand
     private void OnMouseExit()
     {
         isMouseOver = false;
+        Cursor.SetCursor(null, Vector2.zero, cursorMode);
     }
 
     private void Update()
@@ -38,6 +43,7 @@ public class CardHover : MonoBehaviour//, IPointerEnterHandler, IPointerExitHand
                 {
                     imageResult.color = new Vector4(255f / 255f, 255f / 255f, 0f / 255f, 255f / 255f);
                     frameResult.color = new Vector4(255f / 255f, 255f / 255f, 0f / 255f, 255f / 255f);
+                    Cursor.SetCursor(cursorTextureCardSelect, hotSpotSelect, cursorMode);
                 }
             }
         }

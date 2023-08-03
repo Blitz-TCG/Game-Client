@@ -2939,6 +2939,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1d02525acad1e4a8bcda240ac3b9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorManagerGameboard: {fileID: 36354224}
   gameboardImage: {fileID: 205396883}
   gameboardSelected: {fileID: 1324423571}
   gameboardNameAvailable: {fileID: 1281159204}
@@ -5481,6 +5482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1d02525acad1e4a8bcda240ac3b9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorManagerGameboard: {fileID: 36354224}
   gameboardImage: {fileID: 325790149}
   gameboardSelected: {fileID: 1324423571}
   gameboardNameAvailable: {fileID: 2091683786}
@@ -6497,6 +6499,7 @@ GameObject:
   - component: {fileID: 349621375}
   - component: {fileID: 349621374}
   - component: {fileID: 349621373}
+  - component: {fileID: 349621376}
   m_Layer: 5
   m_Name: Delete
   m_TagString: Untagged
@@ -6581,6 +6584,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 36354224}
+        m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+        m_MethodName: AudioClickButtonStandard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &349621374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6619,6 +6634,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 349621371}
   m_CullTransparentMesh: 1
+--- !u!114 &349621376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349621371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: CursorSelect
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: AudioHoverButtonStandard
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: CursorNormal
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &350106482
 GameObject:
   m_ObjectHideFlags: 0
@@ -6863,6 +6935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1d02525acad1e4a8bcda240ac3b9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorManagerGameboard: {fileID: 36354224}
   gameboardImage: {fileID: 353791029}
   gameboardSelected: {fileID: 1324423571}
   gameboardNameAvailable: {fileID: 943565735}
@@ -7367,6 +7440,7 @@ GameObject:
   - component: {fileID: 374197666}
   - component: {fileID: 374197665}
   - component: {fileID: 374197664}
+  - component: {fileID: 374197667}
   m_Layer: 5
   m_Name: Dont Ask Again Select
   m_TagString: Untagged
@@ -7450,6 +7524,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 36354224}
+        m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+        m_MethodName: AudioClickButtonStandard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &374197665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7488,6 +7574,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 374197662}
   m_CullTransparentMesh: 0
+--- !u!114 &374197667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374197662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: CursorSelect
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: AudioHoverButtonStandard
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: CursorNormal
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &388645636
 GameObject:
   m_ObjectHideFlags: 0
@@ -7597,6 +7740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1d02525acad1e4a8bcda240ac3b9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorManagerGameboard: {fileID: 36354224}
   gameboardImage: {fileID: 388645640}
   gameboardSelected: {fileID: 1324423571}
   gameboardNameAvailable: {fileID: 830199552}
@@ -8224,6 +8368,7 @@ GameObject:
   - component: {fileID: 410489544}
   - component: {fileID: 410489543}
   - component: {fileID: 410489542}
+  - component: {fileID: 410489545}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -8308,6 +8453,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 36354224}
+        m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+        m_MethodName: AudioClickButtonStandard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &410489543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8346,6 +8503,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410489540}
   m_CullTransparentMesh: 1
+--- !u!114 &410489545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410489540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: CursorSelect
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: AudioHoverButtonStandard
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 36354224}
+          m_TargetAssemblyTypeName: CursorManager, Assembly-CSharp
+          m_MethodName: CursorNormal
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &415162834
 GameObject:
   m_ObjectHideFlags: 0
@@ -14223,6 +14437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1d02525acad1e4a8bcda240ac3b9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorManagerGameboard: {fileID: 36354224}
   gameboardImage: {fileID: 746201814}
   gameboardSelected: {fileID: 1324423571}
   gameboardNameAvailable: {fileID: 1762492054}
@@ -23795,6 +24010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1d02525acad1e4a8bcda240ac3b9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorManagerGameboard: {fileID: 36354224}
   gameboardImage: {fileID: 1260482666}
   gameboardSelected: {fileID: 1324423571}
   gameboardNameAvailable: {fileID: 917547218}
@@ -38045,6 +38261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1d02525acad1e4a8bcda240ac3b9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorManagerGameboard: {fileID: 36354224}
   gameboardImage: {fileID: 2040012068}
   gameboardSelected: {fileID: 1324423571}
   gameboardNameAvailable: {fileID: 599304075}

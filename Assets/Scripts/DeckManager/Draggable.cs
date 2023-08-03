@@ -31,9 +31,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public AudioSource audioHoverButtonCardDropError;
     public bool cardDropSoundCheck = false;
 
-    public Texture2D cursorTextureCardSelect;
-    public Vector2 hotSpotSelect = Vector2.zero;
-
     void Start()
     {
         deckManagerDrag = GameObject.FindGameObjectWithTag("DeckManager").GetComponent<DeckManager>();
@@ -41,11 +38,20 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         dropZoneAvailable = GameObject.FindGameObjectWithTag("Available").GetComponent<DropZone>();
         countCheck = GameObject.FindGameObjectWithTag("ContentCurrent");
     }
+
+    private void Update()
+    {
+        if (hoverDisabled == true)
+        {
+            Cursor.SetCursor(cursorTextureCard, hotSpotDrag, cursorMode); //this is so it doesn't revert back to the other cursor when moving, could not handle this in CardHover script
+        }
+    }
+
     public void OnBeginDrag(PointerEventData eventData) // when user drag the cards
     {
         if (deckManagerDrag.isDragCheckAllowed == true && eventData.button == PointerEventData.InputButton.Left)
         {
-            Cursor.SetCursor(cursorTextureCard, hotSpotDrag, cursorMode);
+            //Cursor.SetCursor(cursorTextureCard, hotSpotDrag, cursorMode); //removed and replacde with the Update method above due to issues with the pointer reverting back in CardHover
             audioHoverButtonCardGrab.Play();
             hoverDisabled = true;//see CardHover script
 
@@ -144,7 +150,11 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             {
                 Cursor.SetCursor(null, Vector2.zero, cursorMode);
 
-                if (cardDropSoundCheck == true)
+                if (deckManagerDrag.currentListOfCard.transform.childCount >= 25)
+                {
+                    audioHoverButtonCardDropError.Play();
+                }
+                else if (cardDropSoundCheck == true)
                 {
                     audioHoverButtonCardDrop.Play();
                 }

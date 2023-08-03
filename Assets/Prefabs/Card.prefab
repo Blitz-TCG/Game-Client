@@ -880,8 +880,6 @@ MonoBehaviour:
   audioHoverButtonCardDrop: {fileID: 248568587198371766}
   audioHoverButtonCardDropError: {fileID: 1839009301884742753}
   cardDropSoundCheck: 0
-  cursorTextureCardSelect: {fileID: 2800000, guid: 5c871ca49076e104f9f01ec0eeaa1b1d, type: 3}
-  hotSpotSelect: {x: 5.4, y: 5.4}
 --- !u!114 &5933020397543654816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2373,6 +2371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b3f4cb67e8e4f4bad9e32bb0142e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deckManager: {fileID: 0}
   cardNormalPrefab: {fileID: 4276069275343109782}
   cardClicked: {fileID: 3569672785987793446}
 --- !u!222 &1430126902798774189
@@ -2425,9 +2424,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02921b69626b69646b81c6fa5dd4dfc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  findDeckManager: {fileID: 9025222870985367311}
   cardImages: []
   imageResult: {fileID: 0}
   frameResult: {fileID: 0}
+  cursorMode: 0
+  cursorTextureCardSelect: {fileID: 2800000, guid: 5c871ca49076e104f9f01ec0eeaa1b1d, type: 3}
+  hotSpotSelect: {x: 5.4, y: 5.4}
 --- !u!65 &8989455009761954196
 BoxCollider:
   m_ObjectHideFlags: 0
