@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using System;
 using UnityEngine.UI;
 
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler//, IPointerEnterHandler, IPointerExitHandler
 {
     DeckManager deckManagerDrag;
     DropZone dropZoneCurrent;
@@ -26,6 +26,13 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     Color cardOriginal;
 
+    public AudioSource audioHoverButtonCardGrab;
+    public AudioSource audioHoverButtonCardDrop;
+    public bool cardDropSoundCheck = false;
+
+    public Texture2D cursorTextureCardSelect;
+    public Vector2 hotSpotSelect = Vector2.zero;
+
     void Start()
     {
         deckManagerDrag = GameObject.FindGameObjectWithTag("DeckManager").GetComponent<DeckManager>();
@@ -34,11 +41,28 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         countCheck = GameObject.FindGameObjectWithTag("ContentCurrent");
     }
 
+/*    public void OnPointerEnter(PointerEventData eventData) //test
+    {
+        if (hoverDisabled == false)
+        {
+            Cursor.SetCursor(cursorTextureCardSelect, hotSpotSelect, cursorMode);
+        }
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (hoverDisabled == false)
+        {
+            Cursor.SetCursor(null, Vector2.zero, cursorMode);
+        }
+    }*/
+
     public void OnBeginDrag(PointerEventData eventData) // when user drag the cards
     {
         if (deckManagerDrag.isDragCheckAllowed == true && eventData.button == PointerEventData.InputButton.Left)
         {
             Cursor.SetCursor(cursorTextureCard, hotSpotDrag, cursorMode);
+            audioHoverButtonCardGrab.Play();
+            hoverDisabled = true;//see CardHover script
 
             dropZoneCurrent.selectedCardOriginalParent = gameObject.transform.parent;
             dropZoneAvailable.selectedCardOriginalParent = gameObject.transform.parent;
@@ -48,7 +72,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
             Debug.Log("original parent name " + gameObject.transform.parent);
 
-            hoverDisabled = true;//see CardHover script
+           // hoverDisabled = true;//see CardHover script ---moved this higher
             screenPoint = Camera.main.WorldToScreenPoint(transform.position);
             offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(
                 Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
@@ -96,6 +120,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                             cardOriginal = thisImage.color;
                             thisImage.color = new Vector4(0f / 255f, 255f / 255f, 0f / 255f, 255f / 255f);
                         }
+                        cardDropSoundCheck = true;
                     }
                 }
                 else
@@ -108,6 +133,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                             cardOriginal = thisImage.color;
                             thisImage.color = new Vector4(255f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
                         }
+                        cardDropSoundCheck = false;
                     }
                 }
             }
@@ -132,6 +158,15 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             if (deckManagerDrag.isDragCheckAllowed == true)
             {
                 Cursor.SetCursor(null, Vector2.zero, cursorMode);
+
+                if (cardDropSoundCheck == true)
+                {
+                    audioHoverButtonCardDrop.Play();
+                }
+                else if (cardDropSoundCheck == false)
+                {
+                    //donothing
+                }
 
                 if (dropZoneCurrent.dropCheck == false && dropZoneAvailable.dropCheck == false)
                 {

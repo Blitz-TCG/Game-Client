@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -9,6 +8,7 @@ using UnityEngine.UI;
 public class CardSorting : MonoBehaviour
 {
     public DeckManager deckManager;
+    public CursorManager cursorManagerSort;
 
     [Header("Current Cards")]
     public GameObject[] currentCardsSortArray;
@@ -68,6 +68,7 @@ public class CardSorting : MonoBehaviour
 
     public void SortPopupCurrent()
     {
+        cursorManagerSort.CursorNormal();
         if (currentCardsSortPopup.activeSelf)
         {
             currentCardsSortPopup.SetActive(false);
@@ -79,6 +80,7 @@ public class CardSorting : MonoBehaviour
     }
     public void SortPopupAvailable()
     {
+        cursorManagerSort.CursorNormal();
         if (!deckManager.gameboardUI.activeSelf)
         {
             if (availableCardsSortPopup.activeSelf)
@@ -190,6 +192,7 @@ public class CardSorting : MonoBehaviour
 
     public void SortCurrentClear()
     {
+        cursorManagerSort.CursorNormal();
         currentABCselected.SetActive(false);
         currentCBAselected.SetActive(false);
         current123selected.SetActive(false);
@@ -199,6 +202,7 @@ public class CardSorting : MonoBehaviour
     }
     public void SortAvailableClear()
     {
+        cursorManagerSort.CursorNormal();
         availableABCselected.SetActive(false);
         availableCBAselected.SetActive(false);
         available123selected.SetActive(false);
@@ -618,24 +622,28 @@ public class CardSorting : MonoBehaviour
     }
     public void CurrentABCbutton()
     {
+        cursorManagerSort.CursorNormal();
         currentNameBool = true;
         SortChildrenByNameCurrent();
         currentCardsSortPopup.SetActive(false);
     }
     public void CurrentZYXbutton()
     {
+        cursorManagerSort.CursorNormal();
         currentNameBool = false;
         SortChildrenByNameCurrent();
         currentCardsSortPopup.SetActive(false);
     }
     public void Current123button()
     {
+        cursorManagerSort.CursorNormal();
         currentNameLevelBool = true;
         SortChildrenByLevelCurrent();
         currentCardsSortPopup.SetActive(false);
     }
     public void Current321button()
     {
+        cursorManagerSort.CursorNormal();
         currentNameLevelBool = false;
         SortChildrenByLevelCurrent();
         currentCardsSortPopup.SetActive(false);
@@ -643,24 +651,28 @@ public class CardSorting : MonoBehaviour
 
     public void AvailableABCbutton()
     {
+        cursorManagerSort.CursorNormal();
         availableNameBool = true;
         SortChildrenByNameAvailable();
         availableCardsSortPopup.SetActive(false);
     }
     public void AvailableZYXbutton()
     {
+        cursorManagerSort.CursorNormal();
         availableNameBool = false;
         SortChildrenByNameAvailable();
         availableCardsSortPopup.SetActive(false);
     }
     public void Available123button()
     {
+        cursorManagerSort.CursorNormal();
         availableNameLevelBool = true;
         SortChildrenByLevelAvailable();
         availableCardsSortPopup.SetActive(false);
     }
     public void Available321button()
     {
+        cursorManagerSort.CursorNormal();
         availableNameLevelBool = false;
         SortChildrenByLevelAvailable();
         availableCardsSortPopup.SetActive(false);
@@ -871,18 +883,21 @@ public class CardSorting : MonoBehaviour
 
     public void GameboardsABCbutton()
     {
+        cursorManagerSort.CursorNormal();
         gameboardsNameBool = true;
         SortChildrenByNameGameboards();
         gameboardSortPopup.SetActive(false);
     }
     public void GameboardsZYXbutton()
     {
+        cursorManagerSort.CursorNormal();
         gameboardsNameBool = false;
         SortChildrenByNameGameboards();
         gameboardSortPopup.SetActive(false);
     }
     public void SortGameboardsClear()
     {
+        cursorManagerSort.CursorNormal();
         gameboardABCselected.SetActive(false);
         gameboardCBAselected.SetActive(false);
         gameboardSortPopup.SetActive(false);

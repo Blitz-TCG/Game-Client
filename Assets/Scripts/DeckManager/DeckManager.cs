@@ -132,7 +132,8 @@ public class DeckManager : MonoBehaviour
     public bool hitCardLimit = false;
 
     [Header("Cards")]
-    [SerializeField] private GameObject cardButtonUI;
+    [SerializeField] private GameObject cardButtonUIon;
+    [SerializeField] private GameObject cardButtonUIoff;
 
     public Card cardPrefabs;
     private List<CardDetails> cardDetails;
@@ -153,7 +154,8 @@ public class DeckManager : MonoBehaviour
     private int[] tempCurrCard;
 
     [Header("Gameboards")]
-    [SerializeField] private GameObject gameboardButtonUI;
+    [SerializeField] private GameObject gameboardButtonUIon;
+    [SerializeField] private GameObject gameboardButtonUIoff;
     [SerializeField] public GameObject gameboardUI;
     [SerializeField] private string searchTextGameboard;
     [SerializeField] public GameObject searchGameboard;
@@ -170,7 +172,8 @@ public class DeckManager : MonoBehaviour
     public GameObject[] selectedGameboardArrayLoad;
 
     [Header("Generals")]
-    [SerializeField] private GameObject generalButtonUI;
+    [SerializeField] private GameObject generalButtonUIon;
+    [SerializeField] private GameObject generalButtonUIoff;
 
     private void Awake()
     {
@@ -832,6 +835,7 @@ public class DeckManager : MonoBehaviour
         }
 
         Destroy(popUpPanel.transform.GetComponentInChildren<Card>().gameObject);
+        cursorManager.CursorNormal();
         popUpPanel.SetActive(false);
 
         GameObject ghostCard = GameObject.FindWithTag("Card"); //this is to fix the bug with them dragging the card at the same time as clicking a card
@@ -844,6 +848,7 @@ public class DeckManager : MonoBehaviour
     public void OnBackFromPopUp() // When press back button from popup panel
     {
         Destroy(popUpPanel.transform.GetComponentInChildren<Card>().gameObject);
+        cursorManager.CursorNormal();
         popUpPanel.SetActive(false);
 
 
@@ -2037,9 +2042,13 @@ public class DeckManager : MonoBehaviour
     }
     public void uiSelectCards()
     {
-        cardButtonUI.SetActive(true);
-        gameboardButtonUI.SetActive(false);
-        generalButtonUI.SetActive(false);
+        cursorManager.CursorNormal();
+        cardButtonUIon.SetActive(true);
+        cardButtonUIoff.SetActive(false);
+        gameboardButtonUIon.SetActive(false);
+        gameboardButtonUIoff.SetActive(true);
+        generalButtonUIon.SetActive(false);
+        generalButtonUIoff.SetActive(true);
 
         cardSorting.gameboardSortPopup.SetActive(false);
         cardHideParent.SetActive(true);
@@ -2055,11 +2064,15 @@ public class DeckManager : MonoBehaviour
             cardSorting.SortChildrenByNameGameboardsDefault();
         }
 
+        cursorManager.CursorNormal();
         cardHideParent.SetActive(false);
         gameboardHideParent.SetActive(true);
-        cardButtonUI.SetActive(false);
-        gameboardButtonUI.SetActive(true);
-        generalButtonUI.SetActive(false);
+        cardButtonUIon.SetActive(false);
+        cardButtonUIoff.SetActive(true);
+        gameboardButtonUIon.SetActive(true);
+        gameboardButtonUIoff.SetActive(false);
+        generalButtonUIon.SetActive(false);
+        generalButtonUIoff.SetActive(true);
 
         gameboardUI.SetActive(true);
         cardSorting.currentCardsUI.SetActive(false);
@@ -2068,9 +2081,10 @@ public class DeckManager : MonoBehaviour
     }
     public void uiSelectGenerals()
     {
-        cardButtonUI.SetActive(false);
-        gameboardButtonUI.SetActive(false);
-        generalButtonUI.SetActive(true);
+        cursorManager.CursorNormal();
+        cardButtonUIon.SetActive(false);
+        gameboardButtonUIon.SetActive(false);
+        generalButtonUIon.SetActive(true);
     }
 }
 

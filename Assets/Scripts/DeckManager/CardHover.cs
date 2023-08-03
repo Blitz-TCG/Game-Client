@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
@@ -55,31 +54,4 @@ public class CardHover : MonoBehaviour//, IPointerEnterHandler, IPointerExitHand
             }
         }
     }
-
-
-    /*    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (Draggable.hoverDisabled == false)
-        {
-
-            if (imageResult != null && frameResult != null)
-            {
-                imageResult.color = new Vector4(255f / 255f, 255f / 255f, 0f / 255f, 255f / 255f);
-                frameResult.color = new Vector4(255f / 255f, 255f / 255f, 0f / 255f, 255f / 255f);
-            }
-        }
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (Draggable.hoverDisabled == false)// && cardImages != null)
-        {
-
-            if (imageResult != null && frameResult != null)
-            {
-                imageResult.color = new Vector4(1f, 1f, 1f, 1f);
-                frameResult.color = new Vector4(1f, 1f, 1f, 1f);
-            }
-        }
-    }*/
 }
