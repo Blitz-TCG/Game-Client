@@ -49,8 +49,6 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private Button[] buttons;
     [SerializeField] private Button saveButton;
     [SerializeField] private Button deleteButton;
-    //[SerializeField] private Button addOrRemove;
-    //[SerializeField] private Button backButton;
 
     [Header("Game objects")]
     [SerializeField] private GameObject addDeckObject;
@@ -103,6 +101,8 @@ public class DeckManager : MonoBehaviour
     [SerializeField] public TMP_Text deckNotesBodySelected;
 
     [SerializeField] private GameObject popupCardObject;
+    [SerializeField] private GameObject popupButtonOff;
+    [SerializeField] private GameObject popupButtonOn;
 
 
     [Header("images")]
@@ -148,6 +148,10 @@ public class DeckManager : MonoBehaviour
 
     private Color enableColor = new Vector4(1f, 1f, 1f, 1f);
     public Color disableColor = new Vector4(200f / 255f, 200f / 255f, 200f / 255f, 128f / 255f);
+
+    public AudioSource doubleClickCard;
+    public AudioSource doubleClickCardError;
+    public AudioSource singleClickCard;
 
     private int countOfLevelOne = 0;
     private int[] tempAvailCard;
@@ -207,10 +211,12 @@ public class DeckManager : MonoBehaviour
         else if (ErgoQuery.instance.deckGeneralStore[4] > 0)
         {
             deckCount = 5;
+            Debug.Log(ErgoQuery.instance.deckGeneralStore[4]);
         }
         else if (ErgoQuery.instance.deckGeneralStore[3] > 0)
         {
             deckCount = 4;
+            Debug.Log(ErgoQuery.instance.deckGeneralStore[4]);
         }
         else if (ErgoQuery.instance.deckGeneralStore[2] > 0)
         {
@@ -263,7 +269,7 @@ public class DeckManager : MonoBehaviour
         if (Draggable.dragEnd)
         {
             //DragEndInstance(); //test to-do
-            if(hitCardLimit == true)
+            if (hitCardLimit == true)
             {
                 hitCardLimit = false;
                 ActiveTooltip("You cannot have more than 25 cards");
@@ -405,7 +411,7 @@ public class DeckManager : MonoBehaviour
                             Debug.Log(deckId);
                         }
                     }
-                    else if (IsSelected == true && m_MyGameObject.ToString() != "Edit Deck (UnityEngine.GameObject)" 
+                    else if (IsSelected == true && m_MyGameObject.ToString() != "Edit Deck (UnityEngine.GameObject)"
                         && m_MyGameObject.ToString() != "New Deck (UnityEngine.GameObject)"
                         && m_MyGameObject.ToString() != "Back (UnityEngine.GameObject)")
                     {
@@ -560,7 +566,7 @@ public class DeckManager : MonoBehaviour
         }
     }
 
-        public void DeckNotesSelect()
+    public void DeckNotesSelect()
     {
         int imageArrayPosition = deckId - 1;
         if (images[imageArrayPosition].sprite != deckSelected.sprite)
@@ -638,7 +644,7 @@ public class DeckManager : MonoBehaviour
             StoreNotes(deckNotesTitleSelected.text, deckNotesBodySelected.text, deckId);
         }
     }
-    IEnumerator DetectDoubleLeftClick(GameObject cardClicked,Card card, string doubleClickCardType)
+    IEnumerator DetectDoubleLeftClick(GameObject cardClicked, Card card, string doubleClickCardType)
     {
         int currentCount = currentListOfCard.transform.childCount;
         clickImages = card.GetComponentsInChildren<Image>();
@@ -646,7 +652,7 @@ public class DeckManager : MonoBehaviour
         while (Time.time < firstLeftClickTime + timeBetweenLeftClick)
         {
             if (leftClickNum == 2)
-            {   
+            {
                 if ((generalsIndex == (int)card.cardClass || (int)card.cardClass == 0)
                     && (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) || card.ergoTokenId == "") && currentCount <= 25)
                 {
@@ -654,7 +660,6 @@ public class DeckManager : MonoBehaviour
                     {
                         if (clickImages != null) //todo - create card effects when clicked, sounds, etc. - add to rest too
                         {
-                            //Debug.Log("play sound effect");
                             foreach (Image thisImage in clickImages)
 
                             {
@@ -667,19 +672,21 @@ public class DeckManager : MonoBehaviour
                         }
 
                         Debug.Log("Double Click Available to Current Move");
+                        doubleClickCard.Play();
                         cardClicked.transform.SetParent(currentListOfCard.transform);
                         CurrentSelectedLoad();
                     }
                     else if (doubleClickCardType == "Available" && currentCount >= 25)
                     {
                         Debug.Log("25 Double Click Available to Current Move");
-
+                        doubleClickCardError.Play();
                         ActiveToolTipDoubleClick("You cannot have more than 25 cards");
                         Invoke("RemoveToolTipDoubleClick", 2f);
                     }
                     else if (doubleClickCardType == "Current")
                     {
                         Debug.Log("Double Click Current to Available Move");
+                        doubleClickCard.Play();
                         cardClicked.transform.SetParent(availableListOfCard.transform);
                         AvailableSelectedLoad();
                     }
@@ -687,16 +694,19 @@ public class DeckManager : MonoBehaviour
                 else if (generalsIndex != (int)card.cardClass)
                 {
                     ActiveToolTipDoubleClick("You cannot use this card with this General");
+                    doubleClickCardError.Play();
                     Invoke("RemoveToolTipDoubleClick", 2f);
                 }
                 else if (!ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId))
                 {
                     ActiveToolTipDoubleClick("You do not own this card.");
+                    doubleClickCardError.Play();
                     Invoke("RemoveToolTipDoubleClick", 2f);
                 }
                 else if (currentCount >= 25 && doubleClickCardType == "Available") //just in case something else fails above
                 {
                     ActiveToolTipDoubleClick("You cannot have more than 25 cards");
+                    doubleClickCardError.Play();
                     Invoke("RemoveToolTipDoubleClick", 2f);
                 }
 
@@ -708,7 +718,7 @@ public class DeckManager : MonoBehaviour
         if (doubleClick == false)
         {
             Debug.Log("single click");
-            popUpPanel = GameObject.FindGameObjectWithTag("popup").transform.GetChild(0).gameObject;
+            singleClickCard.Play();
             popUpPanel.SetActive(true);
 
             if (card.transform.parent.parent.parent.name.Split(" ")[0] == "Available")
@@ -718,9 +728,9 @@ public class DeckManager : MonoBehaviour
 
                     if (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) || card.ergoTokenId == "") //do i own the token or is it f2p
                     {
-                        popUpPanel.transform.GetComponentsInChildren<Button>()[0].GetComponent<Image>().color = enableColor;
-                        popUpPanel.transform.GetComponentsInChildren<Button>()[0].enabled = true;
-                        popUpPanel.transform.GetComponentsInChildren<Button>()[0].GetComponentInChildren<TMP_Text>().text = "Add";
+                        popupButtonOff.SetActive(false);
+                        popupButtonOn.SetActive(true);
+                        popupButtonOn.transform.GetComponentInChildren<TMP_Text>().text = "Add";
 
                         if (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) && card.ergoTokenId != "") //this sets the right amounts
                         {
@@ -735,18 +745,19 @@ public class DeckManager : MonoBehaviour
                     }
                     else //if it's the right general and not a f2p card and I don't own the token
                     {
-                        popUpPanel.transform.GetComponentsInChildren<Button>()[0].GetComponent<Image>().color = disableColor;
-                        popUpPanel.transform.GetComponentsInChildren<Button>()[0].enabled = false;
-                        popUpPanel.transform.GetComponentsInChildren<Button>()[0].GetComponentInChildren<TMP_Text>().text = "Add";
+
+                        popupButtonOff.SetActive(true);
+                        popupButtonOn.SetActive(false);
+                        popupButtonOff.transform.GetComponentInChildren<TMP_Text>().text = "Add";
 
                         card.ergoTokenAmount = 0;
                     }
                 }
                 else //its the wrong general and not a f2p card
                 {
-                    popUpPanel.transform.GetComponentsInChildren<Button>()[0].GetComponent<Image>().color = disableColor;
-                    popUpPanel.transform.GetComponentsInChildren<Button>()[0].enabled = false;
-                    popUpPanel.transform.GetComponentsInChildren<Button>()[0].GetComponentInChildren<TMP_Text>().text = "Add";
+                    popupButtonOff.SetActive(true);
+                    popupButtonOn.SetActive(false);
+                    popupButtonOff.transform.GetComponentInChildren<TMP_Text>().text = "Add";
 
                     if (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) && card.ergoTokenId != "") //if I own the card but it's the wrong general
                     {
@@ -766,9 +777,9 @@ public class DeckManager : MonoBehaviour
             }
             else if (card.transform.parent.parent.parent.name.Split(" ")[0] == "Current")
             {
-                popUpPanel.transform.GetComponentsInChildren<Button>()[0].GetComponent<Image>().color = enableColor;
-                popUpPanel.transform.GetComponentsInChildren<Button>()[0].enabled = true;
-                popUpPanel.transform.GetComponentsInChildren<Button>()[0].GetComponentInChildren<TMP_Text>().text = "Remove";
+                popupButtonOff.SetActive(false);
+                popupButtonOn.SetActive(true);
+                popupButtonOn.transform.GetComponentsInChildren<Button>()[0].GetComponentInChildren<TMP_Text>().text = "Remove";
 
                 if (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) && card.ergoTokenId != "") //I own the card and it's a blockchain card
                 {
@@ -783,7 +794,6 @@ public class DeckManager : MonoBehaviour
             }
 
             popupCardObject = cardClicked;
-            popUpPanel.transform.GetComponentsInChildren<Button>()[1].GetComponentInChildren<TMP_Text>().text = "Back";
             cardInstance = Instantiate<Card>(bigCardPrefab, popUpPanel.transform);
             cardInstance.SetProperties(card.id, card.ergoTokenId, card.ergoTokenAmount, card.cardName, card.cardDescription, card.attack, card.HP, card.gold, card.XP, card.clan, card.levelRequired, card.image.sprite, card.frame.sprite, card.cardClass);
         }
@@ -794,8 +804,8 @@ public class DeckManager : MonoBehaviour
         isDragCheckAllowed = true;
     }
 
-    public void OnClickSingleCard(GameObject cardClicked,Card selectedCard, string doubleClickCardType) // see FindDeckManager script. Responsible for,
-                                                                                 // when user click any card either current or available, Popup panel open
+    public void OnClickSingleCard(GameObject cardClicked, Card selectedCard, string doubleClickCardType) // see FindDeckManager script. Responsible for,
+                                                                                                         // when user click any card either current or available, Popup panel open
     {
         isDragCheckAllowed = false;
         leftClickNum += 1;
@@ -804,6 +814,11 @@ public class DeckManager : MonoBehaviour
             firstLeftClickTime = Time.time;
             StartCoroutine(DetectDoubleLeftClick(cardClicked, selectedCard, doubleClickCardType));
         }
+    }
+
+    public void CardClickAddButtonAudio()
+    {
+        doubleClickCard.Play();
     }
 
     public void AddOrRemoveCard() // If popuped card is matched, Add or Remove card on respective card
@@ -824,6 +839,7 @@ public class DeckManager : MonoBehaviour
                 else
                 {
                     ActiveTooltip("You cannot have more than 25 cards");
+                    doubleClickCardError.Play();
                     Invoke("RemoveToolTip", 2f);
                 }
             }
@@ -896,8 +912,8 @@ public class DeckManager : MonoBehaviour
     public void OnClickMargoDeck(int index) // When user select red general
     {
         editDeckObject.SetActive(true);
-/*        deckNotes.SetActive(false);
-        deckNotesGraphic.SetActive(false);*/
+        /*        deckNotes.SetActive(false);
+                deckNotesGraphic.SetActive(false);*/
         generalSelectLarge.SetActive(false);
         generalSelectSmall.SetActive(false);
         addDeckObject.SetActive(false);
@@ -907,8 +923,8 @@ public class DeckManager : MonoBehaviour
     public void OnClickMiosDeck(int index) // When user select green general
     {
         editDeckObject.SetActive(true);
-/*        deckNotes.SetActive(false);
-        deckNotesGraphic.SetActive(false);*/
+        /*        deckNotes.SetActive(false);
+                deckNotesGraphic.SetActive(false);*/
         generalSelectLarge.SetActive(false);
         generalSelectSmall.SetActive(false);
         addDeckObject.SetActive(false);
@@ -918,8 +934,8 @@ public class DeckManager : MonoBehaviour
     public void OnClickNassetari(int index) // When user select blue general
     {
         editDeckObject.SetActive(true);
-/*        deckNotes.SetActive(false);
-        deckNotesGraphic.SetActive(false);*/
+        /*        deckNotes.SetActive(false);
+                deckNotesGraphic.SetActive(false);*/
         generalSelectLarge.SetActive(false);
         generalSelectSmall.SetActive(false);
         addDeckObject.SetActive(false);
@@ -930,8 +946,8 @@ public class DeckManager : MonoBehaviour
     public void OnClickVoidDeck(int index) // When user select blue general
     {
         editDeckObject.SetActive(true);
-/*        deckNotes.SetActive(false);
-        deckNotesGraphic.SetActive(false);*/
+        /*        deckNotes.SetActive(false);
+                deckNotesGraphic.SetActive(false);*/
         generalSelectLarge.SetActive(false);
         generalSelectSmall.SetActive(false);
         addDeckObject.SetActive(false);
@@ -942,8 +958,8 @@ public class DeckManager : MonoBehaviour
     public void OnClickTootDeck(int index) // When user select blue general
     {
         editDeckObject.SetActive(true);
-/*        deckNotes.SetActive(false);
-        deckNotesGraphic.SetActive(false);*/
+        /*        deckNotes.SetActive(false);
+                deckNotesGraphic.SetActive(false);*/
         generalSelectLarge.SetActive(false);
         generalSelectSmall.SetActive(false);
         addDeckObject.SetActive(false);
@@ -994,7 +1010,7 @@ public class DeckManager : MonoBehaviour
 
     public void OnHoverDeckEnter(int id)
     {
-        int hoverDeckGeneral = ErgoQuery.instance.deckGeneralStore[id-1];
+        int hoverDeckGeneral = ErgoQuery.instance.deckGeneralStore[id - 1];
         int hoverDeckId = ErgoQuery.instance.deckIdStore[id - 1];
 
         Debug.Log(hoverDeckId);
@@ -1238,7 +1254,7 @@ public class DeckManager : MonoBehaviour
 
         for (int i = 0; i < images.Length; i++) //this resets the deck images when they shouldn't be selected - specifically from dragging notes fields which would be a bug
         {
-            if (i != (id-1))
+            if (i != (id - 1))
             {
                 images[i].sprite = deckOriginal.sprite;
                 Sprite newSprite1 = deckSelected.sprite;
@@ -1533,7 +1549,7 @@ public class DeckManager : MonoBehaviour
     {
         if (!deleteDeckPopup.activeSelf && PlayerPrefs.GetString("DisableDeleteDeckWarning") == "F")
         {
-                deleteDeckPopup.SetActive(true);
+            deleteDeckPopup.SetActive(true);
         }
         else if (PlayerPrefs.GetString("DisableDeleteDeckWarning") == "T")
         {
@@ -1590,11 +1606,11 @@ public class DeckManager : MonoBehaviour
                 Debug.Log(arrayPos + n);
 
 
-                    SaveCurrentDataDelete(ErgoQuery.instance.cardIdCurrentStore[arrayPos + n], ErgoQuery.instance.filterCardsCurrentStore[arrayPos + n], ErgoQuery.instance.gameboardCurrentStore[arrayPos + n], ErgoQuery.instance.generalPfpCurrentStore[arrayPos + n], ErgoQuery.instance.deckIdStore[arrayPos + n],
-                        ErgoQuery.instance.deckGeneralStore[arrayPos + n], ErgoQuery.instance.deckTitleStore[arrayPos + n], ErgoQuery.instance.deckBodyStore[arrayPos + n], arrayMovement);
+                SaveCurrentDataDelete(ErgoQuery.instance.cardIdCurrentStore[arrayPos + n], ErgoQuery.instance.filterCardsCurrentStore[arrayPos + n], ErgoQuery.instance.gameboardCurrentStore[arrayPos + n], ErgoQuery.instance.generalPfpCurrentStore[arrayPos + n], ErgoQuery.instance.deckIdStore[arrayPos + n],
+                    ErgoQuery.instance.deckGeneralStore[arrayPos + n], ErgoQuery.instance.deckTitleStore[arrayPos + n], ErgoQuery.instance.deckBodyStore[arrayPos + n], arrayMovement);
 
-                    SaveAvailableDataDelete(ErgoQuery.instance.cardIdAvailableStore[arrayPos + n], ErgoQuery.instance.hideCardsAvailableStore[arrayPos + n], ErgoQuery.instance.filterCardsAvailableStore[arrayPos + n], ErgoQuery.instance.hideGameboardsStore[arrayPos + n],
-                        ErgoQuery.instance.filterGameboardsStore[arrayPos + n], ErgoQuery.instance.hideGeneralPfpStore[arrayPos + n], ErgoQuery.instance.filterGeneralPfpStore[arrayPos + n], arrayMovement);
+                SaveAvailableDataDelete(ErgoQuery.instance.cardIdAvailableStore[arrayPos + n], ErgoQuery.instance.hideCardsAvailableStore[arrayPos + n], ErgoQuery.instance.filterCardsAvailableStore[arrayPos + n], ErgoQuery.instance.hideGameboardsStore[arrayPos + n],
+                    ErgoQuery.instance.filterGameboardsStore[arrayPos + n], ErgoQuery.instance.hideGeneralPfpStore[arrayPos + n], ErgoQuery.instance.filterGeneralPfpStore[arrayPos + n], arrayMovement);
 
                 if (n == deckDifference)
                 {
@@ -1792,28 +1808,28 @@ public class DeckManager : MonoBehaviour
 
     public void LiveSearch() // Live search, user can search any position in card name
     {
-            searchText = search.GetComponent<TMP_InputField>().text.ToLower();
+        searchText = search.GetComponent<TMP_InputField>().text.ToLower();
 
-            availableCardsSortTransformSearch = availableCardsSortSearch.transform;
-            int j = availableCardsSortTransformSearch.childCount;
-            availableCardsSortArrayAllSearch = new GameObject[j];
+        availableCardsSortTransformSearch = availableCardsSortSearch.transform;
+        int j = availableCardsSortTransformSearch.childCount;
+        availableCardsSortArrayAllSearch = new GameObject[j];
 
-            for (int i = 0; j > i; i++) //saving cards into an array
+        for (int i = 0; j > i; i++) //saving cards into an array
+        {
+            availableCardsSortArrayAllSearch[i] = availableCardsSortTransformSearch.GetChild(i).gameObject;
+
+            if (!availableCardsSortArrayAllSearch[i].name.ToString().ToLower().Contains(searchText))
             {
-                availableCardsSortArrayAllSearch[i] = availableCardsSortTransformSearch.GetChild(i).gameObject;
+                availableCardsSortArrayAllSearch[i].SetActive(false);
 
-                if (!availableCardsSortArrayAllSearch[i].name.ToString().ToLower().Contains(searchText))
-                {
-                    availableCardsSortArrayAllSearch[i].SetActive(false);
-
-                }
-                else if (availableCardsSortArrayAllSearch[i].name.ToString().ToLower().Contains(searchText))
-                {
-                    availableCardsSortArrayAllSearch[i].SetActive(true);
-                }
             }
+            else if (availableCardsSortArrayAllSearch[i].name.ToString().ToLower().Contains(searchText))
+            {
+                availableCardsSortArrayAllSearch[i].SetActive(true);
+            }
+        }
 
-            cardSorting.HideUnmatchedCardsInvoke();
+        cardSorting.HideUnmatchedCardsInvoke();
     }
 
     public void LiveSearchGameboards()
@@ -2006,7 +2022,7 @@ public class DeckManager : MonoBehaviour
         {
             selectedGameboardArrayLoad[i] = selectedGameboardTransformLoad.GetChild(i).gameObject;
             selectedGameboardImagesLoad[i] = selectedGameboardArrayLoad[i].transform.GetComponentInChildren<Image>();
-            
+
             if (selectedGameboardArrayLoad[i].name == gameBoard)
             {
                 selectedGameboardImageLoad.sprite = selectedGameboardImagesLoad[i].sprite;

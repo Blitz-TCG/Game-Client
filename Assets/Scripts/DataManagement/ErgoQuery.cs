@@ -181,12 +181,13 @@ public class ErgoQuery : MonoBehaviour
             availableCardsArray[3] = deckData.AvailableCards4;
             availableCardsArray[4] = deckData.AvailableCards5;
 
-            for (int count = 0; count < 4; count++)
+            for (int count = 0; count <= 4; count++)
             {
                 if (currentCardsArray[count].cardIdCurrent != "")
                 {
                     DeckDataStorage(currentCardsArray[count], availableCardsArray[count], count);
                 }
+                Debug.Log(count);
             }
             GameManager.instance.ChangeScene(1);
         }

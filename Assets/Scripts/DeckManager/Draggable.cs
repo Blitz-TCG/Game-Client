@@ -28,6 +28,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public AudioSource audioHoverButtonCardGrab;
     public AudioSource audioHoverButtonCardDrop;
+    public AudioSource audioHoverButtonCardDropError;
     public bool cardDropSoundCheck = false;
 
     public Texture2D cursorTextureCardSelect;
@@ -40,22 +41,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         dropZoneAvailable = GameObject.FindGameObjectWithTag("Available").GetComponent<DropZone>();
         countCheck = GameObject.FindGameObjectWithTag("ContentCurrent");
     }
-
-/*    public void OnPointerEnter(PointerEventData eventData) //test
-    {
-        if (hoverDisabled == false)
-        {
-            Cursor.SetCursor(cursorTextureCardSelect, hotSpotSelect, cursorMode);
-        }
-    }
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (hoverDisabled == false)
-        {
-            Cursor.SetCursor(null, Vector2.zero, cursorMode);
-        }
-    }*/
-
     public void OnBeginDrag(PointerEventData eventData) // when user drag the cards
     {
         if (deckManagerDrag.isDragCheckAllowed == true && eventData.button == PointerEventData.InputButton.Left)
@@ -165,7 +150,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                 }
                 else if (cardDropSoundCheck == false)
                 {
-                    //donothing
+                    audioHoverButtonCardDropError.Play();
                 }
 
                 if (dropZoneCurrent.dropCheck == false && dropZoneAvailable.dropCheck == false)
@@ -198,6 +183,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             ImageReset();
 
             hoverDisabled = false;//see CardHover script
+            cardDropSoundCheck = false;
             dragEnd = true;//this is the last thing that happens, used to be in the first IF statement
         }
     }
