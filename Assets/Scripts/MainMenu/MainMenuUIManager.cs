@@ -149,14 +149,11 @@ public class MainMenuUIManager : MonoBehaviour
 
     [Header("Messenger")]
     [SerializeField]
-    private GameObject globalDisableUI;
+    private Image globalImage;
     [SerializeField]
-    private GameObject globalEnableUI;
+    private Image whisperImage;
     [SerializeField]
-    private GameObject whisperDisableUI;
-    [SerializeField]
-    private GameObject whisperEnableUI;
-    [SerializeField]
+    private Image[] chatImages;
     public TMP_InputField messengerInputField;
     [SerializeField]
     public TMP_Text messengerFriendUsername;
@@ -226,25 +223,25 @@ public class MainMenuUIManager : MonoBehaviour
 
         if (PlayerPrefs.GetString("DisableGlobal") == "T")
         {
-            globalEnableUI.SetActive(true);
+            globalImage.sprite = chatImages[1].sprite; //off
         }
 
         if (PlayerPrefs.GetString("DisableWhisper") == "T")
         {
-            whisperEnableUI.SetActive(true);
+            whisperImage.sprite = chatImages[3].sprite; //off
         }
 
-        if (PlayerPrefs.HasKey("tooltipDisabled") == true) 
+        if (PlayerPrefs.HasKey("tooltipDisabled") == true)
         {
             settingsHelpTextEnabled.SetActive(true);
         }
 
-        if (PlayerPrefs.HasKey("fullscreenDisabled") == true) 
+        if (PlayerPrefs.HasKey("fullscreenDisabled") == true)
         {
             settingsFullscreenEnabled.SetActive(false);
         }
 
-        if (PlayerPrefs.GetString("DisableDeleteDeckWarning") == "T") 
+        if (PlayerPrefs.GetString("DisableDeleteDeckWarning") == "T")
         {
             Debug.Log(PlayerPrefs.GetString("DisableDeleteDeckWarning"));
             settingsDeleteDeckEnabled.SetActive(true);
@@ -908,7 +905,7 @@ public class MainMenuUIManager : MonoBehaviour
             ClearUI();
         }
 
-        if(!isCooldown && currentTime - lastSentTime < messageInterval)
+        if (!isCooldown && currentTime - lastSentTime < messageInterval)
         {
             StartCoroutine(Cooldown());
             messengerErorr.text = "Slow down, 5 second timeout!";
@@ -1210,29 +1207,40 @@ public class MainMenuUIManager : MonoBehaviour
         }
     }
 
-    public void DisableGlobalChat() //clicking button to disable global chat
+    public void GlobalChatSetting() //clicking button to enable global chat
     {
-        globalEnableUI.SetActive(true);
-        PlayerPrefs.SetString("DisableGlobal", "T");
-        PlayerPrefs.Save();
+        if (globalImage.sprite == chatImages[0].sprite) // if global chat is enabled
+        {
+            globalImage.sprite = chatImages[1].sprite;
+            PlayerPrefs.SetString("DisableGlobal", "T");
+            PlayerPrefs.Save();
+            Debug.Log("off");
+        }
+        else if (globalImage.sprite == chatImages[1].sprite) // if global chat is disabled
+        {
+            globalImage.sprite = chatImages[0].sprite;
+            PlayerPrefs.SetString("DisableGlobal", "F");
+            PlayerPrefs.Save();
+            Debug.Log("on");
+        }
     }
-    public void EnableGlobalChat() //clicking button to enable global chat
+    public void WhisperChatSetting() //clicking button to disable global chat
     {
-        globalEnableUI.SetActive(false);
-        PlayerPrefs.SetString("DisableGlobal", "F");
-        PlayerPrefs.Save();
-    }
-    public void DisableWhisperChat() //clicking button to disable global chat
-    {
-        whisperEnableUI.SetActive(true);
-        PlayerPrefs.SetString("DisableWhisper", "T");
-        PlayerPrefs.Save();
-    }
-    public void EnableWhisperChat() //clicking button to enable global chat
-    {
-        whisperEnableUI.SetActive(false);
-        PlayerPrefs.SetString("DisableWhisper", "F");
-        PlayerPrefs.Save();
+        if (whisperImage.sprite == chatImages[2].sprite) // if whisper chat is enabled
+        {
+            whisperImage.sprite = chatImages[3].sprite;
+            PlayerPrefs.SetString("DisableWhisper", "T");
+            PlayerPrefs.Save();
+            Debug.Log("off");
+        }
+        else if (whisperImage.sprite == chatImages[3].sprite) // if whisper chat is disabled
+        {
+            whisperImage.sprite = chatImages[2].sprite;
+            PlayerPrefs.SetString("DisableWhisper", "F");
+            PlayerPrefs.Save();
+            Debug.Log("on");
+        }
+
     }
 
     public void InstantiateMessageFriends(string _usernameSender, string _receiverUsername, string _senderID, string _receiverID, string _messageText)

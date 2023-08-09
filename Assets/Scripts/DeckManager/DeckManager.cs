@@ -658,7 +658,7 @@ public class DeckManager : MonoBehaviour
                 {
                     if (doubleClickCardType == "Available" && currentCount < 25)
                     {
-                        if (clickImages != null) //todo - create card effects when clicked, sounds, etc. - add to rest too
+                        if (clickImages != null)
                         {
                             foreach (Image thisImage in clickImages)
 

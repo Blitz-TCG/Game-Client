@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class SkirmishManager : MonoBehaviourPunCallbacks
 {
     public static SkirmishManager instance;
+    public CursorManager cursorSkirmish;
 
     public bool IsSelected { get; private set; } = false;
     [SerializeField] private GameObject skirmishObject;
@@ -37,6 +38,8 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
     [SerializeField] public GameObject selectedDeck3;
     [SerializeField] public GameObject selectedDeck4;
     [SerializeField] public GameObject selectedDeck5;
+    [SerializeField] private GameObject playButtonOn;
+    [SerializeField] private GameObject playButtonOff;
 
     public static int generalsIndex = 0;
     public static int generalsIndexStatic;
@@ -46,7 +49,7 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
     [SerializeField] private Button[] buttons;
 
     [SerializeField] private Button deckBuilderButton;
-    [SerializeField] private Button playButton;
+    //[SerializeField] private Button playButton;
     [SerializeField] private Button backButton;
     [SerializeField] private Image[] images;
     [SerializeField] private GameObject loadingPanel;
@@ -248,7 +251,9 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
                         //{
                         Debug.Log(deckId);
                         IsSelected = false;
-                        playButton.interactable = false;
+                        playButtonOn.SetActive(false);
+                        playButtonOff.SetActive(true);
+                        //playButton.interactable = false;
                         //StoreNotes(deckNotesTitleSelected.text, deckNotesBodySelected.text, deckId); //when they click new deck while editing notes
 
                         SpriteState spriteState = new SpriteState();
@@ -298,7 +303,9 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log(hit.collider);
                 IsSelected = false;
-                playButton.interactable = false;
+                playButtonOn.SetActive(false);
+                playButtonOff.SetActive(true);
+                //playButton.interactable = false;
                 deckId = -1;
                 EventSystem.current.SetSelectedGameObject(null);
                 deckNotes.SetActive(false);
@@ -363,11 +370,15 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
             if (cardCount.Length >= 10)
             {
                 Debug.Log(cardCount.Length);
-                playButton.interactable = true;
+                playButtonOn.SetActive(true);
+                playButtonOff.SetActive(false);
+                //playButton.interactable = true;
             }
             else if (cardCount.Length < 10)
             {
-                playButton.interactable = false;
+                playButtonOn.SetActive(false);
+                playButtonOff.SetActive(true);
+                //playButton.interactable = false;
             }
 
         }
@@ -553,6 +564,7 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
     }
     public void OnClickCancel()
     {
+        cursorSkirmish.CursorNormal();
         IsSelected = true;
         OnDeckClick(deckId);
     }

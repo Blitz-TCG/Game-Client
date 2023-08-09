@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class FriendsMouseEnterExit : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler   
+public class MouseEnterExit : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler   
 {
     public CursorManager cursorManagerFriends;
     public void OnPointerEnter(PointerEventData eventData) 
