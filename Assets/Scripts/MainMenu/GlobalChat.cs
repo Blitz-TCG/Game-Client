@@ -27,6 +27,7 @@ public class GlobalChat : MonoBehaviour
             generalChatDropdown.SetActive(true);
             senderUserIDText.text = senderUserIDRaw.text; //this is moving the values from the prefab to the chat window tmp values
             senderUsernameText.text = senderUsernameRaw.text;
+            MainMenuUIManager.instance.messengerErorr.text = "";
         }
         else if (senderUsernameRaw.text == MainMenuUIManager.instance.username)
         {
