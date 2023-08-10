@@ -354,6 +354,24 @@ public class MainMenuUIManager : MonoBehaviour
         GlobalListenForNewMessages();
     }
 
+/*    IEnumerator OnlinePlayerCount() //this is only pulling ~21 users and I'm not sure why
+    {
+        var allUsers = dbReference.Child("users").OrderByChild("username").GetValueAsync();
+        yield return new WaitUntil(predicate: () => allUsers.IsCompleted);
+        if (allUsers.IsFaulted)
+        {
+            Debug.LogError("Error reading data: " + allUsers.Exception);
+        }
+        else if (allUsers.IsCompleted) 
+        {
+            DataSnapshot onlineUsers = allUsers.Result;
+            Debug.Log(onlineUsers.ChildrenCount); //only pullng in 21 people... unsure why at this time
+            foreach (DataSnapshot onlineUser in onlineUsers.Children)
+            {
+                string userId = onlineUser.Key;
+            }
+        }
+    }*/
     public void PresenceCheck() //todo - figure out presence check
     {
 
@@ -378,7 +396,6 @@ public class MainMenuUIManager : MonoBehaviour
 
     private void Update() //various windows exits and checks
     {
-
         if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !changePfpUI.activeSelf && !profileDropdown.activeSelf && generalChatDropdown.activeSelf)
         {
             generalChatDropdown.SetActive(false);
@@ -671,7 +688,6 @@ public class MainMenuUIManager : MonoBehaviour
 
     public IEnumerator LogOutEnumerator() //log a user out and return to main menu
     {
-        FirebaseDatabase.DefaultInstance.GetReference("users").Child(userID).Child("online").SetValueAsync("F");
         var logOut = FirebaseDatabase.DefaultInstance.GetReference("users").Child(userID).Child("online").SetValueAsync("F");
         yield return new WaitUntil(predicate: () => logOut.IsCompleted); //todo maybe add some exception checking
         if (logOut.IsFaulted)
