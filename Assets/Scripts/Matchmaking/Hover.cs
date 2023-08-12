@@ -86,9 +86,14 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         else if (gameObject.transform.parent.parent.name == "Player Hand")
         {
             int id = gameObject.transform.GetChild(0).GetComponent<Card>().id;
+            Debug.Log(gameObject.transform.parent.name.Split(" ")[2] + " name of card postition");
+            int index = int.Parse(gameObject.transform.parent.name.Split(" ")[2]);
+            Debug.Log(index + " index ");
+            GameObject actualParent = cardparent2.transform.GetChild(index - 1).gameObject;
+            Debug.Log(actualParent + " actual parent name");
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
-            Card cardInfo = Instantiate<Card>(infoCard, cardparent2.transform);
+            Card cardInfo = Instantiate<Card>(infoCard, actualParent.transform);
             cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass);
         }
         else if (gameObject.transform.parent.name == "Canvas")
@@ -111,7 +116,8 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         {
             for (int i = 0; i < cardparent2.transform.childCount; i++)
             {
-                Destroy(cardparent2.transform.GetChild(i).gameObject);
+                if(cardparent2.transform.GetChild(i).childCount > 0)
+                    Destroy(cardparent2.transform.GetChild(i).GetChild(0).gameObject);
             }
         }
     }

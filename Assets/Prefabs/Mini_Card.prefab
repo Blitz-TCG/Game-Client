@@ -1134,6 +1134,8 @@ MonoBehaviour:
   cardClass: 0
   cardImage: {fileID: 0}
   cardFrame: {fileID: 0}
+  isAlreadyAttacked: 0
+  dropPosition: 0
   cardId: 0
   cId: {fileID: 5241093512186658464}
   cardErgoTokenId: {fileID: 8567649490831826786}

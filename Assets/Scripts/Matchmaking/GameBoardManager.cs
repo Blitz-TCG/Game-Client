@@ -730,6 +730,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
                 //enemyController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
                 enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "master");
+                InitCards();
                 //int goldPlayer = attacking.gold;
                 //int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
                 //int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"]);
@@ -766,6 +767,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
                 //playerController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
                 playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
+                InitCards();
                 //int goldEnemy = target.gold;
                 //int goldPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
                 //int goldGainedPlayer = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"]);
@@ -814,6 +816,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
                 //enemyController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
                 enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
+                InitCards();
                 //int goldPlayer = attacking.gold;
                 //int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
                 //int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"]);
@@ -846,6 +849,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
                 //playerController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
                 playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
+                InitCards();
                 //int goldEnemy = target.gold;
                 //int goldPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
                 //int goldGainedOther = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"]);
@@ -948,6 +952,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     public void InitCards()
     {
+        Debug.Log("init card called");
         int[] matchCards = ErgoQuery.instance.cardIdCurrentStore[skirmishManager.deckId - 1];
         int cardLength = ErgoQuery.instance.cardIdCurrentStore[skirmishManager.deckId - 1].Length;
 
@@ -963,15 +968,118 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             if (pv.IsMine)
             {
+                Debug.LogError(" inside the mine called");
                 GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", cardListParent.transform.position, cardListParent.transform.rotation);
                 miniCardParent.transform.SetParent(cardListParent.transform);
                 miniCardParent.transform.localScale = cardListParent.transform.localScale;
                 Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
+                Debug.Log(" completed card level " +  completeCard.levelRequired);
+                int level = int.Parse(completeCard.levelRequired.Split(" ")[1]);
                 miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage);
                 miniCard.name = sortedList[i].cardName;
                 miniCardParent.name = sortedList[i].cardName;
+                miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
+                DisplayWithXP(miniCard.gameObject, level);
             }
         }
+    }
+
+    public void DisplayWithXP(GameObject card, int level)
+    {
+        playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+        Debug.Log(playerController.playerGainedXP + " player controller ");
+        Debug.Log(card + " card " + card.GetComponent<Card>());
+
+        bool shouldDisplay = false;
+        if (playerController.playerGainedXP < 200 && level <= 1)
+        {
+            Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
+            shouldDisplay = true;
+        }
+        else if ((playerController.playerGainedXP >= 200 && playerController.playerGainedXP < 400) && level <= 4)
+        {
+            Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
+            shouldDisplay = true;
+        }
+        else if ((playerController.playerGainedXP >= 400 && playerController.playerGainedXP < 600) &&  level <=  8)
+        {
+            Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
+            shouldDisplay = true;
+        }
+        else if (playerController.playerGainedXP >= 600)
+        {
+            Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
+            shouldDisplay = true;
+        }
+
+        if (shouldDisplay)
+        {
+            Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP + " card display");
+            DisplayCard(card.GetComponent<Card>(), Color.white);
+        }
+        
+
+        //if (playerController.totalXP < 200 && level > 1)
+        //{
+        //    Debug.Log("less 200");
+        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
+        //    currentColor.a = 0.6f;
+        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
+        //}
+        //else
+        //{
+        //    Debug.Log("200 else");
+        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
+        //    currentColor.a = 1f;
+        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
+        //}
+
+        //if (playerController.totalXP < 400 && level > 4)
+        //{
+        //    Debug.Log("400 less ");
+        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
+        //    currentColor.a = 0.6f;
+        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
+        //}
+        //else
+        //{
+        //    Debug.Log("400 else");
+        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
+        //    currentColor.a = 1f;
+        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
+        //}
+
+        //if (playerController.totalXP < 600 && level > 8)
+        //{
+        //    Debug.Log("600 less");
+        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
+        //    currentColor.a = 0.6f;
+        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
+        //}
+        //else
+        //{
+        //    Debug.Log("600 else");
+        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
+        //    currentColor.a = 1f;
+        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
+        //}
+
+        //if (playerController.totalXP > 600)
+        //{
+        //    Debug.Log("greter 600");
+        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
+        //    currentColor.a = 1f;
+        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
+        //}
+    }
+
+    private void DisplayCard(Card card, Color color)
+    {
+        Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
+        //currentColor.a = 1f;
+        card.transform.GetChild(0).GetComponent<Image>().color = color;
+        
     }
 
     public void TurnButton()
@@ -1037,9 +1145,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             miniCardParent.transform.SetParent(cardListParent.transform);
             miniCardParent.transform.localScale = cardListParent.transform.localScale;
             Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+            var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
+            Debug.Log(" completed card level " + completeCard.levelRequired);
+            int level = int.Parse(completeCard.levelRequired.Split(" ")[1]);
             miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage);
             miniCard.name = selectedCardList[i].cardName;
             miniCardParent.name = selectedCardList[i].cardName;
+            //DisplayWithXP(miniCard.gameObject, level);
         }
     }
 
