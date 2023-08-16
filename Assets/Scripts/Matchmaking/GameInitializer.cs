@@ -1,5 +1,6 @@
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameInitializer : MonoBehaviourPunCallbacks
 {
@@ -10,6 +11,7 @@ public class GameInitializer : MonoBehaviourPunCallbacks
     private void Start()
     {
         Debug.LogError("initialized");
+        Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
         PhotonNetwork.AutomaticallySyncScene = true;
         loading.SetActive(true);
         InitBoard();

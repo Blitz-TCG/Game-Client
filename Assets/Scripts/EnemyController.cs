@@ -61,7 +61,7 @@ public class EnemyController : MonoBehaviourPunCallbacks
         playerXPProgressBar = gameboardParent.transform.GetChild(1).GetChild(0).Find("Bottom Progress bar").gameObject;
         playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXP);
         Gold.instance.SetGold(totalGold);
-        Debug.LogError("Gold settted " + totalGold + " parent of gold " + Gold.instance.transform.parent.parent.name);
+        //Debug.LogError("Gold settted " + totalGold + " parent of gold " + Gold.instance.transform.parent.parent.name);
     }
 
 }

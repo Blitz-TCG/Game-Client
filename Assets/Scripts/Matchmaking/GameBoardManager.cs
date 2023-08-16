@@ -129,11 +129,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     DeckGeneral masterDeck = DeckGeneral.Unknown, clientDeck = DeckGeneral.Unknown;
     string matchId = "ABCD";
     private string leavePlayer;
+    public static bool hide = false;
 
     #endregion
 
     private void Start()
     {
+        //PhotonManager.RemoveSceneFromBuildIndex();
         isWallDestroyed = false;
         endGame = false;
         skirmishManager = SkirmishManager.instance;
@@ -963,11 +965,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 currentCards.Add(cardDetails[matchCards[i] - 1]);
             }
         }
-        sortedList = currentCards.OrderBy(level => level.levelRequired).ToList();
+        sortedList = SortCardsByLevel(currentCards);
+        //sortedList = currentCards.OrderBy(card => card.levelRequired).ToList();
         for (int i = 0; i < sortedList.Count; i++)
         {
-            if (pv.IsMine)
-            {
+            Debug.Log("inside for " + PhotonNetwork.LocalPlayer.NickName + " player name " + pv.IsMine +  " is mine ");
+            PhotonView view = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+            Debug.Log(view + " view " + gameBoardParent.transform.GetChild(1).gameObject + " gameboard " + gameBoardParent.transform.GetChild(1).gameObject.name);
+            //if (view.IsMine)
+            //{
                 Debug.LogError(" inside the mine called");
                 GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", cardListParent.transform.position, cardListParent.transform.rotation);
                 miniCardParent.transform.SetParent(cardListParent.transform);
@@ -981,8 +987,29 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 miniCardParent.name = sortedList[i].cardName;
                 miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
                 DisplayWithXP(miniCard.gameObject, level);
-            }
+            //}
         }
+    }
+
+    List<CardDetails> SortCardsByLevel(List<CardDetails> cards)
+    {
+        for (int i = 1; i < cards.Count; i++)
+        {
+            CardDetails currentCard = cards[i];
+            int j = i - 1;
+
+            int cardLevelReq = int.Parse(cards[j].levelRequired.Split(" ")[1]);
+            int currCardReq = int.Parse(currentCard.levelRequired.Split(" ")[1]);
+
+            while (j >= 0 && cardLevelReq > currCardReq)
+            {
+                cards[j + 1] = cards[j];
+                j--;
+            }
+
+            cards[j + 1] = currentCard;
+        }
+        return cards;
     }
 
     public void DisplayWithXP(GameObject card, int level)
@@ -2064,13 +2091,18 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.LogError(leavePlayer + " leave player client ");
             pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer);
         }
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
+        //PhotonNetwork.LoadLevel(3);
+        //skirmishManager.GetComponent<SkirmishManager>().enabled = false;
+        hide = true;
+        Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
     }
 
     [PunRPC]
     private void SetLeavePlayer(string playerName)
     {
         leavePlayer = playerName;
+        hide = true;
         Debug.LogError(" leave palyer " + leavePlayer + " player name " + playerName);
     }
 
@@ -2078,14 +2110,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.LogError("called Remaining player");
         PhotonNetwork.AutomaticallySyncScene = false;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
     }
 
     private void LeaveBothPlayer()
     {
         Debug.LogError("called in both  " + PhotonNetwork.LocalPlayer.NickName + " end game value " + endGame);
         status = MatchStatus.Normal;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
     }
 
     private bool FindPlayerByNickname(string nickname, out Player foundPlayer)

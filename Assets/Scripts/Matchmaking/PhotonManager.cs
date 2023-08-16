@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.IO;
+using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
@@ -26,10 +28,27 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        if (GameBoardManager.hide)
+        {
+            gameObject.SetActive(false);
+        }
+        Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
         connected = false;
+        Debug.Log("start called");
+        //PhotonNetwork.Disconnect();
+        if (PhotonNetwork.IsConnected)
+        {
+            if(PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
+            Debug.Log(" already connected ");
+            PhotonNetwork.Disconnect();
+        }
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AutomaticallySyncScene = true;
         skirmishManager = SkirmishManager.instance;
+        Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
     }
 
     private void Update()
@@ -63,6 +82,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
+        Debug.Log("OnConnectedToMaster " + SceneManager.GetActiveScene().name);
         connected = true;
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NickName = FirebaseManager.instance.user.DisplayName;
@@ -70,47 +90,55 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
+        Debug.Log("OnJoinedLobby " + SceneManager.GetActiveScene().name);
         //print("Joined lobby ======");
     }
 
     public void PlayGame()
     {
+        Debug.Log("PlayGame " + SceneManager.GetActiveScene().name);
         StartCoroutine(VersionCheck());
     }
 
     private IEnumerator VersionCheck() //check for if user has latest game build
     {
+        Debug.Log("version check");
         var version = FirebaseDatabase.DefaultInstance.GetReference("versionCheck").GetValueAsync();
         yield return new WaitUntil(predicate: () => version.IsCompleted);
         if (version.IsFaulted)
         {
+            Debug.Log(" Faulted ");
             loadingPanel.SetActive(true);
             skirmishOutputTextError.text = "Unable to validate current game version";
             Invoke(nameof(HideLoadingPanel), 5f);
         }
         else if (version.IsCompleted)
         {
+            Debug.Log(" completed ");
             DataSnapshot versionData = version.Result;
 
             Debug.Log("Current Version: " + versionData.Value.ToString());
 
             if (versionData.Value.ToString() == "0")
             {
-
+                Debug.Log("versionData.Value.ToString() == \"0\"");
                 loadingPanel.SetActive(true);
                 skirmishOutputTextError.text = "Blitz is down for maintenance";
                 Invoke(nameof(HideLoadingPanel), 5f);
             }
             else if (versionData.Value.ToString() != FirebaseManager.instance.versionCheck)
             {
+                Debug.Log("versionData.Value.ToString() != FirebaseManager.instance.versionCheck");
                 loadingPanel.SetActive(true);
                 skirmishOutputTextError.text = "Please download latest version: " + versionData.Value.ToString();
                 Invoke(nameof(HideLoadingPanel), 5f);
             }
             else
             {
+                Debug.Log("else ");
                 if (connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1) //making sure that they have a deck selected before matchmaking begins
                 {
+                    Debug.Log("connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1");
                     PhotonNetwork.JoinRandomRoom();
                     loadingPanel.SetActive(true);
                 }
@@ -120,6 +148,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void HideLoadingPanel()
     {
+        Debug.Log("HideLoadingPanel ");
         if (loadingPanel.activeSelf)
         {
             loadingPanel.SetActive(false);
@@ -128,15 +157,19 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public void CancelMatch()
     {
+        Debug.Log("CancelMatch ");
         Debug.Log(connected);
         if (connected)
         {
+            Debug.Log(" connected ");
             if (PhotonNetwork.InRoom)
             {
+                Debug.Log(" PhotonNetwork ");
                 PhotonNetwork.LeaveRoom();
             }
             else
             {
+                Debug.Log(" else ");
                 PhotonNetwork.Disconnect();
                 PhotonNetwork.ConnectUsingSettings();
                 connected = false;
@@ -149,11 +182,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        Debug.Log("OnJoinRandomFailed");
         CreateNewRoom();
     }
 
     public void CreateNewRoom()
     {
+        Debug.Log("CreateNewRoom");
         int roomId = Random.Range(0, 10000);
         RoomOptions roomOptions = new RoomOptions();
 
@@ -166,11 +201,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
+        Debug.Log("OnCreateRoomFailed");
         CreateNewRoom();
     }
 
     public override void OnJoinedRoom()
     {
+        Debug.Log("joined room");
         customProp["enterdNum"] = 0;
         int deckGeneralId = ErgoQuery.instance.deckGeneralStore[skirmishManager.deckId - 1];
         string deckGeneralField = ErgoQuery.instance.gameboardCurrentStore[skirmishManager.deckId - 1];
@@ -202,9 +239,17 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+        Debug.Log("player enterd game " + PhotonNetwork.CurrentRoom.PlayerCount);
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
+            Debug.Log("2 player enterd game " + PhotonNetwork.CurrentRoom.PlayerCount);
             PhotonNetwork.LoadLevel(4);
+            //if (!PlayerPrefs.HasKey("test"))
+            //{
+            //    PhotonNetwork.LoadLevel(4);
+            //    PlayerPrefs.SetInt("test", 1);
+            //    RemoveSceneFromBuildIndex();
+            //}
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
@@ -212,7 +257,41 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void LeaveTheRoom()
     {
+        Debug.Log("LeaveTheRoom");
         if (loadingPanel.activeSelf)
             CancelMatch();
     }
+
+    //public static void RemoveSceneFromBuildIndex()
+    //{
+    //    int sceneIndexToRemove = 4; // Replace with the index of the scene you want to remove
+
+    //    if (sceneIndexToRemove >= 0 && sceneIndexToRemove < EditorBuildSettings.scenes.Length)
+    //    {
+    //        EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes;
+    //        scenes[sceneIndexToRemove].enabled = false;
+    //        EditorBuildSettings.scenes = scenes;
+
+    //        Debug.Log($"Scene at index {sceneIndexToRemove} removed from build index.");
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("Invalid scene index.");
+    //    }
+    //}
+
+
+    //public override void OnDisconnected(DisconnectCause cause)
+    //{
+    //    Debug.Log("disconnect called");
+    //    Debug.LogWarning($"Disconnected from Photon: {cause}");
+    //    PhotonNetwork.ConnectUsingSettings();
+    //    Debug.Log("connect using set");
+    //}
+
+    //public override void OnDisconnectedFromPhoton()
+    //{
+    //    Debug.Log("Local player disconnected from Photon server.");
+    //    // Handle any necessary cleanup or actions after disconnection.
+    //}
 }

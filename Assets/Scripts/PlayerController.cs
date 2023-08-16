@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         playerXPProgressBar = gameboardParent.transform.GetChild(1).GetChild(0).Find("Bottom Progress bar").gameObject;
         playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXP);
         Gold.instance.SetGold(totalGold);
-        Debug.LogError(" total gold setted " + Gold.instance.transform.parent.parent.name + " " + totalGold);
+        //Debug.LogError(" total gold setted " + Gold.instance.transform.parent.parent.name + " " + totalGold);
         if (name == "master")
         {
             properties["masterGold"] = totalGold;

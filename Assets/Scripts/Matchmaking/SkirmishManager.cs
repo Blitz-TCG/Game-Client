@@ -75,6 +75,10 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        if (GameBoardManager.hide)
+        {
+            gameObject.SetActive(false);
+        }
         if (ErgoQuery.instance.deckGeneralStore[0] == 0)
         {
             deckCountSkirmish = 0;
