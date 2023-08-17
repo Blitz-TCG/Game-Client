@@ -28,10 +28,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if (GameBoardManager.hide)
-        {
-            gameObject.SetActive(false);
-        }
         Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
         connected = false;
         Debug.Log("start called");

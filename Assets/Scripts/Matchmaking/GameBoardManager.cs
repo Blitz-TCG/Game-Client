@@ -129,7 +129,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     DeckGeneral masterDeck = DeckGeneral.Unknown, clientDeck = DeckGeneral.Unknown;
     string matchId = "ABCD";
     private string leavePlayer;
-    public static bool hide = false;
 
     #endregion
 
@@ -199,6 +198,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
         mode = GameMode.OpenToPlay;
         Debug.Log("start called " + PhotonNetwork.IsMasterClient + " photon player " + PhotonNetwork.LocalPlayer.NickName);
+        Invoke("LeaveBothPlayerAccidently", 60f);
     }
 
     private void Update()
@@ -1661,6 +1661,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 GameBoardManager board = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
                 GameBoardManager[] gameboards = GameObject.FindObjectsOfType<GameBoardManager>();
+                GameBoardManager clone = GameObject.Find("Gameboard(clone)").GetComponent<GameBoardManager>();
+                Debug.Log(clone + " clone ");
+                GameObject CloneCountdown =  clone.gameObject.transform.GetChild(0).Find("Global Countdown").gameObject;
+                Debug.Log(" count down " + CloneCountdown);
+                CloneCountdown.SetActive(false);
 
                 board.gameObject.SetActive(true);
                 resultPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Result panel").gameObject;
@@ -2094,7 +2099,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         SceneManager.LoadScene(3);
         //PhotonNetwork.LoadLevel(3);
         //skirmishManager.GetComponent<SkirmishManager>().enabled = false;
-        hide = true;
         Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
     }
 
@@ -2102,7 +2106,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private void SetLeavePlayer(string playerName)
     {
         leavePlayer = playerName;
-        hide = true;
+        SkirmishManager.instance.deckId = -1;
         Debug.LogError(" leave palyer " + leavePlayer + " player name " + playerName);
     }
 
@@ -2110,6 +2114,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.LogError("called Remaining player");
         PhotonNetwork.AutomaticallySyncScene = false;
+        SkirmishManager.instance.deckId = -1;
         SceneManager.LoadScene(3);
     }
 
@@ -2117,6 +2122,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.LogError("called in both  " + PhotonNetwork.LocalPlayer.NickName + " end game value " + endGame);
         status = MatchStatus.Normal;
+        SkirmishManager.instance.deckId = -1;
+        SceneManager.LoadScene(3);
+    }
+    
+    private void LeaveBothPlayerAccidently()
+    {
+        Debug.LogError("called in both  " + PhotonNetwork.LocalPlayer.NickName + " end game value " + endGame);
+        status = MatchStatus.Unknown;
+        SkirmishManager.instance.deckId = -1;
         SceneManager.LoadScene(3);
     }
 
