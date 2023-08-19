@@ -26,25 +26,36 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private SkirmishManager skirmishManager;
     private MatchData matchData;
 
+    private void Awake()
+    {
+        Debug.Log("Awake called");
+        if (PhotonNetwork.IsConnected)
+        {
+            Debug.Log("connected");
+            if (PhotonNetwork.InRoom)
+            {
+                Debug.Log("in room " + PhotonNetwork.InRoom);
+                PhotonNetwork.LeaveRoom();
+            }
+            Debug.Log(" already connected ");
+            PhotonNetwork.Disconnect();
+            Debug.Log("PhotonNetwork.IsConnected " + PhotonNetwork.IsConnected);
+        }
+    }
+
     private void Start()
     {
         Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
         connected = false;
         Debug.Log("start called");
         //PhotonNetwork.Disconnect();
-        if (PhotonNetwork.IsConnected)
-        {
-            if(PhotonNetwork.InRoom)
-            {
-                PhotonNetwork.LeaveRoom();
-            }
-            Debug.Log(" already connected ");
-            PhotonNetwork.Disconnect();
-        }
+        
         PhotonNetwork.ConnectUsingSettings();
+        Debug.Log("PhotonNetwork.IsConnected " + PhotonNetwork.IsConnected);
         PhotonNetwork.AutomaticallySyncScene = true;
         skirmishManager = SkirmishManager.instance;
         Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
+        Debug.Log(PhotonNetwork.InRoom + " photon room ");
     }
 
     private void Update()
@@ -82,6 +93,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         connected = true;
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NickName = FirebaseManager.instance.user.DisplayName;
+        //skirmishManager.gameObject.SetActive(true);
     }
 
     public override void OnJoinedLobby()

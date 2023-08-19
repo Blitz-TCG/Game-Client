@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         view = GetComponent<PhotonView>();
         view.RPC("DistributeGoldAndXP", RpcTarget.Others, playerGainedGold, playerGainedXP, totalGold, totalXP);
+        GameBoardManager manager = gameboardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+        manager.InitCards();
     }
 
     [PunRPC]
@@ -62,5 +64,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         enemyController.totalXP = totalXP;
         enemyXPProgressBar = gameboardParent.transform.GetChild(1).GetChild(0).Find("Top Progress bar").gameObject;
         enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXP);
+        GameBoardManager manager = gameboardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+        manager.InitCards();
     }
 }

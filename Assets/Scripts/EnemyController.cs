@@ -48,6 +48,8 @@ public class EnemyController : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
         view.RPC("DistributeGoldAndXP", RpcTarget.Others, enemyGainedGold, enemyGainedXP, totalGold, totalXP);
+        GameBoardManager manager = gameboardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+        manager.InitCards();
     }
 
     [PunRPC]
@@ -62,6 +64,8 @@ public class EnemyController : MonoBehaviourPunCallbacks
         playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(totalXP);
         Gold.instance.SetGold(totalGold);
         //Debug.LogError("Gold settted " + totalGold + " parent of gold " + Gold.instance.transform.parent.parent.name);
+        GameBoardManager manager = gameboardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+        manager.InitCards();
     }
 
 }
