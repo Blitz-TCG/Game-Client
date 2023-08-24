@@ -72,9 +72,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private GameObject loadingPanel;
     private GameObject gameBoardParent;
     private Timer timer;
-    private Timer countdownTimer;
-    private Timer bidTimer;
-    private Timer afterBidTimer;
+    private Timers countdownTimer;
+    private Timers bidTimer;
+    private Timers afterBidTimer;
     private int player1Bid;
     private int player2Bid;
     private int randomPlayer;
@@ -129,19 +129,28 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     DeckGeneral masterDeck = DeckGeneral.Unknown, clientDeck = DeckGeneral.Unknown;
     string matchId = "ABCD";
     private string leavePlayer;
+    private bool leaveBtn = false;
+    public static bool isCompleted = false;
+    private bool isMatchNotLoaded = false;
 
     #endregion
 
     private void Start()
     {
+        Debug.LogWarning("start called ");
         //PhotonManager.RemoveSceneFromBuildIndex();
         isWallDestroyed = false;
         endGame = false;
         skirmishManager = SkirmishManager.instance;
         gameBoardParent = GameObject.Find("Game Board Parent");
-        countdownTimer = countDownPanel.GetComponent<Timer>();
-        bidTimer = biddingPanel.GetComponentInChildren<Timer>();
-        afterBidTimer = afterBiddingPanel.GetComponent<Timer>();
+        countDownPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Global Countdown").GetChild(0).gameObject;
+        biddingPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Bid Panel").GetChild(0).gameObject;
+        afterBiddingPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("After Bid Panel").GetChild(0).gameObject;
+        countdownTimer = countDownPanel.GetComponent<Timers>();
+        bidTimer = biddingPanel.transform.GetChild(0).GetChild(3).GetComponent<Timers>();
+        afterBidTimer = afterBiddingPanel.GetComponent<Timers>();
+        Debug.LogError("countdownTimer " + countdownTimer + " bidTimer " + bidTimer + " afterBidTimer " + afterBidTimer);
+        Debug.LogError("countDownPanel " + countDownPanel + " biddingPanel " + biddingPanel + " afterBiddingPanel " + afterBiddingPanel);
         winTimer = gameBoardParent.transform.GetChild(1).GetChild(1).GetComponent<TimeLeft>();
 
         timeDown = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Timer").GetChild(1).GetComponent<PlayerTimer>();
@@ -197,6 +206,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
         }
         mode = GameMode.OpenToPlay;
+        leaveBtn = false;
+        isMatchNotLoaded  = false;
         Debug.Log("start called " + PhotonNetwork.IsMasterClient + " photon player " + PhotonNetwork.LocalPlayer.NickName);
         Invoke("LeaveBothPlayerAccidently", 60f);
     }
@@ -205,16 +216,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Count() == 2)
         {
-            if (Timer.isBiddingTime)
+            if (Timers.isGlobalCountDown)
             {
-                Timer.isBiddingTime = false;
+                pv.RPC("Global", RpcTarget.Others, countdownTimer.seconds.text);
+            }
+            if (Timers.isBiddingTime)
+            {
+                pv.RPC("Bidding", RpcTarget.Others, bidTimer.seconds.text);
+                //Timers.isBiddingTime = false;
                 if (isBidPanelInitialize)
                 {
                     isBidPanelInitialize = false;
                     pv.RPC("BiddingPanel", RpcTarget.All);
                 }
             }
-            else if (Timer.isCompletedBid)
+            else if (Timers.isCompletedBid)
             {
                 Timer.isCompletedBid = false;
                 if (isBidEnds)
@@ -470,6 +486,20 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     [PunRPC]
+    private void Bidding(string value)
+    {
+        Debug.LogError(value + " value");
+        bidTimer.seconds.SetText(value);
+    }
+
+    [PunRPC]
+    private void Global(string value)
+    {
+        Debug.LogError(value + " value");
+        countdownTimer.seconds.SetText(value);
+    }
+
+    [PunRPC]
     private void CalculateScore()
     {
         resultPanel.transform.GetChild(0).gameObject.SetActive(true);
@@ -477,6 +507,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         totalTurnText = resultPanel.transform.GetChild(0).Find("Turn").GetChild(1).GetComponent<TMP_Text>();
         matchLengthText = resultPanel.transform.GetChild(0).Find("Match Length").GetChild(1).GetComponent<TMP_Text>();
+        experienceText = resultPanel.transform.GetChild(0).Find("Experience").GetChild(1).GetComponent<TMP_Text>();
         winnerPlayerName = resultPanel.transform.GetChild(0).Find("Victory").GetComponent<TMP_Text>();
         GameObject mainMenu = resultPanel.transform.GetChild(0).Find("Main Menu").gameObject;
         GameObject playerProfile = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Profile").gameObject;
@@ -531,6 +562,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerMmrChange = 0;
                 loserMmrChange = 0;
                 //winnerDeck = PhotonNetwork.LocalPlayer.GetNext();
+                experienceText.SetText(masterPlayerXP.ToString());
                 xpSlider.value = (masterPlayerXP / 2000f);
             }
             else if (enemyHealth > playerHealth)
@@ -558,7 +590,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 winnerMmrChange = 0;
                 loserMmrChange = 0;
-
+                experienceText.SetText(masterPlayerXP.ToString());
                 xpSlider.value = (masterPlayerXP / 2000f);
             }
             else if (playerHealth == enemyHealth)
@@ -569,7 +601,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 winnerMmrChange = 0;
                 loserMmrChange = 0;
-
+                experienceText.SetText(masterPlayerXP.ToString());
                 xpSlider.value = (masterPlayerXP / 2000f);
             }
             //mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer("master"));
@@ -596,6 +628,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 masterPlayerXP += 25;
                 //winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
                 //loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
+                experienceText.SetText(clientPlayerXP.ToString());
                 xpSlider.value = (clientPlayerXP / 2000f);
             }
             else if (enemyHealth > playerHealth)
@@ -606,6 +639,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 clientPlayerXP += 25;
                 //winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
                 //loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
+                experienceText.SetText(clientPlayerXP.ToString());
                 xpSlider.value = (clientPlayerXP / 2000f);
             }
             else if (playerHealth == enemyHealth)
@@ -613,6 +647,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerPlayerName.SetText(" It's Draw!");
                 masterPlayerXP += 50;
                 clientPlayerXP += 50;
+                experienceText.SetText(clientPlayerXP.ToString());
                 xpSlider.value = (clientPlayerXP / 2000f);
             }
             //mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer("client"));
@@ -968,11 +1003,18 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 currentCards.Add(cardDetails[matchCards[i] - 1]);
             }
         }
-        sortedList = SortCardsByLevel(currentCards);
+        //sortedList = SortCardsByLevel(currentCards);
         //sortedList = currentCards.OrderBy(card => card.levelRequired).ToList();
+        currentCards.Sort(SortByLevelAndOrder);
+        sortedList = currentCards;
+        foreach (CardDetails card in sortedList)
+        {
+            Debug.Log($"Card Name: {card.cardName}, Level: {card.levelRequired}");
+        }
+
         for (int i = 0; i < sortedList.Count; i++)
         {
-            Debug.Log("inside for " + PhotonNetwork.LocalPlayer.NickName + " player name " + pv.IsMine +  " is mine ");
+            Debug.Log("inside for " + PhotonNetwork.LocalPlayer.NickName + " player name " + pv.IsMine + " is mine ");
             PhotonView view = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
             Debug.Log(view + " view " + gameBoardParent.transform.GetChild(1).gameObject + " gameboard " + gameBoardParent.transform.GetChild(1).gameObject.name);
             if (view.IsMine)
@@ -983,7 +1025,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 miniCardParent.transform.localScale = cardListParent.transform.localScale;
                 Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
                 var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
-                Debug.Log(" completed card level " +  completeCard.levelRequired);
+                Debug.Log(" completed card level " + completeCard.levelRequired);
                 int level = int.Parse(completeCard.levelRequired.Split(" ")[1]);
                 miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage);
                 miniCard.name = sortedList[i].cardName;
@@ -995,25 +1037,42 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
     }
 
-    List<CardDetails> SortCardsByLevel(List<CardDetails> cards)
+    //List<CardDetails> SortCardsByLevel(List<CardDetails> cards)
+    //{
+    //    for (int i = 1; i < cards.Count; i++)
+    //    {
+    //        CardDetails currentCard = cards[i];
+    //        int j = i - 1;
+
+    //        int cardLevelReq = int.Parse(cards[j].levelRequired.Split(" ")[1]);
+    //        int currCardReq = int.Parse(currentCard.levelRequired.Split(" ")[1]);
+
+    //        while (j >= 0 && cardLevelReq > currCardReq)
+    //        {
+    //            cards[j + 1] = cards[j];
+    //            j--;
+    //        }
+
+    //        cards[j + 1] = currentCard;
+    //    }
+    //    return cards;
+    //}
+
+    private int SortByLevelAndOrder(CardDetails a, CardDetails b)
     {
-        for (int i = 1; i < cards.Count; i++)
+        int levelA = int.Parse(a.levelRequired.Split(" ")[1]);
+        int levelB = int.Parse(b.levelRequired.Split(" ")[1]);
+
+        int levelComparison = levelA.CompareTo(levelB);
+        if (levelComparison != 0)
         {
-            CardDetails currentCard = cards[i];
-            int j = i - 1;
-
-            int cardLevelReq = int.Parse(cards[j].levelRequired.Split(" ")[1]);
-            int currCardReq = int.Parse(currentCard.levelRequired.Split(" ")[1]);
-
-            while (j >= 0 && cardLevelReq > currCardReq)
-            {
-                cards[j + 1] = cards[j];
-                j--;
-            }
-
-            cards[j + 1] = currentCard;
+            return levelComparison;
         }
-        return cards;
+        else
+        {
+            // If levels are the same, maintain the original order
+            return currentCards.IndexOf(a).CompareTo(currentCards.IndexOf(b));
+        }
     }
 
     public void DisplayWithXP(GameObject card, int level)
@@ -1033,7 +1092,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
             shouldDisplay = true;
         }
-        else if ((playerController.playerGainedXP >= 400 && playerController.playerGainedXP < 600) &&  level <=  8)
+        else if ((playerController.playerGainedXP >= 400 && playerController.playerGainedXP < 600) && level <= 8)
         {
             Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
             shouldDisplay = true;
@@ -1050,7 +1109,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP + " card display");
             DisplayCard(card.GetComponent<Card>(), Color.white);
         }
-        
+
 
         //if (playerController.totalXP < 200 && level > 1)
         //{
@@ -1112,7 +1171,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
         //currentColor.a = 1f;
         card.transform.GetChild(0).GetComponent<Image>().color = color;
-        
+
     }
 
     public void TurnButton()
@@ -1530,7 +1589,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         biddingPanel.SetActive(true);
         countDownPanel.SetActive(false);
         afterBiddingPanel.SetActive(true);
-        bidTimer.InitTimers("BT", 25);
+        bidTimer.InitTimers("BT", 20);
         SetPlayerName();
     }
 
@@ -1647,10 +1706,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("master") && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("client"))
         {
+            Debug.LogWarning(" inside both player ");
             if (!isComp)
             {
+                Debug.LogWarning(" inside both player not comp");
                 isComp = true;
-                countDownPanel.SetActive(true);
+
+                Debug.LogWarning("mine " + PhotonNetwork.LocalPlayer.NickName);
                 initialStartTime = DateTime.Now;
 
                 if (gameBoardParent == null)
@@ -1675,6 +1737,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 CloneCountdown.SetActive(false);
 
                 board.gameObject.SetActive(true);
+                countdownTimer = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Global Countdown").GetChild(0).GetComponent<Timers>();
+                countDownPanel.SetActive(true);
+                bidTimer = biddingPanel.transform.GetChild(0).GetChild(3).GetComponent<Timers>();
+                afterBidTimer = afterBiddingPanel.GetComponent<Timers>();
+                Debug.LogError("countdownTimer " + countdownTimer + " bidTimer " + bidTimer + " afterBidTimer " + afterBidTimer);
                 resultPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Result panel").gameObject;
                 //Debug.LogError("result panel " + resultPanel + " " + resultPanel.transform.parent.name + " " + resultPanel.transform.parent.parent.name);
 
@@ -1710,12 +1777,109 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 downProfileIamge.GetComponent<Image>().sprite = profileImages[playerDeckProfileId];
                 upProfileImage.GetComponent<Image>().sprite = profileImages[opponentDeckProfileId];
-            }
-            if (countdownTimer == null)
-                countdownTimer = countDownPanel.GetComponent<Timer>();
 
-            if (PhotonNetwork.IsMasterClient)
-                countdownTimer.InitTimers("GC", 5);
+                if (countdownTimer == null)
+                {
+                    Debug.Log(countdownTimer + " not timer");
+                    countdownTimer = countDownPanel.GetComponent<Timers>();
+                    Debug.Log(" count down timer " + countdownTimer);
+                }
+
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    Debug.Log("master ");
+                    countdownTimer.InitTimers("GC", 5);
+                }
+
+                //initialStartTime = DateTime.Now;
+
+                //if (gameBoardParent == null)
+                //{
+                //    gameBoardParent = GameObject.Find("Game Board Parent");
+                //    Debug.LogError("gameboard parent " + gameBoardParent.name);
+                //}
+
+                //if (gameBoardParent.transform.GetChild(0))
+                //{
+                //    loadingPanel = gameBoardParent.transform.GetChild(0).gameObject;
+                //    loadingPanel.SetActive(false);
+                //}
+
+                //GameBoardManager board = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+                //GameBoardManager[] gameboards = GameObject.FindObjectsOfType<GameBoardManager>();
+                //Debug.Log(GameObject.Find("Gameboard(Clone)") + " gameboard clone");
+                //GameBoardManager clone = GameObject.Find("Gameboard(Clone)").GetComponent<GameBoardManager>();
+                //Debug.Log(clone + " clone ");
+                //GameObject CloneCountdown = clone.gameObject.transform.GetChild(0).Find("Global Countdown").gameObject;
+                //Debug.Log(" count down " + CloneCountdown);
+                //CloneCountdown.SetActive(false);
+
+                //board.gameObject.SetActive(true);
+                //countdownTimer = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Global Countdown").GetChild(0).GetComponent<Timer>();
+                //countDownPanel.SetActive(true);
+                //bidTimer = biddingPanel.transform.GetChild(0).GetChild(3).GetComponent<Timer>();
+                //afterBidTimer = afterBiddingPanel.GetComponent<Timer>();
+                //Debug.LogError("countdownTimer " + countdownTimer + " bidTimer " + bidTimer + " afterBidTimer " + afterBidTimer);
+                //resultPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Result panel").gameObject;
+                ////Debug.LogError("result panel " + resultPanel + " " + resultPanel.transform.parent.name + " " + resultPanel.transform.parent.parent.name);
+
+                ////if (countdownTimer == null)
+                ////    countdownTimer = countDownPanel.GetComponent<Timer>();
+
+                ////if (PhotonNetwork.IsMasterClient)
+                ////    countdownTimer.InitTimers("GC", 5);
+
+                //int playerDeckProfileId = (int)PhotonNetwork.LocalPlayer.CustomProperties["deckId"] - 1;
+                //string playerField = (string)PhotonNetwork.LocalPlayer.CustomProperties["deckField"];
+                //Debug.LogError(playerDeckProfileId + " player deck profile id " + playerField + " player field " + PhotonNetwork.LocalPlayer.NickName);
+                //Player currPlayer = PhotonNetwork.LocalPlayer;
+                //Player nextPlayer = currPlayer.GetNext();
+                //int opponentDeckProfileId = (int)nextPlayer.CustomProperties["deckId"] - 1;
+                //string opponentField = (string)nextPlayer.CustomProperties["deckField"];
+
+                //Debug.LogError(opponentDeckProfileId + " enemy deck profile id " + opponentField + " enemy field " + PhotonNetwork.LocalPlayer.NickName);
+
+                //int playerId = GetFieldIndex(playerField);
+                //int opponentId = GetFieldIndex(opponentField);
+
+                //Debug.LogError(playerId + " player id");
+                //Debug.LogError(opponentId + " opponent id");
+
+                //bottomImage.sprite = playerFields[playerId];
+                //topImage.sprite = playerFields[opponentId];
+                //bottomImage.GetComponent<SetFieldPosition>().SetObjectSize(playerId);
+                //bottomImage.GetComponent<SetFieldPosition>().SetObjectPosition(playerId, "down");
+                //topImage.GetComponent<SetFieldPosition>().SetObjectSize(opponentId);
+                //topImage.GetComponent<SetFieldPosition>().SetObjectPosition(opponentId, "up");
+
+
+                //downProfileIamge.GetComponent<Image>().sprite = profileImages[playerDeckProfileId];
+                //upProfileImage.GetComponent<Image>().sprite = profileImages[opponentDeckProfileId];
+
+                //if (countdownTimer == null)
+                //{
+
+                //    countdownTimer = countDownPanel.GetComponent<Timer>();
+                //}
+
+                //if (PhotonNetwork.IsMasterClient)
+                //{
+
+                //    countdownTimer.InitTimers("GC", 5);
+                //}
+            }
+            //if (countdownTimer == null)
+            //{
+            //    Debug.Log(countdownTimer + " not timer");
+            //    countdownTimer = countDownPanel.GetComponent<Timer>();
+            //    Debug.Log(" count down timer " + countdownTimer);
+            //}
+
+            //if (PhotonNetwork.IsMasterClient)
+            //{
+            //    Debug.Log("master ");
+            //    countdownTimer.InitTimers("GC", 5);
+            //}
 
             if (!isXPSet)
             {
@@ -1860,7 +2024,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (!endGame)
+        Debug.Log("player 1 onleft player");
+        loadingPanel = gameBoardParent.transform.GetChild(0).gameObject;
+        Debug.Log("is match not loaded " + isMatchNotLoaded);
+        if (!endGame && !loadingPanel.activeSelf && !isMatchNotLoaded)
         {
             //leftPlayerPanel.SetActive(true);
             //leftPlayerText.SetText(otherPlayer.NickName + " Was left the game. Press Continue to Go Skirmish screen.");
@@ -1870,6 +2037,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             totalTurnText = resultPanel.transform.GetChild(0).Find("Turn").GetChild(1).GetComponent<TMP_Text>();
             matchLengthText = resultPanel.transform.GetChild(0).Find("Match Length").GetChild(1).GetComponent<TMP_Text>();
+            experienceText = resultPanel.transform.GetChild(0).Find("Experience").GetChild(1).GetComponent<TMP_Text>();
             winnerPlayerName = resultPanel.transform.GetChild(0).Find("Victory").GetComponent<TMP_Text>();
             GameObject mainMenu = resultPanel.transform.GetChild(0).Find("Main Menu").gameObject;
 
@@ -1880,18 +2048,55 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             winnerPlayerName.SetText(winnerName + " is Victorious!");
             int turnCounter = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"];
 
-            if (leavePlayer == "master")
-            {
-                totalTurnText.SetText(turnCounter.ToString() + " Turns.");
-                clientPlayerXP += 100;
-                xpSlider.value = (clientPlayerXP / 2000f);
-            }
-            else if (leavePlayer == "client")
-            {
-                masterPlayerXP += 100;
-                xpSlider.value = (masterPlayerXP / 2000f);
+            string winnerId = "", loserId = "";
+            int winnerXP = 0, loserXP = 0, winnerMmrChange = 0, loserMmrChange = 0;
+            DeckGeneral winnerDeck = DeckGeneral.Unknown, loserDeck = DeckGeneral.Unknown;
+            string matchId = "ABCD";
 
+            Debug.LogError("leave player " + leavePlayer);
+            if (leaveBtn)
+            {
+                Debug.Log(leaveBtn + " leave button");
+                leaveBtn = false;
+                if (leavePlayer == "master")
+                {
+                    Debug.Log("master leave ");
+                    totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+                    clientPlayerXP += 100;
+                    experienceText.SetText(clientPlayerXP.ToString());
+                    xpSlider.value = (clientPlayerXP / 2000f);
+                }
+                else if (leavePlayer == "client")
+                {
+                    Debug.Log(" client leave ");
+                    totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+                    masterPlayerXP += 100;
+                    experienceText.SetText(masterPlayerXP.ToString());
+                    xpSlider.value = (masterPlayerXP / 2000f);
+
+                }
             }
+            else
+            {
+                Debug.Log(leaveBtn + " leave button");
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    Debug.Log(" master remaining ");
+                    totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+                    masterPlayerXP += 100;
+                    experienceText.SetText(masterPlayerXP.ToString());
+                    xpSlider.value = (masterPlayerXP / 2000f);
+                }
+                else
+                {
+                    Debug.Log("client remaining");
+                    totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+                    clientPlayerXP += 100;
+                    experienceText.SetText(clientPlayerXP.ToString());
+                    xpSlider.value = (clientPlayerXP / 2000f);
+                }
+            }
+
 
             Debug.LogError(" main menu " + mainMenu);
             //mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer());
@@ -1912,16 +2117,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             status = MatchStatus.PlayerQuit;
 
-            string winnerId = "", loserId = "";
-            int winnerXP = 0, loserXP = 0, winnerMmrChange = 0, loserMmrChange = 0;
-            DeckGeneral winnerDeck = DeckGeneral.Unknown, loserDeck = DeckGeneral.Unknown;
-            string matchId = "ABCD";
-
             Debug.Log(" leave player name " + leavePlayer);
             if (leavePlayer == "client")
             {
                 Debug.Log(masterID + " master id " + clientId + " client id " + masterPlayerXP + " master player xp " + clientPlayerXP + " client player xp " + masterDeck + " master deck " + clientDeck + " client deck ");
-                winnerId = masterID; 
+                winnerId = masterID;
                 loserId = clientId;
                 winnerXP = masterPlayerXP;
                 loserXP = clientPlayerXP;
@@ -1930,7 +2130,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerDeck = masterDeck;
                 loserDeck = clientDeck;
             }
-            else if(leavePlayer == "master")
+            else if (leavePlayer == "master")
             {
 
                 Debug.Log(masterID + " master id " + clientId + " client id " + masterPlayerXP + " master player xp " + clientPlayerXP + " client player xp " + masterDeck + " master deck " + clientDeck + " client deck ");
@@ -1943,6 +2143,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerDeck = clientDeck;
                 loserDeck = masterDeck;
             }
+            Debug.LogError(" leave player name " + leavePlayer);
             Debug.Log("leave player name " + leavePlayer + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + status);
             matchData = new MatchData(matchId, mode, winnerId, loserId, winnerDeck, loserDeck, winnerXP, loserXP, winnerMmrChange, loserMmrChange, totalSeconds, turnCounter, status);
 
@@ -1954,7 +2155,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         else if (endGame)
         {
             PhotonNetwork.AutomaticallySyncScene = false;
-
+            Debug.LogError("end game true " + endGame);
+            resultPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Result panel").gameObject;
+            Debug.LogError("resultPanel " + resultPanel);
+            Debug.LogError("resultPanel.transform.GetChild(0) " + resultPanel.transform.GetChild(0));
+            Debug.LogError("resultPanel.transform.GetChild(0).Find(\"Main Menu\") " + resultPanel.transform.GetChild(0).Find("Main Menu"));
             GameObject mainMenu = resultPanel.transform.GetChild(0).Find("Main Menu").gameObject;
             mainMenu.GetComponent<Button>().onClick.AddListener(() => LeaveRemainigPlayer());
             status = MatchStatus.Normal;
@@ -1973,17 +2178,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         if (countdownTimer.gameObject.activeSelf)
         {
-            countdownTimer.PauseTimer();
+            countdownTimer.timerIsRunning = false;
             countdownTimer.enabled = false;
         }
         if (afterBidTimer.gameObject.activeSelf)
         {
-            afterBidTimer.PauseTimer();
+            afterBidTimer.timerIsRunning = false;
             afterBidTimer.enabled = false;
         }
         if (bidTimer.gameObject.activeSelf)
         {
-            bidTimer.PauseTimer();
+            bidTimer.timerIsRunning = false;
             bidTimer.enabled = false;
         }
         if (timeDown.currentTime != 180 || timeUp.currentTime != 180)
@@ -2014,7 +2219,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     public void RefreshTimer(float time, int type)
     {
-        Timer timerPanel = countdownTimer;
+        Timers timerPanel = countdownTimer;
         string min = Mathf.FloorToInt(time / 60).ToString("0");
         string sec = Mathf.FloorToInt(time % 60).ToString("00");
         if (type == 0)
@@ -2025,10 +2230,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             timerPanel = bidTimer;
         }
-        else if (type == 2)
-        {
-            timerPanel = afterBidTimer;
-        }
+        //else if (type == 2)
+        //{
+        //    timerPanel = afterBidTimer;
+        //}
 
         timerPanel.minute.SetText(min);
         timerPanel.seconds.SetText(sec);
@@ -2053,7 +2258,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     DeckGeneral GetDeckGeneral(string name)
     {
         Debug.LogError(name + " General name");
-        switch(name)
+        switch (name)
         {
             case "Green Field": return DeckGeneral.GreenField;
             case "Purple Moon": return DeckGeneral.PurpleField;
@@ -2079,13 +2284,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         PhotonNetwork.AutomaticallySyncScene = false;
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            connectUsing = true;
+            //connectUsing = true;
             leavePlayer = "master";
             Debug.LogError(leavePlayer + " leave player master ");
             Player foundPlayer = null;
             string clientName = PhotonNetwork.LocalPlayer.GetNext().NickName;
             bool playerFound = FindPlayerByNickname(clientName, out foundPlayer);
-            pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer);
+            leaveBtn = true;
+            pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer, true);
             if (playerFound)
             {
                 Player targetPlayer = foundPlayer;
@@ -2093,16 +2299,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log("Found player name: " + targetPlayer);
                 Debug.Log(PhotonNetwork.LocalPlayer.IsMasterClient + " previous master ");
                 Debug.Log(PhotonNetwork.LocalPlayer.GetNext().IsMasterClient + " current master");
+
             }
             else
             {
                 Debug.Log("Player with nickname '" + clientName + "' not found.");
             }
+            GenerateGameObject();
             SceneManager.LoadScene(3);
-            //PhotonNetwork.LeaveRoom();
-            //PhotonNetwork.Disconnect();
+            //Invoke("LeaveRoom", 1f);
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
         }
-        else if(!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        else if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
             if (photonView.IsMine)
             {
@@ -2111,22 +2320,83 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log(pv + " photon view");
                 Debug.Log(photonView + " photon view");
                 Debug.Log("leave called");
+                leaveBtn = true;
                 photonView.RPC("MasterCall", RpcTarget.MasterClient);
-                photonView.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer);
+                photonView.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer, leaveBtn);
             }
-            //leavePlayer = "client";
-            //Debug.LogError(leavePlayer + " leave player client ");
-            //if(PhotonNetwork.InRoom)
-            //    PhotonNetwork.LeaveRoom();
-            //PhotonNetwork.Disconnect();
-            //pv.RPC("kickThisPlayer", RpcTarget.Others);
-            //pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer);
-           
+
+            //    PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
+            //    leavePlayer = "client";
+            //    Player foundPlayer = null;
+            //    string clientName = PhotonNetwork.LocalPlayer.NickName;
+            //    bool playerFound = FindPlayerByNickname(clientName, out foundPlayer);
+
+            //    pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer, true);
+            //    if (playerFound)
+            //    {
+            //        connectUsing = true;
+            //        Player targetPlayer = foundPlayer;
+            //        PhotonNetwork.SetMasterClient(targetPlayer);
+            //        Debug.Log(" client is setted maseter " + PhotonNetwork.IsMasterClient);
+            //        Debug.Log("Found player name: " + targetPlayer);
+            //        Debug.Log(PhotonNetwork.LocalPlayer.IsMasterClient + " previous master ");
+            //        Debug.Log(PhotonNetwork.LocalPlayer.GetNext().IsMasterClient + " current master");
+            //        SceneManager.LoadScene(3);
+            //    }
+            //    else
+            //    {
+            //        Debug.Log("Player with nickname '" + clientName + "' not found.");
+            //    }
+
+
+            //    //Debug.Log(" client is setted maseter " + PhotonNetwork.IsMasterClient);
+            //    //PhotonNetwork.AutomaticallySyncScene = false;
+            //    //leavePlayer = "client";
+            //    //pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer);
+            //    //connectUsing = true;
+            //    //SceneManager.LoadScene(3);
+            //    //pv.RPC("ChangeMaster", RpcTarget.Others);
+
+
+
+            //    //if (photonView.IsMine)
+            //    //{
+            //    //    leavePlayer = "client";
+            //    //    Debug.LogError(leavePlayer + " leave player client ");
+            //    //    Debug.Log(pv + " photon view");
+            //    //    Debug.Log(photonView + " photon view");
+            //    //    Debug.Log("leave called");
+            //    //    leaveBtn = true;
+            //    //    photonView.RPC("MasterCall", RpcTarget.MasterClient);
+            //    //    photonView.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer, leaveBtn);
+            //    //}
+            //    //leavePlayer = "client";
+            //    //Debug.LogError(leavePlayer + " leave player client ");
+            //    //if(PhotonNetwork.InRoom)
+            //    //    PhotonNetwork.LeaveRoom();
+            //    //PhotonNetwork.Disconnect();
+            //    //pv.RPC("kickThisPlayer", RpcTarget.Others);
+            //    //pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer);
+
         }
-        //SceneManager.LoadScene(3);
-        ////PhotonNetwork.LoadLevel(3);
-        ////skirmishManager.GetComponent<SkirmishManager>().enabled = false;
-        //Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
+        ////SceneManager.LoadScene(3);
+        //////PhotonNetwork.LoadLevel(3);
+        //////skirmishManager.GetComponent<SkirmishManager>().enabled = false;
+        ////Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
+    }
+
+    private void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
+    }
+
+    [PunRPC]
+    private void ChangeMaster()
+    {
+        Debug.Log(" local player name " + PhotonNetwork.LocalPlayer.NickName);
+        PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
+        Debug.Log("photon network master " + PhotonNetwork.IsMasterClient);
     }
 
     [PunRPC]
@@ -2140,11 +2410,35 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     public void KickPlayerRPC()
     {
         Debug.Log("KickPlayerRPC " + PhotonNetwork.IsMasterClient + " master or not ");
-        connectUsing = true;
+        //connectUsing = true;
+        //SceneManager.LoadScene(1);
+        isCompleted = true;
+        PhotonView view = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+        PhotonTransformView transformView = gameBoardParent.transform.GetChild(1).GetComponent<PhotonTransformView>();
+        Debug.Log(view + " view " + transformView + " transform view ");
+        view.enabled = false;
+        transformView.enabled = false;
+        Destroy(view);
+        Debug.Log(view.enabled + "  view " + transformView.enabled + " tra view");
+        GenerateGameObject();
+        //GameObject copied =  Instantiate(gameBoardParent.transform.GetChild(1)).gameObject;
+        //Destroy(copied.GetComponent<GameBoardManager>());
+        //copied.transform.SetParent(gameBoardParent.transform);
+        //copied.transform.localScale = gameBoardParent.transform.localScale;
+        //copied.transform.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+        //copied.transform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        //Vector3 currentPosition = copied.transform.position;
+        //currentPosition.z = 0f;
+        //copied.transform.localPosition = currentPosition;
+        //copied.name = "GameBoards";
+        //PhotonNetwork.Destroy(view);
+        //PhotonNetwork.Destroy(transformView);
         SceneManager.LoadScene(3);
-        //PhotonNetwork.LeaveRoom();
-        //PhotonNetwork.Disconnect();
+        ////Invoke("LeaveRoom", 1f);
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
     }
+
 
     //[PunRPC]
     //private void kickThisPlayer()
@@ -2156,20 +2450,24 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     //}
 
     [PunRPC]
-    private void SetLeavePlayer(string playerName)
+    private void SetLeavePlayer(string playerName, bool leaveValue)
     {
         leavePlayer = playerName;
+        leaveBtn = leaveValue;
         //SkirmishManager.instance.deckId = -1;
         Debug.LogError(" leave palyer " + leavePlayer + " player name " + playerName);
     }
 
     public void LeaveRemainigPlayer()
     {
-        Debug.LogError("called Remaining player");
+        Debug.LogError("called Remaining player " + PhotonNetwork.IsMasterClient);
         PhotonNetwork.AutomaticallySyncScene = false;
         //SkirmishManager.instance.deckId = -1;
         connectUsing = true;
+        GenerateGameObject();
         SceneManager.LoadScene(3);
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
         //if (PhotonNetwork.InRoom)
         //{
         //    PhotonNetwork.LeaveRoom();
@@ -2182,15 +2480,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.LogError("called in both  " + PhotonNetwork.LocalPlayer.NickName + " end game value " + endGame);
         status = MatchStatus.Normal;
         //SkirmishManager.instance.deckId = -1;
+        GenerateGameObject();
+        PhotonNetwork.Disconnect();
+        PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene(3);
     }
-    
+
     private void LeaveBothPlayerAccidently()
     {
         loadingPanel = gameBoardParent.transform.GetChild(0).gameObject;
         Debug.Log("loading panel " + loadingPanel);
         if (loadingPanel.activeSelf)
         {
+            Debug.Log("inside loading panel " + loadingPanel.activeSelf);
             pv.RPC("MatchNotLoaded", RpcTarget.All);
         }
         Debug.LogError("called in both  " + PhotonNetwork.LocalPlayer.NickName + " end game value " + endGame);
@@ -2199,11 +2501,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     private void MatchNotLoaded()
     {
+        Debug.Log("match not loaded in both");
         connectUsing = true;
+        Debug.Log("match not loaded value " + isMatchNotLoaded);
+        isMatchNotLoaded = true;
+        Debug.Log("match not loaded value " + isMatchNotLoaded);
         Debug.Log(" match not loaded");
         status = MatchStatus.Unknown;
         //SkirmishManager.instance.deckId = -1;
         SceneManager.LoadScene(3);
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
     }
 
     private bool FindPlayerByNickname(string nickname, out Player foundPlayer)
@@ -2219,5 +2527,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         foundPlayer = null;
         return false;
+    }
+
+    public void GenerateGameObject()
+    {
+        GameObject board = Instantiate(gameBoardParent.transform.GetChild(1)).gameObject;
+        Destroy(board.GetComponent<GameBoardManager>());
+        board.transform.SetParent(gameBoardParent.transform);
+        board.transform.localScale = gameBoardParent.transform.localScale;
+        board.transform.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+        board.transform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        Vector3 currentPosition = board.transform.position;
+        currentPosition.z = 0f;
+        board.transform.localPosition = currentPosition;
+        board.name = "GameBoards";
     }
 }

@@ -21,6 +21,8 @@ public class PlayerTimer : MonoBehaviour
 
         minute.text = (min);
         seconds.text = (sec);
+
+        Debug.Log(" min " + min + " sec " + sec);
     }
 
     public void InitTimers(string name, int time)

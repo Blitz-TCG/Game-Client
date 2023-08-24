@@ -42,8 +42,10 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         {
             return;
         }
-        if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient))
+        Debug.Log(GameBoardManager.player1Turn + " GameBoardManager.player1Turn " + PhotonNetwork.IsMasterClient + " PhotonNetwork.IsMasterClient " + photonView.IsMine + " photonView.IsMine");
+        if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
+            Debug.Log("inside player 1");
             isDragging = true;
             previousParent = transform.parent.parent.name;
             previousSubParent = transform.parent.name;
@@ -59,8 +61,9 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             endParent = previousParent;
             endSubParent = previousSubParent;
         }
-        else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient))
+        else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
+            Debug.Log("inside player 2");
             isDragging = true;
             previousParent = transform.parent.parent.name;
             previousSubParent = transform.parent.name;
@@ -88,14 +91,17 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         {
             return;
         }
-        if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient))
+        //Debug.Log(GameBoardManager.player1Turn + " GameBoardManager.player1Turn " + PhotonNetwork.IsMasterClient + " PhotonNetwork.IsMasterClient " + photonView.IsMine + " photonView.IsMine");
+        if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
+            //Debug.Log("inside player 1");
             Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);//+ offset;
             transform.position = curPosition;
         }
-        else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient))
+        else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
+            //Debug.Log("inside player 2");
             Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);//+ offset;
             transform.position = curPosition;
@@ -113,8 +119,10 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         {
             return;
         }
-        if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient))
+        Debug.Log(GameBoardManager.player1Turn + " GameBoardManager.player1Turn " + PhotonNetwork.IsMasterClient + " PhotonNetwork.IsMasterClient " + photonView.IsMine + " photonView.IsMine");
+        if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
+            Debug.Log("inside player 1");
             isDragging = false;
             transform.SetParent(parentAfterDrag);
             transform.position = parentAfterDrag.transform.position;
@@ -124,8 +132,9 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             endSubParent = previousSubParent;
             dragEnd = true;
         }
-        else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient))
+        else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
+            Debug.Log("inside player 2");
             isDragging = false;
             transform.SetParent(parentAfterDrag); transform.position = parentAfterDrag.transform.position;
             transform.GetComponent<CanvasGroup>().blocksRaycasts = true;

@@ -4,11 +4,8 @@ using Photon.Realtime;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using Newtonsoft.Json;
-using System.IO;
 using UnityEngine.SceneManagement;
-using UnityEditor;
+using UnityEngine.UI;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
@@ -25,22 +22,29 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
     private SkirmishManager skirmishManager;
     private MatchData matchData;
+    private const string CANCEL_KEY = "isGameCancelled";
 
     private void Awake()
     {
         Debug.Log("Awake called");
-        if (PhotonNetwork.IsConnected)
-        {
-            Debug.Log("connected");
-            if (PhotonNetwork.InRoom)
-            {
-                Debug.Log("in room " + PhotonNetwork.InRoom);
-                PhotonNetwork.LeaveRoom();
-            }
-            Debug.Log(" already connected ");
-            PhotonNetwork.Disconnect();
-            Debug.Log("PhotonNetwork.IsConnected " + PhotonNetwork.IsConnected);
-        }
+        //if (PhotonNetwork.IsConnected)
+        //{
+        //    Debug.Log("connected");
+        //    if (PhotonNetwork.InRoom)
+        //    {
+        //        Debug.Log("in room " + PhotonNetwork.InRoom);
+        //        PhotonNetwork.LeaveRoom();
+        //    }
+        //    Debug.Log(" already connected ");
+        //    PhotonNetwork.Disconnect();
+        //    Debug.Log("PhotonNetwork.IsConnected " + PhotonNetwork.IsConnected);
+        //}
+        //if (GameBoardManager.isCompleted)
+        //{
+        //    GameBoardManager.isCompleted = false;
+        //    PhotonNetwork.LeaveRoom();
+        //    PhotonNetwork.Disconnect();
+        //}
     }
 
     private void Start()
@@ -49,13 +53,48 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         connected = false;
         Debug.Log("start called");
         //PhotonNetwork.Disconnect();
-        
+
         PhotonNetwork.ConnectUsingSettings();
         Debug.Log("PhotonNetwork.IsConnected " + PhotonNetwork.IsConnected);
         PhotonNetwork.AutomaticallySyncScene = true;
         skirmishManager = SkirmishManager.instance;
         Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
         Debug.Log(PhotonNetwork.InRoom + " photon room ");
+        //if (PhotonNetwork.InRoom)
+        //{
+        //    Invoke("LeaveGame", 30f);
+        //}
+        if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            Invoke("CancelGame", 30f);
+        if (PhotonNetwork.InRoom)
+        {
+            Invoke("LeaveGame", 30f);
+        }
+    }
+
+    public void CancelGame()
+    {
+        if (loadingPanel.gameObject.activeSelf || initialLoading.gameObject.activeSelf)
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CANCEL_KEY, true } });
+    }
+
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        if (propertiesThatChanged.ContainsKey(CANCEL_KEY) && (bool)propertiesThatChanged[CANCEL_KEY])
+        {
+            SceneManager.LoadScene(3);
+            if (PhotonNetwork.InRoom)
+                PhotonNetwork.LeaveRoom();
+        }
+    }
+
+    public void LeaveGame()
+    {
+        if (loadingPanel.gameObject.activeSelf || initialLoading.gameObject.activeSelf)
+        {
+            SceneManager.LoadScene(3);
+            PhotonNetwork.LeaveRoom();
+        }
     }
 
     private void Update()

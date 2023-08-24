@@ -74,24 +74,31 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
             Destroy(instance.gameObject);
         }
 
-        if (PhotonNetwork.IsConnected)
-        {
-            Debug.Log("connected");
-            if (PhotonNetwork.InRoom)
-            {
-                Debug.Log("in room " + PhotonNetwork.InRoom);
-                PhotonNetwork.LeaveRoom();
-            }
-            Debug.Log(" already connected ");
-            PhotonNetwork.Disconnect();
-            Debug.Log("PhotonNetwork.IsConnected " + PhotonNetwork.IsConnected);
-            gameObject.SetActive(false);
-        }
+        //if (GameBoardManager.isCompleted)
+        //{
+        //    GameBoardManager.isCompleted = false;
+        //    PhotonNetwork.LeaveRoom();
+        //    PhotonNetwork.Disconnect();
+        //}
 
-        if (GameBoardManager.connectUsing)
-        {
-            gameObject.SetActive(false);
-        }
+        //if (PhotonNetwork.IsConnected)
+        //{
+        //    Debug.Log("connected");
+        //    if (PhotonNetwork.InRoom)
+        //    {
+        //        Debug.Log("in room " + PhotonNetwork.InRoom);
+        //        PhotonNetwork.LeaveRoom();
+        //    }
+        //    Debug.Log(" already connected ");
+        //    PhotonNetwork.Disconnect();
+        //    Debug.Log("PhotonNetwork.IsConnected " + PhotonNetwork.IsConnected);
+        //    //gameObject.SetActive(false);
+        //}
+
+        //if (GameBoardManager.connectUsing)
+        //{
+        //    gameObject.SetActive(false);
+        //}
 
         //if (GameInitializer.isStarted)
         //{
@@ -113,6 +120,7 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
         //    }
         //    GameInitializer.isStarted = false;
         //}
+        
     }
 
     private void Start()

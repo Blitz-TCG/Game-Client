@@ -39,6 +39,8 @@ public class Timer : MonoBehaviourPunCallbacks
             if (countdown > 0.0f)
             {
                 view = gameBoard.GetComponent<PhotonView>();
+                Debug.Log("*** gameboard " + gameBoard);
+                Debug.Log("*** gameboard name " + gameBoard.name);
                 view.RPC("UpdateTime", RpcTarget.All, countdown);
             }
 
@@ -90,11 +92,13 @@ public class Timer : MonoBehaviourPunCallbacks
 
     public void InitTimers(string name, int time)
     {
+        Debug.Log("*** init timer");
         if(PhotonNetwork.IsMasterClient) 
         {
+            Debug.Log("*** master player " + name);
             if (name == "GC")
             {
-                //Debug.LogError(name + " panel name " + time + " time ");
+                Debug.Log(name + " *** panel name " + time + " time ");
                 isGlobalCountDown = true;
                 Countdown = time;
                 SetStartTime();
@@ -164,6 +168,7 @@ public class Timer : MonoBehaviourPunCallbacks
 
     public static void SetStartTime()
     {
+        Debug.Log("*** inside set strat timer");
         int startTime = 0;
         bool wasSet = TryGetStartTime(out startTime);
         Debug.Log(startTime + " start time " + wasSet);
