@@ -2,6 +2,7 @@ using Firebase.Database;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,6 +25,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private SkirmishManager skirmishManager;
     private MatchData matchData;
     private const string CANCEL_KEY = "isGameCancelled";
+    private List<string> roomNames = new List<string>();
 
     private void Awake()
     {
@@ -56,6 +58,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         //PhotonNetwork.Disconnect();
 
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.ConnectToRegion("us");
+        //PhotonNetwork.ConnectUsingSettings();
         Debug.Log("PhotonNetwork.IsConnected " + PhotonNetwork.IsConnected);
         PhotonNetwork.AutomaticallySyncScene = true;
         skirmishManager = SkirmishManager.instance;
@@ -197,6 +201,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NickName = FirebaseManager.instance.user.DisplayName;
         //skirmishManager.gameObject.SetActive(true);
+        PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
@@ -283,6 +288,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 Debug.Log(" else ");
                 PhotonNetwork.Disconnect();
                 PhotonNetwork.ConnectUsingSettings();
+                PhotonNetwork.ConnectToRegion("us");
                 connected = false;
             }
             loadingPanel.SetActive(false);
@@ -293,12 +299,18 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        string region = PhotonNetwork.CloudRegion;
+        Debug.Log("Current Photon Server Region: " + region);
+        Debug.Log(roomNames.Count + " photon count");
         Debug.Log("OnJoinRandomFailed");
         CreateNewRoom();
     }
 
     public void CreateNewRoom()
     {
+        string region = PhotonNetwork.CloudRegion;
+        Debug.Log("Current Photon Server Region: " + region);
+        Debug.Log(roomNames.Count + " photon count");
         Debug.Log("CreateNewRoom");
         int roomId = Random.Range(0, 10000);
         RoomOptions roomOptions = new RoomOptions();
@@ -312,12 +324,18 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
+        string region = PhotonNetwork.CloudRegion;
+        Debug.Log("Current Photon Server Region: " + region);
+        Debug.Log(roomNames.Count + " photon count");
         Debug.Log("OnCreateRoomFailed");
         CreateNewRoom();
     }
 
     public override void OnJoinedRoom()
     {
+        string region = PhotonNetwork.CloudRegion;
+        Debug.Log("Current Photon Server Region: " + region);
+        Debug.Log(roomNames.Count + " photon count");
         Debug.Log("joined room");
         customProp["enterdNum"] = 0;
         int deckGeneralId = ErgoQuery.instance.deckGeneralStore[skirmishManager.deckId - 1];
@@ -350,6 +368,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+        string region = PhotonNetwork.CloudRegion;
+        Debug.Log("Current Photon Server Region: " + region);
+        Debug.Log(roomNames.Count + " photon count");
         Debug.LogError("player enterd game " + PhotonNetwork.CurrentRoom.PlayerCount);
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
@@ -371,6 +392,24 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("LeaveTheRoom");
         if (loadingPanel.activeSelf)
             CancelMatch();
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach (RoomInfo room in roomList)
+        {
+            if (!room.RemovedFromList)
+            {
+                if (!roomNames.Contains(room.Name))
+                {
+                    roomNames.Add(room.Name);
+                }
+            }
+            else
+            {
+                roomNames.Remove(room.Name);
+            }
+        }
     }
 
     //public static void RemoveSceneFromBuildIndex()

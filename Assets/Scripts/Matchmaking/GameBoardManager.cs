@@ -1978,7 +1978,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         PhotonNetwork.CurrentRoom.CustomProperties.Remove("master");
         PhotonNetwork.CurrentRoom.CustomProperties.Remove("client");
     }
-
+    
     private void ApplyActivePlayer(int id)
     {
         photonPlayer = PhotonNetwork.LocalPlayer;
