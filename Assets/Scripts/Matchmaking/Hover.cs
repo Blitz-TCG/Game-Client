@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections.Generic;
+using System.Dynamic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -29,6 +30,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     private EnemyController enemyController;
     private GameObject gameBoardParent;
     private TMP_Text error;
+    private bool isHovering = false;
 
     private ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
     #endregion
@@ -42,14 +44,27 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        //Debug.Log("--- on pointer enter " + transform.GetComponent<BoxCollider2D>().gameObject);
+        Debug.Log("transform name " + transform.name);
+        isHovering = true;
+        Debug.Log("pointer enter ");
         if (!isClicked)
-            ShowInfoCard();
+            Invoke("ShowInfoCard", 0.1f);
+        //if (!isClicked)
+        //    ShowInfoCard();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        HideInfoCard();
+        Debug.Log("pointer exit ");
+        if(transform.GetComponent<Card>() != null && transform.GetComponent<Card>().transform.parent.name != null)
+        {
+            Debug.Log("transform name " + transform.GetComponent<Card>() + " card parent " + transform.GetComponent<Card>().transform.parent.name);
+        }
+        isHovering =false;
         isClicked = false;
+        Invoke("HideInfoCard", 0.1f);
+        //HideInfoCard();
     }
 
     private void Start()
@@ -73,6 +88,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
     private void ShowInfoCard()
     {
+        Debug.Log("Show card ");
         if (gameObject.transform.parent.name == "Content")
         {
             gameObject.transform.GetChild(0).GetChild(gameObject.transform.GetChild(0).childCount - 1).gameObject.SetActive(true);
@@ -104,6 +120,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
     private void HideInfoCard()
     {
+        Debug.Log("hide card");
         gameObject.transform.GetChild(0).GetChild(gameObject.transform.GetChild(0).childCount - 1).gameObject.SetActive(false);
         if (cardparent1.transform.childCount > 0)
         {
@@ -379,4 +396,5 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         }
         return false;
     }
+
 }

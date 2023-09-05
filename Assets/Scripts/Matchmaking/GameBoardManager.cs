@@ -208,8 +208,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         mode = GameMode.OpenToPlay;
         leaveBtn = false;
         isMatchNotLoaded  = false;
+        ResetAllStaticValues();
         Debug.Log("start called " + PhotonNetwork.IsMasterClient + " photon player " + PhotonNetwork.LocalPlayer.NickName);
-        Invoke("LeaveBothPlayerAccidently", 60f);
+        Invoke("LeaveBothPlayerAccidently", 45f);
     }
 
     private void Update()
@@ -232,19 +233,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             }
             else if (Timers.isCompletedBid)
             {
-                Timer.isCompletedBid = false;
+                Timers.isCompletedBid = false;
                 if (isBidEnds)
                 {
                     isBidEnds = false;
                     pv.RPC("BidComplete", RpcTarget.All);
                 }
             }
-            else if (Timer.isAfterCompletedBid)
+            else if (Timers.isAfterCompletedBid)
             {
                 if (isAfterComplete)
                 {
                     isAfterComplete = false;
-                    Timer.isCompletedBid = false;
+                    Timers.isCompletedBid = false;
                     pv.RPC("AfterBidComplete", RpcTarget.All);
                 }
             }
@@ -1538,9 +1539,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     public void ResetAllStaticValues()
     {
-        Timer.isBiddingTime = false;
-        Timer.isCompletedBid = false;
-        Timer.isAfterCompletedBid = false;
+        Timers.isBiddingTime = false;
+        Timers.isCompletedBid = false;
+        Timers.isAfterCompletedBid = false;
     }
 
     public void ResetAllCard()
@@ -1584,7 +1585,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     public void BiddingPanel()
     {
-        Timer.isBiddingTime = false;
+        Timers.isBiddingTime = false;
         //RemoveProperties();
         biddingPanel.SetActive(true);
         countDownPanel.SetActive(false);
@@ -1596,7 +1597,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     public void BidComplete()
     {
-        Timer.isCompletedBid = false;
+        Timers.isCompletedBid = false;
         countDownPanel.SetActive(false);
         afterBidTimer.InitTimers("CB", 5);
         afterBiddingPanel.SetActive(false);
@@ -2230,10 +2231,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             timerPanel = bidTimer;
         }
-        //else if (type == 2)
-        //{
-        //    timerPanel = afterBidTimer;
-        //}
+        else if (type == 2)
+        {
+            timerPanel = afterBidTimer;
+        }
 
         timerPanel.minute.SetText(min);
         timerPanel.seconds.SetText(sec);
@@ -2306,14 +2307,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log("Player with nickname '" + clientName + "' not found.");
             }
             GenerateGameObject();
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+                PhotonNetwork.Disconnect();
+            }
             SceneManager.LoadScene(3);
             //Invoke("LeaveRoom", 1f);
-            PhotonNetwork.LeaveRoom();
-            PhotonNetwork.Disconnect();
+            
         }
         else if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            if (photonView.IsMine)
+            pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+            Debug.LogError(pv + " pv " + pv.IsMine);
+            Debug.LogError("Leave player called " + PhotonNetwork.LocalPlayer.NickName + " mine " + pv.IsMine);
+            if (pv.IsMine)
             {
                 leavePlayer = "client";
                 Debug.LogError(leavePlayer + " leave player client ");
@@ -2321,8 +2329,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log(photonView + " photon view");
                 Debug.Log("leave called");
                 leaveBtn = true;
-                photonView.RPC("MasterCall", RpcTarget.MasterClient);
-                photonView.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer, leaveBtn);
+                pv.RPC("MasterCall", RpcTarget.MasterClient);
+                pv.RPC("SetLeavePlayer", RpcTarget.All, leavePlayer, leaveBtn);
             }
 
             //    PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
@@ -2433,10 +2441,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         //copied.name = "GameBoards";
         //PhotonNetwork.Destroy(view);
         //PhotonNetwork.Destroy(transformView);
-        SceneManager.LoadScene(3);
         ////Invoke("LeaveRoom", 1f);
-        PhotonNetwork.LeaveRoom();
-        PhotonNetwork.Disconnect();
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+        }
+        SceneManager.LoadScene(3);
     }
 
 
@@ -2481,9 +2492,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         status = MatchStatus.Normal;
         //SkirmishManager.instance.deckId = -1;
         GenerateGameObject();
-        PhotonNetwork.Disconnect();
-        PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene(3);
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+        }
     }
 
     private void LeaveBothPlayerAccidently()
@@ -2510,8 +2524,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         status = MatchStatus.Unknown;
         //SkirmishManager.instance.deckId = -1;
         SceneManager.LoadScene(3);
-        PhotonNetwork.LeaveRoom();
-        PhotonNetwork.Disconnect();
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+        }
     }
 
     private bool FindPlayerByNickname(string nickname, out Player foundPlayer)

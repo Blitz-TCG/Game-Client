@@ -10,6 +10,7 @@ public class GameInitializer : MonoBehaviourPunCallbacks
     public static bool isStarted;
     private bool gameCancelled = false;
     private const string CANCEL_KEY = "isGameCancelled";
+    private ExitGames.Client.Photon.Hashtable customProp = new ExitGames.Client.Photon.Hashtable();
 
     private void Awake()
     {
@@ -76,12 +77,13 @@ public class GameInitializer : MonoBehaviourPunCallbacks
         Debug.Log(PhotonNetwork.IsConnected + " connected ");
         Debug.Log(PhotonNetwork.InRoom + " inside room ");
         Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount + " player count ");
-        if(PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            Invoke("CancelGame", 30f);
-        if (PhotonNetwork.InRoom)
-        {
-            Invoke("LeaveGame", 30f);
-        }
+        //if(PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        //    Invoke("CancelGame", 30f);
+        //if (PhotonNetwork.InRoom)
+        //{
+        //    Invoke("LeaveGame", 30f);
+        //}
+        Invoke("CancelGame", 30f);
     }
 
     public void LeaveGame()
@@ -100,12 +102,54 @@ public class GameInitializer : MonoBehaviourPunCallbacks
 
     public void CancelGame()
     {
-        if(loading.gameObject.activeSelf)
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable  { { CANCEL_KEY, true } });
+        //Debug.LogError("Cancel game called " + PhotonNetwork.CurrentRoom.PlayerCount);
+        if(PhotonNetwork.CurrentRoom != null)
+        {
+            Debug.LogError("Cancel game called " + PhotonNetwork.CurrentRoom.PlayerCount);
+        }
+        if (loading.gameObject.activeSelf)
+        {
+            Debug.LogError(" inside photon nework");
+            if(PhotonNetwork.CurrentRoom != null)
+            {
+                Debug.LogError("not null");
+                if (!customProp.ContainsKey(CANCEL_KEY))
+                {
+                    Debug.LogError("not setted");
+                    customProp[CANCEL_KEY] = true;
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
+                }
+                else
+                {
+                    Debug.LogError("not key null");
+                    SceneManager.LoadScene(3);
+                    if (PhotonNetwork.IsConnected)
+                    {
+                        if (PhotonNetwork.InRoom)
+                            PhotonNetwork.LeaveRoom();
+                        PhotonNetwork.Disconnect();
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("null");
+                SceneManager.LoadScene(3);
+                if (PhotonNetwork.IsConnected)
+                {
+                    if (PhotonNetwork.InRoom)
+                        PhotonNetwork.LeaveRoom();
+                    PhotonNetwork.Disconnect();
+                }
+            }
+            
+        }
+            //PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable  { { CANCEL_KEY, true } });
     }
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
+        Debug.Log(" room property update " + PhotonNetwork.LocalPlayer.NickName + " player name " + PhotonNetwork.CurrentRoom.PlayerCount);
         if (propertiesThatChanged.ContainsKey(CANCEL_KEY) && (bool)propertiesThatChanged[CANCEL_KEY])
         {
             SceneManager.LoadScene(3);
