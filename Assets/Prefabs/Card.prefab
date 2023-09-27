@@ -1333,7 +1333,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: testtesttesttestes testest     estestestes
+  m_text: testtesttesttestes testest     estestestes er rg ergerggerg
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 646656040a5b4df49bcf3a18085cd4fb, type: 2}
   m_sharedMaterial: {fileID: -1459476648163660687, guid: 646656040a5b4df49bcf3a18085cd4fb, type: 2}
@@ -1570,8 +1570,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 90}
-  m_SizeDelta: {x: 239.6091, y: 235.5505}
+  m_AnchoredPosition: {x: -0.0499, y: 90.05603}
+  m_SizeDelta: {x: 239, y: 234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1153159187237463930
 CanvasRenderer:
@@ -2357,7 +2357,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 314.3646, y: 469.092}
+  m_SizeDelta: {x: 299.625, y: 457.625}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9025222870985367311
 MonoBehaviour:
@@ -2371,7 +2371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b3f4cb67e8e4f4bad9e32bb0142e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deckManager: {fileID: 0}
   cardNormalPrefab: {fileID: 4276069275343109782}
   cardClicked: {fileID: 3569672785987793446}
 --- !u!222 &1430126902798774189
@@ -2424,7 +2423,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02921b69626b69646b81c6fa5dd4dfc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  findDeckManager: {fileID: 9025222870985367311}
   cardImages: []
   imageResult: {fileID: 0}
   frameResult: {fileID: 0}
@@ -2442,5 +2440,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 314.3646, y: 469.092, z: 1}
+  m_Size: {x: 299.625, y: 457.625, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

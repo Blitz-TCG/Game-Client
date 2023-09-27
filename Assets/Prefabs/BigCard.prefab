@@ -1038,6 +1038,8 @@ MonoBehaviour:
   cardClass: 0
   cardImage: {fileID: 0}
   cardFrame: {fileID: 0}
+  isAlreadyAttacked: 0
+  dropPosition: 0
   cardId: 0
   cId: {fileID: 3341251846864005424}
   cardErgoTokenId: {fileID: 778497879824199085}
@@ -1539,7 +1541,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 356.4}
-  m_SizeDelta: {x: 958.4364, y: 942.202}
+  m_SizeDelta: {x: 956, y: 936}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1153159187237463930
 CanvasRenderer:
