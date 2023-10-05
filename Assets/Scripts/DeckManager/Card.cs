@@ -28,7 +28,7 @@ public class Card : MonoBehaviour
     public int HP;
     public int gold;
     public int XP;
-    public int race;
+    public int fieldLimit;
     public string levelRequired;
     public string clan;
     public CardClass cardClass;
@@ -48,11 +48,12 @@ public class Card : MonoBehaviour
     public TMP_Text HPText;
     public TMP_Text goldText;
     public TMP_Text XPText;
+    public TMP_Text fieldLimitText;
     public TMP_Text cardClan;
     public TMP_Text levelRequiredText;
     public Image image;
     public Image frame;
-    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName,string cDescription, int cAttack, int cHP,int cGold, int cXP, string cClan, string cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass)
+    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName,string cDescription, int cAttack, int cHP,int cGold, int cXP, int cFieldLimit, string cClan, string cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass)
     {
         cardId = identity;
         cId.text = identity.ToString();
@@ -64,6 +65,7 @@ public class Card : MonoBehaviour
         HPText.text = cHP.ToString();
         goldText.text = cGold.ToString();
         XPText.text = cXP.ToString();
+        fieldLimitText.text = cFieldLimit.ToString();
         cardClan.text = cClan.ToString();
         levelRequiredText.text = cLevelRequired.ToString();
         image.sprite = cImage;
@@ -79,6 +81,14 @@ public class Card : MonoBehaviour
         HP = cHP;
         gold = cGold;
         XP = cXP;
+        fieldLimit = cFieldLimit;
+
+        if(fieldLimit == 8)
+        {
+            RectTransform fieldLimitTransform = fieldLimitText.GetComponent<RectTransform>();
+            fieldLimitTransform.rotation = Quaternion.Euler(0, 0, 90);
+        }
+
         clan = cClan;
         levelRequired = cLevelRequired;
         image.sprite = cImage;

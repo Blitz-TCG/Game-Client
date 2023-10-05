@@ -164,9 +164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: opti-extraBold
   m_EditorClassIdentifier: 
-  hashCode: -1830453270
+  hashCode: -604666832
   material: {fileID: -1459476648163660687}
-  materialHashCode: 2076258314
+  materialHashCode: -58250224
   m_Version: 1.1.0
   m_SourceFontFileGUID: bf42a57c99f6fcb429d3374a657c906d
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: bf42a57c99f6fcb429d3374a657c906d, type: 3}
