@@ -13,6 +13,8 @@ public class FindDeckManager : MonoBehaviour
 
     public void NormalCardClick()
     {
+        deckManager.cardIndex = transform.parent.GetSiblingIndex(); //for next card logic
+
         doubleClickParent = transform.parent.parent.parent.parent;
         string doubleClickCardType = doubleClickParent.name.Split(" ")[0];
         deckManager.OnClickSingleCard(cardClicked, cardNormalPrefab, doubleClickCardType);

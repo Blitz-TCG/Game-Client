@@ -39,7 +39,7 @@ public class DeckManager : MonoBehaviour
     public static Transform doubleClickParent;
     public static int doubleClickCardclassIndex;
     public static string doubleClickTokenId;
-    private Image[] clickImages;
+    //private Image[] clickImages;
 
     public int deckCount;
 
@@ -134,6 +134,8 @@ public class DeckManager : MonoBehaviour
     [Header("Cards")]
     [SerializeField] private GameObject cardButtonUIon;
     [SerializeField] private GameObject cardButtonUIoff;
+    public int cardIndex;
+    private int nextCardCount;
 
     public Card cardPrefabs;
     private List<CardDetails> cardDetails;
@@ -255,6 +257,16 @@ public class DeckManager : MonoBehaviour
         {
             cursorManager.AudioClickButtonStandard();
             OnBackFromPopUp();
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && popUpPanel.activeSelf)
+        {
+            NextCardLeft();
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow) && popUpPanel.activeSelf)
+        {
+            NextCardRight();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) && generalSelectLarge.activeSelf)
@@ -647,7 +659,7 @@ public class DeckManager : MonoBehaviour
     IEnumerator DetectDoubleLeftClick(GameObject cardClicked, Card card, string doubleClickCardType)
     {
         int currentCount = currentListOfCard.transform.childCount;
-        clickImages = card.GetComponentsInChildren<Image>();
+        //clickImages = card.GetComponentsInChildren<Image>();
         isTimeCheckAllowed = false;
         while (Time.time < firstLeftClickTime + timeBetweenLeftClick)
         {
@@ -658,7 +670,7 @@ public class DeckManager : MonoBehaviour
                 {
                     if (doubleClickCardType == "Available" && currentCount < 25)
                     {
-                        if (clickImages != null)
+/*                        if (clickImages != null) //unsure what this used to do, doesn't seem needed anymore - leave for now just in case
                         {
                             foreach (Image thisImage in clickImages)
 
@@ -669,7 +681,7 @@ public class DeckManager : MonoBehaviour
                                     thisImage.color = new Vector4(0f, 0f, 0f, 0f);
                                 }
                             }
-                        }
+                        }*/
 
                         Debug.Log("Double Click Available to Current Move");
                         doubleClickCard.Play();
@@ -825,6 +837,7 @@ public class DeckManager : MonoBehaviour
     {
         int currentCount = currentListOfCard.transform.childCount;
         Card card = popUpPanel.transform.GetComponentInChildren<Card>();
+        popupCardObject.SetActive(true); //for when things are filtered and someone is going left / right through cards
 
         if (popupCardObject.transform.parent.name.Contains("Available")) //comes from the click enumerator
         {
@@ -874,6 +887,150 @@ public class DeckManager : MonoBehaviour
             Destroy(ghostCard);
         }
     }
+
+    public void NextCardLeft() // go to next gameobject in card popup
+    {
+        Destroy(popUpPanel.transform.GetComponentInChildren<Card>().gameObject);
+        string nextCardType = popupCardObject.transform.parent.parent.parent.name.Split(" ")[0];
+        if (nextCardType == "Available")
+        {
+            nextCardCount = availableListOfCard.transform.childCount;
+        }
+        else if (nextCardType == "Current")
+        {
+            nextCardCount = currentListOfCard.transform.childCount;
+        }
+
+        if (cardIndex == 0)
+        {
+            cardIndex = nextCardCount - 1;
+            GameObject nextCard = popupCardObject.transform.parent.GetChild(cardIndex).gameObject;
+            Card nextCardPrefap = popupCardObject.transform.parent.GetChild(cardIndex).gameObject.GetComponent<Card>();
+            NextCard(nextCard, nextCardPrefap);
+        }
+        else
+        {
+            cardIndex--;
+            GameObject nextCard = popupCardObject.transform.parent.GetChild(cardIndex).gameObject;
+            Card nextCardPrefap = popupCardObject.transform.parent.GetChild(cardIndex).gameObject.GetComponent<Card>();
+            NextCard(nextCard, nextCardPrefap);
+        }
+    }
+
+    public void NextCardRight() // go to next gameobject in card popup
+    {
+        Destroy(popUpPanel.transform.GetComponentInChildren<Card>().gameObject);
+        string nextCardType = popupCardObject.transform.parent.parent.parent.name.Split(" ")[0];
+        if (nextCardType == "Available")
+        {
+            nextCardCount = availableListOfCard.transform.childCount;
+        }
+        else if (nextCardType == "Current")
+        {
+            nextCardCount = currentListOfCard.transform.childCount;
+        }
+
+        if (cardIndex + 1 == nextCardCount)
+        {
+            cardIndex = 0;
+            GameObject nextCard = popupCardObject.transform.parent.GetChild(cardIndex).gameObject;
+            Card nextCardPrefap = popupCardObject.transform.parent.GetChild(cardIndex).gameObject.GetComponent<Card>();
+            NextCard(nextCard, nextCardPrefap);
+        }
+        else
+        {
+            cardIndex++;
+            GameObject nextCard = popupCardObject.transform.parent.GetChild(cardIndex).gameObject;
+            Card nextCardPrefap = popupCardObject.transform.parent.GetChild(cardIndex).gameObject.GetComponent<Card>();
+            NextCard(nextCard, nextCardPrefap);
+        }
+    }
+
+    public void NextCard(GameObject cardClicked, Card card)
+    {
+        string nextCardType = popupCardObject.transform.parent.parent.parent.name.Split(" ")[0];
+
+        int currentCount = currentListOfCard.transform.childCount;
+        //clickImages = card.GetComponentsInChildren<Image>();
+        Debug.Log("next card");
+        singleClickCard.Play();
+
+        if (card.transform.parent.parent.parent.name.Split(" ")[0] == "Available")
+        {
+            if (generalsIndex == (int)card.cardClass || (int)card.cardClass == 0) //is it the right general or f2p
+            {
+
+                if (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) || card.ergoTokenId == "") //do i own the token or is it f2p
+                {
+                    popupButtonOff.SetActive(false);
+                    popupButtonOn.SetActive(true);
+                    popupButtonOn.transform.GetComponentInChildren<TMP_Text>().text = "Add";
+
+                    if (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) && card.ergoTokenId != "") //this sets the right amounts
+                    {
+                        int amountIndex = ErgoQuery.instance.tokenIDs.FindIndex(a => a.Contains(card.ergoTokenId));
+                        long tokenAmounts = ErgoQuery.instance.tokenAmounts[amountIndex];
+                        card.ergoTokenAmount = tokenAmounts;
+                    }
+                    else if (card.ergoTokenId == "") //if it's a f2p card
+                    {
+                        card.ergoTokenAmount = 1;
+                    }
+                }
+                else //if it's the right general and not a f2p card and I don't own the token
+                {
+                    popupButtonOff.SetActive(true);
+                    popupButtonOn.SetActive(false);
+                    popupButtonOff.transform.GetComponentInChildren<TMP_Text>().text = "Add";
+
+                    card.ergoTokenAmount = 0;
+                }
+            }
+            else //its the wrong general and not a f2p card
+            {
+                popupButtonOff.SetActive(true);
+                popupButtonOn.SetActive(false);
+                popupButtonOff.transform.GetComponentInChildren<TMP_Text>().text = "Add";
+
+                if (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) && card.ergoTokenId != "") //if I own the card but it's the wrong general
+                {
+                    int amountIndex = ErgoQuery.instance.tokenIDs.FindIndex(a => a.Contains(card.ergoTokenId));
+                    long tokenAmounts = ErgoQuery.instance.tokenAmounts[amountIndex];
+                    card.ergoTokenAmount = tokenAmounts;
+                }
+                else if (card.ergoTokenId == "") //if it's a f2p card
+                {
+                    card.ergoTokenAmount = 1;
+                }
+                else if (!ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId)) //if I don't own the card
+                {
+                    card.ergoTokenAmount = 0;
+                }
+            }
+        }
+        else if (card.transform.parent.parent.parent.name.Split(" ")[0] == "Current")
+        {
+            popupButtonOff.SetActive(false);
+            popupButtonOn.SetActive(true);
+            popupButtonOn.transform.GetComponentsInChildren<Button>()[0].GetComponentInChildren<TMP_Text>().text = "Remove";
+
+            if (ErgoQuery.instance.tokenIDs.Contains(card.ergoTokenId) && card.ergoTokenId != "") //I own the card and it's a blockchain card
+            {
+                int amountIndex = ErgoQuery.instance.tokenIDs.FindIndex(a => a.Contains(card.ergoTokenId));
+                long tokenAmounts = ErgoQuery.instance.tokenAmounts[amountIndex];
+                card.ergoTokenAmount = tokenAmounts;
+            }
+            else if (card.ergoTokenId == "") //it's a f2p card
+            {
+                card.ergoTokenAmount = 1;
+            }
+        }
+
+        popupCardObject = cardClicked;
+        cardInstance = Instantiate<Card>(bigCardPrefab, popUpPanel.transform);
+        cardInstance.SetProperties(card.id, card.ergoTokenId, card.ergoTokenAmount, card.cardName, card.cardDescription, card.attack, card.HP, card.gold, card.XP, card.fieldLimit, card.clan, card.levelRequired, card.image.sprite, card.frame.sprite, card.cardClass);
+    }
+
 
     public void OnClickAddDeck() // click on add deck button
     {
