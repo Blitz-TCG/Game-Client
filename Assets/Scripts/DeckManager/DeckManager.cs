@@ -1584,7 +1584,9 @@ public class DeckManager : MonoBehaviour
 
         for (int i = 0; i < currentListOfCard.transform.childCount; i++)
         {
-            if (int.Parse(currentCards[i].levelRequired.Split(" ")[1]) == 1)
+            string levelText = currentCards[i].levelRequired;
+            int levelInt = int.Parse(levelText.Replace("Starter", "1").Replace("Lower", "2").Replace("Middle", "3").Replace("Upper", "4"));
+            if (levelInt == 1)
             {
                 countOfLevelOne++;
             }
@@ -1592,7 +1594,7 @@ public class DeckManager : MonoBehaviour
 
         if (countOfLevelOne < 2)
         {
-            ActiveTooltip("You need at least two Level 1 cards");
+            ActiveTooltip("You need at least two Starter cards");
             Invoke("RemoveToolTip", 2f);
         }
         else

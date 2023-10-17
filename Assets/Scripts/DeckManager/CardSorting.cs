@@ -161,7 +161,9 @@ public class CardSorting : MonoBehaviour
 
         for (int i = 0; j > i; i++) //saving cards into a dictionary with levels
         {
-            cardsAndLevels.Add(currentCardsSortArray[i], int.Parse(currentCardsSortTransform.Find(currentCardsSortArray[i].name).gameObject.transform.Find("Level").GetComponent<TMP_Text>().text.Replace("Level ", "")));
+            string levelText = currentCardsSortTransform.Find(currentCardsSortArray[i].name).gameObject.transform.Find("Level").GetComponent<TMP_Text>().text;
+            int levelInt = int.Parse(levelText.Replace("Starter", "1").Replace("Lower", "2").Replace("Middle", "3").Replace("Upper", "4"));
+            cardsAndLevels.Add(currentCardsSortArray[i], levelInt);
         }
 
         if (currentNameLevelBool) //123
@@ -327,11 +329,15 @@ public class CardSorting : MonoBehaviour
 
         for (int i = 0; availableCardsSortArrayMatched.Length > i; i++) //saving cards into a dictionary with levels
         {
-            cardsAndLevelsMatched.Add(availableCardsSortArrayMatched[i], int.Parse(availableCardsSortTransform.Find(availableCardsSortArrayMatched[i].name).gameObject.transform.Find("Level").GetComponent<TMP_Text>().text.Replace("Level ", "")));
+            string levelText = availableCardsSortTransform.Find(availableCardsSortArrayMatched[i].name).gameObject.transform.Find("Level").GetComponent<TMP_Text>().text;
+            int levelInt = int.Parse(levelText.Replace("Starter", "1").Replace("Lower", "2").Replace("Middle", "3").Replace("Upper", "4"));
+            cardsAndLevelsMatched.Add(availableCardsSortArrayMatched[i], levelInt);
         }
         for (int i = 0; availableCardsSortArrayUnmatched.Length > i; i++) //saving cards into a dictionary with levels
         {
-            cardsAndLevelsUnmatched.Add(availableCardsSortArrayUnmatched[i], int.Parse(availableCardsSortTransform.Find(availableCardsSortArrayUnmatched[i].name).gameObject.transform.Find("Level").GetComponent<TMP_Text>().text.Replace("Level ", "")));
+            string levelText = availableCardsSortTransform.Find(availableCardsSortArrayUnmatched[i].name).gameObject.transform.Find("Level").GetComponent<TMP_Text>().text;
+            int levelInt = int.Parse(levelText.Replace("Starter", "1").Replace("Lower", "2").Replace("Middle", "3").Replace("Upper", "4"));
+            cardsAndLevelsUnmatched.Add(availableCardsSortArrayUnmatched[i], levelInt);
         }
 
         if (availableNameLevelBool) //123

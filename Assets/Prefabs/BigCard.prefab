@@ -1330,10 +1330,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70
+  m_fontSize: 86.8
   m_fontSizeBase: 70
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 400
   m_fontStyle: 0
@@ -1618,8 +1618,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000057653, y: -199.67}
-  m_SizeDelta: {x: 600, y: 196.1392}
+  m_AnchoredPosition: {x: 0, y: -194.72}
+  m_SizeDelta: {x: 600, y: 174}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2836811643783053208
 CanvasRenderer:
@@ -1649,7 +1649,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Name
+  m_text: Flickerflame Smith
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 646656040a5b4df49bcf3a18085cd4fb, type: 2}
   m_sharedMaterial: {fileID: -1459476648163660687, guid: 646656040a5b4df49bcf3a18085cd4fb, type: 2}
@@ -1676,11 +1676,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 145.5
+  m_fontSize: 64.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 14
   m_fontSizeMax: 400
   m_fontStyle: 0
   m_HorizontalAlignment: 2

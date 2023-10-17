@@ -25,6 +25,7 @@ public class ErgoQuery : MonoBehaviour
     public int[][] cardIdCurrentStore = new int[5][];
     public List<int>[] cardIdCurrentList = new List<int>[5];
     private int currentSize;
+
     public string[] deckBodyStore = new string[5];
     public int[] deckGeneralStore = new int[5];
     public int[] deckIdStore = new int[5];
