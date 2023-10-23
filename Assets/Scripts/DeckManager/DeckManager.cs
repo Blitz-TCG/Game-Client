@@ -1584,9 +1584,9 @@ public class DeckManager : MonoBehaviour
 
         for (int i = 0; i < currentListOfCard.transform.childCount; i++)
         {
-            string levelText = currentCards[i].levelRequired;
-            int levelInt = int.Parse(levelText.Replace("Starter", "1").Replace("Lower", "2").Replace("Middle", "3").Replace("Upper", "4"));
-            if (levelInt == 1)
+            int levelText = (int)currentCards[i].levelRequired;
+            //int levelInt = int.Parse(levelText.Replace("Starter", "1").Replace("Lower", "2").Replace("Middle", "3").Replace("Upper", "4"));
+            if (levelText == 0)
             {
                 countOfLevelOne++;
             }

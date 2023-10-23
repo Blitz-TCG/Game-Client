@@ -181,7 +181,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     Debug.Log(playerController.totalXP + " player total xp " + enemyController.totalXP + " enemy's XP");
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
                     Debug.Log(cardClicked.levelRequired + " level req");
-                    int level = int.Parse(cardClicked.levelRequired.Split(" ")[1]);
+                    int level = (int)(cardClicked.levelRequired);
                     Debug.LogError("level " + level + " total xp " + playerController.totalXP);
                     if (IsRecruit(playerController.totalXP, level))
                     {
@@ -276,7 +276,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     Debug.Log(playerController.totalXP + " player total xp " + enemyController.totalXP + " enemy's XP");
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
                     Debug.Log(cardClicked.levelRequired + " level required");
-                    int level = int.Parse(cardClicked.levelRequired.Split(" ")[1]);
+                    int level = (int)(cardClicked.levelRequired);
                     Debug.LogError("level " + level + " total xp " + playerController.totalXP);
                     if (IsRecruit(playerController.totalXP, level))
                     {
@@ -361,7 +361,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     {
         if(playerXP >= 0 && playerXP < 200)
         {
-            if(level <= 1)
+            if(level < 1)
             {
                 Debug.Log(level + " level value");
                 return true;
@@ -369,7 +369,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         }
         else if(playerXP >= 0 && playerXP < 400)
         {
-            if(level <= 4)
+            if(level <= 1)
             {
                 Debug.Log(level + " level value");
                 return true;
@@ -377,7 +377,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         }
         else if (playerXP >= 0 && playerXP < 600)
         {
-            if (level <= 8)
+            if (level <= 2)
             {
                 Debug.Log(level + " level value");
                 return true;

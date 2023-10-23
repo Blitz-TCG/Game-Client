@@ -15,7 +15,7 @@ public class CardDetails
     public int XP;
     //public int race;
     public int fieldLimit;
-    public string levelRequired;
+    public CardLevel levelRequired;
     public string clan;
     public CardClass cardClass;
     public Sprite cardImage;

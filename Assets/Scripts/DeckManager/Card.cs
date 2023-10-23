@@ -15,6 +15,14 @@ public enum CardClass
     GeneralToot = 5
 }
 
+public enum CardLevel
+{
+    Starter = 0,
+    Lower = 1,
+    Middle = 2,
+    Upper = 3,
+}
+
 [System.Serializable]
 public class Card : MonoBehaviour
 {
@@ -29,7 +37,7 @@ public class Card : MonoBehaviour
     public int gold;
     public int XP;
     public int fieldLimit;
-    public string levelRequired;
+    public CardLevel levelRequired;
     public string clan;
     public CardClass cardClass;
     public Sprite cardImage;
@@ -53,7 +61,7 @@ public class Card : MonoBehaviour
     public TMP_Text levelRequiredText;
     public Image image;
     public Image frame;
-    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName,string cDescription, int cAttack, int cHP,int cGold, int cXP, int cFieldLimit, string cClan, string cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass)
+    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName,string cDescription, int cAttack, int cHP,int cGold, int cXP, int cFieldLimit, string cClan, CardLevel cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass)
     {
         cardId = identity;
         cId.text = identity.ToString();

@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
 
 public class SkirmishManager : MonoBehaviourPunCallbacks
 {

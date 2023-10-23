@@ -62,6 +62,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [SerializeField] private TMP_Text totalTurnText;
     [SerializeField] private TMP_Text experienceText;
     [SerializeField] private TMP_Text tokenText;
+    [SerializeField] private GameObject notMatchedPanel; 
 
 
     private SkirmishManager skirmishManager;
@@ -489,14 +490,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     private void Bidding(string value)
     {
-        Debug.LogError(value + " value");
+        //Debug.LogError(value + " value");
         bidTimer.seconds.SetText(value);
     }
 
     [PunRPC]
     private void Global(string value)
     {
-        Debug.LogError(value + " value");
+        //Debug.LogError(value + " value");
         countdownTimer.seconds.SetText(value);
     }
 
@@ -754,6 +755,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     private void AttackCard(Card attacking, GameObject attackParent, Card target, GameObject targetParent)
     {
+        GameObject playerHand = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Hand").gameObject;
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+
+        GameObject enemyHand = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Hand").gameObject;
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+
         if (player1Turn && PhotonNetwork.IsMasterClient)
         {
             GameObject playerCard = attacking.gameObject;
@@ -834,9 +841,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 ////playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
             }
 
+            Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
+            int playerCount = result.Item1;
+            int enemyCount = result.Item2;
+            string playerJson = result.Item3;
+            string enemyJson = result.Item4;
+
+            Debug.Log(" player json " + playerJson + " enemy json  " + enemyJson);
+
             attackingcard.SetAttackValue(true);
 
-            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId);
+            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, playerJson, enemyJson, playerCount, enemyCount);
         }
         else if (!player1Turn && !PhotonNetwork.IsMasterClient)
         {
@@ -916,9 +931,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 ////playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
             }
 
+            Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
+            int playerCount = result.Item1;
+            int enemyCount = result.Item2;
+            string playerJson = result.Item3;
+            string enemyJson = result.Item4;
+
+            Debug.Log(" player json " + playerJson + " enemy json  " + enemyJson);
+
             attackingcard.SetAttackValue(true);
 
-            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId);
+            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, playerJson, enemyJson, playerCount, enemyCount);
         }
     }
 
@@ -959,8 +982,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     //    }
     //}
 
+    public void ClosePanel()
+    {
+        notMatchedPanel.SetActive(false);
+        Debug.Log("close panel called");
+    }
+
     [PunRPC]
-    private void AttackCardRPC(int attackId, int targetId)
+    private void AttackCardRPC(int attackId, int targetId,  string playerData, string enemyData, int pCount, int eCount)
     {
         GameObject attackParent = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetChild(attackId - 1).gameObject;
         GameObject targetParent = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetChild(targetId - 1).gameObject;
@@ -970,6 +999,132 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         attacking.DealDamage(target.attack, attackParent.transform.GetChild(0).gameObject);
         target.DealDamage(attacking.attack, targetParent.transform.GetChild(0).gameObject);
+
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+
+        Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
+        int playerCount = result.Item1;
+        int enemyCount = result.Item2;
+        string playerJson = result.Item3;
+        string enemyJson = result.Item4;
+
+        if(eCount != playerCount)
+        {
+            Debug.Log(enemyData + " <=== enemy data ===>");
+            Debug.Log(playerJson + " <=== player json ===>");
+
+            notMatchedPanel.SetActive(true);
+            Invoke("ClosePanel", 2f);
+
+            List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyData);
+            List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerJson);
+            Dictionary<int, int> enemyDict = new Dictionary<int, int>();
+
+            for (int i = 0; i < enemyList.Count; i++)
+            {
+                if (enemyList[i] != playerList[i])
+                {
+                    Debug.Log(i + " i " + enemyList[i] + " enemy list ");
+                    enemyDict.Add(i, enemyList[i]);
+                }
+            }
+
+            for (int i = 0; i < enemyDict.Keys.Count; i++)
+            {
+                CardDetails card = cardDetails.Find(cards => cards.id == enemyDict[i]);
+                int dicId = enemyDict.ElementAt(i).Key;
+                int dicVal = enemyDict.ElementAt(i).Value;
+                Debug.Log(" dic id " + dicId + " dic val " + dicVal);
+                GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", playerField.transform.GetChild(dicId).position, playerField.transform.GetChild(dicId).rotation);
+                miniCardParent.transform.SetParent(playerField.transform.GetChild(dicId).transform);
+                miniCardParent.transform.localScale = playerField.transform.GetChild(dicId).transform.localScale;
+                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                var completeCard = cardDetails.Find(card => card.id == dicVal);
+                Debug.Log(" completed card level " + completeCard.levelRequired);
+                int level = (int)(completeCard.levelRequired);
+                miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
+                miniCard.name = completeCard.cardName;
+                miniCardParent.name = selectedCardList[i].cardName;
+            }
+
+        }
+
+        if(pCount != enemyCount)
+        {
+            Debug.Log(playerData + " <=== player data ===>");
+            Debug.Log(enemyJson + " <=== enemy json ===>");
+
+            notMatchedPanel.SetActive(true);
+            Invoke("ClosePanel", 2f);
+
+            //if (masterIndex == 1)
+            //{
+            List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerData);
+                List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyJson);
+                Dictionary<int, int> playerDict = new Dictionary<int, int>();
+
+                for (int i = 0; i < playerList.Count; i++)
+                {
+                    if(playerList[i] != enemyList[i])
+                    {
+                        Debug.Log(i + " i : playerList[i] " + playerList[i]);
+                        playerDict.Add(i, playerList[i]);
+                    }
+                }
+
+                for(int i = 0; i < playerDict.Keys.Count; i++)
+                {
+                    CardDetails card = cardDetails.Find(cards => cards.id == playerDict[i]);
+                    int dicId = playerDict.ElementAt(i).Key;
+                    int dicVal = playerDict.ElementAt(i).Value;
+                    Debug.Log(" dic id " + dicId + " dic val " + dicVal);
+                    GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyField.transform.GetChild(dicId).position, enemyField.transform.GetChild(dicId).rotation);
+                    miniCardParent.transform.SetParent(enemyField.transform.GetChild(dicId).transform);
+                    miniCardParent.transform.localScale = enemyField.transform.GetChild(dicId).transform.localScale;
+                    Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                    var completeCard = cardDetails.Find(card => card.id == dicVal);
+                    Debug.Log(" completed card level " + completeCard.levelRequired);
+                    int level = (int)(completeCard.levelRequired);
+                    miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
+                    miniCard.name = completeCard.cardName;
+                    //miniCardParent.name = selectedCardList[i].cardName;
+                }
+            //}
+            //else if (masterIndex == 2)
+            //{
+            //    List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerData);
+            //    List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyData);
+            //    Dictionary<int, int> playerDict = new Dictionary<int, int>();
+
+            //    for (int i = 0; i < playerList.Count; i++)
+            //    {
+            //        if (playerList[i] != enemyList[i])
+            //        {
+            //            playerDict.Add(i, playerList[i]);
+            //        }
+            //    }
+
+            //    for (int i = 0; i < playerDict.Keys.Count; i++)
+            //    {
+            //        CardDetails card = cardDetails.Find(cards => cards.id == playerDict[i]);
+            //        int dicId = playerDict.ElementAt(i).Key;
+            //        int dicVal = playerDict.ElementAt(i).Value;
+            //        GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyField.transform.GetChild(dicId).position, enemyField.transform.GetChild(dicId).rotation);
+            //        miniCardParent.transform.SetParent(enemyField.transform.GetChild(dicId).transform);
+            //        miniCardParent.transform.localScale = enemyField.transform.GetChild(dicId).transform.localScale;
+            //        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+            //        var completeCard = cardDetails.Find(card => card.id == dicVal);
+            //        Debug.Log(" completed card level " + completeCard.levelRequired);
+            //        int level = (int)(completeCard.levelRequired);
+            //        miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
+            //        miniCard.name = completeCard.cardName;
+            //        miniCardParent.name = selectedCardList[i].cardName;
+            //    }
+            //}
+        }
+
     }
 
     public void ShowHiddenCard()
@@ -1027,7 +1182,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
                 var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
                 Debug.Log(" completed card level " + completeCard.levelRequired);
-                int level = int.Parse(completeCard.levelRequired.Split(" ")[1]);
+                int level = (int)(completeCard.levelRequired);
                 miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage);
                 miniCard.name = sortedList[i].cardName;
                 miniCardParent.name = sortedList[i].cardName;
@@ -1061,8 +1216,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     private int SortByLevelAndOrder(CardDetails a, CardDetails b)
     {
-        int levelA = int.Parse(a.levelRequired.Split(" ")[1]);
-        int levelB = int.Parse(b.levelRequired.Split(" ")[1]);
+        int levelA = (int)(a.levelRequired);
+        int levelB = (int)(b.levelRequired);
 
         int levelComparison = levelA.CompareTo(levelB);
         if (levelComparison != 0)
@@ -1083,17 +1238,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log(card + " card " + card.GetComponent<Card>());
 
         bool shouldDisplay = false;
-        if (playerController.playerGainedXP < 200 && level <= 1)
+        if (playerController.playerGainedXP < 200 && level < 1)
         {
             Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
             shouldDisplay = true;
         }
-        else if ((playerController.playerGainedXP >= 200 && playerController.playerGainedXP < 400) && level <= 4)
+        else if ((playerController.playerGainedXP >= 200 && playerController.playerGainedXP < 400) && level <= 1)
         {
             Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
             shouldDisplay = true;
         }
-        else if ((playerController.playerGainedXP >= 400 && playerController.playerGainedXP < 600) && level <= 8)
+        else if ((playerController.playerGainedXP >= 400 && playerController.playerGainedXP < 600) && level <= 2)
         {
             Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP);
             shouldDisplay = true;
@@ -1240,7 +1395,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
             var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
             Debug.Log(" completed card level " + completeCard.levelRequired);
-            int level = int.Parse(completeCard.levelRequired.Split(" ")[1]);
+            int level = (int)(completeCard.levelRequired);
             miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage);
             miniCard.name = selectedCardList[i].cardName;
             miniCardParent.name = selectedCardList[i].cardName;
@@ -1270,7 +1425,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Hover.cardParent.transform.position = EventSystem.current.currentSelectedGameObject.gameObject.transform.position;
                 Destroy(Hover.cardParent.GetComponent<DragMiniCards>());
                 Hover.cardParent.AddComponent<DragFieldCard>();
-                pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos);
+
+                GameObject playerHand = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Hand").gameObject;
+
+                GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+
+                Tuple<int, int> result = GetTotalCardsCount(playerHand, playerField);
+                int handCount = result.Item1;
+                int fieldCount = result.Item2;
+
+                pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount);
             }
             else if (!player1Turn && !PhotonNetwork.IsMasterClient)
             {
@@ -1281,7 +1445,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Hover.cardParent.transform.position = EventSystem.current.currentSelectedGameObject.gameObject.transform.position;
                 Destroy(Hover.cardParent.GetComponent<DragMiniCards>());
                 Hover.cardParent.AddComponent<DragFieldCard>();
-                pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos);
+
+                GameObject playerHand = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Hand").gameObject;
+
+                GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+
+                Tuple<int, int> result = GetTotalCardsCount(playerHand, playerField);
+                int handCount = result.Item1;
+                int fieldCount = result.Item2;
+
+                pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount);
             }
         }
         ResetAnimation("field");
@@ -1625,7 +1798,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     [PunRPC]
-    public void MoveCard(int prevPos, int currPos)
+    public void MoveCard(int prevPos, int currPos, int hCount, int fCount)
     {
         GameObject enemyHand = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Hand").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
@@ -1634,6 +1807,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         selectedObject.transform.SetParent(selectedObjectParent.transform);
         selectedObject.transform.position = selectedObjectParent.transform.position;
         selectedObject.AddComponent<DropFieldCard>();
+
+        Tuple<int, int> result = GetTotalCardsCount(enemyHand, enemyField);
+        int handCount = result.Item1;
+        int fieldCount = result.Item2;
+
+        if(handCount == hCount)
+        {
+            Debug.LogError("both player same " + handCount + " hand count " + hCount + " hCount"); 
+        }
+        
+        if(fieldCount == fCount)
+        {
+            Debug.LogError("both player same " + fieldCount + " feild count " + fCount + " fCount"); 
+        }
+
         if (selectedObjectParent.tag == "Front Line Enemy")
         {
             selectedObject.SetActive(true);
@@ -2558,5 +2746,84 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         currentPosition.z = 0f;
         board.transform.localPosition = currentPosition;
         board.name = "GameBoards";
+    }
+
+    public static Tuple<int, int> GetTotalCardsCount(GameObject hand, GameObject field)
+    {
+        int handCount = 0;
+        int fieldCount = 0;
+        for (int i = 0; i < hand.transform.childCount; i++)
+        {
+            if (hand.transform.GetChild(i).childCount == 1)
+            {
+                handCount++;
+            }
+        }
+
+        for (int i = 0; i < field.transform.childCount; i++)
+        {
+            if (field.transform.GetChild(i).childCount == 1)
+            {
+                fieldCount++;
+            }
+        }
+        return new Tuple<int, int>(handCount, fieldCount);
+    }
+
+    public static Tuple<int, int, string, string> GetDestroyDataCount(GameObject playerData, GameObject enemyData)
+    {
+        int playerCount = 0;
+        int enemyCount = 0;
+        List<int> playerListId = new();
+        List<int> enemyListId = new();
+        for (int i = 0; i < playerData.transform.childCount; i++)
+        {
+            if (playerData.transform.GetChild(i).childCount == 1)
+            {
+                playerCount++;
+                if(playerData.transform.GetChild(i).GetChild(0).GetChild(0) != null && playerData.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>() != null)
+                {
+                    playerListId.Add(playerData.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().id);
+                }
+            }
+            else
+            {
+                playerListId.Add(0);
+            }
+        }
+
+        for (int i = 0; i < enemyData.transform.childCount; i++)
+        {
+            if (enemyData.transform.GetChild(i).childCount == 1)
+            {
+                enemyCount++;
+                if (enemyData.transform.GetChild(i).GetChild(0).GetChild(0) != null && enemyData.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>() != null)
+                {
+                    enemyListId.Add(enemyData.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().id);
+                }
+            }
+            else
+            {
+                enemyListId.Add(0);
+            }
+        }
+
+        for(int i = 0; i < playerListId.Count; i++)
+        {
+            Debug.Log(playerListId[i] + " <== player id ");
+        }
+        
+        for(int i = 0; i < enemyListId.Count; i++)
+        {
+            Debug.Log(enemyListId[i] + " <== enemy id ");
+        }
+
+        string jsonStringPlayer = Newtonsoft.Json.JsonConvert.SerializeObject(playerListId);
+        
+        string jsonStringEnenmy = Newtonsoft.Json.JsonConvert.SerializeObject(enemyListId);
+
+        Debug.Log(jsonStringPlayer + " player " + jsonStringEnenmy + " jsonStringEnenmy");
+
+        return new Tuple<int, int, string, string>(playerCount, enemyCount, jsonStringPlayer, jsonStringEnenmy);
     }
 }

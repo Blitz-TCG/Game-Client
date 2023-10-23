@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -175,12 +176,18 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             (obj.transform.parent.name.Split(" ")[len - 1]);
             
             PhotonView pv = obj.transform.GetComponent<PhotonView>();
-            
+
+            GameObject playerHand = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Hand").gameObject;
+            GameObject playerField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Field").gameObject;
+
             if (obj.transform.parent.parent.name == "Player Field" && endParent == "Player Hand" && DropMiniCard.dropOnField)
             {
                 Destroy(obj.GetComponent<DragMiniCards>());
                 obj.AddComponent<DragFieldCard>();
-                pv.RPC("DragCards", RpcTarget.Others, cardId, pos, endSubParent);
+                Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(playerHand, playerField);
+                int handCount = result.Item1;
+                int fieldCount = result.Item2;
+                pv.RPC("DragCards", RpcTarget.Others, cardId, pos, endSubParent, handCount, fieldCount);
             }
             
         }
@@ -195,12 +202,19 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             (obj.transform.parent.name.Split(" ")[len - 1]);
             
             PhotonView pv = obj.transform.GetComponent<PhotonView>();
-            
+
+            GameObject playerHand = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Hand").gameObject;
+            GameObject playerField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Field").gameObject;
+
             if (obj.transform.parent.parent.name == "Player Field" && endParent == "Player Hand" && DropMiniCard.dropOnField)
             {
                 Destroy(obj.GetComponent<DragMiniCards>());
                 obj.AddComponent<DragFieldCard>();
-                pv.RPC("DragCards", RpcTarget.Others, cardId, pos, endSubParent);
+                Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(playerHand, playerField);
+                int handCount = result.Item1;
+                int fieldCount = result.Item2;
+
+                pv.RPC("DragCards", RpcTarget.Others, cardId, pos, endSubParent, handCount, fieldCount);
             }
         }
         obj = null;
@@ -220,10 +234,12 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         obj.transform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
         obj = null;
     }
+
+   
     
     #region RPC Method
     [PunRPC]
-    public void DragCards(int id, int pos, string parent)
+    public void DragCards(int id, int pos, string parent, int hCount, int fCount)
     {
         CardDetails clickedCard = cardDetails.Find(card => card.id == id);
         
@@ -231,12 +247,31 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         
         GameObject selectedCardParent = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Enemy Field").Find("Enemy Parent " + pos).gameObject;
         GameObject enemyHand = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Enemy Hand").gameObject;
-        
+        GameObject enemyField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+
         GameObject selectedcard = enemyHand.transform.GetChild(actualCardPos - 1).GetChild(0).gameObject;
         selectedcard.transform.SetParent(selectedCardParent.transform);
         selectedcard.transform.localPosition = Vector3.zero;
         selectedcard.AddComponent<DropFieldCard>();
+
         
+
+        Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(enemyHand, enemyField);
+        int handCount = result.Item1;
+        int fieldCount = result.Item2;
+
+        Debug.LogError(hCount + " h count " + fCount + " f count " + handCount + " player count " + fieldCount + " field count ");
+
+        if(handCount == hCount)
+        {
+            Debug.LogError(" Both same " + handCount + " hand count " + hCount + " hcount ");
+        }
+
+        if (fieldCount == fCount)
+        {
+            Debug.LogError(" Both same " + fieldCount + " field count " + fCount + " fcount ");
+        }
+
         if (selectedCardParent.tag == "Front Line Enemy")
         {
             selectedcard.SetActive(true);
