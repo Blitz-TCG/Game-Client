@@ -58,7 +58,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             transform.SetParent(transform.root);
             transform.SetAsLastSibling();
             transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            obj = transform.gameObject;
+            obj = gameObject;
             endParent = previousParent;
             endSubParent = previousSubParent;
         }
@@ -75,7 +75,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             transform.SetParent(transform.root);
             transform.SetAsLastSibling();
             transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            obj = transform.gameObject;
+            obj = gameObject;
             endParent = previousParent;
             endSubParent = previousSubParent;
         }
@@ -254,23 +254,65 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         selectedcard.transform.localPosition = Vector3.zero;
         selectedcard.AddComponent<DropFieldCard>();
 
-        
-
-        Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(enemyHand, enemyField);
-        int handCount = result.Item1;
-        int fieldCount = result.Item2;
-
-        Debug.LogError(hCount + " h count " + fCount + " f count " + handCount + " player count " + fieldCount + " field count ");
-
-        if(handCount == hCount)
+        Debug.Log(selectedcard.name + " selected card name ");
+        if(selectedCardParent.transform.childCount == 1)
         {
-            Debug.LogError(" Both same " + handCount + " hand count " + hCount + " hcount ");
+            Debug.Log(" child count 1" + selectedCardParent.name + " selected card parent " + selectedcard + " selected card ");
+            
+            Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedcard.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
+            if(selectedcard.transform.GetChild(0).GetComponent<Card>().id != clickedCard.id)
+            {
+                Debug.Log("not matched");
+                Destroy(selectedCardParent.transform.GetChild(0).gameObject);
+                GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedCardParent.transform.position, selectedCardParent.transform.rotation);
+                miniCardParent.transform.SetParent(selectedCardParent.transform);
+                miniCardParent.transform.localScale = selectedCardParent.transform.localScale;
+                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                Debug.Log(" completed card level " + clickedCard.levelRequired);
+                int level = (int)(clickedCard.levelRequired);
+                miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage);
+                miniCard.name = clickedCard.cardName;
+                miniCardParent.name = clickedCard.cardName;
+            }
         }
 
-        if (fieldCount == fCount)
+        if(selectedCardParent.transform.childCount == 0)
         {
-            Debug.LogError(" Both same " + fieldCount + " field count " + fCount + " fcount ");
+            GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedCardParent.transform.position, selectedCardParent.transform.rotation);
+            miniCardParent.transform.SetParent(selectedCardParent.transform);
+            miniCardParent.transform.localScale = selectedCardParent.transform.localScale;
+            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+            Debug.Log(" completed card level " + clickedCard.levelRequired);
+            int level = (int)(clickedCard.levelRequired);
+            miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage);
+            miniCard.name = clickedCard.cardName;
+            miniCardParent.name = clickedCard.cardName;
         }
+        //Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(enemyHand, enemyField);
+        //int handCount = result.Item1;
+        //int fieldCount = result.Item2;
+
+        //Debug.LogError(hCount + " h count " + fCount + " f count " + handCount + " player count " + fieldCount + " field count ");
+
+        //if(handCount != hCount)
+        //{
+        //    Debug.LogError( " Not both same " + hCount + " h count " +  handCount + " player count ");
+        //}
+
+        //if(fieldCount != fCount)
+        //{
+        //    Debug.LogError(" not both  same " + fieldCount + " field count " + fCount + " fcount ");
+        //}
+
+        //if(handCount == hCount)
+        //{
+        //    Debug.LogError(" Both same " + handCount + " hand count " + hCount + " hcount ");
+        //}
+
+        //if (fieldCount == fCount)
+        //{
+        //    Debug.LogError(" Both same " + fieldCount + " field count " + fCount + " fcount ");
+        //}
 
         if (selectedCardParent.tag == "Front Line Enemy")
         {

@@ -30,6 +30,18 @@ public class GameInitializer : MonoBehaviourPunCallbacks
         //        SceneManager.LoadScene(3);
         //    }
         //}
+        Debug.Log("isPlayerClicked " + PhotonManager.isPlayerClicked);
+        Debug.Log(" in room " + PhotonNetwork.InRoom);
+        if(!PhotonManager.isPlayerClicked)
+        {
+            PhotonManager.isPlayerClicked = false;
+            SceneManager.LoadScene(3);
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+                PhotonNetwork.Disconnect();
+            }
+        }
     }
 
 
@@ -57,8 +69,19 @@ public class GameInitializer : MonoBehaviourPunCallbacks
         Debug.LogError("initialized");
         Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
         PhotonNetwork.AutomaticallySyncScene = true;
-        loading.SetActive(true);
-        InitBoard();
+        if (PhotonNetwork.InRoom)
+        {
+            loading.SetActive(true);
+            InitBoard();
+            Debug.Log("in room ");
+        }
+        else
+        {
+            SceneManager.LoadScene(3);
+            //PhotonNetwork.LeaveRoom();
+            //PhotonNetwork.Disconnect();
+            Debug.Log("not room");
+        }
     }
 
     private void InitBoard()

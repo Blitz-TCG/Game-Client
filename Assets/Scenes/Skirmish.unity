@@ -9113,7 +9113,6 @@ MonoBehaviour:
   profileImage: {fileID: 787307785}
   deckId: 0
   deckCountSkirmish: 0
-  miniCardParent: {fileID: 3569672785987793446, guid: ed21395fa28b3481e8eb8c7614c1a0ea, type: 3}
 --- !u!1 &959193723
 GameObject:
   m_ObjectHideFlags: 0

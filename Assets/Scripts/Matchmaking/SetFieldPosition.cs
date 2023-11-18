@@ -13,7 +13,7 @@ public class SetFieldPosition : MonoBehaviour
             new Vector2(2740f, 1310f),
             new Vector2(2850f, 1350f),
             new Vector2(2770f, 1310f),
-            new Vector2(3160f, 1305f)
+            new Vector2(3150f, 1315f)
         };
     Vector2[] positions = new Vector2[]
         {
@@ -23,7 +23,7 @@ public class SetFieldPosition : MonoBehaviour
             new Vector2(0f, -435f),
             new Vector2(-3f, -410f),
             new Vector2(0f, -430f),
-            new Vector2(2f, -430f)
+            new Vector2(6f, -420f)
         };
 
 

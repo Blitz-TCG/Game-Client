@@ -89,7 +89,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     private void ShowInfoCard()
     {
         Debug.Log("Show card ");
-        if (gameObject.transform.parent.name == "Content")
+        if (gameObject?.transform?.parent?.name == "Content")
         {
             gameObject.transform.GetChild(0).GetChild(gameObject.transform.GetChild(0).childCount - 1).gameObject.SetActive(true);
 
@@ -99,7 +99,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             Card cardInfo = Instantiate<Card>(infoCard, cardparent1.transform);
             cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass);
         }
-        else if (gameObject.transform.parent.parent.name == "Player Hand")
+        else if (gameObject?.transform?.parent?.parent?.name == "Player Hand")
         {
             int id = gameObject.transform.GetChild(0).GetComponent<Card>().id;
             Debug.Log(gameObject.transform.parent.name.Split(" ")[2] + " name of card postition");

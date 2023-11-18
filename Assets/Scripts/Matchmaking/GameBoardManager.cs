@@ -62,7 +62,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [SerializeField] private TMP_Text totalTurnText;
     [SerializeField] private TMP_Text experienceText;
     [SerializeField] private TMP_Text tokenText;
-    [SerializeField] private GameObject notMatchedPanel; 
+    [SerializeField] private GameObject notMatchedPanel;
+    [SerializeField] private GameObject[] playerParent;
+    [SerializeField] private GameObject[] enemyParent;
 
 
     private SkirmishManager skirmishManager;
@@ -133,6 +135,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private bool leaveBtn = false;
     public static bool isCompleted = false;
     private bool isMatchNotLoaded = false;
+    private GameObject playerNPC;
+    private GameObject enemyNPC;
+    private int masterCount = 0;
+    private int clientCount = 0;
+    private bool isDestroyedMaster = false;
+    private bool isDestroyedclient = false;
+    private GameBoardManager manager;
+    private bool isSpawnMaster = false;
+    private bool isSpawnClient = false;
 
     #endregion
 
@@ -282,6 +293,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            Debug.Log("left click " + EventSystem.current.currentSelectedGameObject);
             if (EventSystem.current.currentSelectedGameObject == null)
             {
                 GameManager.instance.clicked = 0;
@@ -291,27 +303,35 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             }
             else
             {
+                Debug.Log(" else " + EventSystem.current.currentSelectedGameObject.name);
                 if (EventSystem.current.currentSelectedGameObject.GetComponent<DragFieldCard>())
                 {
+                    Debug.Log(" EventSystem.current.currentSelectedGameObject.GetComponent<DragFieldCard>() " + EventSystem.current.currentSelectedGameObject.GetComponent<DragFieldCard>());
                     if (player1Turn && PhotonNetwork.IsMasterClient)
                     {
+                        Debug.Log("player1Turn && PhotonNetwork.IsMasterClient");
                         attackingcard = EventSystem.current.currentSelectedGameObject.GetComponent<DragFieldCard>().gameObject.GetComponentInChildren<Card>();
+                        Debug.Log("attackingcard " + attackingcard.name);
                         if (attackingcard.IsAttack())
                         {
+                            Debug.Log("attackingcard.IsAttack()");
                             cardError.SetActive(true);
                             cardError.GetComponentInChildren<TMP_Text>().SetText("You already attacked with this card. So, You can not attack with this card in this turn.");
                             Invoke("RemoveErrorObject", 2f);
                         }
                         else if (attackingcard.dropPosition == 0)
                         {
+                            Debug.Log("attackingcard.dropPosition == 0");
                             cardError.SetActive(true);
                             cardError.GetComponentInChildren<TMP_Text>().SetText("You put the card hand to field. So can not attack with card in this turn");
                             Invoke("RemoveErrorObject", 2f);
                         }
                         else if (!attackingcard.IsAttack() && attackingcard.dropPosition == 1)
                         {
+                            Debug.Log("!attackingcard.IsAttack() && attackingcard.dropPosition == 1");
                             if (attackingcard.transform.parent.parent.CompareTag("Front Line Player"))
                             {
+                                Debug.Log("attackingcard.transform.parent.parent.CompareTag('Front Line Player')");
                                 GameManager.instance.clicked = 1;
                             }
                             else if (attackingcard.transform.parent.parent.CompareTag("Back Line Player"))
@@ -343,6 +363,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         {
                             if (attackingcard.transform.parent.parent.CompareTag("Front Line Player"))
                             {
+                                Debug.Log("GameManager.instance.clicked = 1;");
                                 GameManager.instance.clicked = 1;
                             }
                             else if (attackingcard.transform.parent.parent.CompareTag("Back Line Player"))
@@ -357,11 +378,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }
                 else if (EventSystem.current.currentSelectedGameObject.GetComponent<DropFieldCard>())
                 {
+                    Debug.Log("EventSystem.current.currentSelectedGameObject.GetComponent<DropFieldCard>()");
                     if (GameManager.instance.clicked == 1)
                     {
+                        Debug.Log("GameManager.instance.clicked == 1");
                         Card targetCard = EventSystem.current.currentSelectedGameObject.GetComponent<DropFieldCard>().GetComponentInChildren<Card>();
                         GameObject attackingcardParent = attackingcard.transform.parent.parent.gameObject;
                         GameObject targetCardParent = EventSystem.current.currentSelectedGameObject.GetComponent<DropFieldCard>().transform.parent.gameObject;
+                        Debug.Log(targetCard + " target card");
 
                         AttackCard(attackingcard, attackingcardParent, targetCard, targetCardParent);
 
@@ -371,10 +395,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }
                 else if (EventSystem.current.currentSelectedGameObject.tag == "EnemyWall")
                 {
+                    manager = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+                    bottomImage = manager.bottomImage;
+                    topImage = manager.topImage;
                     if (player1Turn && PhotonNetwork.IsMasterClient && pv.IsMine)
                     {
                         if (GameManager.instance.clicked == 1)
                         {
+                            enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
                             GameObject enemyHealthObject = enemyWall.transform.Find("Remaining Health").gameObject;
                             int currentHealth = int.Parse(enemyHealthObject.GetComponent<TMP_Text>().text.ToString());
                             int remainingHealth = currentHealth - attackingcard.attack;
@@ -405,6 +433,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     {
                         if (GameManager.instance.clicked == 1)
                         {
+                            enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
                             GameObject enemyHealthObject = enemyWall.transform.Find("Remaining Health").gameObject;
                             int currentHealth = int.Parse(enemyHealthObject.GetComponent<TMP_Text>().text.ToString());
                             int remainingHealth = currentHealth - attackingcard.attack;
@@ -429,6 +458,37 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 pv.RPC("AttackWall", RpcTarget.Others, remainingHealth);
                                 GameManager.instance.clicked = 0;
                             }
+                        }
+                    }
+
+                }
+                else if (EventSystem.current.currentSelectedGameObject.tag == "NPC_Enemy")
+                {
+                    Debug.Log(EventSystem.current.currentSelectedGameObject.tag + " EventSystem.current.currentSelectedGameObject.tag");
+                    //attackingcard.SetAttackValue(true);
+                    if (player1Turn && PhotonNetwork.IsMasterClient && pv.IsMine)
+                    {
+                        Debug.Log("player1Turn && PhotonNetwork.IsMasterClient && pv.IsMine");
+                        if (GameManager.instance.clicked == 1)
+                        {
+                            Debug.Log("GameManager.instance.clicked == 1");
+                            GameObject enemyNPC = EventSystem.current.currentSelectedGameObject;
+                            Debug.Log(enemyNPC.name  + enemyNPC);
+                            AttackNPC(enemyNPC, attackingcard);
+                            GameManager.instance.clicked = 0;
+                            //attackingcard.SetAttackValue(true);
+                        }
+                    }
+                    else if (!player1Turn && !PhotonNetwork.IsMasterClient && pv.IsMine)
+                    {
+                        if (GameManager.instance.clicked == 1)
+                        {
+                            Debug.Log("GameManager.instance.clicked == 1");
+                            GameObject enemyNPC = EventSystem.current.currentSelectedGameObject;
+                            Debug.Log(enemyNPC.name + enemyNPC);
+                            AttackNPC(enemyNPC, attackingcard);
+                            GameManager.instance.clicked = 0;
+                            //attackingcard.SetAttackValue(true);
                         }
                     }
 
@@ -755,6 +815,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     private void AttackCard(Card attacking, GameObject attackParent, Card target, GameObject targetParent)
     {
+        Debug.Log("attack card");
         GameObject playerHand = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Hand").gameObject;
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
 
@@ -763,6 +824,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         if (player1Turn && PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("player1Turn && PhotonNetwork.IsMasterClient");
             GameObject playerCard = attacking.gameObject;
             GameObject enemyCard = target.gameObject;
             bool destroyPlayer = attacking.DealDamage(target.attack, attackParent.transform.GetChild(0).gameObject);
@@ -841,17 +903,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 ////playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
             }
 
-            Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
-            int playerCount = result.Item1;
-            int enemyCount = result.Item2;
-            string playerJson = result.Item3;
-            string enemyJson = result.Item4;
+            //Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
+            //int playerCount = result.Item1;
+            //int enemyCount = result.Item2;
+            //string playerJson = result.Item3;
+            //string enemyJson = result.Item4;
 
-            Debug.Log(" player json " + playerJson + " enemy json  " + enemyJson);
+            //Debug.Log(" player json " + playerJson + " enemy json  " + enemyJson);
 
             attackingcard.SetAttackValue(true);
 
-            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, playerJson, enemyJson, playerCount, enemyCount);
+            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, destroyPlayer, destroyEnemy, 1);
         }
         else if (!player1Turn && !PhotonNetwork.IsMasterClient)
         {
@@ -931,18 +993,31 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 ////playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
             }
 
-            Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
-            int playerCount = result.Item1;
-            int enemyCount = result.Item2;
-            string playerJson = result.Item3;
-            string enemyJson = result.Item4;
+            //Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
+            //int playerCount = result.Item1;
+            //int enemyCount = result.Item2;
+            //string playerJson = result.Item3;
+            //string enemyJson = result.Item4;
 
-            Debug.Log(" player json " + playerJson + " enemy json  " + enemyJson);
+            //Debug.Log(" player json " + playerJson + " enemy json  " + enemyJson);
 
             attackingcard.SetAttackValue(true);
 
-            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, playerJson, enemyJson, playerCount, enemyCount);
+            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, destroyPlayer, destroyEnemy, 2);
         }
+    }
+
+    private void AttackNPC(GameObject npcObj, Card card)
+    {
+        pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+        int damage = card.attack;
+        Debug.Log(" attack npc "+ npcObj + " card " + card + " damage "+ damage + " pv name " + pv.name);
+        npcObj.GetComponent<NPCManager>().DealDamage(damage, npcObj);
+        card.SetAttackValue(true);
+        Debug.Log(npcObj.transform.parent + " npcObj.transform.parent ");
+        int parentId = int.Parse(npcObj.transform.parent.name.Split(" ")[1]) - 1;
+        Debug.Log("paren id " + parentId);
+        pv.RPC("AttackNPCOther", RpcTarget.Others, parentId, damage);
     }
 
     //[PunRPC]
@@ -989,7 +1064,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     [PunRPC]
-    private void AttackCardRPC(int attackId, int targetId,  string playerData, string enemyData, int pCount, int eCount)
+    private void AttackCardRPC(int attackId, int targetId, bool destroyPlayer, bool destroyEnemy, int ind)
     {
         GameObject attackParent = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetChild(attackId - 1).gameObject;
         GameObject targetParent = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetChild(targetId - 1).gameObject;
@@ -997,134 +1072,287 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Card attacking = attackParent.GetComponentInChildren<Card>();
         Card target = targetParent.GetComponentInChildren<Card>();
 
-        attacking.DealDamage(target.attack, attackParent.transform.GetChild(0).gameObject);
-        target.DealDamage(attacking.attack, targetParent.transform.GetChild(0).gameObject);
+        bool disAttackPlayer = attacking.DealDamage(target.attack, attackParent.transform.GetChild(0).gameObject);
+        bool disTargetPlayer = target.DealDamage(attacking.attack, targetParent.transform.GetChild(0).gameObject);
 
-        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        //GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
 
-        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        //GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
 
-        Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
-        int playerCount = result.Item1;
-        int enemyCount = result.Item2;
-        string playerJson = result.Item3;
-        string enemyJson = result.Item4;
+        //Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
+        //int playerCount = result.Item1;
+        //int enemyCount = result.Item2;
+        //string playerJson = result.Item3;
+        //string enemyJson = result.Item4;
 
-        if(eCount != playerCount)
+        Debug.Log(" master index " + ind);
+        Debug.Log("destry player " + destroyPlayer + " destroy enemy " + destroyEnemy);
+        Debug.Log("disPlayer player " + disAttackPlayer + " disPlayer enemy " + disTargetPlayer);
+
+        if(destroyPlayer != disAttackPlayer)
         {
-            Debug.Log(enemyData + " <=== enemy data ===>");
-            Debug.Log(playerJson + " <=== player json ===>");
-
-            notMatchedPanel.SetActive(true);
-            Invoke("ClosePanel", 2f);
-
-            List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyData);
-            List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerJson);
-            Dictionary<int, int> enemyDict = new Dictionary<int, int>();
-
-            for (int i = 0; i < enemyList.Count; i++)
+            Debug.Log(" not both same " + attackParent + " attack parent " + attackParent.transform.parent + " attack pp " + attackParent.transform.childCount);
+            if(attackParent.transform.childCount == 1)
             {
-                if (enemyList[i] != playerList[i])
-                {
-                    Debug.Log(i + " i " + enemyList[i] + " enemy list ");
-                    enemyDict.Add(i, enemyList[i]);
-                }
+                Debug.Log("child 1 and destroy");
+                Destroy(attackParent.transform.GetChild(0).gameObject);
             }
-
-            for (int i = 0; i < enemyDict.Keys.Count; i++)
-            {
-                CardDetails card = cardDetails.Find(cards => cards.id == enemyDict[i]);
-                int dicId = enemyDict.ElementAt(i).Key;
-                int dicVal = enemyDict.ElementAt(i).Value;
-                Debug.Log(" dic id " + dicId + " dic val " + dicVal);
-                GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", playerField.transform.GetChild(dicId).position, playerField.transform.GetChild(dicId).rotation);
-                miniCardParent.transform.SetParent(playerField.transform.GetChild(dicId).transform);
-                miniCardParent.transform.localScale = playerField.transform.GetChild(dicId).transform.localScale;
-                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-                var completeCard = cardDetails.Find(card => card.id == dicVal);
-                Debug.Log(" completed card level " + completeCard.levelRequired);
-                int level = (int)(completeCard.levelRequired);
-                miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
-                miniCard.name = completeCard.cardName;
-                miniCardParent.name = selectedCardList[i].cardName;
-            }
-
         }
 
-        if(pCount != enemyCount)
+        if(destroyEnemy != disTargetPlayer)
         {
-            Debug.Log(playerData + " <=== player data ===>");
-            Debug.Log(enemyJson + " <=== enemy json ===>");
-
-            notMatchedPanel.SetActive(true);
-            Invoke("ClosePanel", 2f);
-
-            //if (masterIndex == 1)
-            //{
-            List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerData);
-                List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyJson);
-                Dictionary<int, int> playerDict = new Dictionary<int, int>();
-
-                for (int i = 0; i < playerList.Count; i++)
-                {
-                    if(playerList[i] != enemyList[i])
-                    {
-                        Debug.Log(i + " i : playerList[i] " + playerList[i]);
-                        playerDict.Add(i, playerList[i]);
-                    }
-                }
-
-                for(int i = 0; i < playerDict.Keys.Count; i++)
-                {
-                    CardDetails card = cardDetails.Find(cards => cards.id == playerDict[i]);
-                    int dicId = playerDict.ElementAt(i).Key;
-                    int dicVal = playerDict.ElementAt(i).Value;
-                    Debug.Log(" dic id " + dicId + " dic val " + dicVal);
-                    GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyField.transform.GetChild(dicId).position, enemyField.transform.GetChild(dicId).rotation);
-                    miniCardParent.transform.SetParent(enemyField.transform.GetChild(dicId).transform);
-                    miniCardParent.transform.localScale = enemyField.transform.GetChild(dicId).transform.localScale;
-                    Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-                    var completeCard = cardDetails.Find(card => card.id == dicVal);
-                    Debug.Log(" completed card level " + completeCard.levelRequired);
-                    int level = (int)(completeCard.levelRequired);
-                    miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
-                    miniCard.name = completeCard.cardName;
-                    //miniCardParent.name = selectedCardList[i].cardName;
-                }
-            //}
-            //else if (masterIndex == 2)
-            //{
-            //    List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerData);
-            //    List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyData);
-            //    Dictionary<int, int> playerDict = new Dictionary<int, int>();
-
-            //    for (int i = 0; i < playerList.Count; i++)
-            //    {
-            //        if (playerList[i] != enemyList[i])
-            //        {
-            //            playerDict.Add(i, playerList[i]);
-            //        }
-            //    }
-
-            //    for (int i = 0; i < playerDict.Keys.Count; i++)
-            //    {
-            //        CardDetails card = cardDetails.Find(cards => cards.id == playerDict[i]);
-            //        int dicId = playerDict.ElementAt(i).Key;
-            //        int dicVal = playerDict.ElementAt(i).Value;
-            //        GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyField.transform.GetChild(dicId).position, enemyField.transform.GetChild(dicId).rotation);
-            //        miniCardParent.transform.SetParent(enemyField.transform.GetChild(dicId).transform);
-            //        miniCardParent.transform.localScale = enemyField.transform.GetChild(dicId).transform.localScale;
-            //        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-            //        var completeCard = cardDetails.Find(card => card.id == dicVal);
-            //        Debug.Log(" completed card level " + completeCard.levelRequired);
-            //        int level = (int)(completeCard.levelRequired);
-            //        miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
-            //        miniCard.name = completeCard.cardName;
-            //        miniCardParent.name = selectedCardList[i].cardName;
-            //    }
-            //}
+            Debug.Log(" not both same " + targetParent + " targetParent parent " + targetParent.transform.parent + " targetParent pp " + targetParent.transform.childCount);
+            if (targetParent.transform.childCount == 1)
+            {
+                Debug.Log("child 1 and destroy");
+                Destroy(targetParent.transform.GetChild(0).gameObject);
+            }
         }
 
+        //if(ind == 1)
+        //{
+        //    Debug.Log("inside 1 ");
+        //    if(destroyPlayer)
+        //    {
+        //        Debug.Log(" destroy player " + targetParent.transform.childCount);
+        //        if(targetParent.transform.childCount == 1)
+        //        {
+        //            notMatchedPanel.SetActive(true);
+        //            Invoke("ClosePanel", 2f);
+        //            Debug.Log("Destroy cards");
+        //            Destroy(targetParent.transform.GetChild(0).gameObject);
+        //        }
+        //    }
+
+        //    if (destroyEnemy)
+        //    {
+        //        Debug.Log(" destroy enemy " + attackParent.transform.childCount);
+        //        if (attackParent.transform.childCount == 1)
+        //        {
+        //            notMatchedPanel.SetActive(true);
+        //            Invoke("ClosePanel", 2f);
+        //            Debug.Log("Destroy cards");
+        //            Destroy(attackParent.transform.GetChild(0).gameObject);
+        //        }
+        //    }
+                
+        //}
+        //else if(ind == 2)
+        //{
+        //    Debug.Log("inside 2");
+        //    if (destroyPlayer)
+        //    {
+        //        Debug.Log(" destroy player " + targetParent.transform.childCount);
+        //        if (targetParent.transform.childCount == 1)
+        //        {
+        //            notMatchedPanel.SetActive(true);
+        //            Invoke("ClosePanel", 2f);
+        //            Debug.Log("Destroy cards");
+        //            Destroy(targetParent.transform.GetChild(0).gameObject);
+        //        }
+        //    }
+
+        //    if (destroyEnemy)
+        //    {
+        //        Debug.Log(" destroy enemy " + attackParent.transform.childCount);
+        //        if (attackParent.transform.childCount == 1)
+        //        {
+        //            notMatchedPanel.SetActive(true);
+        //            Invoke("ClosePanel", 2f);
+        //            Debug.Log("Destroy cards");
+        //            Destroy(attackParent.transform.GetChild(0).gameObject);
+        //        }
+        //    }
+        //}
+
+        //if(eCount != playerCount)
+        //{
+        //    Debug.Log(enemyData + " <=== enemy data ===>");
+        //    Debug.Log(playerJson + " <=== player json ===>");
+
+        //    notMatchedPanel.SetActive(true);
+        //    Invoke("ClosePanel", 2f);
+
+        //    List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyData);
+        //    List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerJson);
+        //    Dictionary<int, int> enemyDict = new Dictionary<int, int>();
+
+        //    for (int i = 0; i < enemyList.Count; i++)
+        //    {
+        //        if (enemyList[i] != playerList[i])
+        //        {
+        //            Debug.Log(i + " i " + enemyList[i] + " enemy list ");
+        //            enemyDict.Add(i, enemyList[i]);
+        //        }
+        //    }
+
+        //    for (int i = 0; i < enemyDict.Keys.Count; i++)
+        //    {
+        //        CardDetails card = cardDetails.Find(cards => cards.id == enemyDict[i]);
+        //        int dicId = enemyDict.ElementAt(i).Key;
+        //        int dicVal = enemyDict.ElementAt(i).Value;
+        //        Debug.Log(" dic id " + dicId + " dic val " + dicVal);
+        //        GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", playerField.transform.GetChild(dicId).position, playerField.transform.GetChild(dicId).rotation);
+        //        miniCardParent.transform.SetParent(playerField.transform.GetChild(dicId).transform);
+        //        miniCardParent.transform.localScale = playerField.transform.GetChild(dicId).transform.localScale;
+        //        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+        //        var completeCard = cardDetails.Find(card => card.id == dicVal);
+        //        Debug.Log(" completed card level " + completeCard.levelRequired);
+        //        int level = (int)(completeCard.levelRequired);
+        //        miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
+        //        miniCard.name = completeCard.cardName;
+        //        miniCardParent.name = selectedCardList[i].cardName;
+        //    }
+
+        //}
+
+        //if(pCount != enemyCount)
+        //{
+        //    Debug.Log(playerData + " <=== player data ===>");
+        //    Debug.Log(enemyJson + " <=== enemy json ===>");
+
+        //    notMatchedPanel.SetActive(true);
+        //    Invoke("ClosePanel", 2f);
+
+        //    //if (masterIndex == 1)
+        //    //{
+        //    List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerData);
+        //        List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyJson);
+        //        Dictionary<int, int> playerDict = new Dictionary<int, int>();
+
+        //        for (int i = 0; i < playerList.Count; i++)
+        //        {
+        //            if(playerList[i] != enemyList[i])
+        //            {
+        //                Debug.Log(i + " i : playerList[i] " + playerList[i]);
+        //                playerDict.Add(i, playerList[i]);
+        //            }
+        //        }
+
+        //        for(int i = 0; i < playerDict.Keys.Count; i++)
+        //        {
+        //            CardDetails card = cardDetails.Find(cards => cards.id == playerDict[i]);
+        //            int dicId = playerDict.ElementAt(i).Key;
+        //            int dicVal = playerDict.ElementAt(i).Value;
+        //            Debug.Log(" dic id " + dicId + " dic val " + dicVal);
+        //            GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyField.transform.GetChild(dicId).position, enemyField.transform.GetChild(dicId).rotation);
+        //            miniCardParent.transform.SetParent(enemyField.transform.GetChild(dicId).transform);
+        //            miniCardParent.transform.localScale = enemyField.transform.GetChild(dicId).transform.localScale;
+        //            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+        //            var completeCard = cardDetails.Find(card => card.id == dicVal);
+        //            Debug.Log(" completed card level " + completeCard.levelRequired);
+        //            int level = (int)(completeCard.levelRequired);
+        //            miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
+        //            miniCard.name = completeCard.cardName;
+        //            //miniCardParent.name = selectedCardList[i].cardName;
+        //        }
+        //    //}
+        //    //else if (masterIndex == 2)
+        //    //{
+        //    //    List<int> playerList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(playerData);
+        //    //    List<int> enemyList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(enemyData);
+        //    //    Dictionary<int, int> playerDict = new Dictionary<int, int>();
+
+        //    //    for (int i = 0; i < playerList.Count; i++)
+        //    //    {
+        //    //        if (playerList[i] != enemyList[i])
+        //    //        {
+        //    //            playerDict.Add(i, playerList[i]);
+        //    //        }
+        //    //    }
+
+        //    //    for (int i = 0; i < playerDict.Keys.Count; i++)
+        //    //    {
+        //    //        CardDetails card = cardDetails.Find(cards => cards.id == playerDict[i]);
+        //    //        int dicId = playerDict.ElementAt(i).Key;
+        //    //        int dicVal = playerDict.ElementAt(i).Value;
+        //    //        GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyField.transform.GetChild(dicId).position, enemyField.transform.GetChild(dicId).rotation);
+        //    //        miniCardParent.transform.SetParent(enemyField.transform.GetChild(dicId).transform);
+        //    //        miniCardParent.transform.localScale = enemyField.transform.GetChild(dicId).transform.localScale;
+        //    //        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+        //    //        var completeCard = cardDetails.Find(card => card.id == dicVal);
+        //    //        Debug.Log(" completed card level " + completeCard.levelRequired);
+        //    //        int level = (int)(completeCard.levelRequired);
+        //    //        miniCard.SetMiniCard(completeCard.id, completeCard.ergoTokenId, completeCard.ergoTokenAmount, completeCard.cardName, completeCard.attack, completeCard.HP, completeCard.gold, completeCard.XP, completeCard.cardImage);
+        //    //        miniCard.name = completeCard.cardName;
+        //    //        miniCardParent.name = selectedCardList[i].cardName;
+        //    //    }
+        //    //}
+        //}
+
+    }
+
+
+    [PunRPC]
+    private void AttackNPCOther(int id, int dmg)
+    {
+        Debug.Log("AttackNPCOther " + id + " dmg " + dmg);
+        playerParent = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>().playerParent;
+        GameObject npcObj = playerParent[id].transform.GetChild(0).gameObject;
+        bool isPlayerDestroy = npcObj.GetComponent<NPCManager>().DealDamage(dmg, npcObj);
+        Debug.Log("player destroyed " + isPlayerDestroy);
+        if (isPlayerDestroy)
+        {
+            manager = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+            Debug.Log("PhotonNetwork.IsMasterClient " + PhotonNetwork.IsMasterClient);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                manager.isDestroyedMaster = true;
+                Debug.Log("inside master " + manager.isDestroyedMaster + " gameobject name " + gameObject.name);
+                int totalPlayerGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+                int totalMasterXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterXP"];
+                totalPlayerGold += npcObj.GetComponent<NPCManager>().gold;
+                Debug.Log(totalPlayerGold + " total player gold ");
+                totalMasterXP += npcObj.GetComponent<NPCManager>().XP;
+                PhotonNetwork.CurrentRoom.CustomProperties["masterGold"] = totalPlayerGold;
+                PhotonNetwork.CurrentRoom.CustomProperties["masterXP"] = totalMasterXP;
+                Gold.instance.SetGold(totalPlayerGold);
+            }
+            else
+            {
+                manager.isDestroyedclient = true;
+                Debug.Log("inside not master " + manager.isDestroyedclient + " gameobject name " + gameObject.name);
+                int totalClientGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+                int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
+                totalClientGold += npcObj.GetComponent<NPCManager>().gold;
+                PhotonNetwork.CurrentRoom.CustomProperties["clientGold"] = totalClientGold;
+                PhotonNetwork.CurrentRoom.CustomProperties["clientXP"] = totalClientXP;
+                Debug.Log(totalClientGold + " total client gold ");
+                Gold.instance.SetGold(totalClientGold);
+            }
+        }
+
+        //if (isMaster)
+        //{
+        //    //Debug.Log(" parent id = 4 " + parentId);
+        //    int totalPlayerGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+        //    int totalMasterXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterXP"];
+        //    totalPlayerGold += (2 * selectedNPC.GetComponent<NPCManager>().gold);
+        //    Debug.Log(totalPlayerGold + " total player gold ");
+        //    totalMasterXP += selectedNPC.GetComponent<NPCManager>().XP;
+        //    PhotonNetwork.CurrentRoom.CustomProperties["masterGold"] = totalPlayerGold;
+        //    PhotonNetwork.CurrentRoom.CustomProperties["masterXP"] = totalMasterXP;
+        //    Gold.instance.SetGold(totalPlayerGold);
+        //    Destroy(selectedNPC.gameObject);
+        //    manager.isDestroyedMaster = true;
+        //    Debug.Log("isDestroyedMaster " + manager.isDestroyedMaster + " gameobject name " + gameObject.name);
+        //    pv.RPC("DestroyOther", RpcTarget.Others, 4);
+        //}
+        //else
+        //{
+        //    //Debug.Log(" parentId == 4 " + parentId);
+        //    int totalClientGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+        //    int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
+        //    totalClientGold += (2 * selectedNPC.GetComponent<NPCManager>().gold);
+        //    PhotonNetwork.CurrentRoom.CustomProperties["clientGold"] = totalClientGold;
+        //    PhotonNetwork.CurrentRoom.CustomProperties["clientXP"] = totalClientXP;
+        //    Debug.Log(totalClientGold + " total client gold ");
+        //    Gold.instance.SetGold(totalClientGold);
+        //    Destroy(selectedNPC.gameObject);
+        //    manager.isDestroyedclient = true;
+        //    Debug.Log("isDestroyedclient " + manager.isDestroyedclient + " gameobject name " + gameObject.name);
+        //    pv.RPC("DestroyOther", RpcTarget.Others, 4);
+        //}
     }
 
     public void ShowHiddenCard()
@@ -1421,6 +1649,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 int currentPos = int.Parse(button.name.Split(" ")[2]);
                 Hover.cardParent.transform.GetComponent<PhotonView>();
                 int previousPos = int.Parse(Hover.cardParent.transform.parent.name.Split(" ")[2]);
+                int cardId = Hover.cardParent.transform.parent.GetChild(0).GetChild(0).GetComponent<Card>().id;
                 Hover.cardParent.transform.SetParent(EventSystem.current.currentSelectedGameObject.gameObject.transform);
                 Hover.cardParent.transform.position = EventSystem.current.currentSelectedGameObject.gameObject.transform.position;
                 Destroy(Hover.cardParent.GetComponent<DragMiniCards>());
@@ -1434,13 +1663,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 int handCount = result.Item1;
                 int fieldCount = result.Item2;
 
-                pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount);
+                pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount, cardId);
             }
             else if (!player1Turn && !PhotonNetwork.IsMasterClient)
             {
                 int currentPos = int.Parse(button.name.Split(" ")[2]);
                 Hover.cardParent.transform.GetComponent<PhotonView>();
                 int previousPos = int.Parse(Hover.cardParent.transform.parent.name.Split(" ")[2]);
+                int cardId = Hover.cardParent.transform.parent.GetChild(0).GetChild(0).GetComponent<Card>().id;
                 Hover.cardParent.transform.SetParent(EventSystem.current.currentSelectedGameObject.gameObject.transform);
                 Hover.cardParent.transform.position = EventSystem.current.currentSelectedGameObject.gameObject.transform.position;
                 Destroy(Hover.cardParent.GetComponent<DragMiniCards>());
@@ -1454,7 +1684,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 int handCount = result.Item1;
                 int fieldCount = result.Item2;
 
-                pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount);
+                pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount, cardId);
             }
         }
         ResetAnimation("field");
@@ -1657,15 +1887,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             var nextPlayerID = nextPlayer.ActorNumber;
             string minText = downMinText.text;
             string secText = downSecText.text;
+            manager = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
 
             if (!endGame)
             {
+                Debug.Log(" player 1 tuen " + player1Turn + " PhotonNetwork.IsMasterClient " + PhotonNetwork.IsMasterClient);
                 if (player1Turn && PhotonNetwork.IsMasterClient)
                 {
                     SetActivePlayer(nextPlayerID);
                     turnCountMaster = PlayerPrefs.GetInt("masterCount") + 1;
                     PlayerPrefs.SetInt("masterCount", turnCountMaster);
                     pv.RPC("ChangePlayerTurn", RpcTarget.All, false);
+                    Debug.Log(manager.isDestroyedMaster + " isDestroyedMaster " + " gonamr " + gameObject.name);
+                   
                 }
                 else if (!player1Turn && !PhotonNetwork.IsMasterClient)
                 {
@@ -1673,6 +1907,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     turnCountClient = PlayerPrefs.GetInt("clientCount") + 1;
                     PlayerPrefs.SetInt("clientCount", turnCountClient);
                     pv.RPC("ChangePlayerTurn", RpcTarget.All, true);
+                    Debug.Log(isDestroyedclient + " isDestroyedclient " + " gonamr " + gameObject.name);
+                    
                 }
             }
         }
@@ -1742,6 +1978,131 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
     }
 
+    private void SpawnNPC()
+    {
+        Debug.Log("Spawn NPC");
+        pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+        Debug.Log(pv.IsMine + " pv is mine " + gameBoardParent.transform.GetChild(1).name);
+        Debug.Log("master client " + PhotonNetwork.IsMasterClient + " PhotonNetwork.IsMasterClient " + pv.IsMine + " mine " + gameObject.name);
+        playerParent = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>().playerParent;
+        
+
+        if (PhotonNetwork.IsMasterClient && pv.IsMine 
+            && !gameObject.name.ToLower().Contains("clone".ToLower())
+            )
+        {
+            Debug.Log(pv.IsMine + " pv is master  " + gameBoardParent.transform.GetChild(1).name + " is master " + PhotonNetwork.IsMasterClient + " gameobject " +  gameObject.name);
+                
+                GameObject npc = PhotonNetwork.Instantiate("NPC_Player", playerParent[0].transform.position, playerParent[0].transform.rotation);
+                npc.transform.SetParent(playerParent[0].transform);
+                npc.transform.localScale = playerParent[0].transform.localScale;
+                Debug.Log(npc + " npc in mine " + pv.IsMine);
+                npc.GetComponent<NPCManager>().SetNPCProperties(5, 4, 8, 6, 30);
+                pv.RPC("SpawnOther", RpcTarget.Others);
+            
+            
+        }
+        else if (!PhotonNetwork.IsMasterClient && pv.IsMine 
+            && !gameObject.name.ToLower().Contains("clone".ToLower())
+            )
+        {
+            Debug.Log(pv.IsMine + " pv is client " + gameBoardParent.transform.GetChild(1).name + " is master " + PhotonNetwork.IsMasterClient + " gameobject " + gameObject.name);
+           
+                GameObject npc = PhotonNetwork.Instantiate("NPC_Player", playerParent[0].transform.position, playerParent[0].transform.rotation);
+                npc.transform.SetParent(playerParent[0].transform);
+                npc.transform.localScale = playerParent[0].transform.localScale;
+                Debug.Log(npc + " npc in mine " + pv.IsMine);
+                npc.GetComponent<NPCManager>().SetNPCProperties(5, 4, 8, 6, 30);
+                pv.RPC("SpawnOther", RpcTarget.Others);
+            
+           
+        }
+    }
+
+    [PunRPC]
+    private void SpawnOther()
+    {
+        pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+        Debug.Log("pv " + pv);
+        Debug.Log("pv name " + pv.gameObject.name + " SpawnOther");
+        if (//!gameObject.name.Contains("clone") && 
+            pv.IsMine 
+            && PhotonNetwork.IsMasterClient)
+        {
+            gameBoardParent = GameObject.Find("Game Board Parent");
+            Debug.Log(" game board parent " + gameBoardParent);
+            Debug.Log("gameBoardParent.transform.GetChild(1) " + gameBoardParent.transform.GetChild(0));
+            Debug.Log("gameBoardParent.transform.GetChild(1) " + gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>());
+            enemyParent = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>().enemyParent;
+            GameObject npc = PhotonNetwork.Instantiate("NPC_Enemy", enemyParent[0].transform.position, Quaternion.Euler(0, 0, 0));
+            npc.transform.SetParent(enemyParent[0].transform);
+            npc.transform.localScale = enemyParent[0].transform.localScale;
+            Debug.Log(npc + " npc in enemy ");
+            Debug.Log(enemyParent[0].transform.parent.parent.parent.name + " enemy parent name ");
+            npc.GetComponent<NPCManager>().SetNPCProperties(5, 4, 8, 6, 30);
+        }
+        else if (//!gameObject.name.Contains("clone") && 
+            pv.IsMine && !PhotonNetwork.IsMasterClient)
+        {
+            gameBoardParent = GameObject.Find("Game Board Parent");
+            Debug.Log(" game board parent " + gameBoardParent);
+            Debug.Log("gameBoardParent.transform.GetChild(1) " + gameBoardParent.transform.GetChild(0));
+            Debug.Log("gameBoardParent.transform.GetChild(1) " + gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>());
+            enemyParent = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>().enemyParent;
+            GameObject npc = PhotonNetwork.Instantiate("NPC_Enemy", enemyParent[0].transform.position, Quaternion.Euler(0, 0, 0));
+            npc.transform.SetParent(enemyParent[0].transform);
+            npc.transform.localScale = enemyParent[0].transform.localScale;
+            Debug.Log(npc + " npc in enemy ");
+            Debug.Log(enemyParent[0].transform.parent.parent.parent.name + " enemy parent name ");
+            npc.GetComponent<NPCManager>().SetNPCProperties(5, 4, 8, 6, 30);
+        }
+    }
+
+    private void SpawnNextNPC()
+    {
+       
+        Debug.Log("Spawn NPC");
+        pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+        Debug.Log(pv.IsMine + " pv is mine " + gameBoardParent.transform.GetChild(1).name);
+        Debug.Log("master client " + PhotonNetwork.IsMasterClient + " PhotonNetwork.IsMasterClient " + pv.IsMine + " mine " + gameObject.name);
+        playerParent = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>().playerParent;
+        manager = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+
+
+        if (PhotonNetwork.IsMasterClient && pv.IsMine
+            //&& !gameObject.name.ToLower().Contains("clone".ToLower())
+            )
+        {
+            Debug.Log(pv.IsMine + " pv is master  " + gameBoardParent.transform.GetChild(1).name + " is master " + PhotonNetwork.IsMasterClient + " gameobject " + gameObject.name);
+
+            GameObject npc = PhotonNetwork.Instantiate("NPC_Player", playerParent[0].transform.position, playerParent[0].transform.rotation);
+            npc.transform.SetParent(playerParent[0].transform);
+            npc.transform.localScale = playerParent[0].transform.localScale;
+            Debug.Log(npc + " npc in mine " + pv.IsMine);
+            npc.GetComponent<NPCManager>().SetNPCProperties(5, 4, 8, 6, 30);
+            manager.isSpawnMaster = true;
+            Debug.Log(manager.isSpawnMaster + " isSpawn " + PhotonNetwork.IsMasterClient);
+            pv.RPC("SpawnOther", RpcTarget.Others);
+
+
+        }
+        else if (!PhotonNetwork.IsMasterClient && pv.IsMine
+            //&& !gameObject.name.ToLower().Contains("clone".ToLower())
+            )
+        {
+            Debug.Log(pv.IsMine + " pv is client " + gameBoardParent.transform.GetChild(1).name + " is master " + PhotonNetwork.IsMasterClient + " gameobject " + gameObject.name);
+
+            GameObject npc = PhotonNetwork.Instantiate("NPC_Player", playerParent[0].transform.position, playerParent[0].transform.rotation);
+            npc.transform.SetParent(playerParent[0].transform);
+            npc.transform.localScale = playerParent[0].transform.localScale;
+            Debug.Log(npc + " npc in mine " + pv.IsMine);
+            npc.GetComponent<NPCManager>().SetNPCProperties(5, 4, 8, 6, 30);
+            manager.isSpawnClient = true;
+            Debug.Log(manager.isSpawnClient + " isSpawn " + PhotonNetwork.IsMasterClient);
+            pv.RPC("SpawnOther", RpcTarget.Others);
+        }
+    }
+
     #region RPC Methods
     [PunRPC]
     public void CoroutineMethod(float time, string min, string sec)
@@ -1775,12 +2136,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         afterBidTimer.InitTimers("CB", 5);
         afterBiddingPanel.SetActive(false);
         GetWinnerName();
+        Debug.Log("bid complete");
+        SpawnNPC();
     }
 
     [PunRPC]
     public void AfterBidComplete()
     {
         biddingPanel.SetActive(false);
+        //Debug.Log("After bid complete");
+        //SpawnNPC();
     }
 
     [PunRPC]
@@ -1798,8 +2163,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     [PunRPC]
-    public void MoveCard(int prevPos, int currPos, int hCount, int fCount)
+    public void MoveCard(int prevPos, int currPos, int hCount, int fCount, int id)
     {
+        CardDetails clickedCard = cardDetails.Find(card => card.id == id);
         GameObject enemyHand = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Hand").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
         GameObject selectedObject = enemyHand.transform.GetChild(prevPos - 1).GetChild(0).gameObject;
@@ -1808,18 +2174,42 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         selectedObject.transform.position = selectedObjectParent.transform.position;
         selectedObject.AddComponent<DropFieldCard>();
 
-        Tuple<int, int> result = GetTotalCardsCount(enemyHand, enemyField);
-        int handCount = result.Item1;
-        int fieldCount = result.Item2;
+        Debug.Log(selectedObjectParent.name + " selected obje  name ");
+        if (selectedObjectParent.transform.childCount == 1)
+        {
+            Debug.Log(" child count 1" + selectedObjectParent.name + " selected card parent " + clickedCard + " selected card ");
 
-        if(handCount == hCount)
-        {
-            Debug.LogError("both player same " + handCount + " hand count " + hCount + " hCount"); 
+            Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedObject.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
+            if (selectedObject.transform.GetChild(0).GetComponent<Card>().id != id)
+            {
+                Debug.Log("not matched");
+                Destroy(selectedObjectParent.transform.GetChild(0).gameObject);
+                GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedObjectParent.transform.position, selectedObjectParent.transform.rotation);
+                miniCardParent.transform.SetParent(selectedObjectParent.transform);
+                miniCardParent.transform.localScale = selectedObjectParent.transform.localScale;
+                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                Debug.Log(" completed card level " + clickedCard.levelRequired);
+                int level = (int)(clickedCard.levelRequired);
+                miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage);
+                miniCard.name = clickedCard.cardName;
+                miniCardParent.name = clickedCard.cardName;
+            }
         }
-        
-        if(fieldCount == fCount)
+
+        if (selectedObjectParent.transform.childCount == 0)
         {
-            Debug.LogError("both player same " + fieldCount + " feild count " + fCount + " fCount"); 
+            Debug.Log(" child count 0" + selectedObjectParent.name + " selected card parent " + clickedCard + " selected card ");
+
+            Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedObject.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
+            GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedObjectParent.transform.position, selectedObjectParent.transform.rotation);
+            miniCardParent.transform.SetParent(selectedObjectParent.transform);
+            miniCardParent.transform.localScale = selectedObjectParent.transform.localScale;
+            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+            Debug.Log(" completed card level " + clickedCard.levelRequired);
+            int level = (int)(clickedCard.levelRequired);
+            miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage);
+            miniCard.name = clickedCard.cardName;
+            miniCardParent.name = clickedCard.cardName;
         }
 
         if (selectedObjectParent.tag == "Front Line Enemy")
@@ -2200,6 +2590,80 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 string sec = Mathf.FloorToInt(timeUp.currentTime % 60).ToString("00");
                 upMinText.SetText(min);
                 upSecText.SetText(sec);
+                manager = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+                Debug.Log("player turn " + player1Turn);
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    if (manager.isSpawnMaster)
+                    {
+                        manager.isSpawnMaster = false;
+                        Debug.Log("isspawn " + manager.isSpawnMaster);
+                    }
+                    else
+                    {
+                        Debug.Log("isspawn " + manager.isSpawnMaster);
+                        MovePlayer();
+                    }
+                    
+                }
+                else if(!PhotonNetwork.IsMasterClient)
+                {
+                    if (manager.isSpawnClient)
+                    {
+                        manager.isSpawnClient = false;
+                        Debug.Log("isspawn " + manager.isSpawnMaster);
+                    }
+                    else
+                    {
+                        Debug.Log("isspawn " + manager.isSpawnClient);
+                        MovePlayer();
+                    }
+                }
+                //isSpawn = false;
+                //Debug.Log("isspawn " + isSpawn);
+                //MovePlayer();
+
+
+                
+                Debug.Log("apply active player " + id + " gameobject name " + gameObject.name + " manager name "+ manager.gameObject.name);
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    //if (!gameObject.name.ToLower().Contains("clone".ToLower()))
+                    //{
+                    Debug.Log("master called " + gameObject.name + " isDestroyedMaster " + manager.isDestroyedMaster + " count " + manager.masterCount);
+                        if (manager.isDestroyedMaster)
+                        {
+                            manager.masterCount++;
+                            Debug.Log("masterCount " + manager.masterCount);
+                        }
+                        if (manager.masterCount == 3)
+                        {
+                            Debug.Log(" masterCount == 3 " + manager.masterCount);
+                            SpawnNextNPC();
+                            manager.isDestroyedMaster = false;
+                            manager.masterCount = 0;
+                        }
+                    //}
+                }
+                else
+                {
+                    //if (!gameObject.name.ToLower().Contains("clone".ToLower()))
+                    //{
+                        Debug.Log(" not master called " + gameObject.name + " isDestroyedclient " + manager.isDestroyedclient + " count "+ manager.clientCount );
+                        if (manager.isDestroyedclient)
+                        {
+                            manager.clientCount++;
+                            Debug.Log("clientCount " + manager.clientCount);
+                        }
+                        if (manager.clientCount == 3)
+                        {
+                            Debug.Log("clientCount == 3 " + clientCount);
+                            SpawnNextNPC();
+                            manager.isDestroyedclient = false;
+                            manager.clientCount = 0;
+                        }
+                    //}
+                }
 
                 pv.RPC("SetDownTimeText", RpcTarget.Others, min, sec);
                 timeDown.InitTimers("Down", totalSec);
@@ -2210,6 +2674,261 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     #endregion
+
+    public void MovePlayer()
+    {
+        Debug.Log(" move player called");
+        Debug.Log(player1Turn + " player 1 turn " + PhotonNetwork.IsMasterClient + " is master ");
+        playerParent = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>().playerParent;
+        if (!player1Turn && PhotonNetwork.IsMasterClient)
+        {
+            GameObject selectedNPC = null;
+            int parentId = -1;
+
+            Debug.Log(player1Turn + " player 1 turn " + PhotonNetwork.IsMasterClient + " master client");
+
+            for(int i = 0; i < playerParent.Length; i++)
+            {
+                if(playerParent[i].transform.childCount == 1)
+                {
+                    selectedNPC = playerParent[i].transform.GetChild(0).gameObject;
+                    parentId = i;
+                    break;
+                }
+            }
+
+            if (selectedNPC != null)
+            {
+                Debug.Log("selected npc null " + selectedNPC);
+                if (parentId < 4)
+                {
+                    Debug.Log(" parent id < 4 " + parentId);
+                    StartCoroutine(MoveObject(selectedNPC, playerParent[parentId + 1].transform.gameObject, 0.8f));
+                    pv.RPC("MoveOther", RpcTarget.Others, player1Turn, parentId);
+                }
+
+                if (parentId == 3)
+                {
+                    StartCoroutine(SetTheNPC(1.5f, true, selectedNPC));
+                    //Debug.Log(" parent id = 4 " + parentId);
+                    //int totalPlayerGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+                    //int totalMasterXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterXP"];
+                    //totalPlayerGold += selectedNPC.GetComponent<NPCManager>().gold;
+                    //Debug.Log(totalPlayerGold + " total player gold ");
+                    //totalMasterXP += selectedNPC.GetComponent<NPCManager>().XP;
+                    //PhotonNetwork.CurrentRoom.CustomProperties["masterGold"] = totalPlayerGold;
+                    //PhotonNetwork.CurrentRoom.CustomProperties["masterXP"] = totalMasterXP;
+                    //Gold.instance.SetGold(totalPlayerGold);
+                    //Destroy(selectedNPC.gameObject);
+                    //pv.RPC("DestroyOther", RpcTarget.Others, 4);
+                }
+            }
+
+        }
+        else if(player1Turn && !PhotonNetwork.IsMasterClient)
+        {
+            GameObject selectedNPC = null;
+            int parentId = -1;
+
+            Debug.Log("!player1Turn " + player1Turn + " !PhotonNetwork.IsMasterClient " + PhotonNetwork.IsMasterClient);
+
+            for (int i = 0; i < playerParent.Length; i++)
+            {
+                if (playerParent[i].transform.childCount == 1)
+                {
+                    selectedNPC = playerParent[i].transform.GetChild(0).gameObject;
+                    parentId = i;
+                    break;
+                }
+            }
+            if(selectedNPC != null)
+            {
+                Debug.Log("selectedNPC " + selectedNPC);
+                if(parentId < 4)
+                {
+                    Debug.Log(" parent id < 4 " + parentId);
+                    StartCoroutine(MoveObject(selectedNPC, playerParent[parentId + 1].transform.gameObject, 0.8f));
+                    pv.RPC("MoveOther", RpcTarget.Others, player1Turn, parentId);
+
+                    //if (parentId == 3)
+                    //{
+                    //    Debug.Log(" parentId == 4 " + parentId);
+                    //    int totalClientGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+                    //    int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
+                    //    totalClientGold += selectedNPC.GetComponent<NPCManager>().gold;
+                    //    PhotonNetwork.CurrentRoom.CustomProperties["clientGold"] = totalClientGold;
+                    //    PhotonNetwork.CurrentRoom.CustomProperties["clientXP"] = totalClientXP;
+                    //    Debug.Log(totalClientGold + " total client gold ");
+                    //    Gold.instance.SetGold(totalClientGold);
+                    //    Destroy(selectedNPC.gameObject);
+                    //    pv.RPC("DestroyOther", RpcTarget.Others, 4);
+                    //}
+                }
+
+                if(parentId == 3)
+                {
+                    StartCoroutine(SetTheNPC(1.5f, false, selectedNPC));
+                    //Debug.Log(" parentId == 4 " + parentId);
+                    //int totalClientGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+                    //int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
+                    //totalClientGold += selectedNPC.GetComponent<NPCManager>().gold;
+                    //PhotonNetwork.CurrentRoom.CustomProperties["clientGold"] = totalClientGold;
+                    //PhotonNetwork.CurrentRoom.CustomProperties["clientXP"] = totalClientXP;
+                    //Debug.Log(totalClientGold + " total client gold ");
+                    //Gold.instance.SetGold(totalClientGold);
+                    //Destroy(selectedNPC.gameObject);
+                    //pv.RPC("DestroyOther", RpcTarget.Others, 3);
+                }
+            }
+        }
+    }
+
+    IEnumerator SetTheNPC(float time, bool isMaster, GameObject selectedNPC)
+    {
+        manager = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
+        yield return new WaitForSeconds(time);
+        Debug.Log("set the NPC " + isMaster + " isMaster");
+        if (isMaster)
+        {
+            //Debug.Log(" parent id = 4 " + parentId);
+            int totalPlayerGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+            int totalMasterXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterXP"];
+            totalPlayerGold += (2 * selectedNPC.GetComponent<NPCManager>().gold);
+            Debug.Log(totalPlayerGold + " total player gold ");
+            totalMasterXP += selectedNPC.GetComponent<NPCManager>().XP;
+            PhotonNetwork.CurrentRoom.CustomProperties["masterGold"] = totalPlayerGold;
+            PhotonNetwork.CurrentRoom.CustomProperties["masterXP"] = totalMasterXP;
+            Gold.instance.SetGold(totalPlayerGold);
+            Destroy(selectedNPC.gameObject);
+            manager.isDestroyedMaster = true;
+            Debug.Log("isDestroyedMaster " + manager.isDestroyedMaster + " gameobject name " + gameObject.name);
+            pv.RPC("DestroyOther", RpcTarget.Others, 4);
+        }
+        else
+        {
+            //Debug.Log(" parentId == 4 " + parentId);
+            int totalClientGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+            int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
+            totalClientGold += (2 * selectedNPC.GetComponent<NPCManager>().gold);
+            PhotonNetwork.CurrentRoom.CustomProperties["clientGold"] = totalClientGold;
+            PhotonNetwork.CurrentRoom.CustomProperties["clientXP"] = totalClientXP;
+            Debug.Log(totalClientGold + " total client gold ");
+            Gold.instance.SetGold(totalClientGold);
+            Destroy(selectedNPC.gameObject);
+            manager.isDestroyedclient = true;
+            Debug.Log("isDestroyedclient " + manager.isDestroyedclient + " gameobject name " + gameObject.name);
+            pv.RPC("DestroyOther", RpcTarget.Others, 4);
+        }
+    }
+
+    [PunRPC]
+    public void DestroyOther(int id)
+    {
+        enemyParent = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>().enemyParent;
+        Debug.Log(id + " parent id" + id);
+        Destroy(enemyParent[id].transform.GetChild(0).gameObject);
+        for(int i = 0; i < enemyParent.Length; i++)
+        {
+            if (enemyParent[i].transform.childCount == 1)
+            {
+                Destroy(enemyParent[i].transform.GetChild(0).gameObject);
+            }
+        }
+    }
+
+    [PunRPC]
+    private void MoveOther(bool playerTurn, int parentId)
+    {
+        enemyParent = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>().enemyParent;
+        Debug.Log("enemy parent " + enemyParent.Length + " parent id " + parentId + " player turn "+ playerTurn);
+        if (playerTurn)
+        {
+            GameObject selectedNPC = null;
+            Debug.Log("playerTurn " + playerTurn);
+            selectedNPC = enemyParent[parentId].transform.GetChild(0).gameObject;
+            //int parentId = -1;
+            //for (int i = 0; i < enemyParent.Length; i++)
+            //{
+            //    if (enemyParent[i].transform.childCount == 1)
+            //    {
+            //        selectedNPC = enemyParent[parentId - 1].transform.GetChild(0).gameObject;
+            //        parentId = i;
+            //        break;
+            //    }
+            //}
+            if (parentId < 4)
+            {
+                Debug.Log(" player id other parentId < 4 " + parentId);
+                StartCoroutine(MoveObject(selectedNPC, enemyParent[parentId + 1].transform.gameObject, 0.8f));
+            }
+        }
+        else
+        {
+            GameObject selectedNPC = null;
+            selectedNPC = enemyParent[parentId].transform.GetChild(0).gameObject;
+            //int parentId = -1;
+            //for (int i = 0; i < enemyParent.Length; i++)
+            //{
+            //    if (enemyParent[i].transform.childCount == 1)
+            //    {
+            //        selectedNPC = enemyParent[parentId - 1].transform.GetChild(0).gameObject;
+            //        parentId = i;
+            //        break;
+            //    }
+            //}
+            if (parentId < 4)
+            {
+                Debug.Log(" player id other parentId < 4 " + parentId);
+                StartCoroutine(MoveObject(selectedNPC, enemyParent[parentId + 1].transform.gameObject, 0.8f));
+            }
+        }
+        //if (player1Turn && PhotonNetwork.IsMasterClient)
+        //{
+        //    GameObject selectedNPC = null;
+
+        //    for (int i = 0; i < playerParent.Length; i++)
+        //    {
+        //        if (playerParent[i].transform.childCount == 1)
+        //        {
+        //            selectedNPC = playerParent[i].transform.GetChild(0).gameObject;
+        //            break;
+        //        }
+        //    }
+        //    StartCoroutine(MoveObject(selectedNPC, selectedNPC.transform.gameObject, 1f));
+        //    pv.RPC("MoveOther", RpcTarget.Others);
+        //}
+        //else if (!player1Turn && !PhotonNetwork.IsMasterClient)
+        //{
+        //    GameObject selectedNPC = null;
+
+        //    for (int i = 0; i < playerParent.Length; i++)
+        //    {
+        //        if (playerParent[i].transform.childCount == 1)
+        //        {
+        //            selectedNPC = playerParent[i].transform.GetChild(0).gameObject;
+        //            break;
+        //        }
+        //    }
+        //    StartCoroutine(MoveObject(selectedNPC, selectedNPC.transform.gameObject, 1f));
+        //    pv.RPC("MoveOther", RpcTarget.Others);
+        //}
+    }
+
+    IEnumerator MoveObject(GameObject objectToMove, GameObject destination, float duration)
+    {
+        Debug.Log("move object " + objectToMove + " object to move " + destination + " destination " + duration + " duration");
+        float time = 0;
+        Vector3 start = objectToMove.transform.position;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            objectToMove.transform.position = Vector3.Lerp(start, destination.transform.position, time / duration);
+            yield return null;
+        }
+
+        objectToMove.transform.SetParent(destination.transform);
+    }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -2679,6 +3398,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.LogError("called in both  " + PhotonNetwork.LocalPlayer.NickName + " end game value " + endGame);
         status = MatchStatus.Normal;
         //SkirmishManager.instance.deckId = -1;
+        connectUsing = true;
         GenerateGameObject();
         SceneManager.LoadScene(3);
         if (PhotonNetwork.InRoom)

@@ -17,6 +17,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     [SerializeField] Sprite profileImage;
     [SerializeField] public TMP_Text skirmishOutputTextError;
     public static string[] playersName;
+    public static bool isPlayerClicked = false;
 
     private bool connected = false;
     private ExitGames.Client.Photon.Hashtable customProp = new ExitGames.Client.Photon.Hashtable();
@@ -25,7 +26,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private SkirmishManager skirmishManager;
     private MatchData matchData;
     private const string CANCEL_KEY = "isGameCancelled";
-    private List<string> roomNames = new List<string>();
+    private List<RoomInfo> roomNames = new List<RoomInfo>();
+    private bool isJoined = false;
+    
 
     private void Awake()
     {
@@ -54,6 +57,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
         connected = false;
+        isJoined = false;
         Debug.Log("start called");
         //PhotonNetwork.Disconnect();
 
@@ -75,7 +79,21 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         //{
         //    Invoke("LeaveGame", 30f);
         //}
-        Invoke("CancelGame", 30f);
+        Invoke("HideLoading", 30f);
+    }
+
+    public void HideLoading()
+    {
+        if (initialLoading.gameObject.activeSelf)
+        {
+            SceneManager.LoadScene(3);
+            if (PhotonNetwork.IsConnected)
+            {
+                if (PhotonNetwork.InRoom)
+                    PhotonNetwork.LeaveRoom();
+                PhotonNetwork.Disconnect();
+            }
+        }
     }
 
     public void CancelGame()
@@ -85,7 +103,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             Debug.LogError("Cancel game called " + PhotonNetwork.CurrentRoom.PlayerCount);
         }
-        if (loadingPanel.gameObject.activeSelf || initialLoading.gameObject.activeSelf)
+        if (loadingPanel.gameObject.activeSelf 
+            //|| initialLoading.gameObject.activeSelf
+            )
         {
             Debug.LogError(" inside photon nework");
             if (PhotonNetwork.CurrentRoom != null)
@@ -207,6 +227,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("OnJoinedLobby " + SceneManager.GetActiveScene().name);
+        if (isJoined)
+        {
+            PhotonNetwork.JoinRandomRoom();
+        }
         //print("Joined lobby ======");
     }
 
@@ -218,6 +242,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private IEnumerator VersionCheck() //check for if user has latest game build
     {
+        isPlayerClicked = true;
         Debug.Log("version check");
         var version = FirebaseDatabase.DefaultInstance.GetReference("versionCheck").GetValueAsync();
         yield return new WaitUntil(predicate: () => version.IsCompleted);
@@ -255,7 +280,17 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 if (connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1) //making sure that they have a deck selected before matchmaking begins
                 {
                     Debug.Log("connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1");
-                    PhotonNetwork.JoinRandomRoom();
+                    //PhotonNetwork.JoinRandomRoom();
+                    
+                    if (PhotonNetwork.InLobby)
+                        PhotonNetwork.JoinRandomRoom();
+                    else
+                    {
+                        Debug.Log("else");
+                        isJoined = true;
+                        PhotonNetwork.JoinLobby();
+                    }
+
                     loadingPanel.SetActive(true);
                 }
             }
@@ -268,6 +303,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         if (loadingPanel.activeSelf)
         {
             loadingPanel.SetActive(false);
+            isPlayerClicked = false;
         }
     }
 
@@ -302,8 +338,24 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         string region = PhotonNetwork.CloudRegion;
         Debug.Log("Current Photon Server Region: " + region);
         Debug.Log(roomNames.Count + " photon count");
-        Debug.Log("OnJoinRandomFailed");
+        Debug.Log("OnJoinRandomFailed " + isJoined);
+        //PhotonNetwork.JoinLobby();
         CreateNewRoom();
+        //if (isJoined)
+        //{
+        //    Debug.Log("isjoined called " + roomNames.Count);
+        //    if(roomNames.Count >= 1)
+        //    {
+        //        Debug.Log("joined random room again");
+        //        PhotonNetwork.JoinRandomRoom();
+        //    }
+        //    isJoined = false;
+        //}
+        //else
+        //{
+        //    Debug.Log("create room called ");
+        //    CreateNewRoom();
+        //}
     }
 
     public void CreateNewRoom()
@@ -345,6 +397,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         customProp["deckField"] = deckGeneralField;
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProp);
+        Debug.Log("photon room " + PhotonNetwork.CurrentRoom.Name);
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 1)
         {
             Invoke("LeaveTheRoom", 45f);
@@ -364,6 +417,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             properties["clientUserId"] = "456"; // here give dummy id but you need to get id from firebase
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
+        Invoke("CancelGame", 30f);
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
@@ -394,23 +448,47 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             CancelMatch();
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        foreach (RoomInfo room in roomList)
-        {
-            if (!room.RemovedFromList)
-            {
-                if (!roomNames.Contains(room.Name))
-                {
-                    roomNames.Add(room.Name);
-                }
-            }
-            else
-            {
-                roomNames.Remove(room.Name);
-            }
-        }
-    }
+    //public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    //{
+    //    roomNames.Clear();
+    //    foreach (RoomInfo room in roomList)
+    //    {
+    //        roomNames.Add(room);
+    //        //if (!room.RemovedFromList)
+    //        //{
+    //        //    if (!roomNames.Contains(room.Name))
+    //        //    {
+    //        //        roomNames.Add(room.Name);
+    //        //    }
+    //        //}
+    //        //else
+    //        //{
+    //        //    roomNames.Remove(room.Name);
+    //        //}
+    //    }
+
+    //    Debug.Log("in room " + PhotonNetwork.InRoom);
+    //    if (!PhotonNetwork.InRoom && isJoined)
+    //    {
+    //        bool joined = false;
+    //        isJoined = false;
+    //        Debug.Log("inside !PhotonNetwork.InRoom");
+    //        foreach (RoomInfo room in roomList)
+    //        {
+    //            if (room.IsOpen && room.IsVisible && room.PlayerCount < room.MaxPlayers)
+    //            {
+    //                // Join the first suitable room found
+    //                PhotonNetwork.JoinRoom(room.Name);
+    //                 joined = true;
+    //                break;
+    //            }
+    //        }
+    //        if (!joined)
+    //        {
+    //            CreateNewRoom();
+    //        }
+    //    }
+    //}
 
     //public static void RemoveSceneFromBuildIndex()
     //{

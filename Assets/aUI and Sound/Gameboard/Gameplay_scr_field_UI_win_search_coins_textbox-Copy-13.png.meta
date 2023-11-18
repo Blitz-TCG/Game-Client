@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 422780c13b90a844ca0e70d7f8c4e328
+guid: c981cd498700f194f9e0f94989a0de78
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -63,7 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -115,7 +115,28 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Gameplay_scr_field_UI_win_search_coins_textbox-Copy-13_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 537
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 24, y: 0, z: 28, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d4e50f8d0e58b941b7a2321c88bdb10
+      internalID: -886326088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -126,7 +147,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Gameplay_scr_field_UI_win_search_coins_textbox-Copy-13_0: -886326088
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

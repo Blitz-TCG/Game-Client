@@ -189,6 +189,10 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
         //        SceneManager.LoadScene(3);
         //    }
         //}
+        if (PhotonNetwork.InRoom)
+        {
+            Debug.Log("photon room " + PhotonNetwork.CurrentRoom.Name);
+        }
     }
 
     public void Update()
