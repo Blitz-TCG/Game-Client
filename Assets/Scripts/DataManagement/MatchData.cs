@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 
 [System.Serializable]
-public class MatchData
+public class MatchData //look at my other script and help point me to the actual match values
 {
     public string matchid;
     public GameMode gameMode;

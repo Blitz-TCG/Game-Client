@@ -741,7 +741,6 @@ public class FirebaseManager : MonoBehaviour
             DeckAvailable deckAvailable = new DeckAvailable("", 0, "", 0, "", 0, "");
             string jsonStringAvailable = Newtonsoft.Json.JsonConvert.SerializeObject(deckAvailable);
 
-
             var createCurrentDeck = dbReference.Child("decks").Child(user.UserId).Child("CurrentCards" + i).SetRawJsonValueAsync(jsonStringCurrent);
             yield return new WaitUntil(predicate: () => createCurrentDeck.IsCompleted);
             if (createCurrentDeck.IsFaulted)
