@@ -1128,14 +1128,15 @@ MonoBehaviour:
   HP: 0
   gold: 0
   XP: 0
-  race: 0
-  levelRequired: 
+  fieldLimit: 0
+  levelRequired: 0
   clan: 
   cardClass: 0
   cardImage: {fileID: 0}
   cardFrame: {fileID: 0}
   isAlreadyAttacked: 0
   dropPosition: 0
+  ability: 0
   cardId: 0
   cId: {fileID: 5241093512186658464}
   cardErgoTokenId: {fileID: 8567649490831826786}
@@ -1146,6 +1147,7 @@ MonoBehaviour:
   HPText: {fileID: 5136451580206768923}
   goldText: {fileID: 3797702651682240788}
   XPText: {fileID: 6590349169154863490}
+  fieldLimitText: {fileID: 0}
   cardClan: {fileID: 0}
   levelRequiredText: {fileID: 0}
   image: {fileID: 348492904053762808}

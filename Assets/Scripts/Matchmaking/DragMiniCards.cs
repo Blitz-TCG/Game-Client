@@ -59,6 +59,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             transform.SetAsLastSibling();
             transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
             obj = gameObject;
+            Debug.Log(" --== gameobject master "+ obj.name);
             endParent = previousParent;
             endSubParent = previousSubParent;
         }
@@ -76,6 +77,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             transform.SetAsLastSibling();
             transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
             obj = gameObject;
+            Debug.Log(" --== gameobject client " + obj.name);
             endParent = previousParent;
             endSubParent = previousSubParent;
         }
@@ -128,7 +130,8 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             transform.SetParent(parentAfterDrag);
             transform.position = parentAfterDrag.transform.position;
             transform.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            obj = transform.gameObject;
+            obj = gameObject;
+            Debug.Log(" --== gameobject master  end " + obj.name);
             endParent = previousParent;
             endSubParent = previousSubParent;
             dragEnd = true;
@@ -139,7 +142,8 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             isDragging = false;
             transform.SetParent(parentAfterDrag); transform.position = parentAfterDrag.transform.position;
             transform.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            obj = transform.gameObject;
+            obj = gameObject;
+            Debug.Log(" --== game object client end "+obj.name);
             endParent = previousParent;
             endSubParent = previousSubParent;
             dragEnd = true;
@@ -165,23 +169,32 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
     
     public void CardDrag()
     {
+        Debug.Log("card drag called ");
         if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient))
         {
+            Debug.Log("====Master start ==== ");
             Card card = obj.transform.GetComponentInChildren<Card>();
+            Debug.Log(card + " card " + card.id);
             Transform currrParent = obj.transform.parent;
+            Debug.Log("object parent " + obj.transform.parent + " current parent " + currrParent);
             
             int cardId = card.id;
             int len = obj.transform.parent.name.Split(" ").Length;
             int pos = int.Parse
             (obj.transform.parent.name.Split(" ")[len - 1]);
+            Debug.Log(len + " length " + pos + " pos ");
             
             PhotonView pv = obj.transform.GetComponent<PhotonView>();
+            Debug.Log(pv + " photon view ");
 
             GameObject playerHand = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Hand").gameObject;
             GameObject playerField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Field").gameObject;
+            Debug.Log(playerHand + " player hand " + playerField + " player field");
 
+            Debug.Log(" obj.transform.parent.parent.name " + obj.transform.parent.parent.name + " endParent " + endParent + " DropMiniCard.dropOnField " + DropMiniCard.dropOnField);
             if (obj.transform.parent.parent.name == "Player Field" && endParent == "Player Hand" && DropMiniCard.dropOnField)
             {
+                Debug.Log("inside obj.transform.parent.parent.name == \"Player Field\" && endParent == \"Player Hand\" && DropMiniCard.dropOnField ");
                 Destroy(obj.GetComponent<DragMiniCards>());
                 obj.AddComponent<DragFieldCard>();
                 Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(playerHand, playerField);
@@ -189,25 +202,34 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
                 int fieldCount = result.Item2;
                 pv.RPC("DragCards", RpcTarget.Others, cardId, pos, endSubParent, handCount, fieldCount);
             }
+            Debug.Log("====Master End====");
             
         }
         else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient))
         {
+            Debug.Log("====Client start====");
             Card card = obj.transform.GetComponentInChildren<Card>();
+            Debug.Log(card + " card " + card.id);
             Transform currrParent = obj.transform.parent;
-            
+            Debug.Log("object parent " + obj.transform.parent + " current parent " + currrParent);
+
             int cardId = card.id;
             int len = obj.transform.parent.name.Split(" ").Length;
             int pos = int.Parse
             (obj.transform.parent.name.Split(" ")[len - 1]);
-            
+            Debug.Log(len + " length " + pos + " pos ");
+
             PhotonView pv = obj.transform.GetComponent<PhotonView>();
+            Debug.Log(pv + " photon view ");
 
             GameObject playerHand = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Hand").gameObject;
             GameObject playerField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Field").gameObject;
+            Debug.Log(playerHand + " player hand " + playerField + " player field");
 
+            Debug.Log(" obj.transform.parent.parent.name " + obj.transform.parent.parent.name + " endParent " + endParent + " DropMiniCard.dropOnField " + DropMiniCard.dropOnField);
             if (obj.transform.parent.parent.name == "Player Field" && endParent == "Player Hand" && DropMiniCard.dropOnField)
             {
+                Debug.Log("inside obj.transform.parent.parent.name == \"Player Field\" && endParent == \"Player Hand\" && DropMiniCard.dropOnField ");
                 Destroy(obj.GetComponent<DragMiniCards>());
                 obj.AddComponent<DragFieldCard>();
                 Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(playerHand, playerField);
@@ -216,6 +238,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
 
                 pv.RPC("DragCards", RpcTarget.Others, cardId, pos, endSubParent, handCount, fieldCount);
             }
+            Debug.Log("====client end");
         }
         obj = null;
     }
@@ -241,15 +264,22 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
     [PunRPC]
     public void DragCards(int id, int pos, string parent, int hCount, int fCount)
     {
+        Debug.Log(" drag cards in others " + PhotonNetwork.IsMasterClient + " master " + PhotonNetwork.LocalPlayer.NickName);
         CardDetails clickedCard = cardDetails.Find(card => card.id == id);
+        Debug.Log(clickedCard.id + " clickedCard");
+        Debug.Log(hCount + " h count " + fCount + " f count ");
         
         int actualCardPos = int.Parse(parent.Split(" ")[2]);
+        Debug.Log(actualCardPos + " actualCardPos " + parent + " parent");
         
         GameObject selectedCardParent = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Enemy Field").Find("Enemy Parent " + pos).gameObject;
         GameObject enemyHand = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Enemy Hand").gameObject;
         GameObject enemyField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        Debug.Log(selectedCardParent + " selected parent");
+        Debug.Log(enemyHand + " enemyHand " + enemyField + " enemyField");
 
         GameObject selectedcard = enemyHand.transform.GetChild(actualCardPos - 1).GetChild(0).gameObject;
+        Debug.Log(selectedcard + " selectedcard ");
         selectedcard.transform.SetParent(selectedCardParent.transform);
         selectedcard.transform.localPosition = Vector3.zero;
         selectedcard.AddComponent<DropFieldCard>();
@@ -270,7 +300,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
                 Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
                 Debug.Log(" completed card level " + clickedCard.levelRequired);
                 int level = (int)(clickedCard.levelRequired);
-                miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage);
+                miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability, clickedCard.requirements);
                 miniCard.name = clickedCard.cardName;
                 miniCardParent.name = clickedCard.cardName;
             }
@@ -278,21 +308,22 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
 
         if(selectedCardParent.transform.childCount == 0)
         {
+            Debug.Log("selectedCardParent.transform.childCount == 0");
             GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedCardParent.transform.position, selectedCardParent.transform.rotation);
             miniCardParent.transform.SetParent(selectedCardParent.transform);
             miniCardParent.transform.localScale = selectedCardParent.transform.localScale;
             Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
             Debug.Log(" completed card level " + clickedCard.levelRequired);
             int level = (int)(clickedCard.levelRequired);
-            miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage);
+            miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability, clickedCard.requirements);
             miniCard.name = clickedCard.cardName;
             miniCardParent.name = clickedCard.cardName;
         }
-        //Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(enemyHand, enemyField);
-        //int handCount = result.Item1;
-        //int fieldCount = result.Item2;
+        Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(enemyHand, enemyField);
+        int handCount = result.Item1;
+        int fieldCount = result.Item2;
 
-        //Debug.LogError(hCount + " h count " + fCount + " f count " + handCount + " player count " + fieldCount + " field count ");
+        Debug.LogError(hCount + " h count " + fCount + " f count " + handCount + " player count " + fieldCount + " field count ");
 
         //if(handCount != hCount)
         //{
@@ -316,14 +347,16 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
 
         if (selectedCardParent.tag == "Front Line Enemy")
         {
+            Debug.Log("(selectedCardParent.tag " + selectedCardParent.tag);
             selectedcard.SetActive(true);
         }
         else if (selectedCardParent.tag == "Back Line Enemy")
         {
+            Debug.Log("(selectedCardParent.tag " + selectedCardParent.tag);
             if (GameBoardManager.isWallDestroyed)
-            selectedcard.SetActive(true);
+                selectedcard.SetActive(true);
             else
-            selectedcard.SetActive(false);
+                selectedcard.SetActive(false);
             
         }
     }

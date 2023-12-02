@@ -31,6 +31,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     private GameObject gameBoardParent;
     private TMP_Text error;
     private bool isHovering = false;
+    private TMP_Text errorText;
 
     private ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
     #endregion
@@ -40,6 +41,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         cardUI = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("StoreUI").gameObject;
         goldErrorTooltip = cardUI.transform.GetChild(cardUI.transform.childCount - 1).gameObject;
+        errorText = goldErrorTooltip.transform.Find("Gold Error Text").GetComponent<TMP_Text>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -97,7 +99,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
             Card cardInfo = Instantiate<Card>(infoCard, cardparent1.transform);
-            cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass);
+            cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability, hoveredCard.requirements);
         }
         else if (gameObject?.transform?.parent?.parent?.name == "Player Hand")
         {
@@ -110,7 +112,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
             Card cardInfo = Instantiate<Card>(infoCard, actualParent.transform);
-            cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass);
+            cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability, hoveredCard.requirements);
         }
         else if (gameObject.transform.parent.name == "Canvas")
         {
@@ -143,31 +145,33 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     {
         ResetAnimation();
         CardDetails clickedCard = cardDetails.Find(item => item.id == gameObject.transform.GetChild(0).GetComponent<Card>().id);
-
+        Debug.Log("clicked card " + clickedCard);
         int clickedCardid = clickedCard.id;
 
         if (Gold.instance.GetGold() >= clickedCard.gold)
         {
             pv = gameObject.transform.GetComponent<PhotonView>();
+            Debug.Log(" gold called");
             pv.RPC("Recruit", RpcTarget.All, clickedCardid);
         }
         else
         {
-            goldErrorTooltip.SetActive(true);
-            goldErrorTooltip.transform.Find("Gold Error Text").GetComponent<TMP_Text>().SetText("You can not buy card more than gold you have.");
+            errorText.gameObject.SetActive(true);
+            errorText.SetText("You can not buy card more than gold you have.");
             Invoke("DisableGoldErrorTooltip", 1f);
         }
     }
 
     private void DisableGoldErrorTooltip()
     {
-        goldErrorTooltip.SetActive(false);
+        errorText.gameObject.SetActive(false);
     }
 
     #region RPC Method
     [PunRPC]
     public void Recruit(int id)
     {
+        Debug.Log("Recruit called " + id);
         playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
         enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
 
@@ -193,7 +197,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         //miniCard.AddComponent<DragMiniCards>();
                         //miniCard.AddComponent<PhotonView>();
                         Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
+                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability, cardClicked.requirements);
                         card.name = cardClicked.cardName;
                         card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
 
@@ -223,10 +227,11 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     {
                         Debug.Log(" else called ");
                         Debug.Log(" Gold error tool tip " + goldErrorTooltip);
-                        Debug.Log(" gold text name " + goldErrorTooltip.transform.Find("Gold Error Text").name);
-                        Debug.Log(" parent name " + goldErrorTooltip.transform.parent.name + " back ground " + goldErrorTooltip.transform.parent.parent.name + " game board " + goldErrorTooltip.transform.parent.parent.parent.name);
-                        goldErrorTooltip.SetActive(true);
-                        goldErrorTooltip.transform.Find("Gold Error Text").GetComponent<TMP_Text>().SetText("You can not recruit this card!!!");
+                        //Debug.Log(" gold text name " + goldErrorTooltip.transform.Find("Gold Error Text").name);
+                        //Debug.Log(" parent name " + goldErrorTooltip.transform.parent.name + " back ground " + goldErrorTooltip.transform.parent.parent.name + " game board " + goldErrorTooltip.transform.parent.parent.parent.name);
+                        
+                        errorText.gameObject.SetActive(true);
+                        errorText.SetText("You can not recruit this card!!!");
                         Invoke("DisableGoldErrorTooltip", 1f);
                     }
                     //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
@@ -286,7 +291,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
                         miniCard.AddComponent<DragMiniCards>();
                         Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
+                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability, cardClicked.requirements);
                         card.name = cardClicked.cardName;
                         card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
                         miniCard.SetActive(false);

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -20,4 +22,13 @@ public class CardDetails
     public CardClass cardClass;
     public Sprite cardImage;
     public Sprite cardFrame;
+    public CardAbility ability;
+    public AbilityRequirements requirements;
 }
+
+//[Serializable]
+//public class AbilityPair
+//{
+//    public CardAbility ability;
+//    public Good_Favor good_Favor;
+//}

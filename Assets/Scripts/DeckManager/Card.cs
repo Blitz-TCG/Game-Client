@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 
 public enum CardClass
 {
@@ -23,15 +20,104 @@ public enum CardLevel
     Upper = 3,
 }
 
+public enum CardAbility
+{
+    //Clone,
+    //Meteor,
+    //Evolve,
+    //Malignant,
+    GoodFavor,
+    Summon,
+    Serenity,
+    Mutate,
+    Renewal,
+    Goad,
+    Kamikaze,
+    Berserker,
+    Crit,
+    Hunger,
+    Scattershot,
+    Farmer,
+    Buster,
+    Mason,
+    Paralyze,
+    Curse,
+    Doom,
+    Gambit,
+    Silence,
+    Stealth,
+    Smite,
+    Sacrifice,
+    Mimic,
+    GeneralBane,
+    Blackhole,
+    Nuclear,
+    Endgame,
+    Fodder,
+    Repair,
+    GeneralBoon,
+    WhiteFlag,
+    Eclipse,
+    GeneralAegis,
+    Fear,
+    Toxic,
+    Shhh,
+    Swap,
+    Hex,
+    Ban,
+    Consume,
+    Merge,
+    Drain,
+    Warcry,
+    StackedOdds,
+    Coward,
+    Illusion,
+    Heckler,
+    Overtime,
+    Assassin,
+    Blitz,
+    Executioner,
+    Limitless,
+    Shield,
+    Rally,
+    Feast,
+    Truesight,
+    Heathen,
+    Evasive,
+    FleetFooted,
+    Stifle,
+    Timecrunch,
+    Taxes,
+    Rage,
+    Duel,
+    GeneralWard,
+    Subsidy,
+    Stalemate,
+    Morph,
+    Tank,
+    Guardian,
+    Respite,
+    Savings,
+    Flourish,
+}
+
+public enum AbilityRequirements
+{
+    AtTheStartOfTurn,
+    AtTheEndOfTurn,
+    OnAttack,
+    Goded
+}
+
 [System.Serializable]
 public class Card : MonoBehaviour
 {
-    
+
     public int id;
     public string ergoTokenId;
     public long ergoTokenAmount;
     public string cardName;
-    public string cardDescription;  
+    public string cardDescription;
     public int attack;
     public int HP;
     public int gold;
@@ -44,6 +130,8 @@ public class Card : MonoBehaviour
     public Sprite cardFrame;
     public bool isAlreadyAttacked;
     public int dropPosition = 0;
+    public CardAbility ability;
+    public AbilityRequirements requirements;
 
 
     public int cardId;
@@ -61,7 +149,7 @@ public class Card : MonoBehaviour
     public TMP_Text levelRequiredText;
     public Image image;
     public Image frame;
-    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName,string cDescription, int cAttack, int cHP,int cGold, int cXP, int cFieldLimit, string cClan, CardLevel cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass)
+    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName, string cDescription, int cAttack, int cHP, int cGold, int cXP, int cFieldLimit, string cClan, CardLevel cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass, CardAbility cAbility, AbilityRequirements req)
     {
         cardId = identity;
         cId.text = identity.ToString();
@@ -78,7 +166,8 @@ public class Card : MonoBehaviour
         levelRequiredText.text = cLevelRequired.ToString();
         image.sprite = cImage;
         frame.sprite = cFrame;
-
+        ability = cAbility;
+        
         id = identity;
         cId.text = identity.ToString();
         ergoTokenId = ergoId;
@@ -91,7 +180,7 @@ public class Card : MonoBehaviour
         XP = cXP;
         fieldLimit = cFieldLimit;
 
-        if(fieldLimit == 8)
+        if (fieldLimit == 8)
         {
             RectTransform fieldLimitTransform = fieldLimitText.GetComponent<RectTransform>();
             fieldLimitTransform.rotation = Quaternion.Euler(0, 0, 90);
@@ -102,9 +191,10 @@ public class Card : MonoBehaviour
         image.sprite = cImage;
         frame.sprite = cFrame;
         cardClass = cardclass;
+        requirements = req;
     }
 
-    public void SetMiniCard(int identity, string ergoId, long ergoAmount, string cName, int cAttack, int cHP, int cGold, int cXP, Sprite cImage)
+    public void SetMiniCard(int identity, string ergoId, long ergoAmount, string cName, int cAttack, int cHP, int cGold, int cXP, Sprite cImage, CardAbility cAbility, AbilityRequirements req)
     {
         cardId = identity;
         cId.text = identity.ToString();
@@ -127,13 +217,15 @@ public class Card : MonoBehaviour
         gold = cGold;
         XP = cXP;
         image.sprite = cImage;
+        ability = cAbility;
+        requirements = req;
     }
 
     public bool DealDamage(int damage, GameObject card)
     {
         bool destroyed = false;
         HP -= damage;
-        if(HP <= 0)
+        if (HP <= 0)
         {
             Destroy(card.gameObject);
             destroyed = true;
@@ -161,4 +253,14 @@ public class Card : MonoBehaviour
     {
         this.dropPosition = dropvalue;
     }
+
+    public virtual void UseAbility()
+    {
+        Debug.Log("Base ability used.");
+    }
+    public virtual void UseAbility(bool value)
+    {
+        Debug.Log("Base ability used.");
+    }
+
 }
