@@ -163,6 +163,7 @@ public class MainMenuUIManager : MonoBehaviour
     private float messageInterval = 0.2f; // 5 messages per second
     private float cooldownTime = 5f; // 2 seconds timeout
     private bool isCooldown;
+    public TMP_Text onlineCountTMP;
 
     [SerializeField]
     private float chatResize;
@@ -243,7 +244,6 @@ public class MainMenuUIManager : MonoBehaviour
 
         if (PlayerPrefs.GetString("DisableDeleteDeckWarning") == "T")
         {
-            Debug.Log(PlayerPrefs.GetString("DisableDeleteDeckWarning"));
             settingsDeleteDeckEnabled.SetActive(true);
         }
 
@@ -352,26 +352,10 @@ public class MainMenuUIManager : MonoBehaviour
         FriendsListenForNewMessages();
         yield return StartCoroutine(CountGlobalMessageTotal());
         GlobalListenForNewMessages();
+
+        yield return StartCoroutine(CountOnlineUsers());
     }
 
-/*    IEnumerator OnlinePlayerCount() //this is only pulling ~21 users and I'm not sure why
-    {
-        var allUsers = dbReference.Child("users").OrderByChild("username").GetValueAsync();
-        yield return new WaitUntil(predicate: () => allUsers.IsCompleted);
-        if (allUsers.IsFaulted)
-        {
-            Debug.LogError("Error reading data: " + allUsers.Exception);
-        }
-        else if (allUsers.IsCompleted) 
-        {
-            DataSnapshot onlineUsers = allUsers.Result;
-            Debug.Log(onlineUsers.ChildrenCount); //only pullng in 21 people... unsure why at this time
-            foreach (DataSnapshot onlineUser in onlineUsers.Children)
-            {
-                string userId = onlineUser.Key;
-            }
-        }
-    }*/
     public void PresenceCheck() //todo - figure out presence check
     {
 
@@ -381,18 +365,57 @@ public class MainMenuUIManager : MonoBehaviour
 
     private void CheckForDisconnect(object sender, ValueChangedEventArgs args)
     {
-        var checkBool = args.Snapshot;
-
-        if (checkBool == null)
+        if (args.DatabaseError != null)
         {
-            return; //todo: add error checking
+            Debug.LogError(args.DatabaseError.Message);
+            return;
         }
-        else if ((bool)checkBool.GetValue(true))
+
+        var connected = args.Snapshot.Value as bool?; // Safely cast to nullable bool
+
+        if (connected == null)
         {
-            FirebaseDatabase.DefaultInstance.GetReference("users").Child(userID).Child("online").OnDisconnect().SetValue("F");
-            FirebaseDatabase.DefaultInstance.GetReference("users").Child(userID).Child("online").SetValueAsync("T");
+            return;
+        }
+        else if (connected.Value)
+        {
+            var userOnlineRef = FirebaseDatabase.DefaultInstance.GetReference("users").Child(userID).Child("online");
+            userOnlineRef.OnDisconnect().SetValue("F");
+            userOnlineRef.SetValueAsync("T");
         }
     }
+
+    public IEnumerator CountOnlineUsers()
+    {
+        DatabaseReference usersRef = FirebaseDatabase.DefaultInstance.GetReference("users");
+        var query = usersRef.OrderByChild("online").EqualTo("T");
+        var getOnlineUsersTask = query.GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => getOnlineUsersTask.IsCompleted);
+        if (getOnlineUsersTask.IsFaulted)
+        {
+            Debug.LogError("Error getting online users: " + getOnlineUsersTask.Exception);
+        }
+        else if (getOnlineUsersTask.IsCompleted)
+        {
+            DataSnapshot snapshot = getOnlineUsersTask.Result;
+            int onlineCount = 0;
+
+            foreach (DataSnapshot userSnapshot in snapshot.Children)
+            {
+                if (userSnapshot.HasChild("online") && userSnapshot.Child("online").Value.ToString() == "T")
+                {
+                    onlineCount++;
+                }
+            }
+
+            onlineCountTMP.text = "Online: " + onlineCount.ToString();
+            Debug.Log($"Number of online users: {onlineCount}");
+        }
+    }
+
+
+
 
     private void Update() //various windows exits and checks
     {
