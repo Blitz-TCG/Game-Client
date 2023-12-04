@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -5,6 +7,9 @@ public class AudioManager : MonoBehaviour
 {
     public AudioMixer mixer;
     public static AudioManager instance;
+
+    public AudioSource audioSource;
+    public AudioClip[] tracks;
 
     private void Awake()
     {
@@ -22,6 +27,9 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
+
+        StartCoroutine(PlayMusicTracks());
+
         if (PlayerPrefs.HasKey("MasterVolume"))
         {
             mixer.SetFloat("MasterVol", PlayerPrefs.GetFloat("MasterVolume"));
@@ -56,6 +64,36 @@ public class AudioManager : MonoBehaviour
             PlayerPrefs.SetFloat("EffectsVolume", -80 + 7 * (100 / 13));
             PlayerPrefs.SetFloat("EffectsVolumeTier", 7);
             PlayerPrefs.Save();
+        }
+    }
+
+    private IEnumerator PlayMusicTracks()
+    {
+        List<AudioClip> playlist = new List<AudioClip>(tracks); // Create a list from the array for easy manipulation
+
+        while (true) // Loop indefinitely
+        {
+            Shuffle(playlist); // Shuffle the playlist before replaying
+
+            foreach (AudioClip track in playlist)
+            {
+                audioSource.clip = track; // Set the current track
+                audioSource.Play(); // Play the current track
+
+                yield return new WaitForSeconds(audioSource.clip.length); // Wait for the track to finish
+            }
+        }
+    }
+
+    // Method to shuffle the playlist
+    private void Shuffle(List<AudioClip> playlist)
+    {
+        for (int i = 0; i < playlist.Count; i++)
+        {
+            AudioClip temp = playlist[i];
+            int randomIndex = Random.Range(i, playlist.Count);
+            playlist[i] = playlist[randomIndex];
+            playlist[randomIndex] = temp;
         }
     }
 
