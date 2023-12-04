@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
-
+using Newtonsoft.Json;
 
 public class MainMenuUIManager : MonoBehaviour
 
@@ -42,6 +42,8 @@ public class MainMenuUIManager : MonoBehaviour
     [Header("Info References")]
     [SerializeField]
     private TMP_Text usernameText;
+    [SerializeField]
+    private TMP_Text levelText;
     [Space(5f)]
 
     [Header("Profile Picture References")]
@@ -103,6 +105,29 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField]
     public GameObject settingsDeleteDeckEnabled;
     [Space(5f)]
+
+    [Header("Metrics")]
+    [SerializeField]
+    public GameObject metricsUI;
+    [SerializeField]
+    public TMP_Text matchesPlayedData;
+    [SerializeField]
+    public TMP_Text timePlayedData;
+    [SerializeField]
+    public TMP_Text turnsTakenData;
+    [SerializeField]
+    public TMP_Text experiencegainedData;
+    [SerializeField]
+    public TMP_Text masqueradesData;
+    [SerializeField]
+    public TMP_Text theOldKingdomData;
+    [SerializeField]
+    public TMP_Text fairytalesData;
+    [SerializeField]
+    public TMP_Text darkMatterData;
+    [SerializeField]
+    public TMP_Text tinkerersData;
+
 
     [Header("Friends List")]
     [SerializeField]
@@ -419,13 +444,15 @@ public class MainMenuUIManager : MonoBehaviour
 
     private void Update() //various windows exits and checks
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !changePfpUI.activeSelf && !profileDropdown.activeSelf && generalChatDropdown.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !changePfpUI.activeSelf &&
+            !metricsUI.activeSelf && !profileDropdown.activeSelf && generalChatDropdown.activeSelf) //closing chat dropdown last
         {
             generalChatDropdown.SetActive(false);
             cursorManager.AudioClickButtonStandard();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !changePfpUI.activeSelf && profileDropdown.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !changePfpUI.activeSelf && 
+            !metricsUI.activeSelf && profileDropdown.activeSelf) //closing profile dropdown second to last
         {
             profileDropdown.SetActive(false);
             cursorManager.AudioClickButtonStandard();
@@ -434,7 +461,7 @@ public class MainMenuUIManager : MonoBehaviour
         if (changePfpUI.activeSelf && changePfpUI != null)
         {
 
-            if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf)
+            if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !metricsUI.activeSelf)
             {
                 changePfpUI.SetActive(false);
                 cursorManager.AudioClickButtonStandard();
@@ -504,8 +531,14 @@ public class MainMenuUIManager : MonoBehaviour
             SettingsBack();
         }
 
+        if (metricsUI.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+        {
+            cursorManager.AudioClickButtonStandard();
+            MetricsBack();
+        }
 
-        if (!friendsUI.activeSelf && !settingsUI.activeSelf)
+
+        if (!friendsUI.activeSelf && !settingsUI.activeSelf && !metricsUI.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
             {
@@ -552,7 +585,7 @@ public class MainMenuUIManager : MonoBehaviour
             }
         }
 
-        if (!friendsUI.activeSelf && !settingsUI.activeSelf && !messengerInputField.isFocused)
+        if (!friendsUI.activeSelf && !settingsUI.activeSelf && !metricsUI.activeSelf && !messengerInputField.isFocused)
         {
             if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
             {
@@ -569,6 +602,7 @@ public class MainMenuUIManager : MonoBehaviour
             usernameText.text = name;
 
             StartCoroutine(LoadImage());
+            StartCoroutine(LoadLevel());
         }
     }
 
@@ -644,6 +678,64 @@ public class MainMenuUIManager : MonoBehaviour
             {
                 profilePicture.GetComponent<RawImage>().texture = pfpDefault.GetComponent<RawImage>().texture;
                 profileImageLoading.SetActive(false);
+            }
+        }
+    }
+    private int CalculateLevelFromXp(int xp) //y = 25x2 - 50x + 25, starting at level 1 of 0 xp and hitting level 2 at 25 xp
+    {
+        if (xp < 25) return 1;
+
+        int level = (int)Math.Floor((Math.Sqrt(xp) + 5) / 5);
+        return level;
+    }
+
+    private int XpRequiredForLevel(int userLevel, int currentXp)
+    {
+        int totalXpForNextLevel = 25 * (userLevel + 1) * (userLevel + 1) - 50 * (userLevel + 1) + 25;
+
+        return totalXpForNextLevel - currentXp;
+    }
+
+
+    private IEnumerator LoadLevel()
+    {
+        var xpAmount = dbReference.Child("open").Child(userID).Child("xpOpen").GetValueAsync();
+        yield return new WaitUntil(predicate: () => xpAmount.IsCompleted);
+
+        if (xpAmount.IsFaulted)
+        {
+            Debug.Log("Error fetching user's experience.");
+        }
+        else if (xpAmount.IsCompleted)
+        {
+            DataSnapshot snapshot = xpAmount.Result;
+
+            Debug.Log(xpAmount.Result.Value);
+            int xp;
+            if(xpAmount.Result.Value != null)
+            {
+                if (int.TryParse(snapshot.Value.ToString(), out xp))
+
+                {
+                    Debug.Log("xp returned: " + xp);
+                    int userLevel = CalculateLevelFromXp(xp);
+                    Debug.Log("User Level: " + userLevel);
+
+                    int xpNeededForNextLevel = XpRequiredForLevel(userLevel, xp);
+
+                    Debug.Log("xp needed for next level: " + xpNeededForNextLevel);
+                    levelText.text = "LVL " + userLevel.ToString();
+                }
+                else
+                {
+                    Debug.Log("Unable to parse use experience.");
+                    levelText.text = "LVL 1";
+                }
+            }
+            else if (xpAmount.Result.Value == null)
+            {
+                Debug.Log("User has never played a match so experience is null.");
+                levelText.text = "LVL 1";
             }
         }
     }
@@ -773,8 +865,23 @@ public class MainMenuUIManager : MonoBehaviour
         settingsQualityGrouper.SetActive(false);
     }
 
+    public void MetricsBack() //closer settings and all related ui
+    {
+        cursorManager.CursorNormal();
+        metricsUI.SetActive(false);
+    }
+
+    public void MetricsOpen() //open a user's friends list and retrieve their current list of friends
+    {
+        metricsUI.SetActive(true);
+
+        StartCoroutine(RetrieveMetrics());
+
+    }
+
+
     //
-    //this marks the beginning of friends list related dev for retrieving firebase info
+    //this marks the beginning of friends list and metrics related dev for retrieving firebase info
     //
     public void FriendsOpen() //open a user's friends list and retrieve their current list of friends
     {
@@ -892,6 +999,77 @@ public class MainMenuUIManager : MonoBehaviour
         friendsBlockAddSearch.SetActive(false);
         friendsBlockRemoveSearch.SetActive(false);
         ClearUI();
+    }
+
+    public IEnumerator RetrieveMetrics()
+    {
+        Debug.Log(FirebaseManager.instance.user.UserId);
+        var metricsLoad = FirebaseDatabase.DefaultInstance.GetReference("open").Child(FirebaseManager.instance.user.UserId).GetValueAsync();
+        yield return new WaitUntil(predicate: () => metricsLoad.IsCompleted);
+        if (metricsLoad.IsFaulted)
+        {
+            Debug.Log("Unable to load metrics data.");
+        }
+        else if (metricsLoad.IsCompleted && metricsLoad.Result.Value != null)
+        {
+            Debug.Log("Loaded metrics data successfully.");
+
+            DataSnapshot dataSnapshot = metricsLoad.Result;
+            var fullJSON = JsonConvert.DeserializeObject(dataSnapshot.GetRawJsonValue());
+            PlayerMetrics metricsData = JsonUtility.FromJson<PlayerMetrics>(fullJSON.ToString());
+
+            matchesPlayedData.text = (metricsData.margoDeckWinOpen + metricsData.margoDeckLossOpen + metricsData.miosDeckWinOpen + metricsData.miosDeckLossOpen + metricsData.nasseDeckWinOpen + 
+                metricsData.nasseDeckLossOpen + metricsData.voidDeckWinOpen + metricsData.voidDeckLossOpen + metricsData.tootDeckWinOpen + metricsData.tootDeckLossOpen).ToString();
+            timePlayedData.text = (Math.Ceiling((decimal)metricsData.totalTimePlayedOpen / 60 / 60 * 10) / 10).ToString("F1") + " hrs";
+            turnsTakenData.text = metricsData.totalTurnsTakenOpen.ToString();
+            experiencegainedData.text = metricsData.xpOpen.ToString();
+            if ((metricsData.margoDeckWinOpen + metricsData.margoDeckLossOpen) > 0)
+            {
+                masqueradesData.text = ((double)metricsData.margoDeckWinOpen / (metricsData.margoDeckWinOpen + metricsData.margoDeckLossOpen) * 100).ToString("F2") + "%";
+            }
+            else
+            {
+                masqueradesData.text = "0%";
+            }
+            if ((metricsData.miosDeckWinOpen + metricsData.miosDeckLossOpen) > 0)
+            {
+                theOldKingdomData.text = ((double)metricsData.miosDeckWinOpen / (metricsData.miosDeckWinOpen + metricsData.miosDeckLossOpen) * 100).ToString("F2") + "%";
+            }
+            else
+            {
+                theOldKingdomData.text = "0%";
+            }
+            if ((metricsData.nasseDeckLossOpen + metricsData.nasseDeckLossOpen) > 0)
+            {
+                fairytalesData.text = ((double)metricsData.nasseDeckWinOpen / (metricsData.nasseDeckWinOpen + metricsData.nasseDeckLossOpen) * 100).ToString("F2") + "%";
+            }
+            else
+            {
+                fairytalesData.text = "0%";
+            }
+            if ((metricsData.voidDeckWinOpen + metricsData.voidDeckLossOpen) > 0)
+            {
+                darkMatterData.text = ((double)metricsData.voidDeckWinOpen / (metricsData.voidDeckWinOpen + metricsData.voidDeckLossOpen) * 100).ToString("F2") + "%";
+            }
+            else
+            {
+                darkMatterData.text = "0%";
+            }
+            if ((metricsData.tootDeckWinOpen + metricsData.tootDeckLossOpen) > 0)
+            {
+                tinkerersData.text = ((double)metricsData.tootDeckWinOpen / (metricsData.tootDeckWinOpen + metricsData.tootDeckLossOpen) * 100).ToString("F2") + "%";
+            }
+            else
+            {
+                tinkerersData.text = "0%";
+            }
+
+
+        }
+        else if (metricsLoad.IsCompleted && metricsLoad.Result.Value == null)
+        {
+            Debug.Log("No metrics yet generated for this user: " + FirebaseManager.instance.user.UserId);
+        }
     }
 
     public void GlobalChat()
@@ -2505,5 +2683,44 @@ public class MainMenuUIManager : MonoBehaviour
         {
             dbReference.Child("globalChat").LimitToLast(1).ChildAdded -= newMessageListener2;
         }
+    }
+
+    public class PlayerMetrics
+    {
+        public int xpOpen;
+        public int mmrOpen;
+        public int totalTimePlayedOpen;
+        public int totalTurnsTakenOpen;
+        public int margoDeckWinOpen;
+        public int margoDeckLossOpen;
+        public int miosDeckWinOpen;
+        public int miosDeckLossOpen;
+        public int nasseDeckWinOpen;
+        public int nasseDeckLossOpen;
+        public int voidDeckWinOpen;
+        public int voidDeckLossOpen;
+        public int tootDeckWinOpen;
+        public int tootDeckLossOpen;
+
+        public PlayerMetrics(int xpOpen, int mmrOpen, int totalTimePlayedOpen, int totalTurnsTakenOpen, int margoDeckWinOpen, int margoDeckLossOpen,
+            int miosDeckWinOpen, int miosDeckLossOpen, int nasseDeckWinOpen, int nasseDeckLossOpen, int voidDeckWinOpen, int voidDeckLossOpen,
+            int tootDeckWinOpen, int tootDeckLossOpen)
+        {
+            this.xpOpen = xpOpen;
+            this.mmrOpen = mmrOpen;
+            this.totalTimePlayedOpen = totalTimePlayedOpen;
+            this.totalTurnsTakenOpen = totalTurnsTakenOpen;
+            this.margoDeckWinOpen = margoDeckWinOpen;
+            this.margoDeckLossOpen = margoDeckLossOpen;
+            this.miosDeckWinOpen = miosDeckWinOpen;
+            this.miosDeckLossOpen = miosDeckLossOpen;
+            this.nasseDeckWinOpen = nasseDeckWinOpen;
+            this.nasseDeckLossOpen = nasseDeckLossOpen;
+            this.voidDeckWinOpen = voidDeckWinOpen;
+            this.voidDeckLossOpen = voidDeckLossOpen;
+            this.tootDeckWinOpen = tootDeckWinOpen;
+            this.tootDeckLossOpen = tootDeckLossOpen;
+        }
+
     }
 }

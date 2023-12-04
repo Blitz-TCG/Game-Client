@@ -186,7 +186,7 @@ public class databaseExampleDeleteAfterReview : MonoBehaviour
         //FirebaseUser winner = FirebaseManager.instance.user; //update this to the winning user
         //FirebaseUser loser = FirebaseManager.instance.user; //update this to the losing user
 
-        winnerHardSet = "00ZrYBVWIzPHWIYTXTiNKig7P8z1";
+        winnerHardSet = "u6tKgdbNpfcGOWw9Zt1lMnwllo22";
         loserHardSet = "0VbXHY9ASnbBs8pMlNYMnGZz0wg1";
         gameMode = "open"; //for Skirmish matches, this should always be set to 'open', for Blitz matches (coming later), it will be set to the 'season#'.
         winnerDeck = "Fairytales"; //update this with the the actual deck the winning player used during the match
