@@ -681,7 +681,7 @@ public class MainMenuUIManager : MonoBehaviour
             }
         }
     }
-    private int CalculateLevelFromXp(int xp) //y = 25x2 - 50x + 25, starting at level 1 of 0 xp and hitting level 2 at 25 xp
+    private int CalculateLevelFromXp(int xp) //y = 25x^2 - 50x + 25, starting at level 1 of 0 xp and hitting level 2 at 25 xp, etc.
     {
         if (xp < 25) return 1;
 
@@ -694,6 +694,10 @@ public class MainMenuUIManager : MonoBehaviour
         int totalXpForNextLevel = 25 * (userLevel + 1) * (userLevel + 1) - 50 * (userLevel + 1) + 25;
 
         return totalXpForNextLevel - currentXp;
+
+        //for matchmaking, we'd just take this totalXpForNextLevel amount and have that be the end of the leveling bar
+        //the start of the leveling bar would just be int currentLevelStartingXp = 25 * (userLevel) * (userLevel) - 50 * (userLevel) + 25;
+        //and then we would just need to know the xpAmount.Result.Value to know how much xp the user currently has to then add the new xp to it, i.e. 400 xp + 25xp gained from the match
     }
 
 
