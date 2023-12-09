@@ -955,8 +955,8 @@ GameObject:
   - component: {fileID: 4683404186920665370}
   - component: {fileID: 3499238095833450771}
   m_Layer: 5
-  m_Name: NPC_Enemy
-  m_TagString: NPC_Enemy
+  m_Name: NPC_Enemy_1
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

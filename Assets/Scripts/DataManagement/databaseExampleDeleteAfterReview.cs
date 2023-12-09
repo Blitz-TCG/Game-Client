@@ -111,10 +111,10 @@ public class databaseExampleDeleteAfterReview : MonoBehaviour
         StartCoroutine(MatchDataUpdates1());
     }
 
-    public IEnumerator MatchDataUpdates(string winnerDeckName, string loserDeckName, int matchLen, int winnerTurns, int loserTurns, string status)
+    public IEnumerator MatchDataUpdates(string winnerId, string loserId, string winnerDeckName, string loserDeckName, int matchLen, int winnerTurns, int loserTurns, string status)
     {
-        Debug.Log(winnerDeckName + " " + loserDeckName + " " +  matchLen + " " +  winnerTurns + " " +  loserTurns + " " + status);
-        yield return StartCoroutine(PushMatchDataToFirebase(winnerDeckName,loserDeckName,matchLen, winnerTurns, loserTurns, status)); //first update the match data itself
+        Debug.Log( winnerId + " winner id " + loserId + " loserid " + winnerDeckName + " " + loserDeckName + " " +  matchLen + " " +  winnerTurns + " " +  loserTurns + " " + status);
+        yield return StartCoroutine(PushMatchDataToFirebase(winnerId, loserId,winnerDeckName,loserDeckName,matchLen, winnerTurns, loserTurns, status)); //first update the match data itself
         
         //yield return StartCoroutine(LoadPlayerDataFromFirebase()); //then load each user's current data
         //Debug.Log(" load player data completed ==>");
@@ -128,14 +128,14 @@ public class databaseExampleDeleteAfterReview : MonoBehaviour
         yield return StartCoroutine(PushPlayerDataToFirebase()); //then update the specific player data for each user
     }
 
-    public IEnumerator PushMatchDataToFirebase(string winnerDeckName, string loserDeckName, int matchLen, int winnerTurns, int loserTurns, string status) //these are the values I need all pointed to the dynamic values generated and stored during a match
+    public IEnumerator PushMatchDataToFirebase(string winnerId, string loserId, string winnerDeckName, string loserDeckName, int matchLen, int winnerTurns, int loserTurns, string status) //these are the values I need all pointed to the dynamic values generated and stored during a match
     {
         //I hard set some of these varibles for testing purposes, but they should all be using the real match data.
         //FirebaseUser winner = FirebaseManager.instance.user; //update this to the winning user
         //FirebaseUser loser = FirebaseManager.instance.user; //update this to the losing user
 
-        winnerHardSet = "00ZrYBVWIzPHWIYTXTiNKig7P8z1";
-        loserHardSet = "0VbXHY9ASnbBs8pMlNYMnGZz0wg1";
+        winnerHardSet = winnerId;
+        loserHardSet = loserId;
         gameMode = "open"; //for Skirmish matches, this should always be set to 'open', for Blitz matches (coming later), it will be set to the 'season#'.
         winnerDeck = winnerDeckName; //update this with the the actual deck the winning player used during the match
         loserDeck = loserDeckName; //update this with the the actual deck the loser player used during the match

@@ -367,6 +367,11 @@ public class MainMenuUIManager : MonoBehaviour
         {
             PhotonNetwork.Disconnect();
         }
+
+        Debug.Log(" fire base code " + FirebaseDatabase.DefaultInstance.GetHashCode());
+        Debug.Log("user id " + FirebaseDatabase.DefaultInstance.GetReference("users").Child(userID));
+        Debug.Log("user id " + userID);
+        
     }
 
     IEnumerator RetrieveFriendsforMessaging()
