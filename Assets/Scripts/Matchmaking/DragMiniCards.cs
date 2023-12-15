@@ -245,7 +245,8 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
     
     public void EndForceTurn()
     {
-        Card card = obj.transform.GetComponentInChildren<Card>();
+        if (obj == null) return;
+        Card card = obj?.transform.GetComponentInChildren<Card>();
         
         int cardParentPos = int.Parse(endSubParent.Split(" ")[2]) - 1;
         GameObject playerHand = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Hand").gameObject;

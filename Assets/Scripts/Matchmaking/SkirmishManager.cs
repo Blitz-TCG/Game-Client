@@ -63,6 +63,7 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
 
     public int deckId;
     public int deckCountSkirmish;
+    private AudioManager audioManager;
 
     private void Awake()
     {
@@ -193,6 +194,16 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("photon room " + PhotonNetwork.CurrentRoom.Name);
         }
+
+        Debug.Log("GameBoardManager.completeGame " + GameBoardManager.completeGame);
+        
+        if (GameBoardManager.completeGame)
+        {
+            Debug.Log("GameBoardManager.completeGame " + GameBoardManager.completeGame);
+            audioManager = GameObject.FindObjectOfType<AudioManager>();
+            audioManager.PlayMusicTracks();
+        }
+        GameBoardManager.completeGame = false;
     }
 
     public void Update()

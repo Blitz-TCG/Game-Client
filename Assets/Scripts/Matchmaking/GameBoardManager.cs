@@ -149,15 +149,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private bool isSpawnClient = false;
     private string winnerPlayerId = "", loserPlayerId = "";
     private bool completedActivate = false;
+    private AudioManager audioManager;
+    public static bool completeGame = false;
+    private GameObject currentXP;
+    private GameObject totalXP;
 
     #endregion
 
     private void Start()
     {
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
+        StartCoroutine(audioManager.PlayInGameMusic());
         Debug.LogWarning("start called ");
         //PhotonManager.RemoveSceneFromBuildIndex();
         isWallDestroyed = false;
         endGame = false;
+        MainMenuUIManager.instance.isUserXPLoaded = false;
         skirmishManager = SkirmishManager.instance;
         gameBoardParent = GameObject.Find("Game Board Parent");
         countDownPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Global Countdown").GetChild(0).gameObject;
@@ -184,7 +191,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             //PlayerPrefs.SetInt("masterCount", 0);
             customProp["totalMasterTurn"] = 0;
             customProp["masterUserId"] = FirebaseManager.instance.user.UserId;
+            customProp["masterCurrentXP"] = MainMenuUIManager.instance.currentUserXP;
+            customProp["masterCurrentLevel"] = MainMenuUIManager.instance.currentUserLevel;
+            customProp["masterRequiredXPForNext"] = MainMenuUIManager.instance.nextXpRequired;
             Debug.Log(" current master userId " + FirebaseManager.instance.user.UserId);
+            Debug.Log(" current master currentUserXP " + MainMenuUIManager.instance.currentUserXP);
+            Debug.Log(" current master currentUserLevel " + MainMenuUIManager.instance.currentUserLevel);
+            Debug.Log(" current master max " + MainMenuUIManager.instance.maxXPForCurrentLevel);
+            Debug.Log(" current master nextXpRequired " + MainMenuUIManager.instance.nextXpRequired);
             PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
         }
 
@@ -193,8 +207,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             customProp["client"] = true;
             //PlayerPrefs.SetInt("clientCount", 0);
             customProp["totalClientTurn"] = 0;
+            customProp["clientCurrentXP"] = MainMenuUIManager.instance.currentUserXP;
+            customProp["clientCurrentLevel"] = MainMenuUIManager.instance.currentUserLevel;
+            customProp["clientRequiredXPForNext"] = MainMenuUIManager.instance.nextXpRequired;
             customProp["clientUserId"] = FirebaseManager.instance.user.UserId;
             Debug.Log(" current master client id " + FirebaseManager.instance.user.UserId);
+            Debug.Log(" current master client currentUserXP " + MainMenuUIManager.instance.currentUserXP);
+            Debug.Log(" current master client currentUserLevel " + MainMenuUIManager.instance.currentUserLevel);
+            Debug.Log(" current master client max " + MainMenuUIManager.instance.maxXPForCurrentLevel);
+            Debug.Log(" current master client nextXpRequired " + MainMenuUIManager.instance.nextXpRequired);
             PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
         }
 
@@ -231,6 +252,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         mode = GameMode.OpenToPlay;
         leaveBtn = false;
         isMatchNotLoaded  = false;
+        completeGame = false;
         ResetAllStaticValues();
         Debug.Log("start called " + PhotonNetwork.IsMasterClient + " photon player " + PhotonNetwork.LocalPlayer.NickName);
         Invoke("LeaveBothPlayerAccidently", 45f);
@@ -550,6 +572,30 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }
             }
         }
+
+        if(databaseExampleDeleteAfterReview.instance.isPalyerDataUpadated)
+        {
+            databaseExampleDeleteAfterReview.instance.isPalyerDataUpadated = false;
+            Debug.Log("databaseExampleDeleteAfterReview.instance.isPalyerDataUpadated in update");
+            StartCoroutine(MainMenuUIManager.instance.LoadLevel());
+        }
+
+        if (MainMenuUIManager.instance.isUserXPLoaded)
+        {
+            Debug.Log("MainMenuUIManager.instance.isUserXPLoaded");
+            MainMenuUIManager.instance.isUserXPLoaded = false;
+            Debug.Log(MainMenuUIManager.instance.currentUserXP + " user Xp ");
+            Debug.Log(MainMenuUIManager.instance.currentUserLevel + " user level ");
+            Debug.Log(MainMenuUIManager.instance.nextXpRequired + " next required ");
+            xpSlider = resultPanel.transform.GetChild(0).Find("XP Progress Bar").GetComponent<Slider>();
+            currentXP = xpSlider.gameObject.transform.Find("xp").gameObject;
+            totalXP = xpSlider.gameObject.transform.Find("total").gameObject;
+            xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
+            Debug.Log(" current xp " + currentXP + " total xp " + totalXP + " xp slider " + xpSlider.name);
+            currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+            totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+            xpSlider.interactable = false;
+        }
     }
 
     private void CalculateWinner()
@@ -559,10 +605,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         timeDown.PauseTimer("down");
         timeUp.PauseTimer("up");
         pv.RPC("CalculateScore", RpcTarget.All);
-        int va = PhotonNetwork.CountOfRooms;
-        int va1 = PhotonNetwork.CountOfPlayersOnMaster;
-        int va2 = PhotonNetwork.CountOfPlayersInRooms;
-        int val3 = PhotonNetwork.CountOfPlayers;
     }
 
     [PunRPC]
@@ -595,6 +637,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GameObject enemyProfile = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Profile").gameObject;
         int enemyHealth = int.Parse(enemyProfile.transform.Find("Enemy Deck Health").Find("Remaining Health").GetComponent<TMP_Text>().text);
         xpSlider = resultPanel.transform.GetChild(0).Find("XP Progress Bar").GetComponent<Slider>();
+        currentXP = xpSlider.gameObject.transform.Find("xp").gameObject;
+        totalXP = xpSlider.gameObject.transform.Find("total").gameObject;
+        currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+        totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
         xpSlider.interactable = false;
         string winnerName = "";
         int turnCounter = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"];
@@ -608,12 +654,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         if (PhotonNetwork.IsMasterClient)
         {
             Debug.LogError(PlayerPrefs.GetInt("masterCount") + " master value " + PhotonNetwork.LocalPlayer.NickName);
-            totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+            totalTurnText.SetText(turnCounter.ToString());
             int totalPlayerGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
             int gainedMasterXp = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"];
             int totalMasterXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterXP"];
             Debug.Log(" master xp " + gainedMasterXp + " gained " + totalMasterXP + " total " + totalPlayerGold + " total gold");
-            xpSlider.value = (totalMasterXP / 2000f);
+            xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
             PlayerPrefs.SetInt("totalGold", totalPlayerGold);
             PlayerPrefs.SetInt("totalXP", totalMasterXP);
             Debug.LogError(" player health " + playerHealth + " enemy health " + enemyHealth);
@@ -641,8 +687,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerXP = masterPlayerXP;
                 loserXP = clientPlayerXP;
 
-                winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
-                loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
+                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
+                Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
+                int winnerPlayerTurn = result.Item1;
+                int loserPlayerTurn = result.Item2;
+                Debug.Log(winnerPlayerTurn + " winnerPlayerTurn " + loserPlayerTurn + " loserPlayerTurn");
+
+                winnerTurnCount = winnerPlayerTurn;
+                loserTurnCount = loserPlayerTurn;
                 Debug.Log(" winner turn count " + winnerTurnCount + " loser turn count " + loserTurnCount);
                 status = MatchStatus.Normal;
                 
@@ -650,7 +703,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 loserMmrChange = 0;
                 //winnerDeck = PhotonNetwork.LocalPlayer.GetNext();
                 experienceText.SetText(masterPlayerXP.ToString());
-                xpSlider.value = (masterPlayerXP / 2000f);
+                xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
             }
             else if (enemyHealth > playerHealth)
             {
@@ -675,14 +728,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerXP = clientPlayerXP;
                 loserXP = masterPlayerXP;
 
-                winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
-                loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
+                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
+                Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
+                int winnerPlayerTurn = result.Item1;
+                int loserPlayerTurn = result.Item2;
+                Debug.Log(winnerPlayerTurn + " winnerPlayerTurn " + loserPlayerTurn + " loserPlayerTurn");
+
+                winnerTurnCount = loserPlayerTurn;
+                loserTurnCount = winnerPlayerTurn;
                 Debug.Log(" winner turn count " + winnerTurnCount + " loser turn count " + loserTurnCount);
 
                 winnerMmrChange = 0;
                 loserMmrChange = 0;
                 experienceText.SetText(masterPlayerXP.ToString());
-                xpSlider.value = (masterPlayerXP / 2000f);
+                xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
             }
             else if (playerHealth == enemyHealth)
             {
@@ -696,14 +756,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
                 loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
 
-                winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
-                loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
+                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
+                Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
+                int winnerPlayerTurn = result.Item1;
+                int loserPlayerTurn = result.Item2;
+                Debug.Log(winnerPlayerTurn + " winnerPlayerTurn " + loserPlayerTurn + " loserPlayerTurn");
+
+                winnerTurnCount = winnerPlayerTurn;
+                loserTurnCount = loserPlayerTurn;
                 Debug.Log(" winner turn count " + winnerTurnCount + " loser turn count " + loserTurnCount);
 
                 matchStatusVal = "draw";
 
                 experienceText.SetText(masterPlayerXP.ToString());
-                xpSlider.value = (masterPlayerXP / 2000f);
+                xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
             }
             //mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer("master"));
             mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer());
@@ -713,9 +780,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             int totalClientGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
             int gainedClientXp = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"];
             int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
-            xpSlider.value = (totalClientXP / 2000f);
+            xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
             Debug.LogError(PlayerPrefs.GetInt("clientCount") + " client value " + PhotonNetwork.LocalPlayer.NickName);
-            totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+            totalTurnText.SetText(turnCounter.ToString());
             Debug.Log(" client xp " + gainedClientXp + " gained " + totalClientXP + " total " + totalClientGold + " total client gold");
             PlayerPrefs.SetInt("totalGold", totalClientGold);
             PlayerPrefs.SetInt("totalXP", totalClientXP);
@@ -730,12 +797,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
                 loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
 
-                winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
-                loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
+                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
+                Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
+                int winnerPlayerTurn = result.Item1;
+                int loserPlayerTurn = result.Item2;
+                Debug.Log(winnerPlayerTurn + " winnerPlayerTurn " + loserPlayerTurn + " loserPlayerTurn");
+
+                winnerTurnCount = loserPlayerTurn;
+                loserTurnCount = winnerPlayerTurn;
                 Debug.Log(" winner turn count " + winnerTurnCount + " loser turn count " + loserTurnCount);
 
                 experienceText.SetText(clientPlayerXP.ToString());
-                xpSlider.value = (clientPlayerXP / 2000f);
+                xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
             }
             else if (enemyHealth > playerHealth)
             {
@@ -746,12 +820,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
                 loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
 
-                winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
-                loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
+                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
+                Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
+                int winnerPlayerTurn = result.Item1;
+                int loserPlayerTurn = result.Item2;
+                Debug.Log(winnerPlayerTurn + " winnerPlayerTurn " + loserPlayerTurn + " loserPlayerTurn");
+
+                winnerTurnCount = winnerPlayerTurn;
+                loserTurnCount = loserPlayerTurn ;
                 Debug.Log(" winner turn count " + winnerTurnCount + " loser turn count " + loserTurnCount);
-                
+
                 experienceText.SetText(clientPlayerXP.ToString());
-                xpSlider.value = (clientPlayerXP / 2000f);
+                xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
             }
             else if (playerHealth == enemyHealth)
             {
@@ -762,12 +843,20 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
                 loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
 
-                winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
-                loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
+                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
+                Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
+                int winnerPlayerTurn = result.Item1;
+                int loserPlayerTurn = result.Item2;
+                Debug.Log(winnerPlayerTurn + " winnerPlayerTurn " + loserPlayerTurn + " loserPlayerTurn");
+
+                winnerTurnCount = winnerPlayerTurn;
+                loserTurnCount = loserPlayerTurn;
                 Debug.Log(" winner turn count " + winnerTurnCount + " loser turn count " + loserTurnCount);
+
                 matchStatusVal = "draw";
                 experienceText.SetText(clientPlayerXP.ToString());
-                xpSlider.value = (clientPlayerXP / 2000f);
+                xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
             }
             //mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer("client"));
             mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer());
@@ -816,27 +905,30 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log(winnerTurnCount + " winner turn count");
             Debug.Log(loserTurnCount + " loser turn count");
             Debug.Log(matchStatusVal + " status");
-            StartCoroutine(databaseExampleDeleteAfterReview.instance.MatchDataUpdates(winnerId, 
-                loserId,
-                winnerDeck, 
-                loserDeck, 
-                totalSeconds, 
-                winnerTurnCount, 
-                loserTurnCount, 
-                matchStatusVal));
+            StartCoroutine(databaseExampleDeleteAfterReview.instance.MatchDataUpdates(winnerId, loserId, winnerDeck, loserDeck, totalSeconds, winnerTurnCount, loserTurnCount, matchStatusVal));
             //matchData = new MatchData(matchId, mode, winnerId, loserId, winnerDeck, loserDeck, winnerXP, loserXP, winnerMmrChange, loserMmrChange, totalSeconds, turnCounter, status);
             Debug.Log("leave player name " + PhotonNetwork.IsMasterClient + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + matchStatusVal);
-            // Here you need to store the data
         }
 
         PhotonNetwork.AutomaticallySyncScene = false;
 
         Debug.LogError("End game after " + endGame + " player name " + PhotonNetwork.LocalPlayer);
 
+        StartCoroutine(MainMenuUIManager.instance.LoadLevel());
+        Debug.Log(MainMenuUIManager.instance.currentUserXP + " user Xp ");
+        Debug.Log(MainMenuUIManager.instance.currentUserLevel + " user level ");
+        Debug.Log(MainMenuUIManager.instance.nextXpRequired + " next required ");
         //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"] + " mgg ");
         //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"] + " cgg ");
         //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"] + " mgx ");
         //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"] + " cgx ");
+
+        //StartCoroutine(databaseExampleDeleteAfterReview.instance.GetPalyerXP(FirebaseManager.instance.user.UserId, (xp) => {
+            
+        //    Debug.Log("Winner's XP: " + xp);
+        //}));
+        //Debug.Log("xp values " + a);
+
     }
 
     [PunRPC]
@@ -2336,6 +2428,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         upMinText.SetText("0");
         upSecText.SetText("00");
         winTimer.InitTimers(30);
+        completeGame = true;
+        Debug.Log(" set the true value CompleteGame rpc " + completeGame);
     }
 
     [PunRPC]
@@ -3216,6 +3310,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             //leftPlayerPanel.SetActive(true);
             //leftPlayerText.SetText(otherPlayer.NickName + " Was left the game. Press Continue to Go Skirmish screen.");
             //pv.RPC("CalculateLeftWinner", RpcTarget.All);
+            completeGame = true;
+            Debug.Log(" set the true value left game rpc " + completeGame);
             resultPanel.transform.GetChild(0).gameObject.SetActive(true);
             winTimer.InitTimers(30);
 
@@ -3247,18 +3343,18 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 if (leavePlayer == "master")
                 {
                     Debug.Log("master leave ");
-                    totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+                    totalTurnText.SetText(turnCounter.ToString());
                     clientPlayerXP += 100;
                     experienceText.SetText(clientPlayerXP.ToString());
-                    xpSlider.value = (clientPlayerXP / 2000f);
+                    xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
                 }
                 else if (leavePlayer == "client")
                 {
                     Debug.Log(" client leave ");
-                    totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+                    totalTurnText.SetText(turnCounter.ToString());
                     masterPlayerXP += 100;
                     experienceText.SetText(masterPlayerXP.ToString());
-                    xpSlider.value = (masterPlayerXP / 2000f);
+                    xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
 
                 }
             }
@@ -3268,18 +3364,18 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 if (PhotonNetwork.IsMasterClient)
                 {
                     Debug.Log(" master remaining ");
-                    totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+                    totalTurnText.SetText(turnCounter.ToString());
                     masterPlayerXP += 100;
                     experienceText.SetText(masterPlayerXP.ToString());
-                    xpSlider.value = (masterPlayerXP / 2000f);
+                    xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
                 }
                 else
                 {
                     Debug.Log("client remaining");
-                    totalTurnText.SetText(turnCounter.ToString() + " Turns.");
+                    totalTurnText.SetText(turnCounter.ToString());
                     clientPlayerXP += 100;
                     experienceText.SetText(clientPlayerXP.ToString());
-                    xpSlider.value = (clientPlayerXP / 2000f);
+                    xpSlider.value = (MainMenuUIManager.instance.currentUserXP / MainMenuUIManager.instance.maxXPForCurrentLevel);
                 }
             }
 
@@ -3300,10 +3396,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             timeDown.PauseTimer("down");
             timeUp.PauseTimer("up");
             StopAllCoroutines();
-
-            //status = MatchStatus.PlayerQuit;
-            //string matchStatusVal = "normal";
-
 
             Debug.Log(" leave player name " + leavePlayer);
             //if (leavePlayer == "client")
@@ -3329,14 +3421,24 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 loserMmrChange = clientMmr;
                 winnerDeck = masterDeckGeneral;
                 loserDeck = clientDeckGeneral;
-                winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
-                loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
+
+                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
+                Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
+                int winnerPlayerTurn = result.Item1;
+                int loserPlayerTurn = result.Item2;
+                Debug.Log(winnerPlayerTurn + " winnerPlayerTurn " + loserPlayerTurn + " loserPlayerTurn");
+
+                winnerTurnCount = winnerPlayerTurn;
+                loserTurnCount = loserPlayerTurn;
+                Debug.Log(" winner turn count " + winnerTurnCount + " loser turn count " + loserTurnCount);
+                //winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
+                //loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
 
                 Debug.Log("leave player name " + leavePlayer + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + status + " winner turn count " + winnerTurnCount + " loser turn count ");
 
                 Debug.Log("winnerDeck " + winnerDeck + " loserDeck " + loserDeck + " totalSeconds " + totalSeconds + " winnerTurnCount " + winnerTurnCount + " loserTurnCount " + loserTurnCount);
 
-                //StartCoroutine(databaseExampleDeleteAfterReview.instance.MatchDataUpdates(winnerDeck, loserDeck, totalSeconds, winnerTurnCount, loserTurnCount, "normal"));
             }
             else if (!PhotonNetwork.IsMasterClient)
             {
@@ -3352,20 +3454,24 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 loserMmrChange = masterMmr;
                 winnerDeck = clientDeckGeneral;
                 loserDeck = masterDeckGeneral;
-                winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
-                loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
+
+                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
+                Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
+                int winnerPlayerTurn = result.Item1;
+                int loserPlayerTurn = result.Item2;
+                Debug.Log(winnerPlayerTurn + " winnerPlayerTurn " + loserPlayerTurn + " loserPlayerTurn");
+
+                winnerTurnCount = loserPlayerTurn;
+                loserTurnCount = winnerPlayerTurn;
+                Debug.Log(" winner turn count " + winnerTurnCount + " loser turn count " + loserTurnCount);
+                //winnerTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalClientTurn"];
+                //loserTurnCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMasterTurn"];
                 
                 Debug.Log("leave player name " + leavePlayer + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + status + " winner turn count " + winnerTurnCount + " loser turn count ");
-
-                Debug.Log("winnerDeck " + winnerDeck + " loserDeck " + loserDeck + " totalSeconds " + totalSeconds + " winnerTurnCount " + winnerTurnCount + " loserTurnCount " + loserTurnCount);
-
-                //StartCoroutine(databaseExampleDeleteAfterReview.instance.MatchDataUpdates(winnerDeck, loserDeck, totalSeconds, winnerTurnCount, loserTurnCount, "normal"));
+             
             }
             Debug.LogError(" leave player name " + leavePlayer);
-            Debug.Log("leave player name " + leavePlayer + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + status + " winner turn count " + winnerTurnCount + " loser turn count");
-            //matchData = new MatchData(matchId, mode, winnerId, loserId, winnerDeck, loserDeck, winnerXP, loserXP, winnerMmrChange, loserMmrChange, totalSeconds, turnCounter, status);
-            //Debug.Log("winnerDeck.ToString() " + winnerDeck + " loserDeck.ToString() " + loserDeck + " totalSeconds " + totalSeconds + " winnerTurnCount " + winnerTurnCount + " loserTurnCount " + loserTurnCount);
-            //StartCoroutine(MatchDataUpdates(winnerDeck, loserDeck, totalSeconds, winnerTurnCount, loserTurnCount, "normal"));
             Debug.Log(winnerId + " winner id");
             Debug.Log(loserId + " loser id");
             Debug.Log(winnerDeck + " winner deck");
@@ -3375,16 +3481,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log(loserTurnCount + " loser turn count");
             Debug.Log("normal " + " status");
             Debug.Log(databaseExampleDeleteAfterReview.instance + " instance ");
-            StartCoroutine(databaseExampleDeleteAfterReview.instance.MatchDataUpdates(winnerId, 
-                loserId, 
-                winnerDeck, 
-                loserDeck, 
-                totalSeconds, 
-                winnerTurnCount, 
-                loserTurnCount, 
-                "normal"));
-            //StartCoroutine(databaseExampleDeleteAfterReview.instance.LoadPlayerDataFromFirebase());
-            //StartCoroutine(databaseExampleDeleteAfterReview.instance.PushPlayerDataToFirebase());
+            StartCoroutine(databaseExampleDeleteAfterReview.instance.MatchDataUpdates(winnerId, loserId, winnerDeck, loserDeck, totalSeconds, winnerTurnCount, loserTurnCount, "normal"));
+
+            StartCoroutine(MainMenuUIManager.instance.LoadLevel());
+            Debug.Log(MainMenuUIManager.instance.currentUserXP + " user Xp ");
+            Debug.Log(MainMenuUIManager.instance.currentUserLevel + " user level ");
+            Debug.Log(MainMenuUIManager.instance.nextXpRequired + " next required ");
 
             PhotonNetwork.AutomaticallySyncScene = false;
             endGame = true;
@@ -3395,6 +3497,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             PhotonNetwork.AutomaticallySyncScene = false;
             Debug.LogError("end game true " + endGame);
+            completeGame = true;
             resultPanel = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Result panel").gameObject;
             Debug.LogError("resultPanel " + resultPanel);
             Debug.LogError("resultPanel.transform.GetChild(0) " + resultPanel.transform.GetChild(0));
@@ -3529,6 +3632,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log("leave player called");
         PhotonNetwork.AutomaticallySyncScene = false;
+        completeGame = true;
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
             //connectUsing = true;
@@ -3719,6 +3823,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.LogError("called Remaining player " + PhotonNetwork.IsMasterClient);
         PhotonNetwork.AutomaticallySyncScene = false;
+        completeGame = true;
         //SkirmishManager.instance.deckId = -1;
         connectUsing = true;
         GenerateGameObject();
@@ -3736,6 +3841,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.LogError("called in both  " + PhotonNetwork.LocalPlayer.NickName + " end game value " + endGame);
         status = MatchStatus.Normal;
+        completeGame = true;
         //SkirmishManager.instance.deckId = -1;
         connectUsing = true;
         GenerateGameObject();
@@ -3751,6 +3857,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         loadingPanel = gameBoardParent.transform.GetChild(0).gameObject;
         Debug.Log("loading panel " + loadingPanel);
+        completeGame = true;
         if (loadingPanel.activeSelf)
         {
             Debug.Log("inside loading panel " + loadingPanel.activeSelf);
@@ -3769,6 +3876,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log("match not loaded value " + isMatchNotLoaded);
         Debug.Log(" match not loaded");
         status = MatchStatus.Unknown;
+        completeGame = true;
         //SkirmishManager.instance.deckId = -1;
         SceneManager.LoadScene(3);
         if (PhotonNetwork.InRoom)
@@ -3913,5 +4021,37 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
         Debug.Log(playerDeck + " playerDeck value");
         return playerDeck;
+    }
+
+    private Tuple<int, int> GetTurnCount(int totalTurn, int randomId)
+    {
+        int masterCount = 0, clientCount = 0;
+        if(totalTurn % 2 == 0)
+        {
+            Debug.Log(totalTurn + " total turn " + " totalTurn % 2 == 0");
+            masterCount = totalTurn / 2;
+            clientCount = totalTurn / 2;
+            Debug.Log(masterCount + " master count " +  clientCount + " client count");
+        }
+        else if(totalTurn % 2 == 1) 
+        {
+            Debug.Log("totalTurn % 2 == 1");
+            if(randomId == 1)
+            {
+                Debug.Log("randomId == 1 " + randomId);
+                masterCount = (totalTurn / 2) + 1;
+                clientCount = totalTurn / 2;
+                Debug.Log(masterCount + " master count " + clientCount + " client count");
+            }
+            else if(randomId == 2)
+            {
+                Debug.Log("randomId == 2 " + randomId);
+                masterCount = totalTurn / 2;
+                clientCount = (totalTurn / 2) + 1;
+                Debug.Log(masterCount + " master count " + clientCount + " client count");
+            }
+        }
+        Debug.Log(masterCount + " final master count " + clientCount + " final client count");
+        return new Tuple<int, int>(masterCount, clientCount);
     }
 }

@@ -76,6 +76,7 @@ public class databaseExampleDeleteAfterReview : MonoBehaviour
 
     bool winnerLoaded = false;
     bool loserLoaded = false;
+    public bool isPalyerDataUpadated = false; 
 
     private void Awake() //for testing
     {
@@ -358,6 +359,41 @@ public class databaseExampleDeleteAfterReview : MonoBehaviour
         }
     }
 
+    //public IEnumerator GetPalyerXP(string userId, System.Action<int> xpCallback)
+    //{
+    //    var loadUser = FirebaseDatabase.DefaultInstance.GetReference("open").Child(userId).Child("xpOpen").GetValueAsync();
+    //    yield return new WaitUntil(() => loadUser.IsCompleted);
+
+    //    if (loadUser.IsFaulted)
+    //    {
+    //        Debug.Log("Error fetching winner's experience.");
+    //    }
+    //    else if (loadUser.IsCompleted)
+    //    {
+    //        DataSnapshot snapshot = loadUser.Result;
+
+    //        Debug.Log(loadUser.Result.Value + " result value ");
+    //        int xp;
+    //        if (loadUser.Result.Value != null)
+    //        {
+    //            if (int.TryParse(snapshot.Value.ToString(), out xp))
+    //            {
+    //                Debug.Log("Winner's XP: " + xp);
+    //                xpCallback?.Invoke(xp);
+    //            }
+    //            else
+    //            {
+    //                Debug.Log("Unable to parse winner's experience.");
+    //                xpCallback?.Invoke(-1); // Indicate an error
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Debug.Log("Winner has no XP data.");
+    //            xpCallback?.Invoke(0); // Default value
+    //        }
+    //    }
+    //}
 
     public IEnumerator PushPlayerDataToFirebase()
     {
@@ -398,6 +434,10 @@ public class databaseExampleDeleteAfterReview : MonoBehaviour
             Debug.Log("Losing user data updated successfully");
         }
 
+        if(pushWinnerData.IsCompleted && pushLoserData.IsCompleted)
+        {
+            isPalyerDataUpadated = true;
+        }
     }
 
     public void DeckChecks()

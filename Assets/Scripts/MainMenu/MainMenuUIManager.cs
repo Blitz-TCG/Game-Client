@@ -229,9 +229,15 @@ public class MainMenuUIManager : MonoBehaviour
     public List<object> messageClonesGlobal = new List<object>();
     public FriendsScrollViewAdapter friendsScrollViewAdapter;
     public BlockedScrollViewAdapter blockedScrollViewAdapter;
+    public int currentUserXP = 0;
+    public int currentUserLevel = 1;
+    public int nextXpRequired = 0;
+    public int maxXPForCurrentLevel = 0;
 
     //CursorAudio
     public CursorManager cursorManager;
+    public bool isUserXPLoaded = false;
+
     private void Awake()
     {
         //PlayerPrefs.DeleteAll(); //for testing settings values
@@ -371,7 +377,9 @@ public class MainMenuUIManager : MonoBehaviour
         Debug.Log(" fire base code " + FirebaseDatabase.DefaultInstance.GetHashCode());
         Debug.Log("user id " + FirebaseDatabase.DefaultInstance.GetReference("users").Child(userID));
         Debug.Log("user id " + userID);
-        
+        //Debug.Log("audio manager " + GameObject.FindObjectOfType<AudioManager>());
+        //Debug.Log("audio manager name " + GameObject.FindObjectOfType<AudioManager>().tracks[7].name);
+        //Debug.Log("audio manager name " + GameObject.FindObjectOfType<AudioManager>().GetComponent<AudioManager>());
     }
 
     IEnumerator RetrieveFriendsforMessaging()
@@ -694,6 +702,14 @@ public class MainMenuUIManager : MonoBehaviour
         return level;
     }
 
+    private int CalculateMaxXpForCurrentLevel(int level)
+    {
+        if(level <= 0) return 0;
+
+        int xp = 25 * level * level - 50 * level + 25;
+        return xp;
+    }
+
     private int XpRequiredForLevel(int userLevel, int currentXp)
     {
         int totalXpForNextLevel = 25 * (userLevel + 1) * (userLevel + 1) - 50 * (userLevel + 1) + 25;
@@ -706,8 +722,9 @@ public class MainMenuUIManager : MonoBehaviour
     }
 
 
-    private IEnumerator LoadLevel()
+    public IEnumerator LoadLevel()
     {
+        Debug.Log(" load level called");
         var xpAmount = dbReference.Child("open").Child(userID).Child("xpOpen").GetValueAsync();
         yield return new WaitUntil(predicate: () => xpAmount.IsCompleted);
 
@@ -719,7 +736,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             DataSnapshot snapshot = xpAmount.Result;
 
-            Debug.Log(xpAmount.Result.Value);
+            Debug.Log(xpAmount.Result.Value + " result value ");
             int xp;
             if(xpAmount.Result.Value != null)
             {
@@ -731,22 +748,40 @@ public class MainMenuUIManager : MonoBehaviour
                     Debug.Log("User Level: " + userLevel);
 
                     int xpNeededForNextLevel = XpRequiredForLevel(userLevel, xp);
+                    int maxXP = CalculateMaxXpForCurrentLevel(userLevel);
 
-                    Debug.Log("xp needed for next level: " + xpNeededForNextLevel);
+                    Debug.Log("xp needed for next level: " + xpNeededForNextLevel + " max xp: " + maxXP);
                     levelText.text = "LVL " + userLevel.ToString();
+                    currentUserXP = xp;
+                    currentUserLevel = userLevel;
+                    nextXpRequired = xpNeededForNextLevel;
+                    maxXPForCurrentLevel = maxXP;
                 }
                 else
                 {
                     Debug.Log("Unable to parse use experience.");
                     levelText.text = "LVL 1";
+                    currentUserXP = 0;
+                    currentUserLevel = -1;
+                    nextXpRequired = -1;
+                    maxXPForCurrentLevel = 0;
                 }
             }
             else if (xpAmount.Result.Value == null)
             {
                 Debug.Log("User has never played a match so experience is null.");
                 levelText.text = "LVL 1";
+
+                int xpNeededForNextLevel = XpRequiredForLevel(1, 0);
+
+                Debug.Log("xp needed for next level: " + xpNeededForNextLevel);
+                currentUserXP = 0;
+                currentUserLevel = 1;
+                nextXpRequired = xpNeededForNextLevel;
+                maxXPForCurrentLevel = 0;
             }
         }
+        isUserXPLoaded = true;
     }
 
     public void ClearUI() //clear ui text fields

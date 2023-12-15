@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource audioSource;
     public AudioClip[] tracks;
+    public AudioClip inGameSound;
 
     private void Awake()
     {
@@ -67,7 +68,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayMusicTracks()
+    public IEnumerator PlayMusicTracks()
     {
         List<AudioClip> playlist = new List<AudioClip>(tracks); // Create a list from the array for easy manipulation
 
@@ -82,6 +83,18 @@ public class AudioManager : MonoBehaviour
 
                 yield return new WaitForSeconds(audioSource.clip.length); // Wait for the track to finish
             }
+        }
+    }
+
+    public IEnumerator PlayInGameMusic()
+    {
+        Debug.Log(" In game music called " +inGameSound.name);
+        while (true)
+        {
+            audioSource.clip = inGameSound; // Set the current track
+            audioSource.Play(); // Play the current track
+
+            yield return new WaitForSeconds(audioSource.clip.length); // Wait for the track to finish
         }
     }
 
