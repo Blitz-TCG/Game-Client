@@ -29,6 +29,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     private PlayerController playerController;
     private EnemyController enemyController;
     private GameObject gameBoardParent;
+    private GameBoardManager gameboardManager;
     private TMP_Text error;
     private bool isHovering = false;
     private TMP_Text errorText;
@@ -72,6 +73,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     private void Start()
     {
         gameBoardParent = GameObject.Find("Game Board Parent");
+        gameboardManager = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
         cardDetails = CardDataBase.instance.cardDetails;
         GetParent();
     }
@@ -99,7 +101,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
             Card cardInfo = Instantiate<Card>(infoCard, cardparent1.transform);
-            cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability, hoveredCard.requirements);
+            cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability, hoveredCard.requirements, hoveredCard.abilityLevel);
         }
         else if (gameObject?.transform?.parent?.parent?.name == "Player Hand")
         {
@@ -112,7 +114,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
             Card cardInfo = Instantiate<Card>(infoCard, actualParent.transform);
-            cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability, hoveredCard.requirements);
+            cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability, hoveredCard.requirements, hoveredCard.abilityLevel);
         }
         else if (gameObject.transform.parent.name == "Canvas")
         {
@@ -197,9 +199,10 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         //miniCard.AddComponent<DragMiniCards>();
                         //miniCard.AddComponent<PhotonView>();
                         Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability, cardClicked.requirements);
+                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability, cardClicked.requirements, cardClicked.abilityLevel);
                         card.name = cardClicked.cardName;
                         card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+                        gameboardManager.UpdateSkill(cardClicked.ability, card);
 
                         if (PhotonNetwork.IsMasterClient)
                         {
@@ -291,9 +294,10 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
                         miniCard.AddComponent<DragMiniCards>();
                         Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability, cardClicked.requirements);
+                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability, cardClicked.requirements, cardClicked.abilityLevel);
                         card.name = cardClicked.cardName;
                         card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+                        gameboardManager.UpdateSkill(cardClicked.ability, card);
                         miniCard.SetActive(false);
                     }
                     //    GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);

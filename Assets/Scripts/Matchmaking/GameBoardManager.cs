@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 //using UnityEngine.Timeline;
 
 public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
@@ -180,6 +181,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         timeDown = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Timer").GetChild(1).GetComponent<PlayerTimer>();
         timeUp = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Timer").GetChild(0).GetComponent<PlayerTimer>();
         Debug.LogError("timer down " + timeDown + " time up " + timeUp);
+        cardError = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Popup").GetChild(0).gameObject;
+        Debug.Log(cardError.name + " card error ");
 
         customProp["totalTurnCount"] = 0;
         PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
@@ -411,7 +414,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }
                 else if (EventSystem.current.currentSelectedGameObject.GetComponent<DropFieldCard>())
                 {
-                    Debug.Log("EventSystem.current.currentSelectedGameObject.GetComponent<DropFieldCard>()");
+                    Debug.Log("EventSystem.current.currentSelectedGameObject.GetComponent<DropFieldCard>() " + GameManager.instance.clicked);
+                    
                     if (GameManager.instance.clicked == 1)
                     {
                         Debug.Log("GameManager.instance.clicked == 1");
@@ -432,14 +436,45 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
                     bottomImage = manager.bottomImage;
                     topImage = manager.topImage;
+                    GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
                     if (player1Turn && PhotonNetwork.IsMasterClient && pv.IsMine)
                     {
                         if (GameManager.instance.clicked == 1)
                         {
+                            if (attackingcard.requirements != AbilityRequirements.OnAttack 
+                                //|| attackingcard.requirements != AbilityRequirements.Goaded
+                                )
+                            {
+                                cardError.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText($"You can not attack. This ability {attackingcard.ability.ToString()} is not able to attack");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
+                            if (IsGoaded(enemyField))
+                            {
+                                Debug.Log("Goaded called");
+                                cardError.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText("You must attack enemy's goaded card.");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
                             enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
                             GameObject enemyHealthObject = enemyWall.transform.Find("Remaining Health").gameObject;
                             int currentHealth = int.Parse(enemyHealthObject.GetComponent<TMP_Text>().text.ToString());
-                            int remainingHealth = currentHealth - attackingcard.attack;
+                            int damageVal;
+                            if (attackingcard.GetComponent<Crit>())
+                            {
+                                Debug.Log("crit called");
+                                Crit crit = attackingcard.GetComponent<Crit>();
+                                damageVal = crit.UseAbilityAndCalculateDamage(attackingcard.attack);
+                            }
+                            else
+                            {
+                                Debug.Log("normal attack called");
+                                damageVal = attackingcard.attack;
+                            }
+
+                            int remainingHealth = currentHealth - damageVal;
                             attackingcard.SetAttackValue(true);
                             if (remainingHealth <= 0)
                             {
@@ -467,10 +502,40 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     {
                         if (GameManager.instance.clicked == 1)
                         {
+                            if (attackingcard.requirements != AbilityRequirements.OnAttack 
+                                //|| attackingcard.requirements != AbilityRequirements.Goaded
+                                )
+                            {
+                                cardError.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText($"You can not attack. This ability {attackingcard.ability.ToString()} is not able to attack");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
+                            if(IsGoaded(enemyField))
+                            {
+                                Debug.Log("goaded called");
+                                cardError.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText("You must attack enemy's goaded card.");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
                             enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
                             GameObject enemyHealthObject = enemyWall.transform.Find("Remaining Health").gameObject;
                             int currentHealth = int.Parse(enemyHealthObject.GetComponent<TMP_Text>().text.ToString());
-                            int remainingHealth = currentHealth - attackingcard.attack;
+                            int damageVal;
+                            if (attackingcard.GetComponent<Crit>())
+                            {
+                                Debug.Log("crit called");
+                                Crit crit = attackingcard.GetComponent<Crit>();
+                                damageVal = crit.UseAbilityAndCalculateDamage(attackingcard.attack);
+                            }
+                            else
+                            {
+                                Debug.Log("normal attack called");
+                                damageVal = attackingcard.attack;
+                            }
+
+                            int remainingHealth = currentHealth - damageVal;
                             attackingcard.SetAttackValue(true);
                             if (remainingHealth <= 0)
                             {
@@ -531,15 +596,47 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 else if (EventSystem.current.currentSelectedGameObject.name == "Enemy Profile")
                 {
                     pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+                    GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
                     if (GameManager.instance.clicked == 1)
                     {
                         if (isWallDestroyed)
                         {
+                            if (attackingcard.requirements != AbilityRequirements.OnAttack 
+                                //|| attackingcard.requirements != AbilityRequirements.Goaded
+                                )
+                            {
+                                cardError.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText($"You can not attack. This ability {attackingcard.ability.ToString()} is not able to attack");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
+                            if(IsGoaded(enemyField))
+                            {
+                                Debug.Log("goaded called");
+                                cardError.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText("You must attack enemy's goaded card.");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
                             GameObject enemyProfile = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Profile").gameObject;
                             GameObject enemyHealth = enemyProfile.transform.Find("Enemy Deck Health").Find("Remaining Health").gameObject;
                             int currentHealth = int.Parse(enemyHealth.GetComponent<TMP_Text>().text.ToString());
-                            int remainingHealth = currentHealth - attackingcard.attack;
+                            int damageVal;
+                            if (attackingcard.GetComponent<Crit>())
+                            {
+                                Debug.Log("crit called");
+                                Crit crit = attackingcard.GetComponent<Crit>();
+                                damageVal = crit.UseAbilityAndCalculateDamage(attackingcard.attack);
+                            }
+                            else
+                            {
+                                Debug.Log("normal attack called");
+                                damageVal = attackingcard.attack;
+                            }
+
+                            int remainingHealth = currentHealth - damageVal;
                             attackingcard.SetAttackValue(true);
+
                             if (remainingHealth <= 0)
                             {
                                 //win or lose panel open
@@ -687,7 +784,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerXP = masterPlayerXP;
                 loserXP = clientPlayerXP;
 
-                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
                 Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
                 Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
                 int winnerPlayerTurn = result.Item1;
@@ -728,7 +825,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerXP = clientPlayerXP;
                 loserXP = masterPlayerXP;
 
-                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
                 Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
                 Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
                 int winnerPlayerTurn = result.Item1;
@@ -756,7 +853,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
                 loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
 
-                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
                 Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
                 Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
                 int winnerPlayerTurn = result.Item1;
@@ -797,7 +894,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
                 loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
 
-                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
                 Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
                 Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
                 int winnerPlayerTurn = result.Item1;
@@ -820,7 +917,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
                 loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
 
-                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
                 Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
                 Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
                 int winnerPlayerTurn = result.Item1;
@@ -843,7 +941,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerId = (string)PhotonNetwork.CurrentRoom.CustomProperties["masterUserId"];
                 loserId = (string)PhotonNetwork.CurrentRoom.CustomProperties["clientUserId"];
 
-                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
                 Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
                 Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
                 int winnerPlayerTurn = result.Item1;
@@ -922,13 +1020,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"] + " cgg ");
         //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"] + " mgx ");
         //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"] + " cgx ");
-
-        //StartCoroutine(databaseExampleDeleteAfterReview.instance.GetPalyerXP(FirebaseManager.instance.user.UserId, (xp) => {
-            
-        //    Debug.Log("Winner's XP: " + xp);
-        //}));
-        //Debug.Log("xp values " + a);
-
     }
 
     [PunRPC]
@@ -996,10 +1087,81 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log("player1Turn && PhotonNetwork.IsMasterClient");
             GameObject playerCard = attacking.gameObject;
             GameObject enemyCard = target.gameObject;
-            bool destroyPlayer = attacking.DealDamage(target.attack, attackParent.transform.GetChild(0).gameObject);
-            bool destroyEnemy = target.DealDamage(attacking.attack, targetParent.transform.GetChild(0).gameObject);
+            Debug.Log(attacking.name + " name of card " + target.name + " name of target " + attacking.requirements.ToString());
+            if (attacking.requirements != AbilityRequirements.OnAttack 
+                //|| attacking.requirements != AbilityRequirements.Goaded
+                ) 
+            {
+                Debug.Log("attacking.requirements " + attacking.requirements);
+                Debug.Log(cardError.transform.parent.parent.name + " card error name");
+                cardError.SetActive(true);
+                cardError.GetComponentInChildren<TMP_Text>().SetText($"You can not attack. This ability {attacking.ability.ToString()} is not able to attack");
+                Invoke("RemoveErrorObject", 2f);
+                return;
+            } 
+
+
+            bool destroyPlayer, destroyEnemy;
+            int destroyPlayerAttackValue, destroyEnemyAttackValue;
+
+            if(IsGoaded(enemyField))
+            {
+                Debug.Log("goaded card");
+                if (target.GetComponent<Goad>())
+                {
+                    Debug.Log("target goaded");
+                    if (attacking.GetComponent<Crit>())
+                    {
+                        Debug.Log("attack crit");
+                        Crit crit = attackingcard.GetComponent<Crit>();
+                        Debug.Log(" crit card " + crit);
+                        destroyPlayerAttackValue = target.attack;
+                        destroyEnemyAttackValue = crit.UseAbilityAndCalculateDamage(attacking.attack);
+                        destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                        destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+                    }
+                    else
+                    {
+                        Debug.Log("not attack crit");
+                        destroyPlayerAttackValue = target.attack;
+                        destroyEnemyAttackValue = attacking.attack;
+                        destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                        destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+                    }
+                   
+                    Debug.Log($" attack with goaded card value1 {destroyPlayerAttackValue} value2 {destroyEnemyAttackValue} ");
+                }
+                else
+                {
+                    Debug.Log("not goaded");
+                    cardError.SetActive(true);
+                    cardError.GetComponentInChildren<TMP_Text>().SetText("You must attack enemy's goaded card.");
+                    Invoke("RemoveErrorObject", 2f);
+                    return;
+                }
+            }
+            else if(attacking.GetComponent<Crit>())
+            {
+                Crit crit = attackingcard.GetComponent<Crit>();
+                Debug.Log(" crit card " + crit);
+                destroyPlayerAttackValue = target.attack;
+                destroyEnemyAttackValue = crit.UseAbilityAndCalculateDamage(attacking.attack);
+                destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+            }
+            else
+            {
+                Debug.Log("normal card attack called");
+                destroyPlayerAttackValue = target.attack;
+                destroyEnemyAttackValue = attacking.attack;
+                destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+            }
+           
             int attackcardParentId = int.Parse(attackParent.name.ToString().Split(" ")[2]);
             int targetcardParentId = int.Parse(targetParent.name.ToString().Split(" ")[2]);
+
+            Debug.Log(destroyPlayer + " destroy player " + destroyEnemy + " destroy enemy");
 
             if (destroyPlayer)
             {
@@ -1082,14 +1244,83 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             attackingcard.SetAttackValue(true);
 
-            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, destroyPlayer, destroyEnemy, 1);
+            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, destroyPlayer, destroyEnemy, 1, destroyPlayerAttackValue, destroyEnemyAttackValue);
         }
         else if (!player1Turn && !PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("!player1Turn && !PhotonNetwork.IsMasterClient");
             GameObject playerCard = attacking.gameObject;
             GameObject enemyCard = target.gameObject;
-            bool destroyPlayer = attacking.DealDamage(target.attack, attackParent.transform.GetChild(0).gameObject);
-            bool destroyEnemy = target.DealDamage(attacking.attack, targetParent.transform.GetChild(0).gameObject);
+            Debug.Log(playerCard + " player card " + enemyCard + " requirement " + attacking.requirements);
+            if (attacking.requirements != AbilityRequirements.OnAttack 
+                //|| attacking.requirements != AbilityRequirements.Goaded
+                ) 
+            {
+                Debug.Log("not satisfy req");
+                cardError.SetActive(true);
+                cardError.GetComponentInChildren<TMP_Text>().SetText($"You can not attack. This ability {attacking.ability.ToString()} is not able to attack");
+                Invoke("RemoveErrorObject", 2f);
+                return;
+            }
+            bool destroyPlayer, destroyEnemy;
+            int destroyPlayerAttackValue, destroyEnemyAttackValue;
+            if (IsGoaded(enemyField))
+            {
+                Debug.Log("goaded called");
+                if (target.GetComponent<Goad>())
+                {
+                    Debug.Log("target goaded");
+                    if (attacking.GetComponent<Crit>())
+                    {
+                        Debug.Log("attack crit");
+                        Crit crit = attackingcard.GetComponent<Crit>();
+                        Debug.Log(" crit card " + crit);
+                        destroyPlayerAttackValue = target.attack;
+                        destroyEnemyAttackValue = crit.UseAbilityAndCalculateDamage(attacking.attack);
+                        destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                        destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+                    }
+                    else
+                    {
+                        Debug.Log("not attack crit");
+                        destroyPlayerAttackValue = target.attack;
+                        destroyEnemyAttackValue = attacking.attack;
+                        destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                        destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+                    }
+                    Debug.Log($" attack with goaded card value1 {destroyPlayerAttackValue} value2 {destroyEnemyAttackValue} ");
+                }
+                else
+                {
+                    Debug.Log("target not goaded");
+                    cardError.SetActive(true);
+                    cardError.GetComponentInChildren<TMP_Text>().SetText("You must attack enemy's goaded card.");
+                    Invoke("RemoveErrorObject", 2f);
+                    return;
+                }
+            }
+            else if (attacking.GetComponent<Crit>())
+            {
+                Debug.Log("crit called");
+                Crit crit = attackingcard.GetComponent<Crit>();
+                destroyPlayerAttackValue = target.attack;
+                destroyEnemyAttackValue = crit.UseAbilityAndCalculateDamage(attacking.attack);
+                destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+            }
+            else
+            {
+                Debug.Log(" normal attack called");
+                destroyPlayerAttackValue = target.attack;
+                destroyEnemyAttackValue = attacking.attack;
+                destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+            }
+
+            //bool destroyPlayer = attacking.DealDamage(target.attack, attackParent.transform.GetChild(0).gameObject);
+            //bool destroyEnemy = target.DealDamage(attacking.attack, targetParent.transform.GetChild(0).gameObject);
+
+            Debug.Log(destroyPlayer + " destroy player " + destroyEnemy);
 
             int attackcardParentId = int.Parse(attackParent.name.ToString().Split(" ")[2]);
             int targetcardParentId = int.Parse(targetParent.name.ToString().Split(" ")[2]);
@@ -1172,14 +1403,43 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             attackingcard.SetAttackValue(true);
 
-            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, destroyPlayer, destroyEnemy, 2);
+            pv.RPC("AttackCardRPC", RpcTarget.Others, attackcardParentId, targetcardParentId, destroyPlayer, destroyEnemy, 2, destroyPlayerAttackValue, destroyEnemyAttackValue);
         }
     }
 
     private void AttackNPC(GameObject npcObj, Card card)
     {
+         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        if (card.requirements != AbilityRequirements.OnAttack 
+            //|| card.requirements != AbilityRequirements.Goaded
+            )
+        {
+            cardError.SetActive(true);
+            cardError.GetComponentInChildren<TMP_Text>().SetText($"You can not attack. This ability {card.ability.ToString()} is not able to attack");
+            Invoke("RemoveErrorObject", 2f);
+            return;
+        }
         pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
-        int damage = card.attack;
+        int damage;
+        if(IsGoaded(enemyField))
+        {
+            Debug.Log("is goaded called");
+            cardError.SetActive(true);
+            cardError.GetComponentInChildren<TMP_Text>().SetText("You must attack enemy's goaded card.");
+            Invoke("RemoveErrorObject", 2f);
+            return;
+        }
+        if (card.GetComponent<Crit>())
+        {
+            Debug.Log("crit card called");
+            Crit crit = card.GetComponent<Crit>();
+            damage = crit.UseAbilityAndCalculateDamage(card.attack);
+        }
+        else
+        {
+            Debug.Log("normal npc attack called");
+            damage = card.attack;
+        }
         Debug.Log(" attack npc "+ npcObj + " card " + card + " damage "+ damage + " pv name " + pv.name);
         npcObj.GetComponent<NPCManager>().DealDamage(damage, npcObj);
         card.SetAttackValue(true);
@@ -1233,16 +1493,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     [PunRPC]
-    private void AttackCardRPC(int attackId, int targetId, bool destroyPlayer, bool destroyEnemy, int ind)
+    private void AttackCardRPC(int attackId, int targetId, bool destroyPlayer, bool destroyEnemy, int ind, int attackVal, int targetVal)
     {
         GameObject attackParent = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetChild(attackId - 1).gameObject;
         GameObject targetParent = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetChild(targetId - 1).gameObject;
 
+        Debug.Log(attackParent+ " attack parent " + targetParent);
+
         Card attacking = attackParent.GetComponentInChildren<Card>();
         Card target = targetParent.GetComponentInChildren<Card>();
 
-        bool disAttackPlayer = attacking.DealDamage(target.attack, attackParent.transform.GetChild(0).gameObject);
-        bool disTargetPlayer = target.DealDamage(attacking.attack, targetParent.transform.GetChild(0).gameObject);
+        Debug.Log("attacking " + attacking + " target " + target);
+
+        bool disAttackPlayer = attacking.DealDamage(targetVal, attackParent.transform.GetChild(0).gameObject);
+        bool disTargetPlayer = target.DealDamage(attackVal, targetParent.transform.GetChild(0).gameObject);
+
+        Debug.Log(disAttackPlayer + " dis attack player " + disTargetPlayer);
 
         //GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
 
@@ -1595,7 +1861,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
                 Debug.Log(" completed card level " + completeCard.levelRequired);
                 int level = (int)(completeCard.levelRequired);
-                miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage, sortedList[i].ability, sortedList[i].requirements);
+                miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage, sortedList[i].ability, sortedList[i].requirements, sortedList[i].abilityLevel);
                 UpdateSkill(sortedList[i].ability, miniCard);
                 miniCard.name = sortedList[i].cardName;
                 miniCardParent.name = sortedList[i].cardName;
@@ -1627,18 +1893,48 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     //    return cards;
     //}
 
-    private void UpdateSkill(CardAbility ability, Card card)
+    public void UpdateSkill(CardAbility ability, Card card)
     {
         switch (ability)
         {
-            case CardAbility.GoodFavor: 
-                card.gameObject.AddComponent<GoodFavor>();
+            case CardAbility.GoodFavor:
+                GoodFavor favor = card.gameObject.AddComponent<GoodFavor>();
+                if (card.abilityLevel == 0)
+                {
+                    favor.SetAbility();  // this is normal base value 25gold
+                }
+                else if(card.abilityLevel == 1)
+                {
+                    favor.SetAbility(2);   // here if you cn set the multiplyer value
+                }
+                else if(card.abilityLevel == 2)
+                {
+                    favor.SetAbility(1, 30);  // here you can change multiplier or you add custom gold which i give 30 for testing purpose, also change multiplier
+                }
+                else
+                {
+                    favor.SetAbility();  // this is normal base value 25gold
+                }
+
                 break;
             case CardAbility.Crit:
-                card.gameObject.AddComponent<GoodFavor>();
+                Crit crit = card.gameObject.AddComponent<Crit>();
+                if (card.abilityLevel == 0)
+                {
+                    crit.SetAbility();
+                }
+                else if(card.abilityLevel == 1)
+                {
+                    crit.SetAbility(3);   // here you can set x amount of damage(3x,4x etc.)
+                }
+                else
+                {
+                    crit.SetAbility();
+                }
+
                 break; 
             case CardAbility.Goad:
-                card.gameObject.AddComponent<GoodFavor>();
+                card.gameObject.AddComponent<Goad>();
                 break;
             default: break; 
         }
@@ -1804,7 +2100,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             randomPlayer = GenerateRandomNumber();
             customProp["randomPlayer"] = randomPlayer;
-            PhotonNetwork.MasterClient.SetCustomProperties(customProp);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
         }
     }
 
@@ -1846,7 +2142,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
             Debug.Log(" completed card level " + completeCard.levelRequired);
             int level = (int)(completeCard.levelRequired);
-            miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage, selectedCardList[i].ability, selectedCardList[i].requirements);
+            miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage, selectedCardList[i].ability, selectedCardList[i].requirements, selectedCardList[i].abilityLevel);
             miniCard.name = selectedCardList[i].cardName;
             miniCardParent.name = selectedCardList[i].cardName;
             //DisplayWithXP(miniCard.gameObject, level);
@@ -2046,7 +2342,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
         else if (player2Bid == player1Bid)
         {
-            randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+            randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
             Gold.instance.SetGold(initialGold);
 
             if (PhotonNetwork.IsMasterClient)
@@ -2464,7 +2760,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
                 Debug.Log(" completed card level " + clickedCard.levelRequired);
                 int level = (int)(clickedCard.levelRequired);
-                miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability, clickedCard.requirements);
+                miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability, clickedCard.requirements, clickedCard.abilityLevel);
                 miniCard.name = clickedCard.cardName;
                 miniCardParent.name = clickedCard.cardName;
             }
@@ -2481,7 +2777,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
             Debug.Log(" completed card level " + clickedCard.levelRequired);
             int level = (int)(clickedCard.levelRequired);
-            miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability, clickedCard.requirements);
+            miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability, clickedCard.requirements, clickedCard.abilityLevel);
             miniCard.name = clickedCard.cardName;
             miniCardParent.name = clickedCard.cardName;
         }
@@ -2910,6 +3206,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         MovePlayer();
                     }
 
+                    if (!gameObject.name.ToLower().Contains("clone"))
+                        StartTheTurn();
                     //if (!gameObject.name.ToLower().Contains("clone"))
                     //{
                     //    GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
@@ -2967,6 +3265,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     {
 
                     }
+                    if (!gameObject.name.ToLower().Contains("clone"))
+                        StartTheTurn();
                 }
                 //isSpawn = false;
                 //Debug.Log("isspawn " + isSpawn);
@@ -3023,6 +3323,47 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     #endregion
+
+    public void StartTheTurn()
+    {
+        Debug.Log(" start the turn called ");
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount);
+        for(int i = 0; i < playerField.transform.childCount; i++)
+        {
+            Debug.Log(" i value " + i + " playerField.transform.GetChild(i).childCount " + playerField.transform.GetChild(i).childCount);
+            if(playerField.transform.GetChild(i).childCount == 1)
+            {
+                Debug.Log(playerField.transform.GetChild(i)?.GetChild(0)?.GetChild(0).GetComponent<Card>().requirements + " requirements");
+                if(playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().requirements == AbilityRequirements.AtTheStartOfTurn)
+                {
+                    Debug.Log(playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<GoodFavor>() + " good favor ");
+                    if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<GoodFavor>())
+                    {
+                        playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<GoodFavor>().UseAbility(PhotonNetwork.IsMasterClient);
+                        UpdateGoldUI();
+                    }
+                }
+            }
+        }
+    }
+
+    private void UpdateGoldUI()
+    {
+        Debug.Log("UpdateGoldUI called " + PhotonNetwork.IsMasterClient);
+        if(PhotonNetwork.IsMasterClient)
+        {
+            int masterGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+            Gold.instance.SetGold(masterGold);
+            Debug.Log(Gold.instance.gameObject.transform.parent.parent.name + " parent ");
+        }
+        else
+        {
+            int clientGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+            Gold.instance.SetGold(clientGold);
+            Debug.Log(Gold.instance.gameObject.transform.parent.parent.name + " parent ");
+        }
+    }
 
     public void MovePlayer()
     {
@@ -3422,7 +3763,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerDeck = masterDeckGeneral;
                 loserDeck = clientDeckGeneral;
 
-                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
                 Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
                 Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
                 int winnerPlayerTurn = result.Item1;
@@ -3455,7 +3796,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 winnerDeck = clientDeckGeneral;
                 loserDeck = masterDeckGeneral;
 
-                randomPlayer = (int)PhotonNetwork.MasterClient.CustomProperties["randomPlayer"];
+                randomPlayer = (int)PhotonNetwork.CurrentRoom.CustomProperties["randomPlayer"];
                 Debug.Log(turnCounter + " turn counter " + randomPlayer + " random player");
                 Tuple<int, int> result = GetTurnCount(turnCounter, randomPlayer);
                 int winnerPlayerTurn = result.Item1;
@@ -4053,5 +4394,28 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
         Debug.Log(masterCount + " final master count " + clientCount + " final client count");
         return new Tuple<int, int>(masterCount, clientCount);
+    }
+
+    private bool IsGoaded(GameObject enemyfield)
+    {
+        Debug.Log(enemyfield + " enemy field " + " is goaded");
+        bool goaded = false;
+        for(int i = 0; i < enemyfield.transform.childCount; i++)
+        {
+            if(enemyfield.transform.GetChild(i).tag.Contains("Front Line"))
+            {
+                if(enemyfield.transform.GetChild(i).childCount == 1)
+                {
+                    if(enemyfield.transform.GetChild(i).GetChild(0).childCount == 1)
+                    {
+                        if(enemyfield.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().ability == CardAbility.Goad)
+                        {
+                            goaded = true;
+                        }
+                    }
+                }
+            }
+        }
+        return goaded;
     }
 }

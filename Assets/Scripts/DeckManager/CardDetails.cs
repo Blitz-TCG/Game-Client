@@ -24,6 +24,7 @@ public class CardDetails
     public Sprite cardFrame;
     public CardAbility ability;
     public AbilityRequirements requirements;
+    public int abilityLevel = 0;
 }
 
 //[Serializable]
