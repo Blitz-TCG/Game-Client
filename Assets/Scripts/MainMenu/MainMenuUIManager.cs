@@ -189,6 +189,7 @@ public class MainMenuUIManager : MonoBehaviour
     private float cooldownTime = 5f; // 2 seconds timeout
     private bool isCooldown;
     public TMP_Text onlineCountTMP;
+    private Coroutine countOnlineUsers;
 
     [SerializeField]
     private float chatResize;
@@ -391,7 +392,7 @@ public class MainMenuUIManager : MonoBehaviour
         yield return StartCoroutine(CountGlobalMessageTotal());
         GlobalListenForNewMessages();
 
-        yield return StartCoroutine(CountOnlineUsers());
+        countOnlineUsers = StartCoroutine(CountOnlineUsers());
     }
 
     public void PresenceCheck() //todo - figure out presence check
@@ -425,31 +426,37 @@ public class MainMenuUIManager : MonoBehaviour
 
     public IEnumerator CountOnlineUsers()
     {
-        DatabaseReference usersRef = FirebaseDatabase.DefaultInstance.GetReference("users");
-        var query = usersRef.OrderByChild("online").EqualTo("T");
-        var getOnlineUsersTask = query.GetValueAsync();
-
-        yield return new WaitUntil(predicate: () => getOnlineUsersTask.IsCompleted);
-        if (getOnlineUsersTask.IsFaulted)
+        while (true)
         {
-            Debug.LogError("Error getting online users: " + getOnlineUsersTask.Exception);
-        }
-        else if (getOnlineUsersTask.IsCompleted)
-        {
-            DataSnapshot snapshot = getOnlineUsersTask.Result;
-            int onlineCount = 0;
+            DatabaseReference usersRef = FirebaseDatabase.DefaultInstance.GetReference("users");
+            var query = usersRef.OrderByChild("online").EqualTo("T");
+            var getOnlineUsersTask = query.GetValueAsync();
 
-            foreach (DataSnapshot userSnapshot in snapshot.Children)
+            yield return new WaitUntil(predicate: () => getOnlineUsersTask.IsCompleted);
+            if (getOnlineUsersTask.IsFaulted)
             {
-                if (userSnapshot.HasChild("online") && userSnapshot.Child("online").Value.ToString() == "T")
+                Debug.LogError("Error getting online users: " + getOnlineUsersTask.Exception);
+            }
+            else if (getOnlineUsersTask.IsCompleted)
+            {
+                DataSnapshot snapshot = getOnlineUsersTask.Result;
+                int onlineCount = 0;
+
+                foreach (DataSnapshot userSnapshot in snapshot.Children)
                 {
-                    onlineCount++;
+                    if (userSnapshot.HasChild("online") && userSnapshot.Child("online").Value.ToString() == "T")
+                    {
+                        onlineCount++;
+                    }
                 }
+
+                onlineCountTMP.text = "Online: " + onlineCount.ToString();
+                Debug.Log($"Number of online users: {onlineCount}");
             }
 
-            onlineCountTMP.text = "Online: " + onlineCount.ToString();
-            Debug.Log($"Number of online users: {onlineCount}");
+            yield return new WaitForSeconds(30f);
         }
+
     }
 
 
@@ -853,6 +860,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             cursorManager.CursorNormal();
             RemoveListener();
+            StopCoroutines();
             FirebaseManager.instance.auth.SignOut();
             GameManager.instance.ChangeScene(0);
         }
@@ -860,6 +868,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             cursorManager.CursorNormal();
             RemoveListener();
+            StopCoroutines();
             FirebaseManager.instance.auth.SignOut();
             GameManager.instance.ChangeScene(0);
         }
@@ -880,6 +889,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             Debug.Log("could not cleanly terminate session");
             RemoveListener();
+            StopCoroutines();
             FirebaseManager.instance.auth.SignOut();
             Application.Quit();
         }
@@ -887,6 +897,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             FirebaseManager.instance.auth.SignOut();
             RemoveListener();
+            StopCoroutines();
             Application.Quit();
             Debug.Log("exit");
         }
@@ -2709,6 +2720,7 @@ public class MainMenuUIManager : MonoBehaviour
         settingsHelpTextEnabled.SetActive(false);
         cursorManager.CursorNormal();
         RemoveListener();
+        StopCoroutines();
         GameManager.instance.ChangeScene(3);
     }
     public void DeckBuilder()
@@ -2716,6 +2728,7 @@ public class MainMenuUIManager : MonoBehaviour
         settingsHelpTextEnabled.SetActive(false);
         cursorManager.CursorNormal();
         RemoveListener();
+        StopCoroutines();
         GameManager.instance.ChangeScene(2);
     }
 
@@ -2729,6 +2742,14 @@ public class MainMenuUIManager : MonoBehaviour
         if (newMessageListener2 != null)
         {
             dbReference.Child("globalChat").LimitToLast(1).ChildAdded -= newMessageListener2;
+        }
+    }
+
+    private void StopCoroutines()
+    {
+        if (countOnlineUsers != null)
+        {
+            StopCoroutine(countOnlineUsers);
         }
     }
 

@@ -1,12 +1,10 @@
 using Photon.Pun;
-using System.IO;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System;
-using System.Collections.Generic;
+
 
 public class SkirmishManager : MonoBehaviourPunCallbacks
 {
@@ -60,6 +58,8 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
     [SerializeField] private Button button;
     [SerializeField] private Sprite[] pfpImages;
     [SerializeField] private Image profileImage;
+    [SerializeField] private TMP_Text activeMatchesText;
+    private Coroutine playerCountCoroutine;
 
     public int deckId;
     public int deckCountSkirmish;
@@ -204,6 +204,20 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
             audioManager.PlayMusicTracks();
         }
         GameBoardManager.completeGame = false;
+
+        playerCountCoroutine = StartCoroutine(UpdatePlayerCountCoroutine());
+    }
+
+    public IEnumerator UpdatePlayerCountCoroutine()
+    {
+        while (true)
+        {
+            int activeMatches = PhotonNetwork.CountOfRooms;
+            Debug.Log("Active Matches: " + activeMatches);
+            activeMatchesText.text = ("Active Matches: " + activeMatches);
+
+            yield return new WaitForSeconds(20f);  // Wait for 20 seconds
+        }
     }
 
     public void Update()
@@ -468,12 +482,20 @@ public class SkirmishManager : MonoBehaviourPunCallbacks
         Debug.Log("Back");
         GameManager.instance.ChangeScene(1);
         PhotonNetwork.Disconnect();
+        if (playerCountCoroutine != null)
+        {
+            StopCoroutine(playerCountCoroutine);
+        }
     }
 
     public void DeckBuilder()
     {
         GameManager.instance.ChangeScene(2);
         PhotonNetwork.Disconnect();
+        if (playerCountCoroutine != null)
+        {
+            StopCoroutine(playerCountCoroutine);
+        }
     }
 
     public void OnDeckClick(int id) //make this the same as deck builder enentually
