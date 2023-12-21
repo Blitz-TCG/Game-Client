@@ -3,7 +3,6 @@ using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -181,6 +180,23 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private GameObject generalButtonUIon;
     [SerializeField] private GameObject generalButtonUIoff;
 
+    [Header("Metrics")]
+    [SerializeField] public int masqueradesGamesPlayed;
+    [SerializeField] public Image masquerdesGameboard;
+    [SerializeField] public TMP_Text masquerdesGameboardName;
+    [SerializeField] public int theOldKingdomGamesPlayed;
+    [SerializeField] public Image theOldKingdomGameboard;
+    [SerializeField] public TMP_Text theOldKingdomGameboardName;
+    [SerializeField] public int fairytalesGamesPlayed;
+    [SerializeField] public Image fairytalesGameboard;
+    [SerializeField] public TMP_Text fairytalesGameboardName;
+    [SerializeField] public int darkMatterGamesPlayed;
+    [SerializeField] public Image darkMatterGameboard;
+    [SerializeField] public TMP_Text darkMatterGameboardName;
+    [SerializeField] public int tinkerersGamesPlayed;
+    [SerializeField] public Image tinkerersGameboard;
+    [SerializeField] public TMP_Text tinkerersGameboardName;
+
     private void Awake()
     {
         if (instance == null)
@@ -201,8 +217,9 @@ public class DeckManager : MonoBehaviour
         DisplayDeck();
         ClearCards();
         DestroyCardList();
-    }
 
+        StartCoroutine(RetrieveMetricsDeckBuilder());
+    }
 
     public void DeckCount()
     {
@@ -2261,6 +2278,37 @@ public class DeckManager : MonoBehaviour
         cardSorting.currentCardsSortPopup.SetActive(false);
         cardSorting.availableCardsSortPopup.SetActive(false);
     }
+
+    public void DetermineGameboardUnlocks()
+    {
+        if (masqueradesGamesPlayed >= 10)
+        {
+            masquerdesGameboard.color = new Vector4(1f, 1f, 1f, 1f);
+            masquerdesGameboardName.color = new Vector4(255f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
+        }
+        if (theOldKingdomGamesPlayed >= 10)
+        {
+            theOldKingdomGameboard.color = new Vector4(1f, 1f, 1f, 1f);
+            theOldKingdomGameboardName.color = new Vector4(255f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
+        }
+        if (fairytalesGamesPlayed >= 10)
+        {
+            fairytalesGameboard.color = new Vector4(1f, 1f, 1f, 1f);
+            fairytalesGameboardName.color = new Vector4(255f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
+        }
+        if (darkMatterGamesPlayed >= 10)
+        {
+            darkMatterGameboard.color = new Vector4(1f, 1f, 1f, 1f);
+            darkMatterGameboardName.color = new Vector4(255f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
+        }
+        if (tinkerersGamesPlayed >= 10)
+        {
+            tinkerersGameboard.color = new Vector4(1f, 1f, 1f, 1f);
+            tinkerersGameboardName.color = new Vector4(255f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
+        }
+    }
+
+
     public void uiSelectGenerals()
     {
         availableListOfCard.SetActive(false);
@@ -2270,6 +2318,83 @@ public class DeckManager : MonoBehaviour
         cardButtonUIon.SetActive(false);
         gameboardButtonUIon.SetActive(false);
         generalButtonUIon.SetActive(true);
+    }
+
+    public IEnumerator RetrieveMetricsDeckBuilder()
+    {
+        Debug.Log(FirebaseManager.instance.user.UserId);
+        var metricsLoad = FirebaseDatabase.DefaultInstance.GetReference("open").Child(FirebaseManager.instance.user.UserId).GetValueAsync();
+        yield return new WaitUntil(predicate: () => metricsLoad.IsCompleted);
+        if (metricsLoad.IsFaulted)
+        {
+            Debug.Log("Unable to load metrics data.");
+        }
+        else if (metricsLoad.IsCompleted && metricsLoad.Result.Value != null)
+        {
+            Debug.Log("Loaded metrics data successfully.");
+
+            DataSnapshot dataSnapshot = metricsLoad.Result;
+            /*            var fullJSON = JsonConvert.DeserializeObject(dataSnapshot.GetRawJsonValue());
+                        PlayerMetrics metricsData = JsonUtility.FromJson<PlayerMetrics>(fullJSON.ToString());*/
+            string jsonString = dataSnapshot.GetRawJsonValue();
+            PlayerMetrics metricsData = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerMetrics>(jsonString);
+
+            masqueradesGamesPlayed = metricsData.margoDeckWinOpen + metricsData.margoDeckLossOpen;
+            theOldKingdomGamesPlayed = metricsData.miosDeckWinOpen + metricsData.miosDeckLossOpen;
+            fairytalesGamesPlayed = metricsData.nasseDeckWinOpen + metricsData.nasseDeckLossOpen;
+            darkMatterGamesPlayed = metricsData.voidDeckWinOpen + metricsData.voidDeckLossOpen;
+            tinkerersGamesPlayed = metricsData.tootDeckWinOpen + metricsData.tootDeckLossOpen;
+
+            DetermineGameboardUnlocks();
+        }
+        else if (metricsLoad.IsCompleted && metricsLoad.Result.Value == null)
+        {
+            Debug.Log("No metrics yet generated for this user: " + FirebaseManager.instance.user.UserId);
+            masqueradesGamesPlayed = 0;
+            theOldKingdomGamesPlayed = 0;
+            fairytalesGamesPlayed = 0;
+            darkMatterGamesPlayed = 0;
+            tinkerersGamesPlayed = 0;
+        }
+    }
+
+    public class PlayerMetrics
+    {
+        public int xpOpen;
+        public int mmrOpen;
+        public int totalTimePlayedOpen;
+        public int totalTurnsTakenOpen;
+        public int margoDeckWinOpen;
+        public int margoDeckLossOpen;
+        public int miosDeckWinOpen;
+        public int miosDeckLossOpen;
+        public int nasseDeckWinOpen;
+        public int nasseDeckLossOpen;
+        public int voidDeckWinOpen;
+        public int voidDeckLossOpen;
+        public int tootDeckWinOpen;
+        public int tootDeckLossOpen;
+
+        public PlayerMetrics(int xpOpen, int mmrOpen, int totalTimePlayedOpen, int totalTurnsTakenOpen, int margoDeckWinOpen, int margoDeckLossOpen,
+            int miosDeckWinOpen, int miosDeckLossOpen, int nasseDeckWinOpen, int nasseDeckLossOpen, int voidDeckWinOpen, int voidDeckLossOpen,
+            int tootDeckWinOpen, int tootDeckLossOpen)
+        {
+            this.xpOpen = xpOpen;
+            this.mmrOpen = mmrOpen;
+            this.totalTimePlayedOpen = totalTimePlayedOpen;
+            this.totalTurnsTakenOpen = totalTurnsTakenOpen;
+            this.margoDeckWinOpen = margoDeckWinOpen;
+            this.margoDeckLossOpen = margoDeckLossOpen;
+            this.miosDeckWinOpen = miosDeckWinOpen;
+            this.miosDeckLossOpen = miosDeckLossOpen;
+            this.nasseDeckWinOpen = nasseDeckWinOpen;
+            this.nasseDeckLossOpen = nasseDeckLossOpen;
+            this.voidDeckWinOpen = voidDeckWinOpen;
+            this.voidDeckLossOpen = voidDeckLossOpen;
+            this.tootDeckWinOpen = tootDeckWinOpen;
+            this.tootDeckLossOpen = tootDeckLossOpen;
+        }
+
     }
 }
 

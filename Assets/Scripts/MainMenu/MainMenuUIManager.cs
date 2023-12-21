@@ -1067,13 +1067,14 @@ public class MainMenuUIManager : MonoBehaviour
             timePlayedData.text = (Math.Ceiling((decimal)metricsData.totalTimePlayedOpen / 60 / 60 * 10) / 10).ToString("F1") + " hrs";
             turnsTakenData.text = metricsData.totalTurnsTakenOpen.ToString();
             experiencegainedData.text = metricsData.xpOpen.ToString();
+
             if ((metricsData.margoDeckWinOpen + metricsData.margoDeckLossOpen) > 0)
             {
                 masqueradesData.text = ((double)metricsData.margoDeckWinOpen / (metricsData.margoDeckWinOpen + metricsData.margoDeckLossOpen) * 100).ToString("F2") + "%";
             }
             else
             {
-                masqueradesData.text = "0%";
+                masqueradesData.text = "0.00%";
             }
             if ((metricsData.miosDeckWinOpen + metricsData.miosDeckLossOpen) > 0)
             {
@@ -1081,15 +1082,15 @@ public class MainMenuUIManager : MonoBehaviour
             }
             else
             {
-                theOldKingdomData.text = "0%";
+                theOldKingdomData.text = "0.00%";
             }
-            if ((metricsData.nasseDeckLossOpen + metricsData.nasseDeckLossOpen) > 0)
+            if ((metricsData.nasseDeckWinOpen + metricsData.nasseDeckLossOpen) > 0)
             {
                 fairytalesData.text = ((double)metricsData.nasseDeckWinOpen / (metricsData.nasseDeckWinOpen + metricsData.nasseDeckLossOpen) * 100).ToString("F2") + "%";
             }
             else
             {
-                fairytalesData.text = "0%";
+                fairytalesData.text = "0.00%";
             }
             if ((metricsData.voidDeckWinOpen + metricsData.voidDeckLossOpen) > 0)
             {
@@ -1097,7 +1098,7 @@ public class MainMenuUIManager : MonoBehaviour
             }
             else
             {
-                darkMatterData.text = "0%";
+                darkMatterData.text = "0.00%";
             }
             if ((metricsData.tootDeckWinOpen + metricsData.tootDeckLossOpen) > 0)
             {
@@ -1105,7 +1106,7 @@ public class MainMenuUIManager : MonoBehaviour
             }
             else
             {
-                tinkerersData.text = "0%";
+                tinkerersData.text = "0.00%";
             }
 
 
@@ -2705,12 +2706,14 @@ public class MainMenuUIManager : MonoBehaviour
     }
     public void Skirmish()
     {
+        settingsHelpTextEnabled.SetActive(false);
         cursorManager.CursorNormal();
         RemoveListener();
         GameManager.instance.ChangeScene(3);
     }
     public void DeckBuilder()
     {
+        settingsHelpTextEnabled.SetActive(false);
         cursorManager.CursorNormal();
         RemoveListener();
         GameManager.instance.ChangeScene(2);

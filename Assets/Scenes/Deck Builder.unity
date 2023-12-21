@@ -39051,6 +39051,21 @@ MonoBehaviour:
   selectedGameboardArrayLoad: []
   generalButtonUIon: {fileID: 1876520408}
   generalButtonUIoff: {fileID: 490338582}
+  masqueradesGamesPlayed: 0
+  masquerdesGameboard: {fileID: 2040012068}
+  masquerdesGameboardName: {fileID: 599304075}
+  theOldKingdomGamesPlayed: 0
+  theOldKingdomGameboard: {fileID: 1260482666}
+  theOldKingdomGameboardName: {fileID: 917547218}
+  fairytalesGamesPlayed: 0
+  fairytalesGameboard: {fileID: 746201814}
+  fairytalesGameboardName: {fileID: 1762492054}
+  darkMatterGamesPlayed: 0
+  darkMatterGameboard: {fileID: 388645640}
+  darkMatterGameboardName: {fileID: 830199552}
+  tinkerersGamesPlayed: 0
+  tinkerersGameboard: {fileID: 353791029}
+  tinkerersGameboardName: {fileID: 943565735}
 --- !u!4 &2058514701
 Transform:
   m_ObjectHideFlags: 0

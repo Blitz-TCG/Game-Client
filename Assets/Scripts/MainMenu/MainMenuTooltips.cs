@@ -12,20 +12,13 @@ public class MainMenuTooltips : MonoBehaviour, IPointerEnterHandler, IPointerExi
     //Detect if the Cursor starts to pass over the GameObject
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        //Debug.Log("Cursor Entering " + name + " GameObject");
-        if (MainMenuUIManager.instance != null)
+        if (Tooltip != null)
         {
-            if (!MainMenuUIManager.instance.settingsHelpTextEnabled.activeSelf)
+            if (MainMenuUIManager.instance != null &&
+                MainMenuUIManager.instance.settingsHelpTextEnabled != null &&
+                !MainMenuUIManager.instance.settingsHelpTextEnabled.activeSelf)
             {
-                if (name == "Skirmish")
-                {
-                    Tooltip.SetActive(true);
-                }
-                else if (name == "Deck Builder")
-                {
-                    Tooltip.SetActive(true);
-                }
-                else if (name == "Exit")
+                if (name == "Skirmish" || name == "Deck Builder" || name == "Exit")
                 {
                     Tooltip.SetActive(true);
                 }
@@ -33,23 +26,17 @@ public class MainMenuTooltips : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
     }
 
+
     //Detect when Cursor leaves the GameObject
     public void OnPointerExit(PointerEventData pointerEventData)
     {
-        //Debug.Log("Cursor Exiting " + name + " GameObject");
-        if (MainMenuUIManager.instance != null)
+        if (Tooltip != null)
         {
-            if (!MainMenuUIManager.instance.settingsHelpTextEnabled.activeSelf)
+            if (MainMenuUIManager.instance != null &&
+                MainMenuUIManager.instance.settingsHelpTextEnabled != null &&
+                !MainMenuUIManager.instance.settingsHelpTextEnabled.activeSelf)
             {
-                if (name == "Skirmish")
-                {
-                    Tooltip.SetActive(false);
-                }
-                else if (name == "Deck Builder")
-                {
-                    Tooltip.SetActive(false);
-                }
-                else if (name == "Exit")
+                if (name == "Skirmish" || name == "Deck Builder" || name == "Exit")
                 {
                     Tooltip.SetActive(false);
                 }
