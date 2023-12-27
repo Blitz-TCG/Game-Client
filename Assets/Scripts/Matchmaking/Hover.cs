@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using TMPro;
@@ -33,6 +34,10 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     private TMP_Text error;
     private bool isHovering = false;
     private TMP_Text errorText;
+
+    private Queue<int> goldUpdateQueue = new Queue<int>();
+    private bool isProcessingGoldUpdate = false;
+    private List<int> goldList = new();
 
     private ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
     #endregion
@@ -101,7 +106,9 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
             Card cardInfo = Instantiate<Card>(infoCard, cardparent1.transform);
-            cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability, hoveredCard.requirements, hoveredCard.abilityLevel);
+            cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability
+                //, hoveredCard.requirements, hoveredCard.abilityLevel
+                );
         }
         else if (gameObject?.transform?.parent?.parent?.name == "Player Hand")
         {
@@ -114,7 +121,9 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
             Card cardInfo = Instantiate<Card>(infoCard, actualParent.transform);
-            cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability, hoveredCard.requirements, hoveredCard.abilityLevel);
+            cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability
+                //, hoveredCard.requirements, hoveredCard.abilityLevel
+                );
         }
         else if (gameObject.transform.parent.name == "Canvas")
         {
@@ -178,12 +187,15 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
 
         pv = gameObject.transform.GetComponent<PhotonView>();
+        Debug.Log(pv + " photon view " + pv.IsMine);
         if (pv.IsMine)
         {
+            Debug.Log(" is mine called ");
             for (int i = 0; i < hand.transform.childCount; i++)
             {
                 if (hand.transform.GetChild(i).childCount == 0)
                 {
+                    Debug.Log(hand.transform.GetChild(i).childCount + " child count " + i);
                     Debug.Log(playerController.totalXP + " player total xp " + enemyController.totalXP + " enemy's XP");
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
                     Debug.Log(cardClicked.levelRequired + " level req");
@@ -196,91 +208,71 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         miniCard.transform.position = hand.transform.GetChild(i).transform.position;
                         miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
                         miniCard.GetComponent<DragMiniCards>().enabled = true;
+                        Debug.Log(miniCard.name + " mini card ");
                         //miniCard.AddComponent<DragMiniCards>();
                         //miniCard.AddComponent<PhotonView>();
                         Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability, cardClicked.requirements, cardClicked.abilityLevel);
+                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                            //, cardClicked.requirements, cardClicked.abilityLevel
+                            );
                         card.name = cardClicked.cardName;
                         card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
                         gameboardManager.UpdateSkill(cardClicked.ability, card);
+                        Debug.Log(card + " card value");
 
                         if (PhotonNetwork.IsMasterClient)
                         {
-                            int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+                            Debug.Log("master client " + PhotonNetwork.IsMasterClient);
+                            //int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+                            int getGold = Gold.instance.GetGold();
+                                //(int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+                            Debug.Log(getGold + " get gold ");
                             int availableGold = getGold - cardClicked.gold;
+                            //goldList.Add(cardClicked.gold);
+                            Debug.Log(availableGold + " available gold "); Debug.Log(getGold + " get gold " +  availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
+                            //UpdateGoldLocally(availableGold, PhotonNetwork.IsMasterClient, goldList);
+                            //UpdateGold(availableGold, PhotonNetwork.IsMasterClient);
                             Gold.instance.SetGold(availableGold);
                             properties["masterGold"] = availableGold;
                             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-
-                            //Invoke("UpdatedProperties", 1f);
                         }
                         else if (!PhotonNetwork.IsMasterClient)
                         {
-                            int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+                            Debug.Log("!master client " + PhotonNetwork.IsMasterClient);
+                            //int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+                            int getGold = Gold.instance.GetGold(); 
+                            Debug.Log(getGold + " get gold ");
                             int availableGold = getGold - cardClicked.gold;
+                            Debug.Log(availableGold + " available gold ");
+                            Debug.Log(availableGold + " available gold "); Debug.Log(getGold + " get gold " + availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
+                            //goldList.Add(cardClicked.gold);
+                            //UpdateGoldLocally(availableGold, PhotonNetwork.IsMasterClient, goldList);
+                            //UpdateGold(availableGold, PhotonNetwork.IsMasterClient);
                             Gold.instance.SetGold(availableGold);
                             properties["clientGold"] = availableGold;
                             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                            //Debug.LogError("available client " + availableGold);
-
-                            //Invoke("UpdatedProperties", 1f);
                         }
                     }
                     else
                     {
                         Debug.Log(" else called ");
                         Debug.Log(" Gold error tool tip " + goldErrorTooltip);
-                        //Debug.Log(" gold text name " + goldErrorTooltip.transform.Find("Gold Error Text").name);
-                        //Debug.Log(" parent name " + goldErrorTooltip.transform.parent.name + " back ground " + goldErrorTooltip.transform.parent.parent.name + " game board " + goldErrorTooltip.transform.parent.parent.parent.name);
-                        
                         errorText.gameObject.SetActive(true);
                         errorText.SetText("You can not recruit this card!!!");
                         Invoke("DisableGoldErrorTooltip", 1f);
                     }
-                    //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
-                    //miniCard.transform.SetParent(hand.transform.GetChild(i));
-                    //miniCard.transform.position = hand.transform.GetChild(i).transform.position;
-                    //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
-                    //miniCard.GetComponent<DragMiniCards>().enabled = true;
-                    ////miniCard.AddComponent<DragMiniCards>();
-                    ////miniCard.AddComponent<PhotonView>();
-                    //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                    //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount ,cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
-                    //card.name = cardClicked.cardName;
-                    //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-
-                    //if (PhotonNetwork.IsMasterClient)
-                    //{
-                    //    int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
-                    //    int availableGold = getGold - cardClicked.gold;
-                    //    Gold.instance.SetGold(availableGold);
-                    //    properties["masterGold"] = availableGold;
-                    //    PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-
-                    //    //Invoke("UpdatedProperties", 1f);
-                    //}
-                    //else if (!PhotonNetwork.IsMasterClient)
-                    //{
-                    //    int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
-                    //    int availableGold = getGold - cardClicked.gold;
-                    //    Gold.instance.SetGold(availableGold);
-                    //    properties["clientGold"] = availableGold;
-                    //    PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-                    //    //Debug.LogError("available client " + availableGold);
-
-                    //    //Invoke("UpdatedProperties", 1f);
-                    //}
-
                     break;
                 }
             }
         }
         else
         {
+            Debug.Log(" not mine " + pv.IsMine);
             for (int i = 0; i < hand.transform.childCount; i++)
             {
                 if (enemyHand.transform.GetChild(i).childCount == 0)
                 {
+                    Debug.Log(enemyHand.transform.GetChild(i).childCount + " enemyHand.transform.GetChild(i).childCount");
                     Debug.Log(playerController.totalXP + " player total xp " + enemyController.totalXP + " enemy's XP");
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
                     Debug.Log(cardClicked.levelRequired + " level required");
@@ -294,22 +286,15 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
                         miniCard.AddComponent<DragMiniCards>();
                         Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability, cardClicked.requirements, cardClicked.abilityLevel);
+                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                            //, cardClicked.requirements, cardClicked.abilityLevel
+                            );
+                        Debug.Log(card + " card");
                         card.name = cardClicked.cardName;
                         card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
                         gameboardManager.UpdateSkill(cardClicked.ability, card);
                         miniCard.SetActive(false);
                     }
-                    //    GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
-                    //miniCard.transform.SetParent(enemyHand.transform.GetChild(i));
-                    //miniCard.transform.position = enemyHand.transform.GetChild(i).transform.position;
-                    //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
-                    //miniCard.AddComponent<DragMiniCards>();
-                    //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                    //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId , cardClicked.ergoTokenAmount , cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage);
-                    //card.name = cardClicked.cardName;
-                    //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-                    //miniCard.SetActive(false);
                     break;
                 }
             }
@@ -368,6 +353,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
     public bool IsRecruit(int playerXP, int level)
     {
+        Debug.Log("is recruit called " + playerXP + " level " + level);
         if(playerXP >= 0 && playerXP < 200)
         {
             if(level < 1)
@@ -406,4 +392,92 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         return false;
     }
 
+    //private void UpdateGold(int newGold, bool isMaster)
+    //{
+    //    Gold.instance.SetGold(newGold);
+    //    if (isMaster)
+    //    {
+    //        properties["masterGold"] = newGold;
+    //    }
+    //    else
+    //    {
+    //        properties["clientGold"] = newGold;
+    //    }
+    //    PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    //}
+
+    //private void UpdateGoldLocally(int newGold, bool isMaster, List<int> gList)
+    //{
+    //    Debug.Log(newGold + " new gold " + isMaster + " master ");
+    //    if (isMaster)
+    //    {
+    //        Debug.Log("master " + gList.Count);
+    //        //int totalDeductGold = 0;
+    //        //for(int i = 0; i < gList.Count; i++)
+    //        //{
+    //        //    Debug.Log(gList[i] + " gold saperate value");
+    //        //    totalDeductGold += gList[i];
+    //        //}
+    //        int getGold = Gold.instance.GetGold();
+    //        int availableGold = getGold - totalDeductGold;
+    //        Debug.Log(getGold + " get gold " + totalDeductGold + " deduct gold " + availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
+    //        Gold.instance.SetGold(availableGold);
+    //        properties["masterGold"] = availableGold;
+    //        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    //        goldList.Clear();
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("!master " + gList.Count);
+    //        int totalDeductGold = 0;
+    //        //for (int i = 0; i < gList.Count; i++)
+    //        //{
+    //        //    Debug.Log(gList[i] + " gold saperate value");
+    //        //    totalDeductGold += gList[i];
+    //        //}
+    //        int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+    //        int availableGold = getGold - totalDeductGold;
+    //        Debug.Log(getGold + " get gold " + totalDeductGold + " deduct gold " + availableGold);
+    //        properties["clientGold"] = availableGold;
+    //        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    //        goldList.Clear();
+    //    }
+    //    //if(isMaster)
+    //    //{
+    //    //    Gold.instance.SetGold(newGold);
+    //    //    goldUpdateQueue.Enqueue(newGold);
+    //    //    if (!isProcessingGoldUpdate)
+    //    //    {
+    //    //        StartCoroutine(ProcessGoldUpdateQueue(isMaster));
+    //    //    }
+    //    //}
+    //    //else
+    //    //{
+    //    //    Gold.instance.SetGold(newGold);
+    //    //    goldUpdateQueue.Enqueue(newGold);
+    //    //    if (!isProcessingGoldUpdate)
+    //    //    {
+    //    //        StartCoroutine(ProcessGoldUpdateQueue(isMaster));
+    //    //    }
+    //    //}
+        
+    //}
+
+    //private IEnumerator ProcessGoldUpdateQueue(bool isMaster)
+    //{
+    //    isProcessingGoldUpdate = true;
+    //    Debug.Log(goldUpdateQueue.Count + " gold queue ccount");
+    //    while (goldUpdateQueue.Count > 0)
+    //    {
+    //        int newGold = goldUpdateQueue.Dequeue();
+    //        if(isMaster)
+    //            properties["masterGold"] = newGold;
+    //        else
+    //            properties["clientGold"] = newGold;
+    //        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    //        yield return null; 
+    //    }
+
+    //    isProcessingGoldUpdate = false;
+    //}
 }

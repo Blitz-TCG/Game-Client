@@ -23,8 +23,8 @@ public class CardDetails
     public Sprite cardImage;
     public Sprite cardFrame;
     public CardAbility ability;
-    public AbilityRequirements requirements;
-    public int abilityLevel = 0;
+    //public AbilityRequirements requirements;
+    //public int abilityLevel = 0;
 }
 
 //[Serializable]

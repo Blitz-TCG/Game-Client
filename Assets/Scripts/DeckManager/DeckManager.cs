@@ -824,7 +824,9 @@ public class DeckManager : MonoBehaviour
 
             popupCardObject = cardClicked;
             cardInstance = Instantiate<Card>(bigCardPrefab, popUpPanel.transform);
-            cardInstance.SetProperties(card.id, card.ergoTokenId, card.ergoTokenAmount, card.cardName, card.cardDescription, card.attack, card.HP, card.gold, card.XP, card.fieldLimit, card.clan, card.levelRequired, card.image.sprite, card.frame.sprite, card.cardClass, card.ability, card.requirements, card.abilityLevel);
+            cardInstance.SetProperties(card.id, card.ergoTokenId, card.ergoTokenAmount, card.cardName, card.cardDescription, card.attack, card.HP, card.gold, card.XP, card.fieldLimit, card.clan, card.levelRequired, card.image.sprite, card.frame.sprite, card.cardClass, card.ability
+                //, card.requirements, card.abilityLevel
+                );
         }
 
         leftClickNum = 0;
@@ -1045,7 +1047,9 @@ public class DeckManager : MonoBehaviour
 
         popupCardObject = cardClicked;
         cardInstance = Instantiate<Card>(bigCardPrefab, popUpPanel.transform);
-        cardInstance.SetProperties(card.id, card.ergoTokenId, card.ergoTokenAmount, card.cardName, card.cardDescription, card.attack, card.HP, card.gold, card.XP, card.fieldLimit, card.clan, card.levelRequired, card.image.sprite, card.frame.sprite, card.cardClass, card.ability, card.requirements, card.abilityLevel);
+        cardInstance.SetProperties(card.id, card.ergoTokenId, card.ergoTokenAmount, card.cardName, card.cardDescription, card.attack, card.HP, card.gold, card.XP, card.fieldLimit, card.clan, card.levelRequired, card.image.sprite, card.frame.sprite, card.cardClass, card.ability
+            //, card.requirements, card.abilityLevel
+            );
     }
 
 
@@ -1487,14 +1491,18 @@ public class DeckManager : MonoBehaviour
             if (cardDetails.Where(card => card.id == tempAvailList[i] && (int)card.cardClass == 0).Count() == 1) //accounting for free to play cards
             {
                 Card cardInstance = Instantiate<Card>(cardPrefabs, availableListOfCard.transform);
-                cardInstance.SetProperties(cardDetails[tempAvailList[i] - 1].id, cardDetails[tempAvailList[i] - 1].ergoTokenId, cardDetails[tempAvailList[i] - 1].ergoTokenAmount, cardDetails[tempAvailList[i] - 1].cardName, cardDetails[tempAvailList[i] - 1].cardDescription, cardDetails[tempAvailList[i] - 1].attack, cardDetails[tempAvailList[i] - 1].HP, cardDetails[tempAvailList[i] - 1].gold, cardDetails[tempAvailList[i] - 1].XP, cardDetails[tempAvailList[i] - 1].fieldLimit, cardDetails[tempAvailList[i] - 1].clan, cardDetails[tempAvailList[i] - 1].levelRequired, cardDetails[tempAvailList[i] - 1].cardImage, cardDetails[tempAvailList[i] - 1].cardFrame, cardDetails[tempAvailList[i] - 1].cardClass, cardDetails[tempAvailList[i] - 1].ability, cardDetails[tempAvailList[i] - 1].requirements, cardDetails[tempAvailList[i] - 1].abilityLevel);
+                cardInstance.SetProperties(cardDetails[tempAvailList[i] - 1].id, cardDetails[tempAvailList[i] - 1].ergoTokenId, cardDetails[tempAvailList[i] - 1].ergoTokenAmount, cardDetails[tempAvailList[i] - 1].cardName, cardDetails[tempAvailList[i] - 1].cardDescription, cardDetails[tempAvailList[i] - 1].attack, cardDetails[tempAvailList[i] - 1].HP, cardDetails[tempAvailList[i] - 1].gold, cardDetails[tempAvailList[i] - 1].XP, cardDetails[tempAvailList[i] - 1].fieldLimit, cardDetails[tempAvailList[i] - 1].clan, cardDetails[tempAvailList[i] - 1].levelRequired, cardDetails[tempAvailList[i] - 1].cardImage, cardDetails[tempAvailList[i] - 1].cardFrame, cardDetails[tempAvailList[i] - 1].cardClass, cardDetails[tempAvailList[i] - 1].ability
+                    //, cardDetails[tempAvailList[i] - 1].requirements, cardDetails[tempAvailList[i] - 1].abilityLevel
+                    );
                 cardInstance.name = cardDetails[tempAvailList[i] - 1].cardName;
                 availableCards.Add(cardInstance);
             }
             else if (cardDetails.Where(card => card.id == tempAvailList[i] && (int)card.cardClass != generalsIndex).Count() == 1)
             {
                 Card cardInstance = Instantiate<Card>(cardPrefabs, availableListOfCard.transform);
-                cardInstance.SetProperties(cardDetails[tempAvailList[i] - 1].id, cardDetails[tempAvailList[i] - 1].ergoTokenId, cardDetails[tempAvailList[i] - 1].ergoTokenAmount, cardDetails[tempAvailList[i] - 1].cardName, cardDetails[tempAvailList[i] - 1].cardDescription, cardDetails[tempAvailList[i] - 1].attack, cardDetails[tempAvailList[i] - 1].HP, cardDetails[tempAvailList[i] - 1].gold, cardDetails[tempAvailList[i] - 1].XP, cardDetails[tempAvailList[i] - 1].fieldLimit, cardDetails[tempAvailList[i] - 1].clan, cardDetails[tempAvailList[i] - 1].levelRequired, cardDetails[tempAvailList[i] - 1].cardImage, cardDetails[tempAvailList[i] - 1].cardFrame, cardDetails[tempAvailList[i] - 1].cardClass, cardDetails[tempAvailList[i] - 1].ability, cardDetails[tempAvailList[i] - 1].requirements, cardDetails[tempAvailList[i] - 1].abilityLevel);
+                cardInstance.SetProperties(cardDetails[tempAvailList[i] - 1].id, cardDetails[tempAvailList[i] - 1].ergoTokenId, cardDetails[tempAvailList[i] - 1].ergoTokenAmount, cardDetails[tempAvailList[i] - 1].cardName, cardDetails[tempAvailList[i] - 1].cardDescription, cardDetails[tempAvailList[i] - 1].attack, cardDetails[tempAvailList[i] - 1].HP, cardDetails[tempAvailList[i] - 1].gold, cardDetails[tempAvailList[i] - 1].XP, cardDetails[tempAvailList[i] - 1].fieldLimit, cardDetails[tempAvailList[i] - 1].clan, cardDetails[tempAvailList[i] - 1].levelRequired, cardDetails[tempAvailList[i] - 1].cardImage, cardDetails[tempAvailList[i] - 1].cardFrame, cardDetails[tempAvailList[i] - 1].cardClass, cardDetails[tempAvailList[i] - 1].ability
+                    //, cardDetails[tempAvailList[i] - 1].requirements, cardDetails[tempAvailList[i] - 1].abilityLevel
+                    );
                 cardInstance.name = cardDetails[tempAvailList[i] - 1].cardName;
                 cardInstance.frame.GetComponent<Image>().color = disableColor;
                 cardInstance.image.GetComponent<Image>().color = disableColor;
@@ -1503,7 +1511,9 @@ public class DeckManager : MonoBehaviour
             else if (cardDetails[tempAvailList[i] - 1].ergoTokenId != "" && !ErgoQuery.instance.tokenIDs.Contains(cardDetails[tempAvailList[i] - 1].ergoTokenId))
             {
                 Card cardInstance = Instantiate<Card>(cardPrefabs, availableListOfCard.transform);
-                cardInstance.SetProperties(cardDetails[tempAvailList[i] - 1].id, cardDetails[tempAvailList[i] - 1].ergoTokenId, cardDetails[tempAvailList[i] - 1].ergoTokenAmount, cardDetails[tempAvailList[i] - 1].cardName, cardDetails[tempAvailList[i] - 1].cardDescription, cardDetails[tempAvailList[i] - 1].attack, cardDetails[tempAvailList[i] - 1].HP, cardDetails[tempAvailList[i] - 1].gold, cardDetails[tempAvailList[i] - 1].XP, cardDetails[tempAvailList[i] - 1].fieldLimit, cardDetails[tempAvailList[i] - 1].clan, cardDetails[tempAvailList[i] - 1].levelRequired, cardDetails[tempAvailList[i] - 1].cardImage, cardDetails[tempAvailList[i] - 1].cardFrame, cardDetails[tempAvailList[i] - 1].cardClass, cardDetails[tempAvailList[i] - 1].ability, cardDetails[tempAvailList[i] - 1].requirements, cardDetails[tempAvailList[i] - 1].abilityLevel);
+                cardInstance.SetProperties(cardDetails[tempAvailList[i] - 1].id, cardDetails[tempAvailList[i] - 1].ergoTokenId, cardDetails[tempAvailList[i] - 1].ergoTokenAmount, cardDetails[tempAvailList[i] - 1].cardName, cardDetails[tempAvailList[i] - 1].cardDescription, cardDetails[tempAvailList[i] - 1].attack, cardDetails[tempAvailList[i] - 1].HP, cardDetails[tempAvailList[i] - 1].gold, cardDetails[tempAvailList[i] - 1].XP, cardDetails[tempAvailList[i] - 1].fieldLimit, cardDetails[tempAvailList[i] - 1].clan, cardDetails[tempAvailList[i] - 1].levelRequired, cardDetails[tempAvailList[i] - 1].cardImage, cardDetails[tempAvailList[i] - 1].cardFrame, cardDetails[tempAvailList[i] - 1].cardClass, cardDetails[tempAvailList[i] - 1].ability
+                    //, cardDetails[tempAvailList[i] - 1].requirements, cardDetails[tempAvailList[i] - 1].abilityLevel
+                    );
                 cardInstance.name = cardDetails[tempAvailList[i] - 1].cardName;
                 cardInstance.frame.GetComponent<Image>().color = disableColor;
                 cardInstance.image.GetComponent<Image>().color = disableColor;
@@ -1512,7 +1522,9 @@ public class DeckManager : MonoBehaviour
             else if (cardDetails.Where(card => card.id == tempAvailList[i] && (int)card.cardClass == generalsIndex).Count() == 1)
             {
                 Card cardInstance = Instantiate<Card>(cardPrefabs, availableListOfCard.transform);
-                cardInstance.SetProperties(cardDetails[tempAvailList[i] - 1].id, cardDetails[tempAvailList[i] - 1].ergoTokenId, cardDetails[tempAvailList[i] - 1].ergoTokenAmount, cardDetails[tempAvailList[i] - 1].cardName, cardDetails[tempAvailList[i] - 1].cardDescription, cardDetails[tempAvailList[i] - 1].attack, cardDetails[tempAvailList[i] - 1].HP, cardDetails[tempAvailList[i] - 1].gold, cardDetails[tempAvailList[i] - 1].XP, cardDetails[tempAvailList[i] - 1].fieldLimit, cardDetails[tempAvailList[i] - 1].clan, cardDetails[tempAvailList[i] - 1].levelRequired, cardDetails[tempAvailList[i] - 1].cardImage, cardDetails[tempAvailList[i] - 1].cardFrame, cardDetails[tempAvailList[i] - 1].cardClass, cardDetails[tempAvailList[i] - 1].ability, cardDetails[tempAvailList[i] - 1].requirements, cardDetails[tempAvailList[i] - 1].abilityLevel);
+                cardInstance.SetProperties(cardDetails[tempAvailList[i] - 1].id, cardDetails[tempAvailList[i] - 1].ergoTokenId, cardDetails[tempAvailList[i] - 1].ergoTokenAmount, cardDetails[tempAvailList[i] - 1].cardName, cardDetails[tempAvailList[i] - 1].cardDescription, cardDetails[tempAvailList[i] - 1].attack, cardDetails[tempAvailList[i] - 1].HP, cardDetails[tempAvailList[i] - 1].gold, cardDetails[tempAvailList[i] - 1].XP, cardDetails[tempAvailList[i] - 1].fieldLimit, cardDetails[tempAvailList[i] - 1].clan, cardDetails[tempAvailList[i] - 1].levelRequired, cardDetails[tempAvailList[i] - 1].cardImage, cardDetails[tempAvailList[i] - 1].cardFrame, cardDetails[tempAvailList[i] - 1].cardClass, cardDetails[tempAvailList[i] - 1].ability
+                    //, cardDetails[tempAvailList[i] - 1].requirements, cardDetails[tempAvailList[i] - 1].abilityLevel
+                    );
                 cardInstance.name = cardDetails[tempAvailList[i] - 1].cardName;
                 availableCards.Add(cardInstance);
             }
@@ -1526,14 +1538,18 @@ public class DeckManager : MonoBehaviour
                 if (cardDetails[tempCurrList[i] - 1].ergoTokenId != "" && ErgoQuery.instance.tokenIDs.Contains(cardDetails[tempCurrList[i] - 1].ergoTokenId))
                 {
                     Card cardInstance = Instantiate<Card>(cardPrefabs, currentListOfCard.transform);
-                    cardInstance.SetProperties(cardDetails[tempCurrList[i] - 1].id, cardDetails[tempCurrList[i] - 1].ergoTokenId, cardDetails[tempCurrList[i] - 1].ergoTokenAmount, cardDetails[tempCurrList[i] - 1].cardName, cardDetails[tempCurrList[i] - 1].cardDescription, cardDetails[tempCurrList[i] - 1].attack, cardDetails[tempCurrList[i] - 1].HP, cardDetails[tempCurrList[i] - 1].gold, cardDetails[tempCurrList[i] - 1].XP, cardDetails[tempCurrList[i] - 1].fieldLimit, cardDetails[tempCurrList[i] - 1].clan, cardDetails[tempCurrList[i] - 1].levelRequired, cardDetails[tempCurrList[i] - 1].cardImage, cardDetails[tempCurrList[i] - 1].cardFrame, cardDetails[tempCurrList[i] - 1].cardClass, cardDetails[tempCurrList[i] - 1].ability, cardDetails[tempCurrList[i] - 1].requirements, cardDetails[tempCurrList[i] - 1].abilityLevel);
+                    cardInstance.SetProperties(cardDetails[tempCurrList[i] - 1].id, cardDetails[tempCurrList[i] - 1].ergoTokenId, cardDetails[tempCurrList[i] - 1].ergoTokenAmount, cardDetails[tempCurrList[i] - 1].cardName, cardDetails[tempCurrList[i] - 1].cardDescription, cardDetails[tempCurrList[i] - 1].attack, cardDetails[tempCurrList[i] - 1].HP, cardDetails[tempCurrList[i] - 1].gold, cardDetails[tempCurrList[i] - 1].XP, cardDetails[tempCurrList[i] - 1].fieldLimit, cardDetails[tempCurrList[i] - 1].clan, cardDetails[tempCurrList[i] - 1].levelRequired, cardDetails[tempCurrList[i] - 1].cardImage, cardDetails[tempCurrList[i] - 1].cardFrame, cardDetails[tempCurrList[i] - 1].cardClass, cardDetails[tempCurrList[i] - 1].ability
+                        //, cardDetails[tempCurrList[i] - 1].requirements, cardDetails[tempCurrList[i] - 1].abilityLevel
+                        );
                     cardInstance.name = cardDetails[tempCurrList[i] - 1].cardName;
                     currentCards.Add(cardInstance);
                 }
                 else if (cardDetails[tempCurrList[i] - 1].ergoTokenId != "" && !ErgoQuery.instance.tokenIDs.Contains(cardDetails[tempCurrList[i] - 1].ergoTokenId)) //this removes the card from their current list if they no longer own the token
                 {
                     Card cardInstance = Instantiate<Card>(cardPrefabs, availableListOfCard.transform);
-                    cardInstance.SetProperties(cardDetails[tempCurrList[i] - 1].id, cardDetails[tempCurrList[i] - 1].ergoTokenId, cardDetails[tempCurrList[i] - 1].ergoTokenAmount, cardDetails[tempCurrList[i] - 1].cardName, cardDetails[tempCurrList[i] - 1].cardDescription, cardDetails[tempCurrList[i] - 1].attack, cardDetails[tempCurrList[i] - 1].HP, cardDetails[tempCurrList[i] - 1].gold, cardDetails[tempCurrList[i] - 1].XP, cardDetails[tempCurrList[i] - 1].fieldLimit, cardDetails[tempCurrList[i] - 1].clan, cardDetails[tempCurrList[i] - 1].levelRequired, cardDetails[tempCurrList[i] - 1].cardImage, cardDetails[tempCurrList[i] - 1].cardFrame, cardDetails[tempCurrList[i] - 1].cardClass, cardDetails[tempCurrList[i] - 1].ability, cardDetails[tempCurrList[i] - 1].requirements, cardDetails[tempCurrList[i] - 1].abilityLevel);
+                    cardInstance.SetProperties(cardDetails[tempCurrList[i] - 1].id, cardDetails[tempCurrList[i] - 1].ergoTokenId, cardDetails[tempCurrList[i] - 1].ergoTokenAmount, cardDetails[tempCurrList[i] - 1].cardName, cardDetails[tempCurrList[i] - 1].cardDescription, cardDetails[tempCurrList[i] - 1].attack, cardDetails[tempCurrList[i] - 1].HP, cardDetails[tempCurrList[i] - 1].gold, cardDetails[tempCurrList[i] - 1].XP, cardDetails[tempCurrList[i] - 1].fieldLimit, cardDetails[tempCurrList[i] - 1].clan, cardDetails[tempCurrList[i] - 1].levelRequired, cardDetails[tempCurrList[i] - 1].cardImage, cardDetails[tempCurrList[i] - 1].cardFrame, cardDetails[tempCurrList[i] - 1].cardClass, cardDetails[tempCurrList[i] - 1].ability
+                        //, cardDetails[tempCurrList[i] - 1].requirements, cardDetails[tempCurrList[i] - 1].abilityLevel
+                        );
                     cardInstance.name = cardDetails[tempCurrList[i] - 1].cardName;
                     cardInstance.frame.GetComponent<Image>().color = disableColor;
                     cardInstance.image.GetComponent<Image>().color = disableColor;
@@ -1542,7 +1558,9 @@ public class DeckManager : MonoBehaviour
                 else if (cardDetails[tempCurrList[i] - 1].ergoTokenId == "")
                 {
                     Card cardInstance = Instantiate<Card>(cardPrefabs, currentListOfCard.transform);
-                    cardInstance.SetProperties(cardDetails[tempCurrList[i] - 1].id, cardDetails[tempCurrList[i] - 1].ergoTokenId, cardDetails[tempCurrList[i] - 1].ergoTokenAmount, cardDetails[tempCurrList[i] - 1].cardName, cardDetails[tempCurrList[i] - 1].cardDescription, cardDetails[tempCurrList[i] - 1].attack, cardDetails[tempCurrList[i] - 1].HP, cardDetails[tempCurrList[i] - 1].gold, cardDetails[tempCurrList[i] - 1].XP, cardDetails[tempCurrList[i] - 1].fieldLimit, cardDetails[tempCurrList[i] - 1].clan, cardDetails[tempCurrList[i] - 1].levelRequired, cardDetails[tempCurrList[i] - 1].cardImage, cardDetails[tempCurrList[i] - 1].cardFrame, cardDetails[tempCurrList[i] - 1].cardClass, cardDetails[tempCurrList[i] - 1].ability, cardDetails[tempCurrList[i] - 1].requirements, cardDetails[tempCurrList[i] - 1].abilityLevel);
+                    cardInstance.SetProperties(cardDetails[tempCurrList[i] - 1].id, cardDetails[tempCurrList[i] - 1].ergoTokenId, cardDetails[tempCurrList[i] - 1].ergoTokenAmount, cardDetails[tempCurrList[i] - 1].cardName, cardDetails[tempCurrList[i] - 1].cardDescription, cardDetails[tempCurrList[i] - 1].attack, cardDetails[tempCurrList[i] - 1].HP, cardDetails[tempCurrList[i] - 1].gold, cardDetails[tempCurrList[i] - 1].XP, cardDetails[tempCurrList[i] - 1].fieldLimit, cardDetails[tempCurrList[i] - 1].clan, cardDetails[tempCurrList[i] - 1].levelRequired, cardDetails[tempCurrList[i] - 1].cardImage, cardDetails[tempCurrList[i] - 1].cardFrame, cardDetails[tempCurrList[i] - 1].cardClass, cardDetails[tempCurrList[i] - 1].ability
+                        //, cardDetails[tempCurrList[i] - 1].requirements, cardDetails[tempCurrList[i] - 1].abilityLevel
+                        );
                     cardInstance.name = cardDetails[tempCurrList[i] - 1].cardName;
                     currentCards.Add(cardInstance);
                 }
@@ -1964,7 +1982,9 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < matchedCardListForAvailable.Count; i++)
         {
             Card cardInstance = Instantiate<Card>(cardPrefabs, availableListOfCard.transform);
-            cardInstance.SetProperties(matchedCardListForAvailable[i].id, matchedCardListForAvailable[i].ergoTokenId, matchedCardListForAvailable[i].ergoTokenAmount, matchedCardListForAvailable[i].cardName, matchedCardListForAvailable[i].cardDescription, matchedCardListForAvailable[i].attack, matchedCardListForAvailable[i].HP, matchedCardListForAvailable[i].gold, matchedCardListForAvailable[i].XP, matchedCardListForAvailable[i].fieldLimit, matchedCardListForAvailable[i].clan, matchedCardListForAvailable[i].levelRequired, matchedCardListForAvailable[i].cardImage, matchedCardListForAvailable[i].cardFrame, matchedCardListForAvailable[i].cardClass, matchedCardListForAvailable[i].ability, matchedCardListForAvailable[i].requirements, matchedCardListForAvailable[i].abilityLevel);
+            cardInstance.SetProperties(matchedCardListForAvailable[i].id, matchedCardListForAvailable[i].ergoTokenId, matchedCardListForAvailable[i].ergoTokenAmount, matchedCardListForAvailable[i].cardName, matchedCardListForAvailable[i].cardDescription, matchedCardListForAvailable[i].attack, matchedCardListForAvailable[i].HP, matchedCardListForAvailable[i].gold, matchedCardListForAvailable[i].XP, matchedCardListForAvailable[i].fieldLimit, matchedCardListForAvailable[i].clan, matchedCardListForAvailable[i].levelRequired, matchedCardListForAvailable[i].cardImage, matchedCardListForAvailable[i].cardFrame, matchedCardListForAvailable[i].cardClass, matchedCardListForAvailable[i].ability
+                //, matchedCardListForAvailable[i].requirements, matchedCardListForAvailable[i].abilityLevel
+                );
             cardInstance.name = matchedCardListForAvailable[i].cardName;
             availableCards.Add(cardInstance);
         }
@@ -1972,7 +1992,9 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < unmatchedCardListForAvailable.Count; i++)
         {
             Card cardInstance = Instantiate<Card>(cardPrefabs, availableListOfCard.transform);
-            cardInstance.SetProperties(unmatchedCardListForAvailable[i].id, unmatchedCardListForAvailable[i].ergoTokenId, unmatchedCardListForAvailable[i].ergoTokenAmount, unmatchedCardListForAvailable[i].cardName, unmatchedCardListForAvailable[i].cardDescription, unmatchedCardListForAvailable[i].attack, unmatchedCardListForAvailable[i].HP, unmatchedCardListForAvailable[i].gold, unmatchedCardListForAvailable[i].XP, unmatchedCardListForAvailable[i].fieldLimit, unmatchedCardListForAvailable[i].clan, unmatchedCardListForAvailable[i].levelRequired, unmatchedCardListForAvailable[i].cardImage, unmatchedCardListForAvailable[i].cardFrame, unmatchedCardListForAvailable[i].cardClass, unmatchedCardListForAvailable[i].ability, unmatchedCardListForAvailable[i].requirements, unmatchedCardListForAvailable[i].abilityLevel);
+            cardInstance.SetProperties(unmatchedCardListForAvailable[i].id, unmatchedCardListForAvailable[i].ergoTokenId, unmatchedCardListForAvailable[i].ergoTokenAmount, unmatchedCardListForAvailable[i].cardName, unmatchedCardListForAvailable[i].cardDescription, unmatchedCardListForAvailable[i].attack, unmatchedCardListForAvailable[i].HP, unmatchedCardListForAvailable[i].gold, unmatchedCardListForAvailable[i].XP, unmatchedCardListForAvailable[i].fieldLimit, unmatchedCardListForAvailable[i].clan, unmatchedCardListForAvailable[i].levelRequired, unmatchedCardListForAvailable[i].cardImage, unmatchedCardListForAvailable[i].cardFrame, unmatchedCardListForAvailable[i].cardClass, unmatchedCardListForAvailable[i].ability
+                //, unmatchedCardListForAvailable[i].requirements, unmatchedCardListForAvailable[i].abilityLevel
+                );
             cardInstance.name = unmatchedCardListForAvailable[i].cardName;
             cardInstance.frame.GetComponent<Image>().color = disableColor;
             cardInstance.image.GetComponent<Image>().color = disableColor;

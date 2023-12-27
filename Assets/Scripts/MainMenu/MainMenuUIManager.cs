@@ -392,7 +392,8 @@ public class MainMenuUIManager : MonoBehaviour
         yield return StartCoroutine(CountGlobalMessageTotal());
         GlobalListenForNewMessages();
 
-        countOnlineUsers = StartCoroutine(CountOnlineUsers());
+	countOnlineUsers = StartCoroutine(CountOnlineUsers());
+
     }
 
     public void PresenceCheck() //todo - figure out presence check
@@ -428,31 +429,31 @@ public class MainMenuUIManager : MonoBehaviour
     {
         while (true)
         {
-            DatabaseReference usersRef = FirebaseDatabase.DefaultInstance.GetReference("users");
-            var query = usersRef.OrderByChild("online").EqualTo("T");
-            var getOnlineUsersTask = query.GetValueAsync();
+        DatabaseReference usersRef = FirebaseDatabase.DefaultInstance.GetReference("users");
+        var query = usersRef.OrderByChild("online").EqualTo("T");
+        var getOnlineUsersTask = query.GetValueAsync();
 
-            yield return new WaitUntil(predicate: () => getOnlineUsersTask.IsCompleted);
-            if (getOnlineUsersTask.IsFaulted)
-            {
-                Debug.LogError("Error getting online users: " + getOnlineUsersTask.Exception);
-            }
-            else if (getOnlineUsersTask.IsCompleted)
-            {
-                DataSnapshot snapshot = getOnlineUsersTask.Result;
-                int onlineCount = 0;
+        yield return new WaitUntil(predicate: () => getOnlineUsersTask.IsCompleted);
+        if (getOnlineUsersTask.IsFaulted)
+        {
+            Debug.LogError("Error getting online users: " + getOnlineUsersTask.Exception);
+        }
+        else if (getOnlineUsersTask.IsCompleted)
+        {
+            DataSnapshot snapshot = getOnlineUsersTask.Result;
+            int onlineCount = 0;
 
-                foreach (DataSnapshot userSnapshot in snapshot.Children)
+            foreach (DataSnapshot userSnapshot in snapshot.Children)
+            {
+                if (userSnapshot.HasChild("online") && userSnapshot.Child("online").Value.ToString() == "T")
                 {
-                    if (userSnapshot.HasChild("online") && userSnapshot.Child("online").Value.ToString() == "T")
-                    {
-                        onlineCount++;
-                    }
+                    onlineCount++;
                 }
-
-                onlineCountTMP.text = "Online: " + onlineCount.ToString();
-                Debug.Log($"Number of online users: {onlineCount}");
             }
+
+            onlineCountTMP.text = "Online: " + onlineCount.ToString();
+            Debug.Log($"Number of online users: {onlineCount}");
+        }
 
             yield return new WaitForSeconds(30f);
         }
@@ -711,9 +712,8 @@ public class MainMenuUIManager : MonoBehaviour
 
     private int CalculateMaxXpForCurrentLevel(int level)
     {
-        if(level <= 0) return 0;
-
-        int xp = 25 * level * level - 50 * level + 25;
+        int xp = 25 * (level + 1) * (level + 1) - 50 * (level + 1) + 25;
+        Debug.Log(level + " level " + xp + " xp ");
         return xp;
     }
 
@@ -769,9 +769,9 @@ public class MainMenuUIManager : MonoBehaviour
                     Debug.Log("Unable to parse use experience.");
                     levelText.text = "LVL 1";
                     currentUserXP = 0;
-                    currentUserLevel = -1;
-                    nextXpRequired = -1;
-                    maxXPForCurrentLevel = 0;
+                    currentUserLevel = 1;
+                    nextXpRequired = 25;
+                    maxXPForCurrentLevel = 25;
                 }
             }
             else if (xpAmount.Result.Value == null)
@@ -784,8 +784,8 @@ public class MainMenuUIManager : MonoBehaviour
                 Debug.Log("xp needed for next level: " + xpNeededForNextLevel);
                 currentUserXP = 0;
                 currentUserLevel = 1;
-                nextXpRequired = xpNeededForNextLevel;
-                maxXPForCurrentLevel = 0;
+                nextXpRequired = 25;
+                maxXPForCurrentLevel = 25;
             }
         }
         isUserXPLoaded = true;
@@ -860,7 +860,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             cursorManager.CursorNormal();
             RemoveListener();
-            StopCoroutines();
+		StopCoroutines();
             FirebaseManager.instance.auth.SignOut();
             GameManager.instance.ChangeScene(0);
         }
@@ -868,7 +868,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             cursorManager.CursorNormal();
             RemoveListener();
-            StopCoroutines();
+	StopCoroutines();
             FirebaseManager.instance.auth.SignOut();
             GameManager.instance.ChangeScene(0);
         }
@@ -889,7 +889,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             Debug.Log("could not cleanly terminate session");
             RemoveListener();
-            StopCoroutines();
+		StopCoroutines();
             FirebaseManager.instance.auth.SignOut();
             Application.Quit();
         }
@@ -897,7 +897,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             FirebaseManager.instance.auth.SignOut();
             RemoveListener();
-            StopCoroutines();
+		StopCoroutines();
             Application.Quit();
             Debug.Log("exit");
         }
@@ -2720,7 +2720,7 @@ public class MainMenuUIManager : MonoBehaviour
         settingsHelpTextEnabled.SetActive(false);
         cursorManager.CursorNormal();
         RemoveListener();
-        StopCoroutines();
+	StopCoroutines();
         GameManager.instance.ChangeScene(3);
     }
     public void DeckBuilder()
@@ -2728,7 +2728,7 @@ public class MainMenuUIManager : MonoBehaviour
         settingsHelpTextEnabled.SetActive(false);
         cursorManager.CursorNormal();
         RemoveListener();
-        StopCoroutines();
+	StopCoroutines();
         GameManager.instance.ChangeScene(2);
     }
 

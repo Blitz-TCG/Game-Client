@@ -3,12 +3,12 @@ using Firebase.Database;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class databaseExampleDeleteAfterReview : MonoBehaviour
+public class DatabaseIntegration : MonoBehaviour
 {
     //this is pseudocode for you to put into your matchmaking script(s) where appropropriate to update match and user data after Skirmish matches are completed
     //you worked on the 'MatchData' script previously, so either move this content over into it after review or repurpose this script as needed
 
-    public static databaseExampleDeleteAfterReview instance;
+    public static DatabaseIntegration instance;
 
     //match data -------- these 'match data' elements are where I need your help, these need to point to the relevant match variables at the end of a match
     string gameMode;

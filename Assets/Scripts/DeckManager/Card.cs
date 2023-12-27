@@ -101,13 +101,13 @@ public enum CardAbility
     Flourish,
 }
 
-public enum AbilityRequirements
-{
-    AtTheStartOfTurn,
-    AtTheEndOfTurn,
-    OnAttack,
-    //Goaded
-}
+//public enum AbilityRequirements
+//{
+//    AtTheStartOfTurn,
+//    AtTheEndOfTurn,
+//    OnAttack,
+//    //Goaded
+//}
 
 [System.Serializable]
 public class Card : MonoBehaviour
@@ -131,8 +131,8 @@ public class Card : MonoBehaviour
     public bool isAlreadyAttacked;
     public int dropPosition = 0;
     public CardAbility ability;
-    public AbilityRequirements requirements;
-    public int abilityLevel = 0;
+    //public AbilityRequirements requirements;
+    //public int abilityLevel = 0;
 
 
     public int cardId;
@@ -150,7 +150,9 @@ public class Card : MonoBehaviour
     public TMP_Text levelRequiredText;
     public Image image;
     public Image frame;
-    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName, string cDescription, int cAttack, int cHP, int cGold, int cXP, int cFieldLimit, string cClan, CardLevel cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass, CardAbility cAbility, AbilityRequirements req, int ablvl)
+    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName, string cDescription, int cAttack, int cHP, int cGold, int cXP, int cFieldLimit, string cClan, CardLevel cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass, CardAbility cAbility
+        //, AbilityRequirements req, int ablvl
+        )
     {
         cardId = identity;
         cId.text = identity.ToString();
@@ -192,11 +194,13 @@ public class Card : MonoBehaviour
         image.sprite = cImage;
         frame.sprite = cFrame;
         cardClass = cardclass;
-        requirements = req;
-        abilityLevel = ablvl;
+        //requirements = req;
+        //abilityLevel = ablvl;
     }
 
-    public void SetMiniCard(int identity, string ergoId, long ergoAmount, string cName, int cAttack, int cHP, int cGold, int cXP, Sprite cImage, CardAbility cAbility, AbilityRequirements req, int ablvl)
+    public void SetMiniCard(int identity, string ergoId, long ergoAmount, string cName, int cAttack, int cHP, int cGold, int cXP, Sprite cImage, CardAbility cAbility
+        //, AbilityRequirements req, int ablvl
+        )
     {
         cardId = identity;
         cId.text = identity.ToString();
@@ -220,20 +224,24 @@ public class Card : MonoBehaviour
         XP = cXP;
         image.sprite = cImage;
         ability = cAbility;
-        requirements = req;
-        abilityLevel = ablvl;
+        //requirements = req;
+        //abilityLevel = ablvl;
     }
 
     public bool DealDamage(int damage, GameObject card)
     {
+        Debug.Log(damage + " attacking damage value " + HP);
         bool destroyed = false;
         HP -= damage;
+        Debug.Log(HP + " hp value ");
         if (HP <= 0)
         {
+            Debug.Log("destroyed card " + HP);
             Destroy(card.gameObject);
             destroyed = true;
         }
         HPText.SetText(HP.ToString());
+        Debug.Log(HP + " Hp value");
         return destroyed;
     }
 
