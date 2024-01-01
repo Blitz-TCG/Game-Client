@@ -152,6 +152,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     public static bool completeGame = false;
     private GameObject currentXP;
     private GameObject totalXP;
+    private bool isPanelOpen = false;
+    private float openTimeThreshold = 2.0f; 
+    private float timePanelHasBeenOpen = 0.0f;
 
     #endregion
 
@@ -695,6 +698,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
             xpSlider.interactable = false;
         }
+
+        HidePanel(cardError);
     }
 
     private void CalculateWinner()
@@ -738,9 +743,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         xpSlider = resultPanel.transform.GetChild(0).Find("XP Progress Bar").GetComponent<Slider>();
         currentXP = xpSlider.gameObject.transform.Find("xp").gameObject;
         totalXP = xpSlider.gameObject.transform.Find("total").gameObject;
-        currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
-        totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
-        xpSlider.interactable = false;
         string winnerName = "";
         int turnCounter = (int)PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"];
         string winnerId = "", loserId = "";
@@ -760,6 +762,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log(" master xp " + gainedMasterXp + " gained " + totalMasterXP + " total " + totalPlayerGold + " total gold");
             Debug.Log(MainMenuUIManager.instance.currentUserXP + " current xp " + MainMenuUIManager.instance.maxXPForCurrentLevel + " max xp");
             xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+            currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+            totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+            xpSlider.interactable = false;
             PlayerPrefs.SetInt("totalGold", totalPlayerGold);
             PlayerPrefs.SetInt("totalXP", totalMasterXP);
             Debug.LogError(" player health " + playerHealth + " enemy health " + enemyHealth);
@@ -804,7 +809,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 //winnerDeck = PhotonNetwork.LocalPlayer.GetNext();
                 experienceText.SetText(masterPlayerXP.ToString());
                 Debug.Log(MainMenuUIManager.instance.currentUserXP + " current xp " + MainMenuUIManager.instance.maxXPForCurrentLevel + " max xp");
-                xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+                //totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+                //xpSlider.interactable = false;
             }
             else if (enemyHealth > playerHealth)
             {
@@ -844,7 +852,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 loserMmrChange = 0;
                 experienceText.SetText(masterPlayerXP.ToString());
                 Debug.Log(MainMenuUIManager.instance.currentUserXP + " current xp " + MainMenuUIManager.instance.maxXPForCurrentLevel + " max xp");
-                xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+                //totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+                //xpSlider.interactable = false;
             }
             else if (playerHealth == enemyHealth)
             {
@@ -881,7 +892,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 experienceText.SetText(masterPlayerXP.ToString());
                 Debug.Log(MainMenuUIManager.instance.currentUserXP + " current xp " + MainMenuUIManager.instance.maxXPForCurrentLevel + " max xp");
-                xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+                //totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+                //xpSlider.interactable = false;
             }
             //mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer("master"));
             mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer());
@@ -893,6 +907,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
             Debug.Log(MainMenuUIManager.instance.currentUserXP + " current xp " + MainMenuUIManager.instance.maxXPForCurrentLevel + " max xp");
             xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+            currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+            totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+            xpSlider.interactable = false;
             Debug.LogError(PlayerPrefs.GetInt("clientCount") + " client value " + PhotonNetwork.LocalPlayer.NickName);
             totalTurnText.SetText(turnCounter.ToString());
             Debug.Log(" client xp " + gainedClientXp + " gained " + totalClientXP + " total " + totalClientGold + " total client gold");
@@ -922,7 +939,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 experienceText.SetText(clientPlayerXP.ToString());
                 Debug.Log(MainMenuUIManager.instance.currentUserXP + " current xp " + MainMenuUIManager.instance.maxXPForCurrentLevel + " max xp");
-                xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+                //totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+                //xpSlider.interactable = false;
             }
             else if (enemyHealth > playerHealth)
             {
@@ -947,7 +967,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 experienceText.SetText(clientPlayerXP.ToString());
                 Debug.Log(MainMenuUIManager.instance.currentUserXP + " current xp " + MainMenuUIManager.instance.maxXPForCurrentLevel + " max xp");
-                xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+                //totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+                //xpSlider.interactable = false;
+
             }
             else if (playerHealth == enemyHealth)
             {
@@ -972,7 +996,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 matchStatusVal = "draw";
                 experienceText.SetText(clientPlayerXP.ToString());
                 Debug.Log(MainMenuUIManager.instance.currentUserXP + " current xp " + MainMenuUIManager.instance.maxXPForCurrentLevel + " max xp");
-                xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //xpSlider.value = ((float)MainMenuUIManager.instance.currentUserXP / (float)MainMenuUIManager.instance.maxXPForCurrentLevel);
+                //currentXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.currentUserXP.ToString());
+                //totalXP.GetComponent<TMP_Text>().SetText(MainMenuUIManager.instance.maxXPForCurrentLevel.ToString());
+                //xpSlider.interactable = false;
             }
             //mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer("client"));
             mainMenu.GetComponent<Button>().onClick.AddListener(() => LeavePlayer());
@@ -1022,18 +1049,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log(loserTurnCount + " loser turn count");
             Debug.Log(matchStatusVal + " status");
             StartCoroutine(DatabaseIntegration.instance.MatchDataUpdates(winnerId, loserId, winnerDeck, loserDeck, totalSeconds, winnerTurnCount, loserTurnCount, matchStatusVal));
-            //matchData = new MatchData(matchId, mode, winnerId, loserId, winnerDeck, loserDeck, winnerXP, loserXP, winnerMmrChange, loserMmrChange, totalSeconds, turnCounter, status);
             Debug.Log("leave player name " + PhotonNetwork.IsMasterClient + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + matchStatusVal);
         }
 
         PhotonNetwork.AutomaticallySyncScene = false;
 
         Debug.LogError("End game after " + endGame + " player name " + PhotonNetwork.LocalPlayer);
-
-        //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedGold"] + " mgg ");
-        //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedGold"] + " cgg ");
-        //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["masterGainedXP"] + " mgx ");
-        //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["clientGainedXP"] + " cgx ");
     }
 
     [PunRPC]
@@ -1544,8 +1565,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log("attacking " + attacking + " target " + target);
         Debug.Log("attacking " + attacking.HP + " target " + target.HP);
         Debug.Log(attackVal + " attackVal " + targetVal + " targetVal");
-        bool disAttackPlayer = attacking.DealDamage(targetVal, attackParent.transform.GetChild(0).gameObject);
-        bool disTargetPlayer = target.DealDamage(attackVal, targetParent.transform.GetChild(0).gameObject);
+        bool disAttackPlayer = attacking.DealDamage(attackVal, attackParent.transform.GetChild(0).gameObject);
+        bool disTargetPlayer = target.DealDamage(targetVal, targetParent.transform.GetChild(0).gameObject);
 
         Debug.Log(disAttackPlayer + " dis attack player " + disTargetPlayer);
 
@@ -4667,4 +4688,27 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
         return totalValue;
     }
+
+    public void HidePanel(GameObject cardError)
+    {
+        GameObject currentObject = cardError.transform.GetChild(0).gameObject;
+        bool currentPanelState = currentObject.activeSelf;
+
+        if (currentPanelState)
+        {
+            timePanelHasBeenOpen += Time.deltaTime;
+            if (timePanelHasBeenOpen >= openTimeThreshold)
+            {
+                //Debug.Log("Panel has been open for at least 2 seconds!");
+            }
+        }
+        else
+        {
+            timePanelHasBeenOpen = 0.0f;
+        }
+
+        isPanelOpen = currentPanelState;
+    }
+
 }
+

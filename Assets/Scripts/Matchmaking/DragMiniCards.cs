@@ -214,6 +214,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             isDragging = false;
         }
         previousVal = currVal;
+        gameboardManager.HidePanel(cardError);
     }
     
     public void CardDrag()
