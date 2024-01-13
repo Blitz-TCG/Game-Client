@@ -30,6 +30,16 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.GoodFavor, new CardRequirements("2", "Frontline"));
         requirements.Add(CardAbility.Crit, new CardRequirements("Unlimited", "None"));
         requirements.Add(CardAbility.Goad, new CardRequirements("2", "Frontline"));
+        requirements.Add(CardAbility.Meteor, new CardRequirements("1", "Frontline"));
+        requirements.Add(CardAbility.Kamikaze, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Renewal, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Hunger, new CardRequirements("Unlimited", "None"));
+        requirements.Add(CardAbility.Clone, new CardRequirements("1", "Frontline"));
+        requirements.Add(CardAbility.Evolve, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Malignant, new CardRequirements("1", "Frontline"));
+        requirements.Add(CardAbility.Mutate, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Mutate, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Mutate, new CardRequirements("Unlimited", "Frontline"));
     }
 }
 

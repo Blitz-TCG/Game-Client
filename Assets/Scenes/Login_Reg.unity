@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1071,7 +1071,7 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &464047137
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1088,7 +1088,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &464047138
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1869,6 +1870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -1971,7 +1973,6 @@ GameObject:
   - component: {fileID: 901408438}
   - component: {fileID: 901408437}
   - component: {fileID: 901408440}
-  - component: {fileID: 901408439}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -2096,27 +2097,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 901408435}
   m_CullTransparentMesh: 0
---- !u!114 &901408439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 901408435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6124f6b987dc8d44a99abbadf6a5c2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursorTextureDrag: {fileID: 0}
-  cursorTextureIbeam: {fileID: 0}
-  cursorTextureSelect: {fileID: 0}
-  hotspotDrag: {x: 16, y: 16}
-  hotspotIbeam: {x: 5.4, y: 5.4}
-  hotspotSelect: {x: 5.4, y: 5.4}
-  cursorMode: 0
-  audioHoverButtonStandard: {fileID: 0}
-  audioClickButtonStandard: {fileID: 0}
 --- !u!65 &901408440
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4866,7 +4846,7 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1911422641
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4883,7 +4863,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &1911422642
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5410,7 +5391,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1956675305
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5427,7 +5408,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &1956675306
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5521,7 +5503,7 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &2005335730
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5538,7 +5520,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &2005335731
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7043,7 +7026,6 @@ GameObject:
   - component: {fileID: 3248631697399860936}
   - component: {fileID: 3248631697399860937}
   - component: {fileID: 3248631697399860945}
-  - component: {fileID: 3248631697399860944}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -7051,27 +7033,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &3248631697399860944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3248631697399860943}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6124f6b987dc8d44a99abbadf6a5c2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursorTextureDrag: {fileID: 0}
-  cursorTextureIbeam: {fileID: 0}
-  cursorTextureSelect: {fileID: 0}
-  hotspotDrag: {x: 16, y: 16}
-  hotspotIbeam: {x: 5.4, y: 5.4}
-  hotspotSelect: {x: 5.4, y: 5.4}
-  cursorMode: 0
-  audioHoverButtonStandard: {fileID: 0}
-  audioClickButtonStandard: {fileID: 0}
 --- !u!65 &3248631697399860945
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7964,7 +7925,6 @@ GameObject:
   - component: {fileID: 3248631697788636777}
   - component: {fileID: 3248631697788636779}
   - component: {fileID: 3248631697788636776}
-  - component: {fileID: 3248631697788636784}
   - component: {fileID: 3248631697788636783}
   m_Layer: 5
   m_Name: Text
@@ -7986,27 +7946,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 543.479, y: 54.254, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3248631697788636784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3248631697788636782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6124f6b987dc8d44a99abbadf6a5c2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursorTextureDrag: {fileID: 0}
-  cursorTextureIbeam: {fileID: 0}
-  cursorTextureSelect: {fileID: 0}
-  hotspotDrag: {x: 16, y: 16}
-  hotspotIbeam: {x: 5.4, y: 5.4}
-  hotspotSelect: {x: 5.4, y: 5.4}
-  cursorMode: 0
-  audioHoverButtonStandard: {fileID: 0}
-  audioClickButtonStandard: {fileID: 0}
 --- !u!222 &3248631697817501529
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8585,7 +8524,6 @@ GameObject:
   - component: {fileID: 3248631697995688044}
   - component: {fileID: 3248631697995688046}
   - component: {fileID: 3248631697995688047}
-  - component: {fileID: 3248631697995688049}
   - component: {fileID: 3248631697995688048}
   m_Layer: 5
   m_Name: Text
@@ -8704,27 +8642,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 543.479, y: 54.254, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3248631697995688049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3248631697995688045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6124f6b987dc8d44a99abbadf6a5c2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursorTextureDrag: {fileID: 0}
-  cursorTextureIbeam: {fileID: 0}
-  cursorTextureSelect: {fileID: 0}
-  hotspotDrag: {x: 16, y: 16}
-  hotspotIbeam: {x: 5.4, y: 5.4}
-  hotspotSelect: {x: 5.4, y: 5.4}
-  cursorMode: 0
-  audioHoverButtonStandard: {fileID: 0}
-  audioClickButtonStandard: {fileID: 0}
 --- !u!224 &3248631698081881724
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9559,7 +9476,6 @@ GameObject:
   - component: {fileID: 3248631698558422650}
   - component: {fileID: 3248631698558422651}
   - component: {fileID: 3248631698558422653}
-  - component: {fileID: 3248631698558422652}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -9664,27 +9580,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3248631698558422652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3248631698558422649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6124f6b987dc8d44a99abbadf6a5c2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursorTextureDrag: {fileID: 0}
-  cursorTextureIbeam: {fileID: 0}
-  cursorTextureSelect: {fileID: 0}
-  hotspotDrag: {x: 16, y: 16}
-  hotspotIbeam: {x: 5.4, y: 5.4}
-  hotspotSelect: {x: 5.4, y: 5.4}
-  cursorMode: 0
-  audioHoverButtonStandard: {fileID: 0}
-  audioClickButtonStandard: {fileID: 0}
 --- !u!65 &3248631698558422653
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10521,7 +10416,6 @@ GameObject:
   - component: {fileID: 3248631698969145278}
   - component: {fileID: 3248631698969145272}
   - component: {fileID: 3248631698969145273}
-  - component: {fileID: 3248631698969145281}
   - component: {fileID: 3248631698969145280}
   m_Layer: 5
   m_Name: Text
@@ -10543,27 +10437,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 543.479, y: 54.254, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3248631698969145281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3248631698969145279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6124f6b987dc8d44a99abbadf6a5c2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursorTextureDrag: {fileID: 0}
-  cursorTextureIbeam: {fileID: 0}
-  cursorTextureSelect: {fileID: 0}
-  hotspotDrag: {x: 16, y: 16}
-  hotspotIbeam: {x: 5.4, y: 5.4}
-  hotspotSelect: {x: 5.4, y: 5.4}
-  cursorMode: 0
-  audioHoverButtonStandard: {fileID: 0}
-  audioClickButtonStandard: {fileID: 0}
 --- !u!222 &3248631698989193536
 CanvasRenderer:
   m_ObjectHideFlags: 0

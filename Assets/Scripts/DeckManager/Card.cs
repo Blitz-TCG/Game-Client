@@ -22,10 +22,10 @@ public enum CardLevel
 
 public enum CardAbility
 {
-    //Clone,
-    //Meteor,
-    //Evolve,
-    //Malignant,
+    Clone,
+    Meteor,
+    Evolve,
+    Malignant,
     GoodFavor,
     Summon,
     Serenity,
@@ -245,6 +245,38 @@ public class Card : MonoBehaviour
         return destroyed;
     }
 
+    public int HealCard(int healAmount)
+    {
+        HP += healAmount;
+        Debug.Log(healAmount + " heal amount " + HP + " hp value");
+        HPText.SetText(HP.ToString());
+        return HP;
+    }
+
+    public int SetCardAttack(int attackAmount)
+    {
+        attack += attackAmount;
+        Debug.Log(attackAmount + " attack Amount " + attack + " attack value");
+        attackText.SetText(attack.ToString());
+        return attack;
+    }
+    
+    public int SetCardXP(int XPAmount)
+    {
+        XP += XPAmount;
+        Debug.Log(XPAmount + " XPAmount " + XP + " XP value");
+        XPText.SetText(XP.ToString());
+        return XP;
+    }
+    
+    public int SetCardGold(int goldAmount)
+    {
+        gold += goldAmount;
+        Debug.Log(goldAmount + " goldAmount " + gold + " gold value");
+        attackText.SetText(gold.ToString());
+        return gold;
+    }
+
     public bool IsAttack()
     {
         return this.isAlreadyAttacked;
@@ -274,4 +306,47 @@ public class Card : MonoBehaviour
         Debug.Log("Base ability used.");
     }
 
+    public void SetHP(int HPAmt)
+    {
+        HP = HPAmt;
+        HPText.SetText(HPAmt.ToString());
+    }
+    
+    public void SetXP(int XPAmt)
+    {
+        XP = XPAmt;
+        XPText.SetText(XPAmt.ToString());
+    }
+    
+    public void SetGold(int goldAmt)
+    {
+        gold = goldAmt;
+        goldText.SetText(goldAmt.ToString());
+    }
+
+    public void SetAttack(int attackAmt)
+    {
+        attack = attackAmt;
+        attackText.SetText(attackAmt.ToString());
+    }
+
+    public int GetCardAttack()
+    {
+        return attack;
+    }
+    
+    public int GetCardHealth()
+    {
+        return HP;
+    }
+    
+    public int GetCardGold()
+    {
+        return gold;
+    }
+    
+    public int GetCardXP()
+    {
+        return XP;
+    }
 }

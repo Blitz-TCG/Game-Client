@@ -15,6 +15,29 @@ public class CursorManager : MonoBehaviour
     public AudioSource audioHoverButtonStandard;
     public AudioSource audioClickButtonStandard;
 
+    private void Awake()
+    {
+        Debug.Log("Awake called ");
+        if (transform.parent == null)
+        {
+            DontDestroyOnLoad(gameObject);
+
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            // If not the root, destroy it, or handle it as appropriate for your use case
+            Destroy(gameObject);
+        }
+    }
+
     public void CursorIbeam()
     {
         Cursor.SetCursor(cursorTextureIbeam, hotspotIbeam, cursorMode);
