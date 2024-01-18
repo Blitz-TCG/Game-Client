@@ -48,13 +48,13 @@ public class Clone : Card
         return false;
     }
 
-    public Tuple<int, int, int, int> ReplicateCard(Card card)
+    public Tuple<int, int, int, int> ReplicateCard(Card card, CardDetails originalCard)
     {
         Debug.Log("ReplicateCard called ");
-        int replicateAttack = card.SetCardAttack(card.attack);
-        int replicateHealth = card.HealCard(card.HP);
-        int replicateGold = card.SetCardGold(card.gold);
-        int replicateXP = card.SetCardXP(card.XP);
+        int replicateAttack = card.SetCardAttack(card.attack, originalCard.attack);
+        int replicateHealth = card.HealCard(card.HP, originalCard.HP);
+        int replicateGold = card.SetCardGold(card.gold, originalCard.gold);
+        int replicateXP = card.SetCardXP(card.XP, originalCard.XP);
         Debug.Log(" new values are " + replicateAttack + " attack " + replicateGold + " gold " + replicateHealth + " health " + replicateXP + " xp");
         return new Tuple<int, int, int, int>(replicateAttack, replicateHealth, replicateGold, replicateXP);
     }

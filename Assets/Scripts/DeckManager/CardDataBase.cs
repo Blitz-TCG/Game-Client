@@ -38,8 +38,9 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Evolve, new CardRequirements("Unlimited", "Frontline"));
         requirements.Add(CardAbility.Malignant, new CardRequirements("1", "Frontline"));
         requirements.Add(CardAbility.Mutate, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Mutate, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Mutate, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Farmer, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Buster, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Summon, new CardRequirements("1", "None"));
     }
 }
 

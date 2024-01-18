@@ -5,10 +5,10 @@ using UnityEngine;
 public class Hunger : Card
 {
     public int beforeAttackGiveHealth = 3;
-    public int UseAbility(Card card)
+    public int UseAbility(Card card, int cardHP)
     {
         base.UseAbility();
         Debug.Log(" use renewal called " + card.name);
-        return card.HealCard(beforeAttackGiveHealth);
+        return card.HealCard(beforeAttackGiveHealth, cardHP);
     }
 }

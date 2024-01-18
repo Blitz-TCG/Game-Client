@@ -99,6 +99,7 @@ public enum CardAbility
     Respite,
     Savings,
     Flourish,
+    None
 }
 
 //public enum AbilityRequirements
@@ -245,34 +246,38 @@ public class Card : MonoBehaviour
         return destroyed;
     }
 
-    public int HealCard(int healAmount)
+    public int HealCard(int healAmount, int maxCardHP)
     {
         HP += healAmount;
         Debug.Log(healAmount + " heal amount " + HP + " hp value");
+        if(HP > maxCardHP) { HP = maxCardHP; }
         HPText.SetText(HP.ToString());
         return HP;
     }
 
-    public int SetCardAttack(int attackAmount)
+    public int SetCardAttack(int attackAmount, int maxCardAttack)
     {
         attack += attackAmount;
         Debug.Log(attackAmount + " attack Amount " + attack + " attack value");
+        if(attack > maxCardAttack) {  attack = maxCardAttack; }
         attackText.SetText(attack.ToString());
         return attack;
     }
     
-    public int SetCardXP(int XPAmount)
+    public int SetCardXP(int XPAmount, int maxCardXP)
     {
         XP += XPAmount;
         Debug.Log(XPAmount + " XPAmount " + XP + " XP value");
+        if(XP > maxCardXP) {  XP = maxCardXP; }
         XPText.SetText(XP.ToString());
         return XP;
     }
     
-    public int SetCardGold(int goldAmount)
+    public int SetCardGold(int goldAmount, int maxCardGold)
     {
         gold += goldAmount;
         Debug.Log(goldAmount + " goldAmount " + gold + " gold value");
+        if(gold > maxCardGold) { gold = maxCardGold; }
         attackText.SetText(gold.ToString());
         return gold;
     }

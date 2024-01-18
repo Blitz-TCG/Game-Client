@@ -163,6 +163,8 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             endParent = previousParent;
             endSubParent = previousSubParent;
             dragEnd = true;
+            Debug.Log("Card setted");
+            gameboardManager.OnSetCard(card, PhotonNetwork.IsMasterClient);
         }
         else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
@@ -196,6 +198,8 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             endParent = previousParent;
             endSubParent = previousSubParent;
             dragEnd = true;
+            Debug.Log("Card setted ");
+            gameboardManager.OnSetCard(card, PhotonNetwork.IsMasterClient);
         }
         
     }

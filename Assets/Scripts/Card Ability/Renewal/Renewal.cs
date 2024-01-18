@@ -6,10 +6,10 @@ public class Renewal : Card
 {
     public int healthAmount = 3;
 
-    public int UseAbility(Card card)
+    public int UseAbility(Card card, int maxHP)
     {
         Debug.Log(" use renewal called " + card.name);
-        return card.HealCard(healthAmount);
+        return card.HealCard(healthAmount, maxHP);
     }
 }
 
