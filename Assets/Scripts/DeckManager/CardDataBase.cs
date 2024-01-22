@@ -41,6 +41,9 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Farmer, new CardRequirements("Unlimited", "Frontline"));
         requirements.Add(CardAbility.Buster, new CardRequirements("Unlimited", "Frontline"));
         requirements.Add(CardAbility.Summon, new CardRequirements("1", "None"));
+        requirements.Add(CardAbility.Repair, new CardRequirements("Unlimited", "None"));
+        requirements.Add(CardAbility.GeneralBoon, new CardRequirements("Unlimited", "None"));
+        requirements.Add(CardAbility.Serenity, new CardRequirements("1", "Frontline"));
     }
 }
 

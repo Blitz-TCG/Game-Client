@@ -2172,6 +2172,18 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Summon summon = card.gameObject.AddComponent<Summon>();
                 summon.ability = CardAbility.Summon;
                 break;
+            case CardAbility.Repair:
+                Repair repair = card.gameObject.AddComponent<Repair>();
+                repair.ability = CardAbility.Repair;
+                break;
+            case CardAbility.GeneralBoon:
+                GeneralBoon boon = card.gameObject.AddComponent<GeneralBoon>();
+                boon.ability = CardAbility.GeneralBoon;
+                break;
+            case CardAbility.Serenity:
+                Serenity serenity = card.gameObject.AddComponent<Serenity>();
+                serenity.ability = CardAbility.Serenity;
+                break;
             default: break;
         }
     }
@@ -2400,6 +2412,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log("ButtonClick " + button.name);
         pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
         Debug.Log(pv + " pv " + Hover.clickCounter);
+        Transform settedParent = null;
+
         if (Hover.clickCounter == 1)
         {
             Hover.clickCounter = 0;
@@ -2429,9 +2443,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     ResetAnimation("field");
                     return;
                 }
-
-                Hover.cardParent.transform.SetParent(EventSystem.current.currentSelectedGameObject.gameObject.transform);
-                Hover.cardParent.transform.position = EventSystem.current.currentSelectedGameObject.gameObject.transform.position;
+                settedParent = EventSystem.current.currentSelectedGameObject.gameObject.transform;
+                Hover.cardParent.transform.SetParent(settedParent);
+                Hover.cardParent.transform.position = settedParent.position;
                 Destroy(Hover.cardParent.GetComponent<DragMiniCards>());
                 Hover.cardParent.AddComponent<DragFieldCard>();
                 Debug.Log(Hover.cardParent.name + " Hover.cardParent");
@@ -2443,7 +2457,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log(handCount + " hand count " + fieldCount + " field count");
                 Debug.Log("move card called not in others " + handCount + " hand count " + fieldCount);
                 Debug.Log("Card setted ");
-                OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient);
+                OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient, settedParent);
                 pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount, cardId);
                 Debug.Log("==== master-end ====");
             }
@@ -2475,8 +2489,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     return;
                 }
 
-                Hover.cardParent.transform.SetParent(EventSystem.current.currentSelectedGameObject.gameObject.transform);
-                Hover.cardParent.transform.position = EventSystem.current.currentSelectedGameObject.gameObject.transform.position;
+                settedParent = EventSystem.current.currentSelectedGameObject.gameObject.transform;
+                Hover.cardParent.transform.SetParent(settedParent);
+                Hover.cardParent.transform.position = settedParent.position;
                 Destroy(Hover.cardParent.GetComponent<DragMiniCards>());
                 Hover.cardParent.AddComponent<DragFieldCard>();
                 Debug.Log(Hover.cardParent.name + " Hover.cardParent");
@@ -2488,7 +2503,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log(handCount + " hand count " + fieldCount + " field count");
                 Debug.Log("move card called not in others " + handCount + " hand count " + fieldCount);
                 Debug.Log("card setted ");
-                OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient);
+                OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient, settedParent);
                 pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount, cardId);
                 Debug.Log("==== client-end ====");
             }
@@ -3630,6 +3645,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log(" start the turn called ");
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
 
         Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount);
         for (int i = 0; i < playerField.transform.childCount; i++)
@@ -3818,24 +3834,24 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         }
 
                     }
-
-
-                    //for (int j = 0; j < enemyField.transform.childCount; j++)
-                    //{
-                    //    if (enemyField.transform.GetChild(j).tag.Contains("Front Line"))
-                    //    {
-                    //        if (enemyField.transform.GetChild(j).childCount == 1)
-                    //        {
-                    //            if (enemyField.transform.GetChild(j).GetChild(0).childCount == 1)
-                    //            {
-                    //                int parentId = int.Parse(enemyField.transform.GetChild(j).name.Split(" ")[2]);
-                    //                enemyFieldCardsList.Add(parentId);
-                    //            }
-                    //        }
-                    //    }
-                    //}
                 }
-                //}
+                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Serenity>())
+                {
+                    if ((playerField.transform.GetChild(i).tag.Contains("Front Line")))
+                    {
+                        Serenity serenity = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Serenity>();
+                        Card currentCard = serenity.GetComponent<Card>();
+                        CardDetails bigCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
+                        int parentId = int.Parse(playerField.transform.GetChild(i).name.Split(" ")[2]);
+                        Debug.Log(serenity + " Serenity called");
+                        
+                        
+                        List<int> playerFieldList = serenity.GetSurroundingPositions(parentId);
+                        Debug.Log(string.Join(", ", playerFieldList) + "  player field list ");
+
+                        serenity.UseSerenityAbility(playerFieldList, playerField, pv);
+                    }
+                }
             }
         }
     }
@@ -5171,15 +5187,35 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         return newList;
     }
 
-    public void OnSetCard(Card card, bool isMaster)
+    public void OnSetCard(Card card, bool isMaster, Transform parent)
     {
+        Debug.Log(" on set card method called " + card + "   card " + isMaster + " ismaster " + parent + " parent");
+        pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+
         if (card.GetComponent<Repair>())
         {
-            GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
-            Repair repair = card.GetComponent<Repair>();
-            repair.OnSetHealWall(playerWall, gameObject.GetComponent<PhotonView>());
+            Debug.Log(" inside card repair " + parent.name);
+            if(parent.gameObject.tag.Contains("Front Line"))
+            {
+                Debug.Log("front line");
+                GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
+                Debug.Log(" player wall " + playerWall);
+                Repair repair = card.GetComponent<Repair>();
+                repair.OnSetHealWall(playerWall, pv);
+            }
         }
-        
+        else if(card.GetComponent<GeneralBoon>())
+        {
+            Debug.Log(" inside card general boon " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                GameObject palyerProfile = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Profile").gameObject;
+
+                Debug.Log(" player general " + palyerProfile);
+                GeneralBoon boon = card.GetComponent<GeneralBoon>();
+                boon.OnSetHealGeneral(palyerProfile, pv);
+            }
+        }
     }
 
     #region Card Ability RPCS
@@ -5389,6 +5425,37 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
     }
 
+    [PunRPC]
+    private void SetWallHealthToOthers(int health)
+    {
+        Debug.Log("SetWallHealthToOthers called " + health);
+        enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
+        Debug.Log("enemy wall " + enemyWall + " health " + enemyWall.transform.Find("Remaining Health"));
+        enemyWall.transform.Find("Remaining Health").gameObject.GetComponent<TMP_Text>().SetText(health.ToString());
+    }
+
+    [PunRPC]
+    private void SetGeneralHealthToOthers(int health)
+    {
+        Debug.Log("SetGeneralHealthToOthers called " + health);
+        GameObject enemyGeneral = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Profile").gameObject;
+        enemyGeneral.transform.Find("Player Deck Health").GetChild(0).gameObject.GetComponent<TMP_Text>().SetText(health.ToString());
+
+    }
+
+    [PunRPC]
+    private void SerenityAbilityForOthers(int pos
+        //, int health
+        )
+    {
+        Debug.Log("SerenityAbilityForOthers called " 
+            //+ health + " health "
+            + pos + " pos ");
+        //GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        //Card currentCard = enemyField.transform.GetChild(pos).GetChild(0).GetChild(0).GetComponent<Card>();
+        //currentCard.SetHP(health);
+    }
+    
     #endregion
 }
 
