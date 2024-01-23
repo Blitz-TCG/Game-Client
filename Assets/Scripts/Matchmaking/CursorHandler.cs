@@ -5,14 +5,17 @@ using UnityEngine.EventSystems;
 
 public class CursorHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    private CursorManager manager;
     public void OnPointerEnter(PointerEventData eventData)
     {
-        CursorManager.instance.AudioHoverButtonStandard();
-        CursorManager.instance.CursorSelect();
+        manager = GameObject.Find("CursorManager").GetComponent<CursorManager>();
+        manager.AudioHoverButtonStandard();
+        manager.CursorSelect();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        CursorManager.instance.CursorNormal();
+        manager = GameObject.Find("CursorManager").GetComponent<CursorManager>();
+        manager.CursorNormal();
     }
 }
