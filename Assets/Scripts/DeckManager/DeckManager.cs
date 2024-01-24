@@ -1667,10 +1667,10 @@ public class DeckManager : MonoBehaviour
             isEdit = false;
             deckProfile.enabled = false;
             DisplayDeck();
+            cursorManager.CursorNormal();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         countOfLevelOne = 0;
-
     }
 
     public void SaveCurrentData(int[] currentCardindex, string filterCurrent, string selectedGameboardNameLoad, string generalPfpCurrentPlaceholder, int deckId, int generalsIndex)
@@ -1831,6 +1831,7 @@ public class DeckManager : MonoBehaviour
         availableCards.Clear();
         currentCards.Clear();
         DisplayDeck();
+        cursorManager.CursorNormal();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -1941,6 +1942,7 @@ public class DeckManager : MonoBehaviour
         search.GetComponent<TMP_InputField>().text = "";
         availableCards.Clear();
         currentCards.Clear();
+        cursorManager.CursorNormal();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
