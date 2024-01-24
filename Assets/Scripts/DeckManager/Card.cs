@@ -132,6 +132,8 @@ public class Card : MonoBehaviour
     public bool isAlreadyAttacked;
     public int dropPosition = 0;
     public CardAbility ability;
+    public bool isParalyzedCard =  false;
+    public int paralyzedCardCount = 0;
     //public AbilityRequirements requirements;
     //public int abilityLevel = 0;
 
@@ -353,5 +355,31 @@ public class Card : MonoBehaviour
     public int GetCardXP()
     {
         return XP;
+    }
+
+    public void SetParalyzedCard(int paralyzedValue,int id)
+    {
+        isParalyzedCard = true;
+        paralyzedCardCount += paralyzedValue;
+        if (paralyzedCardCount == 0) 
+        {
+            isParalyzedCard = false;
+            CardDetails getCard = CardDataBase.instance.cardDetails.Find(currCard => currCard.id == id);
+            ability = getCard.ability;
+            Debug.Log("ability setted " + ability);
+        }
+            
+    }
+
+    public bool GetParalyzedCard()
+    {
+        Debug.Log("isParalyzedCard " + isParalyzedCard);
+        return isParalyzedCard;
+    }
+
+    public int GetParalyzedCardCount()
+    {
+        Debug.Log("paralyzedCardCount " + paralyzedCardCount);
+        return paralyzedCardCount;
     }
 }

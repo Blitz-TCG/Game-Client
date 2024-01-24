@@ -49,6 +49,8 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Serenity, new CardRequirements("1", "Frontline"));
         requirements.Add(CardAbility.Scattershot, new CardRequirements("Unlimited", "None"));
         requirements.Add(CardAbility.Berserker, new CardRequirements("Unlimited", "None"));
+        requirements.Add(CardAbility.Mason, new CardRequirements("1", "Frontline"));
+        requirements.Add(CardAbility.Paralyze, new CardRequirements("2", "Frontline"));
     }
 
     public List<int> GetSurroundingPositions(int selectedPosition)

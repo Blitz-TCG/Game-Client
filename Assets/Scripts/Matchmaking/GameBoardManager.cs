@@ -1,3 +1,4 @@
+using Microsoft.Win32.SafeHandles;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -9,7 +10,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-//using UnityEngine.Timeline;
 
 public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 {
@@ -192,17 +192,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         if (PhotonNetwork.IsMasterClient)
         {
             customProp["master"] = true;
-            //PlayerPrefs.SetInt("masterCount", 0);
             customProp["totalMasterTurn"] = 0;
             customProp["masterUserId"] = FirebaseManager.instance.user.UserId;
             customProp["masterCurrentXP"] = MainMenuUIManager.instance.currentUserXP;
             customProp["masterCurrentLevel"] = MainMenuUIManager.instance.currentUserLevel;
             customProp["masterRequiredXPForNext"] = MainMenuUIManager.instance.nextXpRequired;
-            Debug.Log(" current master userId " + FirebaseManager.instance.user.UserId);
-            Debug.Log(" current master currentUserXP " + MainMenuUIManager.instance.currentUserXP);
-            Debug.Log(" current master currentUserLevel " + MainMenuUIManager.instance.currentUserLevel);
-            Debug.Log(" current master max " + MainMenuUIManager.instance.maxXPForCurrentLevel);
-            Debug.Log(" current master nextXpRequired " + MainMenuUIManager.instance.nextXpRequired);
+            //Debug.Log(" current master userId " + FirebaseManager.instance.user.UserId);
+            //Debug.Log(" current master currentUserXP " + MainMenuUIManager.instance.currentUserXP);
+            //Debug.Log(" current master currentUserLevel " + MainMenuUIManager.instance.currentUserLevel);
+            //Debug.Log(" current master max " + MainMenuUIManager.instance.maxXPForCurrentLevel);
+            //Debug.Log(" current master nextXpRequired " + MainMenuUIManager.instance.nextXpRequired);
             PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
             identifiedPlayerIsMaster = true;
         }
@@ -216,11 +215,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             customProp["clientCurrentLevel"] = MainMenuUIManager.instance.currentUserLevel;
             customProp["clientRequiredXPForNext"] = MainMenuUIManager.instance.nextXpRequired;
             customProp["clientUserId"] = FirebaseManager.instance.user.UserId;
-            Debug.Log(" current master client id " + FirebaseManager.instance.user.UserId);
-            Debug.Log(" current master client currentUserXP " + MainMenuUIManager.instance.currentUserXP);
-            Debug.Log(" current master client currentUserLevel " + MainMenuUIManager.instance.currentUserLevel);
-            Debug.Log(" current master client max " + MainMenuUIManager.instance.maxXPForCurrentLevel);
-            Debug.Log(" current master client nextXpRequired " + MainMenuUIManager.instance.nextXpRequired);
+            //Debug.Log(" current master client id " + FirebaseManager.instance.user.UserId);
+            //Debug.Log(" current master client currentUserXP " + MainMenuUIManager.instance.currentUserXP);
+            //Debug.Log(" current master client currentUserLevel " + MainMenuUIManager.instance.currentUserLevel);
+            //Debug.Log(" current master client max " + MainMenuUIManager.instance.maxXPForCurrentLevel);
+            //Debug.Log(" current master client nextXpRequired " + MainMenuUIManager.instance.nextXpRequired);
             PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
             identifiedPlayerIsMaster = false;
         }
@@ -311,7 +310,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             timeUp = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Timer").GetChild(0).GetComponent<PlayerTimer>();
             timeDown.PauseTimer("down");
             timeUp.PauseTimer("up");
-            //Debug.LogError(" time up parent " + timeUp.transform.parent.parent.parent.name + " down " + timeDown.transform.parent.parent.parent);
             StopAllCoroutines();
             //resultPanel.SetActive(true);
             //winTimer.InitTimers(30);
@@ -324,9 +322,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         if (winTimer.timeUp && endGame)
         {
-            //Debug.LogError("the timer up and end game called before " + endGame + " " + PhotonNetwork.LocalPlayer.NickName);
             endGame = false;
-            //Debug.LogError("the timer up and end game called after " + endGame + " " + PhotonNetwork.LocalPlayer.NickName);
             LeaveBothPlayer();
         }
 
@@ -805,7 +801,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         int winnerXP = 0, loserXP = 0, winnerMmrChange = 0, loserMmrChange = 0;
         int winnerTurnCount = 0, loserTurnCount = 0;
         string winnerDeck = "unKnown", loserDeck = "unKnown";
-        string matchId = "ABCD";
         string matchStatusVal = "normal";
 
         if (PhotonNetwork.IsMasterClient)
@@ -1067,18 +1062,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
         enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
 
-        //<----- Here set the xp for player to the database (playerController.totalXP) ------->
-
-        //if (PhotonNetwork.IsMasterClient)	
-        //{	
-        //    //Debug.LogError("master turn " + turnCountMaster);	
-        //}	
-        //else	
-        //{	
-        //    //Debug.LogError(" client turn " + turnCountClient);	
-        //}
-
-
         endTime = DateTime.Now;
         int totalSeconds = (int)(endTime - initialStartTime).TotalSeconds;
         status = MatchStatus.Normal;
@@ -1086,31 +1069,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         timeDown.PauseTimer("down");
         timeUp.PauseTimer("up");
         StopAllCoroutines();
-        //int minutes = (int)totalSeconds / 60;
-        //int seconds = (int)totalSeconds % 60;
-        //Debug.LogError(" minutes " + minutes + " seconds " + seconds);	
-        //matchLengthText.SetText($"{minutes} : {seconds}");	
-        //Debug.LogError(" winner name " + winnerName);
+
         if (PhotonNetwork.IsMasterClient)
         {
             pv.RPC("SetUserSpendTime", RpcTarget.All, totalSeconds);
             Debug.Log("winnerDeck.ToString() " + winnerDeck + " loserDeck.ToString() " + loserDeck + " totalSeconds " + totalSeconds + " winnerTurnCount " + winnerTurnCount + " loserTurnCount " + loserTurnCount + " winner hash ");
 
-            Debug.Log(winnerId + " winner id");
-            Debug.Log(loserId + " loser id");
-            Debug.Log(winnerDeck + " winner deck");
-            Debug.Log(loserDeck + " loser deck");
-            Debug.Log(totalSeconds + " seconds");
-            Debug.Log(winnerTurnCount + " winner turn count");
-            Debug.Log(loserTurnCount + " loser turn count");
-            Debug.Log(matchStatusVal + " status");
             StartCoroutine(DatabaseIntegration.instance.MatchDataUpdates(winnerId, loserId, winnerDeck, loserDeck, totalSeconds, winnerTurnCount, loserTurnCount, matchStatusVal));
             Debug.Log("leave player name " + PhotonNetwork.IsMasterClient + " winnerId " + winnerId + " loser id " + loserId + " winnerxp " + winnerXP + " loserxp " + loserXP + " winner mmr " + winnerMmrChange + " loser mmr " + loserMmrChange + " winner deck " + winnerDeck + " loser deck " + loserDeck + " status " + matchStatusVal);
         }
 
         PhotonNetwork.AutomaticallySyncScene = false;
-
-        Debug.LogError("End game after " + endGame + " player name " + PhotonNetwork.LocalPlayer);
     }
 
     [PunRPC]
@@ -1194,6 +1163,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             bool destroyPlayer = false, destroyEnemy = false;
             int destroyPlayerAttackValue = 0, destroyEnemyAttackValue = 0;
+
+            if (attacking.GetParalyzedCard())
+            {
+                Debug.Log("GetParalyzedCard called " + attacking.GetParalyzedCard());
+                cardError.transform.GetChild(0).gameObject.SetActive(true);
+                cardError.GetComponentInChildren<TMP_Text>().SetText($"You are paralysed by the enemy's card. Please wait for {attacking.GetParalyzedCardCount()} turn.");
+                Invoke("RemoveErrorObject", 2f);
+                return;
+            }
 
             if (IsGoaded(enemyField))
             {
@@ -2318,6 +2296,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Berserker berserker = card.gameObject.AddComponent<Berserker>();
                 berserker.ability = CardAbility.Berserker;
                 break;
+            case CardAbility.Mason:
+                Mason mason = card.gameObject.AddComponent<Mason>();
+                mason.ability = CardAbility.Mason;
+                break;
+            case CardAbility.Paralyze:
+                Paralyze paralyze = card.gameObject.AddComponent<Paralyze>();
+                paralyze.ability = CardAbility.Paralyze;
+                break;
             default: break;
         }
     }
@@ -2393,60 +2379,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log("level " + level + " playerController.playerGainedXP " + playerController.playerGainedXP + " card display");
             DisplayCard(card.GetComponent<Card>(), Color.white);
         }
-
-
-        //if (playerController.totalXP < 200 && level > 1)
-        //{
-        //    Debug.Log("less 200");
-        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
-        //    currentColor.a = 0.6f;
-        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
-        //}
-        //else
-        //{
-        //    Debug.Log("200 else");
-        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
-        //    currentColor.a = 1f;
-        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
-        //}
-
-        //if (playerController.totalXP < 400 && level > 4)
-        //{
-        //    Debug.Log("400 less ");
-        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
-        //    currentColor.a = 0.6f;
-        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
-        //}
-        //else
-        //{
-        //    Debug.Log("400 else");
-        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
-        //    currentColor.a = 1f;
-        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
-        //}
-
-        //if (playerController.totalXP < 600 && level > 8)
-        //{
-        //    Debug.Log("600 less");
-        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
-        //    currentColor.a = 0.6f;
-        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
-        //}
-        //else
-        //{
-        //    Debug.Log("600 else");
-        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
-        //    currentColor.a = 1f;
-        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
-        //}
-
-        //if (playerController.totalXP > 600)
-        //{
-        //    Debug.Log("greter 600");
-        //    Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
-        //    currentColor.a = 1f;
-        //    card.transform.GetChild(0).GetComponent<Image>().color = currentColor;
-        //}
     }
 
     private void DisplayCard(Card card, Color color)
@@ -3779,10 +3711,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log(" start the turn called ");
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
+        GameObject enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
+
         pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
 
-        Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount);
-        for (int i = 0; i < playerField.transform.childCount; i++)
+        bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
+        Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount + " is wall destroyed " + isPlayerWallDestroyed + " count of field " + (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount/2));
+        for (int i = 0; i < (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2); i++)
         {
             Debug.Log(" i value " + i + " playerField.transform.GetChild(i).childCount " + playerField.transform.GetChild(i).childCount);
             if (playerField.transform.GetChild(i).childCount == 1)
@@ -3807,10 +3743,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                         int damage = meteor.damageAmount;
                         meteor.ResetRound();
-                        for (int j = 0; j < enemyField.transform.childCount; j++)
+                        bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+                        for (int j = 0; j < (isEnemyWallDestroyed ? enemyField.transform.childCount : playerField.transform.childCount / 2); j++)
                         {
-                            if (enemyField.transform.GetChild(j).tag.Contains("Front Line"))
-                            {
+                            //if (enemyField.transform.GetChild(j).tag.Contains("Front Line"))
+                            //{
                                 if (enemyField.transform.GetChild(j).childCount == 1)
                                 {
                                     if (enemyField.transform.GetChild(j).GetChild(0).childCount == 1)
@@ -3820,7 +3757,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                         attackedCard.DealDamage(meteor.damageAmount, attackedCard.transform.parent.gameObject);
                                     }
                                 }
-                            }
+                            //}
                         }
                         Debug.Log(damage + " damage amount value");
                         pv.RPC("ApplyDamageToOthers", RpcTarget.Others, damage);
@@ -3881,10 +3818,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     Debug.Log(malignant + " Malignant called");
                     List<int> enemyFieldCardsList = new();
                     enemyFieldCardsList.Clear();
-                    for (int j = 0; j < enemyField.transform.childCount; j++)
+
+                    bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+                    for (int j = 0; j < (isEnemyWallDestroyed ? enemyField.transform.childCount : enemyField.transform.childCount / 2); j++)
                     {
-                        if (enemyField.transform.GetChild(j).tag.Contains("Front Line"))
-                        {
+                        //if (enemyField.transform.GetChild(j).tag.Contains("Front Line"))
+                        //{
                             if (enemyField.transform.GetChild(j).childCount == 1)
                             {
                                 if (enemyField.transform.GetChild(j).GetChild(0).childCount == 1)
@@ -3893,7 +3832,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                     enemyFieldCardsList.Add(parentId);
                                 }
                             }
-                        }
+                        //}
                     }
                     Debug.Log("list added =>");
                     List<int> listOfEnemyCardsToBeDamaged = malignant.GetRandomPositionListOfEnemyCards(enemyFieldCardsList);
@@ -3971,8 +3910,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }
                 else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Serenity>())
                 {
-                    if ((playerField.transform.GetChild(i).tag.Contains("Front Line")))
-                    {
+                    //if ((playerField.transform.GetChild(i).tag.Contains("Front Line")))
+                    //{
                         Serenity serenity = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Serenity>();
                         Card currentCard = serenity.GetComponent<Card>();
                         CardDetails bigCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
@@ -3984,7 +3923,26 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         Debug.Log(string.Join(", ", playerFieldList) + "  player field list ");
 
                         serenity.UseSerenityAbility(playerFieldList, playerField, pv);
-                    }
+                    //}
+                }
+                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Mason>())
+                {
+                    //if (playerField.transform.GetChild(i).tag.Contains("Front Line"))
+                    //{
+                        //GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
+                        Mason mason
+                        = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Mason>();
+                        Card currentCard = mason.GetComponent<Card>();
+                        Debug.Log(mason + " Mason called");
+                        CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
+                        mason.OnSetAndActiveHealWall(playerWall, pv);
+                    //}
+                }
+
+                if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().GetParalyzedCard())
+                {
+                    int count = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().GetParalyzedCardCount();
+                    playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().SetParalyzedCard(count > 0 ? -1 : 0);
                 }
             }
         }
@@ -4006,8 +3964,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log(Gold.instance.gameObject.transform.parent.parent.name + " parent ");
         }
     }
-
-
 
     public void MovePlayer()
     {
@@ -5266,9 +5222,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
-
-        Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount);
-        for (int i = 0; i < playerField.transform.childCount; i++)
+        GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
+        bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
+        Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount + " (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2) " + (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2));
+        for (int i = 0; i < (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2); i++)
         {
             Debug.Log(" i value " + i + " playerField.transform.GetChild(i).childCount " + playerField.transform.GetChild(i).childCount);
             if (playerField.transform.GetChild(i).childCount == 1)
@@ -5326,6 +5283,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log(" on set card method called " + card + "   card " + isMaster + " ismaster " + parent + " parent");
         pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
+        playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
 
         if (card.GetComponent<Repair>())
         {
@@ -5351,6 +5312,41 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 boon.OnSetHealGeneral(palyerProfile, pv);
             }
         }
+        else if (card.GetComponent<Mason>())
+        {
+            Debug.Log(" inside card mason " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                Debug.Log(" player general " + playerWall);
+                Mason mason = card.GetComponent<Mason>();
+                mason.OnSetAndActiveHealWall(playerWall, pv);
+            }
+        }
+        else if (card.GetComponent<Paralyze>())
+        {
+            Debug.Log(" inside card Paralyze " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                Paralyze paralyze = card.GetComponent<Paralyze>();
+                List<int> totalCardList = paralyze.GenerateEnemyCardList(enemyField, IsWallDestroyed(enemyWall));
+                Debug.Log(totalCardList.Count + " total card list count ");
+
+                for(int i = 0; i < totalCardList.Count; i++)
+                {
+                   Card currentCard = enemyField.transform.GetChild(totalCardList[i] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+                    currentCard.SetParalyzedCard(paralyze.cardsToBeParalyzedForTurns, currentCard.id);
+                    currentCard.ability = CardAbility.None;
+                    pv.RPC("ParalyzeCardInOthers", RpcTarget.Others, (totalCardList[i] - 1), paralyze.cardsToBeParalyzedForTurns);
+                }
+            }
+        }
+    }
+
+    private bool IsWallDestroyed(GameObject wall)
+    {
+        int wallHealth = int.Parse(wall.transform.Find("Remaining Health").GetComponent<TMP_Text>().text);
+        if (wallHealth <= 0) return true;
+        return false;
     }
 
     #region Card Ability RPCS
@@ -5392,24 +5388,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             //Debug.Log(enemyField.transform.GetChild(parentId - 1).GetChild(0).name + " name of the card");
             //Destroy(enemyField.transform.GetChild(parentId - 1).gameObject);
         }
-
-        //for (int j = 0; j < enemyField.transform.childCount; j++)
-        //{
-        //    if (enemyField.transform.GetChild(j).tag.Contains("Front Line"))
-        //    {
-        //        if (enemyField.transform.GetChild(j).childCount == 1)
-        //        {
-        //            if (enemyField.transform.GetChild(j).GetChild(0).childCount == 1)
-        //            {
-        //                if(enemyField.transform.GetChild(j).GetChild(0).GetChild(0).GetComponent<Card>().id == id)
-        //                {
-        //                    enemyField.transform.GetChild(j).GetChild(0).GetChild(0).GetComponent<Card>().SetHP(healAmt);
-        //                    //enemyField.transform.GetChild(j).GetChild(0).GetChild(0).GetComponent<Card>()
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
     }
 
     [PunRPC]
@@ -5590,7 +5568,25 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log(currentCard + " current card");
         currentCard.SetHP(health);
     }
-    
+
+    [PunRPC]
+    private void SetOrActiveWallHealthToOthers(int health)
+    {
+        Debug.Log("SetWallHealthToOthers called " + health);
+        enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
+        Debug.Log("enemy wall " + enemyWall + " health " + enemyWall.transform.Find("Remaining Health"));
+        enemyWall.transform.Find("Remaining Health").gameObject.GetComponent<TMP_Text>().SetText(health.ToString());
+    }
+
+    [PunRPC]
+    private void ParalyzeCardInOthers(int position, int turns)
+    {
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        Card currentCard = playerField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
+        currentCard.SetParalyzedCard(turns, currentCard.id);
+        currentCard.ability = CardAbility.None;
+    }
+
     #endregion
 }
 
