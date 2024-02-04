@@ -18,7 +18,8 @@ public class MainMenuTooltips : MonoBehaviour, IPointerEnterHandler, IPointerExi
                 MainMenuUIManager.instance.settingsHelpTextEnabled != null &&
                 !MainMenuUIManager.instance.settingsHelpTextEnabled.activeSelf)
             {
-                if (name == "Skirmish" || name == "Deck Builder" || name == "Exit")
+                if (name == "Skirmish" || name == "Deck Builder" || name == "Exit"
+                    || name == "Global Chat Switch" || name == "Global Chat" || name == "Whisper Chat")
                 {
                     Tooltip.SetActive(true);
                 }
@@ -36,7 +37,8 @@ public class MainMenuTooltips : MonoBehaviour, IPointerEnterHandler, IPointerExi
                 MainMenuUIManager.instance.settingsHelpTextEnabled != null &&
                 !MainMenuUIManager.instance.settingsHelpTextEnabled.activeSelf)
             {
-                if (name == "Skirmish" || name == "Deck Builder" || name == "Exit")
+                if (name == "Skirmish" || name == "Deck Builder" || name == "Exit"
+                    || name == "Global Chat Switch" || name == "Global Chat" || name == "Whisper Chat")
                 {
                     Tooltip.SetActive(false);
                 }

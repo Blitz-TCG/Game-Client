@@ -17,7 +17,7 @@ public class FirebaseManager : MonoBehaviour
     public CursorManager cursorManager;
 
     //Version Check
-    public string versionCheck = "0.1";
+    public string versionCheck = "0.1"; //might be easier to just change this to a string now that the firebase datatype is also a string...
     public TMP_Text currentVersionText;
 
     //Other Variables
@@ -115,7 +115,7 @@ public class FirebaseManager : MonoBehaviour
 
     private void Awake()
     {
-        currentVersionText.text = "Build Version: " + versionCheck;
+        currentVersionText.text = "Build Version: " + versionCheck;//.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
         AuthUI = GameObject.FindGameObjectWithTag("AuthUIManager"); //accesing a gameobject via tags, could pick something better
         RememberMe = GameObject.FindGameObjectWithTag("RememberMe");
@@ -136,7 +136,6 @@ public class FirebaseManager : MonoBehaviour
 
     private void Start() //initializing firebase
     {
-
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(checkDependecyTask =>
         {
             var dependencyStatus = checkDependecyTask.Result;
@@ -558,31 +557,43 @@ public class FirebaseManager : MonoBehaviour
         {
             DataSnapshot versionData = version.Result;
 
-            Debug.Log(version.Result);
-            Debug.Log("Current Version: " + versionData.Value);
+            Debug.Log("Raw Version Data: " + versionData.Value);
+            string versionString = versionData.Value.ToString();
+            Debug.Log("Version String: " + versionString);
 
-            string correctedVersion = versionData.Value.ToString().Replace(',', '.');
+/*            if (versionString.Contains(","))
+            {
+                versionString = versionString.Replace(",", ".");
+                Debug.Log("Corrected Version String: " + versionString);
+            }*/
 
-            Debug.Log("Coversion: " + correctedVersion);
+/*            if (double.TryParse(versionString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double versionNumber))
+            {*/
+               // Debug.Log("Parsed Version Number: " + versionString);
 
-            if (correctedVersion == "0")
+                if (versionString == "0")
+                {
+                    LoadingAnimationLoginOff();
+                    loginOutputTextSuccess.text = "";
+                    loginOutputTextError.text = "Blitz is down for maintenance";
+                }
+                else if (versionString != versionCheck)
+                {
+                    LoadingAnimationLoginOff();
+                    loginOutputTextSuccess.text = "";
+                loginOutputTextError.text = "Please download latest version: " + versionString;//.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    downloadButton.SetActive(true);
+                }
+                else
+                {
+                    StartCoroutine(LoginReg);
+                    timerIsRunning = true;
+                }
+            //}
+/*            else
             {
-                LoadingAnimationLoginOff();
-                loginOutputTextSuccess.text = "";
-                loginOutputTextError.text = "Blitz is down for maintenance";
-            }
-            else if (correctedVersion != versionCheck)
-            {
-                LoadingAnimationLoginOff();
-                loginOutputTextSuccess.text = "";
-                loginOutputTextError.text = "Please download latest version: " + correctedVersion;
-                downloadButton.SetActive(true);
-            }
-            else
-            {
-                StartCoroutine(LoginReg);
-                timerIsRunning = true;
-            }
+                Debug.LogError("Unable to parse version number from Firebase.");
+            }*/
         }
     }
 

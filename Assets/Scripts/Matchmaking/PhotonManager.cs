@@ -255,28 +255,35 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         }
         else if (version.IsCompleted)
         {
-            Debug.Log(" completed ");
             DataSnapshot versionData = version.Result;
+            string versionString = versionData.Value.ToString();
 
-            string correctedVersion = versionData.Value.ToString().Replace(',', '.');
+         /*   if (versionString.Contains(","))
+            {
+                versionString = versionString.Replace(",", ".");
+                Debug.Log("Corrected Version String: " + versionString);
+            }
 
-            if (correctedVersion == "0")
+            double versionNumber;
+            bool isParsed = double.TryParse(versionData.Value.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out versionNumber);*/
+
+            if (versionString == "0")
             {
                 Debug.Log("versionData.Value == 0");
                 loadingPanel.SetActive(true);
                 skirmishOutputTextError.text = "Blitz is down for maintenance";
                 Invoke(nameof(HideLoadingPanel), 5f);
             }
-            else if (correctedVersion != FirebaseManager.instance.versionCheck)
+            else if (versionString != FirebaseManager.instance.versionCheck)
             {
                 Debug.Log("versionData.Value != FirebaseManager.instance.versionCheck");
                 loadingPanel.SetActive(true);
-                skirmishOutputTextError.text = "Please download latest version: " + FirebaseManager.instance.versionCheck;
+                skirmishOutputTextError.text = "Please download latest version: " + versionString;//.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 Invoke(nameof(HideLoadingPanel), 5f);
             }
             else
             {
-                Debug.Log("else ");
+                Debug.Log("else");
                 if (connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1)
                 {
                     Debug.Log("connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1");
