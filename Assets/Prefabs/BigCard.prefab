@@ -381,8 +381,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.18127, y: -807.86536}
-  m_SizeDelta: {x: 489.5436, y: 81.2949}
+  m_AnchoredPosition: {x: 0.18127, y: -801.0298}
+  m_SizeDelta: {x: 489.5436, y: 67.6238}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2993237126483948484
 CanvasRenderer:
@@ -1118,6 +1118,9 @@ MonoBehaviour:
   cardFrame: {fileID: 0}
   isAlreadyAttacked: 0
   dropPosition: 0
+  ability: 0
+  isParalyzedCard: 0
+  paralyzedCardCount: 0
   cardId: 0
   cId: {fileID: 3341251846864005424}
   cardErgoTokenId: {fileID: 778497879824199085}

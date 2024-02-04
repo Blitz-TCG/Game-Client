@@ -3942,7 +3942,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().GetParalyzedCard())
                 {
                     int count = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().GetParalyzedCardCount();
-                    playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().SetParalyzedCard(count > 0 ? -1 : 0);
+                    //playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().SetParalyzedCard(count > 0 ? -1 : 0);
                 }
             }
         }
