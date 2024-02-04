@@ -552,25 +552,30 @@ public class FirebaseManager : MonoBehaviour
         {
             LoadingAnimationLoginOff();
             loginOutputTextSuccess.text = "";
-            loginOutputTextError.text = "Unable to validate current game version"; 
+            loginOutputTextError.text = "Unable to validate current game version";
         }
         else if (version.IsCompleted)
         {
             DataSnapshot versionData = version.Result;
 
-            Debug.Log("Current Version: " + versionData.Value.ToString());
+            Debug.Log(version.Result);
+            Debug.Log("Current Version: " + versionData.Value);
 
-            if (versionData.Value.ToString() == "0")
+            string correctedVersion = versionData.Value.ToString().Replace(',', '.');
+
+            Debug.Log("Coversion: " + correctedVersion);
+
+            if (correctedVersion == "0")
             {
                 LoadingAnimationLoginOff();
                 loginOutputTextSuccess.text = "";
                 loginOutputTextError.text = "Blitz is down for maintenance";
             }
-            else if (versionData.Value.ToString() != versionCheck)
+            else if (correctedVersion != versionCheck)
             {
                 LoadingAnimationLoginOff();
                 loginOutputTextSuccess.text = "";
-                loginOutputTextError.text = "Please download latest version: " + versionData.Value.ToString();
+                loginOutputTextError.text = "Please download latest version: " + correctedVersion;
                 downloadButton.SetActive(true);
             }
             else

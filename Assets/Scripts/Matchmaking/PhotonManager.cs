@@ -258,30 +258,28 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             Debug.Log(" completed ");
             DataSnapshot versionData = version.Result;
 
-            Debug.Log("Current Version: " + versionData.Value.ToString());
+            string correctedVersion = versionData.Value.ToString().Replace(',', '.');
 
-            if (versionData.Value.ToString() == "0")
+            if (correctedVersion == "0")
             {
-                Debug.Log("versionData.Value.ToString() == \"0\"");
+                Debug.Log("versionData.Value == 0");
                 loadingPanel.SetActive(true);
                 skirmishOutputTextError.text = "Blitz is down for maintenance";
                 Invoke(nameof(HideLoadingPanel), 5f);
             }
-            else if (versionData.Value.ToString() != FirebaseManager.instance.versionCheck)
+            else if (correctedVersion != FirebaseManager.instance.versionCheck)
             {
-                Debug.Log("versionData.Value.ToString() != FirebaseManager.instance.versionCheck");
+                Debug.Log("versionData.Value != FirebaseManager.instance.versionCheck");
                 loadingPanel.SetActive(true);
-                skirmishOutputTextError.text = "Please download latest version: " + versionData.Value.ToString();
+                skirmishOutputTextError.text = "Please download latest version: " + FirebaseManager.instance.versionCheck;
                 Invoke(nameof(HideLoadingPanel), 5f);
             }
             else
             {
                 Debug.Log("else ");
-                if (connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1) //making sure that they have a deck selected before matchmaking begins
+                if (connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1)
                 {
                     Debug.Log("connected && PhotonNetwork.IsConnectedAndReady && skirmishManager.deckId >= 1");
-                    //PhotonNetwork.JoinRandomRoom();
-                    
                     if (PhotonNetwork.InLobby)
                         PhotonNetwork.JoinRandomRoom();
                     else
@@ -290,12 +288,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                         isJoined = true;
                         PhotonNetwork.JoinLobby();
                     }
-
                     loadingPanel.SetActive(true);
                 }
             }
         }
     }
+
 
     private void HideLoadingPanel()
     {
