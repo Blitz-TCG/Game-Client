@@ -24,24 +24,31 @@ public class Paralyze : Card
                 gettedCardsPos.Add((i + 1));
             }
         }
-        Shuffle(gettedCardsPos);
-        TrimList(gettedCardsPos, cardsToBeParalyzed);
-        return gettedCardsPos;
+        Debug.Log(gettedCardsPos.Count + " list of getted card ");
+        List<int> shuffledList = Shuffle(gettedCardsPos);
+        Debug.Log(gettedCardsPos.Count + " after shuffling " + string.Join(", ", shuffledList));
+        List<int> trimmed = TrimList(shuffledList, cardsToBeParalyzed);
+        Debug.Log(trimmed.Count + " after triming " + string.Join(", ", trimmed));
+        return trimmed;
     }
 
     public List<int> Shuffle(List<int> list)
     {
+        Debug.Log("shuffle card called");
         return list.OrderBy(x => Guid.NewGuid()).ToList();
     }
 
     public List<int> TrimList(List<int> list, int trimValue)
     {
+        Debug.Log("trim list called ");
         if (list.Count <= trimValue)
         {
+            Debug.Log("list.Count <= trimValue");
             return list;
         }
         else
         {
+            Debug.Log("else");
             return list.Take(trimValue).ToList();
         }
     }

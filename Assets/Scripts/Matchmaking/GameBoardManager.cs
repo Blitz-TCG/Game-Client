@@ -1,4 +1,3 @@
-using Microsoft.Win32.SafeHandles;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -47,10 +46,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [SerializeField] private TMP_Text leftPlayerText;
     [SerializeField] private TMP_Text countdownMinText;
     [SerializeField] private TMP_Text countDownSecText;
-    [SerializeField] private Sprite[] playerFields;
-    [SerializeField] private Sprite[] playerBrokenFields;
-    [SerializeField] private Image bottomImage;
-    [SerializeField] private Image topImage;
+    [SerializeField] private List<Sprites> playerFields;
+    [SerializeField] private List<Sprites> playerBrokenFields;
+    [SerializeField] private Image bottomLeftImage;
+    [SerializeField] private Image topLeftImage;
+    [SerializeField] private Image bottomRightImage;
+    [SerializeField] private Image topRightImage;
     [SerializeField] private GameObject enemyWall;
     [SerializeField] private GameObject playerWall;
     //[SerializeField] private Image playerXPProgressBar;	
@@ -433,8 +434,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 {
                     manager = gameBoardParent.transform.GetChild(1).GetComponent<GameBoardManager>();
                     pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
-                    bottomImage = manager.bottomImage;
-                    topImage = manager.topImage;
+
+                    bottomRightImage = manager.bottomRightImage;
+                    topRightImage = manager.topRightImage;
+                    topLeftImage = manager.topLeftImage;
+                    bottomLeftImage = manager.bottomLeftImage;
+
+                    //bottomImage = manager.bottomImage;
+                    //topImage = manager.topImage;
                     GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
                     if (player1Turn && PhotonNetwork.IsMasterClient && pv.IsMine)
                     {
@@ -449,6 +456,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                             //    Invoke("RemoveErrorObject", 2f);
                             //    return;
                             //}
+                            if (attackingcard.GetParalyzedCard())
+                            {
+                                Debug.Log("GetParalyzedCard called " + attackingcard.GetParalyzedCard());
+                                cardError.transform.GetChild(0).gameObject.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText($"You are paralysed by the enemy's card. Please wait for {attackingcard.GetParalyzedCardCount()} turn.");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
+
                             if (IsGoaded(enemyField))
                             {
                                 Debug.Log("Goaded called");
@@ -492,7 +508,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 nextPlayer = PhotonNetwork.LocalPlayer.GetNext();
                                 string opponentField = (string)nextPlayer.CustomProperties["deckField"];
                                 int opponentId = GetFieldIndex(opponentField);
-                                topImage.sprite = playerBrokenFields[opponentId];
+                                topRightImage.sprite = playerBrokenFields[1].sprites[opponentId];
+                                topLeftImage.sprite = playerBrokenFields[2].sprites[opponentId];
+                                //topImage.sprite = playerBrokenFields[opponentId];
                                 enemyWall.GetComponent<PolygonCollider2D>().enabled = false;
                                 enemyWall.GetComponent<Button>().enabled = false;
                                 enemyHealthObject.GetComponent<TMP_Text>().SetText(0.ToString());
@@ -523,6 +541,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                             //    Invoke("RemoveErrorObject", 2f);
                             //    return;
                             //}
+
+                            if (attackingcard.GetParalyzedCard())
+                            {
+                                Debug.Log("GetParalyzedCard called " + attackingcard.GetParalyzedCard());
+                                cardError.transform.GetChild(0).gameObject.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText($"You are paralysed by the enemy's card. Please wait for {attackingcard.GetParalyzedCardCount()} turn.");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
                             if (IsGoaded(enemyField))
                             {
                                 Debug.Log("goaded called");
@@ -566,7 +593,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 nextPlayer = PhotonNetwork.LocalPlayer.GetNext();
                                 string opponentField = (string)nextPlayer.CustomProperties["deckField"];
                                 int opponentId = GetFieldIndex(opponentField);
-                                topImage.sprite = playerBrokenFields[opponentId];
+                                //topImage.sprite = playerBrokenFields[opponentId];
+                                topRightImage.sprite = playerBrokenFields[1].sprites[opponentId];
+                                topLeftImage.sprite = playerBrokenFields[2].sprites[opponentId];
                                 enemyWall.GetComponent<PolygonCollider2D>().enabled = false;
                                 enemyWall.GetComponent<Button>().enabled = false;
                                 enemyHealthObject.GetComponent<TMP_Text>().SetText(0.ToString());
@@ -635,6 +664,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                             //    Invoke("RemoveErrorObject", 2f);
                             //    return;
                             //}
+
+                            if (attackingcard.GetParalyzedCard())
+                            {
+                                Debug.Log("GetParalyzedCard called " + attackingcard.GetParalyzedCard());
+                                cardError.transform.GetChild(0).gameObject.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText($"You are paralysed by the enemy's card. Please wait for {attackingcard.GetParalyzedCardCount()} turn.");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
                             if (IsGoaded(enemyField))
                             {
                                 Debug.Log("goaded called");
@@ -1120,8 +1158,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             playerWall.GetComponent<Button>().enabled = false;
             string playerField = (string)PhotonNetwork.LocalPlayer.CustomProperties["deckField"];
             int playerId = GetFieldIndex(playerField);
-            GameObject bottomField = playersFieldParent.transform.Find("Bottom Field").gameObject;
-            bottomField.GetComponent<Image>().sprite = playerBrokenFields[playerId];
+            //GameObject bottomField = playersFieldParent.transform.Find("Bottom Field").gameObject;
+            //bottomField.GetComponent<Image>().sprite = playerBrokenFields[playerId];
+            bottomRightImage = manager.bottomRightImage;
+            bottomLeftImage = manager.bottomLeftImage;
+            bottomRightImage.sprite = playerBrokenFields[0].sprites[playerId];
+            bottomLeftImage.sprite = playerBrokenFields[3].sprites[playerId];
             ChangePlayerTag();
         }
     }
@@ -1212,37 +1254,30 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         int totalHealth = hunger.UseAbility(attackingcard, originalCard.HP);
                         string parentId = hunger.transform.parent.parent.name.Split(" ")[2];
                         pv.RPC("CalculateHealBeforeAttack", RpcTarget.Others, hunger.id, parentId, totalHealth);
-                        Debug.Log(hunger.name + " name " + hunger.HP + " hp value after updated ");
+                        Debug.Log(hunger.name + " name " + attacking.HP + " hp value after updated ");
                         Debug.Log(target.attack + " target attack called");
                         destroyPlayerAttackValue = target.attack;
                         destroyEnemyAttackValue = attacking.attack;
                         destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                         destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                     }
-                    //else if (attacking.GetComponent<Scattershot>())
-                    //{
-                    //    Scattershot scattershot = attacking.GetComponent<Scattershot>();
-                    //    string targetId = target.transform.parent.parent.name.Split(" ")[2];
-                    //    Card currentCard = scattershot.GetComponent<Card>();
+                    else if (attacking.GetComponent<Scattershot>())
+                    {
+                        Scattershot scattershot = attacking.GetComponent<Scattershot>();
+                        string targetId = target.transform.parent.parent.name.Split(" ")[2];
+                        Card currentCard = scattershot.GetComponent<Card>();
+                        destroyPlayerAttackValue = target.attack;
+                        destroyEnemyAttackValue = attacking.attack;
+                        destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                        destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+
+                        List<int> enemyFieldList = CardDataBase.instance.GetSurroundingPositions(int.Parse(targetId));
+                        Debug.Log(string.Join(", ", enemyFieldList) + "  player field list ");
+
+                        DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv, scattershot.damageAmount);
 
 
-                    //    List<int> enemyFieldList = CardDataBase.instance.GetSurroundingPositions(int.Parse(targetId));
-                    //    Debug.Log(string.Join(", ", enemyFieldList) + "  player field list ");
-
-                    //    for (int element = 0; element < enemyFieldList.Count; element++)
-                    //    {
-                    //        if (enemyField.transform.GetChild(element - 1 ).childCount == 1)
-                    //        {
-                    //            Card targetCard = enemyField.transform.GetChild(enemyFieldList[element] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
-                    //            destroyPlayerAttackValue = targetCard.attack;
-                    //            destroyEnemyAttackValue = attacking.attack;
-                    //            destroyPlayer = false;
-                    //            destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
-
-                    //        }
-                    //        //bool scattershot.UseScattershotAbility(playerFieldList, currentCard, pv);
-                    //    }
-                    //}
+                    }
                     else if (attacking.GetComponent<Berserker>())
                     {
                         Berserker berserker = attackingcard.GetComponent<Berserker>();
@@ -1310,7 +1345,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 int totalHealth = hunger.UseAbility(attackingcard, originalCard.HP);
                 string parentId = hunger.transform.parent.parent.name.Split(" ")[2];
                 pv.RPC("CalculateHealBeforeAttack", RpcTarget.Others, hunger.id, parentId, totalHealth);
-                Debug.Log(hunger.name + " name " + hunger.HP + " hp value after updated ");
+                Debug.Log(hunger.name + " name " + attacking.HP + " hp value after updated ");
                 Debug.Log(target.attack + " target attack called");
                 destroyPlayerAttackValue = target.attack;
                 destroyEnemyAttackValue = attacking.attack;
@@ -1331,6 +1366,23 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                 destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                 //pv.RPC("Calculate", RpcTarget.Others, hunger.id, parentId, totalHealth);
+            }
+            else if (attacking.GetComponent<Scattershot>())
+            {
+                Scattershot scattershot = attacking.GetComponent<Scattershot>();
+                string targetId = target.transform.parent.parent.name.Split(" ")[2];
+                Card currentCard = scattershot.GetComponent<Card>();
+                destroyPlayerAttackValue = target.attack;
+                destroyEnemyAttackValue = attacking.attack;
+                destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+
+                List<int> enemyFieldList = CardDataBase.instance.GetSurroundingPositions(int.Parse(targetId));
+                Debug.Log(string.Join(", ", enemyFieldList) + "  player field list ");
+
+                DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv , scattershot.damageAmount);
+
+
             }
             else
             {
@@ -1445,8 +1497,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             //    Invoke("RemoveErrorObject", 2f);
             //    return;
             //}
-            bool destroyPlayer, destroyEnemy;
-            int destroyPlayerAttackValue, destroyEnemyAttackValue;
+            bool destroyPlayer = false, destroyEnemy = false;
+            int destroyPlayerAttackValue = 0, destroyEnemyAttackValue = 0;
             if (IsGoaded(enemyField))
             {
                 Debug.Log("goaded called");
@@ -1486,7 +1538,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         int totalHealth = hunger.UseAbility(attackingcard, originalCard.HP);
                         string parentId = hunger.transform.parent.parent.name.Split(" ")[2];
                         pv.RPC("CalculateHealBeforeAttack", RpcTarget.Others, hunger.id, parentId, totalHealth);
-                        Debug.Log(hunger.name + " name " + hunger.HP + " hp value after updated ");
+                        Debug.Log(hunger.name + " name " + attacking.HP + " hp value after updated ");
                         Debug.Log(target.attack + " target attack called");
                         destroyPlayerAttackValue = target.attack;
                         destroyEnemyAttackValue = attacking.attack;
@@ -1507,6 +1559,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                         destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                         //pv.RPC("Calculate", RpcTarget.Others, hunger.id, parentId, totalHealth);
+                    }
+                    else if (attacking.GetComponent<Scattershot>())
+                    {
+                        Scattershot scattershot = attacking.GetComponent<Scattershot>();
+                        string targetId = target.transform.parent.parent.name.Split(" ")[2];
+                        Card currentCard = scattershot.GetComponent<Card>();
+                        destroyPlayerAttackValue = target.attack;
+                        destroyEnemyAttackValue = attacking.attack;
+                        destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                        destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+
+                        List<int> enemyFieldList = CardDataBase.instance.GetSurroundingPositions(int.Parse(targetId));
+                        Debug.Log(string.Join(", ", enemyFieldList) + "  player field list ");
+
+                        DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv,  scattershot.damageAmount);
                     }
                     else
                     {
@@ -1559,7 +1626,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 int totalHealth = hunger.UseAbility(attackingcard, originalCard.HP);
                 string parentId = hunger.transform.parent.parent.name.Split(" ")[2];
                 pv.RPC("CalculateHealBeforeAttack", RpcTarget.Others, hunger.id, parentId, totalHealth);
-                Debug.Log(hunger.name + " name " + hunger.HP + " hp value after updated ");
+                Debug.Log(hunger.name + " name " + attacking.HP + " hp value after updated ");
                 Debug.Log(target.attack + " target attack called");
                 destroyPlayerAttackValue = target.attack;
                 destroyEnemyAttackValue = attacking.attack;
@@ -1580,6 +1647,23 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                 destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                 //pv.RPC("Calculate", RpcTarget.Others, hunger.id, parentId, totalHealth);
+            }
+            else if (attacking.GetComponent<Scattershot>())
+            {
+                Scattershot scattershot = attacking.GetComponent<Scattershot>();
+                string targetId = target.transform.parent.parent.name.Split(" ")[2];
+                Card currentCard = scattershot.GetComponent<Card>();
+                destroyPlayerAttackValue = target.attack;
+                destroyEnemyAttackValue = attacking.attack;
+                destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
+                destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
+
+                List<int> enemyFieldList = CardDataBase.instance.GetSurroundingPositions(int.Parse(targetId));
+                Debug.Log(string.Join(", ", enemyFieldList) + "  player field list ");
+
+                DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv, scattershot.damageAmount);
+
+
             }
             else
             {
@@ -1680,6 +1764,31 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
     }
 
+    private void DamagingToTheSurroundingCard(List<int> positions, GameObject enemyField, Card attacking, PhotonView view, int damageAmt)
+    {
+        for (int element = 0; element < positions.Count; element++)
+        {
+            if (enemyField.transform.GetChild(positions[element] - 1).childCount == 1)
+            {
+                Card targetCard = enemyField.transform.GetChild(positions[element] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+                targetCard.DealDamage(damageAmt, targetCard.transform.parent.gameObject);
+                view.RPC("CardDestroyedOnOthers", RpcTarget.Others,damageAmt, positions[element] - 1);
+            }
+            //bool scattershot.UseScattershotAbility(playerFieldList, currentCard, pv);
+        }
+    }
+
+    [PunRPC]
+    private void CardDestroyedOnOthers(int attack, int position)
+    {
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        if (playerField.transform.GetChild(position).childCount == 1)
+        {
+            Card targetCard = playerField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
+            targetCard.DealDamage(attack, targetCard.transform.parent.gameObject);
+        }
+    }
+
     private void AttackNPC(GameObject npcObj, Card card)
     {
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
@@ -1694,6 +1803,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         //}
         pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
         int damage;
+
+        if (card.GetParalyzedCard())
+        {
+            Debug.Log("GetParalyzedCard called " + card.GetParalyzedCard());
+            cardError.transform.GetChild(0).gameObject.SetActive(true);
+            cardError.GetComponentInChildren<TMP_Text>().SetText($"You are paralysed by the enemy's card. Please wait for {card.GetParalyzedCardCount()} turn.");
+            Invoke("RemoveErrorObject", 2f);
+            return;
+        }
         if (IsGoaded(enemyField))
         {
             Debug.Log("is goaded called");
@@ -2304,6 +2422,30 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Paralyze paralyze = card.gameObject.AddComponent<Paralyze>();
                 paralyze.ability = CardAbility.Paralyze;
                 break;
+            case CardAbility.Curse:
+                Curse curse = card.gameObject.AddComponent<Curse>();
+                curse.ability = CardAbility.Curse;
+                break;
+            case CardAbility.Smite:
+                Smite smite = card.gameObject.AddComponent<Smite>();
+                smite.ability = CardAbility.Smite;
+                break;
+            case CardAbility.Doom:
+                Doom doom = card.gameObject.AddComponent<Doom>();
+                doom.ability = CardAbility.Doom;
+                break;
+            case CardAbility.Gambit:
+                Gambit gambit = card.gameObject.AddComponent<Gambit>();
+                gambit.ability = CardAbility.Gambit;
+                break;
+            case CardAbility.GeneralBane:
+                GeneralBane generalBane = card.gameObject.AddComponent<GeneralBane>();
+                generalBane.ability = CardAbility.GeneralBane;
+                break;
+            case CardAbility.Blackhole:
+                Blackhole blackHole = card.gameObject.AddComponent <Blackhole>();
+                blackHole.ability = CardAbility.Blackhole;
+                break;
             default: break;
         }
     }
@@ -2523,8 +2665,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log(handCount + " hand count " + fieldCount + " field count");
                 Debug.Log("move card called not in others " + handCount + " hand count " + fieldCount);
                 Debug.Log("Card setted ");
-                OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient, settedParent);
                 pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount, cardId);
+                OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient, settedParent);
                 Debug.Log("==== master-end ====");
             }
             else if (!player1Turn && !PhotonNetwork.IsMasterClient)
@@ -2569,8 +2711,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log(handCount + " hand count " + fieldCount + " field count");
                 Debug.Log("move card called not in others " + handCount + " hand count " + fieldCount);
                 Debug.Log("card setted ");
-                OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient, settedParent);
                 pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount, cardId);
+                OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient, settedParent);
                 Debug.Log("==== client-end ====");
             }
         }
@@ -2822,12 +2964,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         else if (whichPosition.Equals("field"))
         {
             GameObject gameObj = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+            GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
 
             for (int i = 0; i < gameObj.transform.childCount; i++)
             {
                 if (gameObj.transform.GetChild(i).childCount == 1)
                 {
                     gameObj.transform.GetChild(i).GetChild(0).transform.GetComponent<Animator>().SetBool("Scale", false);
+                }
+            }
+
+            for (int i = 0; i < enemyField.transform.childCount; i++)
+            {
+                if (enemyField.transform.GetChild(i).childCount == 1)
+                {
+                    enemyField.transform.GetChild(i).GetChild(0).transform.GetComponent<Animator>().SetBool("Scale", false);
                 }
             }
         }
@@ -3157,21 +3308,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         Debug.Log("move card called in others " + handCount + " hand count " + fieldCount);
 
-        if (handCount != hCount)
-        {
-            cardError.transform.GetChild(0).gameObject.SetActive(true);
-            cardError.GetComponentInChildren<TMP_Text>().SetText("The hand count and h count not same");
-            Debug.Log("The hand count and h count not same");
-            Invoke("RemoveErrorObject", 2f);
-        }
+        //if (handCount != hCount)
+        //{
+        //    cardError.transform.GetChild(0).gameObject.SetActive(true);
+        //    cardError.GetComponentInChildren<TMP_Text>().SetText("The hand count and h count not same");
+        //    Debug.Log("The hand count and h count not same");
+        //    Invoke("RemoveErrorObject", 2f);
+        //}
 
-        if (fieldCount != fCount)
-        {
-            cardError.transform.GetChild(0).gameObject.SetActive(true);
-            cardError.GetComponentInChildren<TMP_Text>().SetText("The fieldCount and f count not same");
-            Debug.Log("The fieldCount and f count not same");
-            Invoke("RemoveErrorObject", 2f);
-        }
+        //if (fieldCount != fCount)
+        //{
+        //    cardError.transform.GetChild(0).gameObject.SetActive(true);
+        //    cardError.GetComponentInChildren<TMP_Text>().SetText("The fieldCount and f count not same");
+        //    Debug.Log("The fieldCount and f count not same");
+        //    Invoke("RemoveErrorObject", 2f);
+        //}
 
         if (selectedObjectParent.tag == "Front Line Enemy")
         {
@@ -3301,19 +3452,34 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 Debug.LogError(opponentDeckProfileId + " enemy deck profile id " + opponentField + " enemy field " + PhotonNetwork.LocalPlayer.NickName);
 
+                //int playerId = GetFieldIndex(playerField);
+                //int opponentId = GetFieldIndex(opponentField);                
                 int playerId = GetFieldIndex(playerField);
                 int opponentId = GetFieldIndex(opponentField);
 
                 Debug.LogError(playerId + " player id");
                 Debug.LogError(opponentId + " opponent id");
 
-                bottomImage.sprite = playerFields[playerId];
-                topImage.sprite = playerFields[opponentId];
-                bottomImage.GetComponent<SetFieldPosition>().SetObjectSize(playerId);
-                bottomImage.GetComponent<SetFieldPosition>().SetObjectPosition(playerId, "down");
-                topImage.GetComponent<SetFieldPosition>().SetObjectSize(opponentId);
-                topImage.GetComponent<SetFieldPosition>().SetObjectPosition(opponentId, "up");
+                //bottomImage.sprite = playerFields[0][playerId];
+                //topImage.sprite = playerFields[opponentId];
+                //bottomImage.GetComponent<SetFieldPosition>().SetObjectSize(playerId);
+                //bottomImage.GetComponent<SetFieldPosition>().SetObjectPosition(playerId, "down");
+                //topImage.GetComponent<SetFieldPosition>().SetObjectSize(opponentId);
+                //topImage.GetComponent<SetFieldPosition>().SetObjectPosition(opponentId, "up");
+                bottomRightImage.sprite = playerFields[0].sprites[playerId];
+                topRightImage.sprite = playerFields[1].sprites[opponentId];
+                topLeftImage.sprite = playerFields[2].sprites[opponentId];
+                bottomLeftImage.sprite = playerFields[3].sprites[playerId];
 
+                bottomRightImage.GetComponent<SetFieldPosition>().SetObjectSize(playerId, 0);
+                topRightImage.GetComponent<SetFieldPosition>().SetObjectSize(opponentId, 1);
+                topLeftImage.GetComponent<SetFieldPosition>().SetObjectSize(opponentId, 2);
+                bottomLeftImage.GetComponent<SetFieldPosition>().SetObjectSize(playerId, 3);
+
+                bottomRightImage.GetComponent<SetFieldPosition>().SetObjectPosition(playerId, 0);
+                topRightImage.GetComponent<SetFieldPosition>().SetObjectPosition(opponentId, 1);
+                topLeftImage.GetComponent<SetFieldPosition>().SetObjectPosition(opponentId, 2);
+                bottomLeftImage.GetComponent<SetFieldPosition>().SetObjectPosition(playerId, 3);
 
                 downProfileIamge.GetComponent<Image>().sprite = profileImages[playerDeckProfileId];
                 upProfileImage.GetComponent<Image>().sprite = profileImages[opponentDeckProfileId];
@@ -3717,7 +3883,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
 
         bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
-        Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount + " is wall destroyed " + isPlayerWallDestroyed + " count of field " + (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount/2));
+        Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount + " is wall destroyed " + isPlayerWallDestroyed + " count of field " + (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2));
         for (int i = 0; i < (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2); i++)
         {
             Debug.Log(" i value " + i + " playerField.transform.GetChild(i).childCount " + playerField.transform.GetChild(i).childCount);
@@ -3726,15 +3892,43 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 //Debug.Log(playerField.transform.GetChild(i)?.GetChild(0)?.GetChild(0).GetComponent<Card>().requirements + " requirements");
                 //if(playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().requirements == AbilityRequirements.AtTheStartOfTurn)
                 //{
-                Debug.Log(playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<GoodFavor>() + " good favor ");
-                if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<GoodFavor>())
+                GameObject cardObj = playerField.transform.GetChild(i).GetChild(0).GetChild(0).gameObject;
+                Debug.Log(cardObj + " card  gameobject");
+
+                if (cardObj.GetComponent<Card>().GetParalyzedCard())
                 {
-                    playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<GoodFavor>().UseAbility(PhotonNetwork.IsMasterClient);
+                    Card currentCard = cardObj.GetComponent<Card>();
+                    int count = currentCard.GetParalyzedCardCount();
+                    //int parentId = int.Parse(playerField.transform.GetChild(i).name.Split(" ")[2]);
+                    int paralyzedVal = count > 0 ? -1 : 0;
+                    Debug.Log(currentCard + " currentCard " + count + " count " + paralyzedVal);
+                    currentCard.SetParalyzedCard(paralyzedVal, currentCard.id);
+                    //pv.RPC("ChangesOnParalyzedCount", RpcTarget.Others, parentId, paralyzedVal);
+                }
+
+                Debug.Log("i value before " + i);
+                if (cardObj.GetComponent<Card>().ability == CardAbility.None)
+                {
+                    Debug.Log("cardObj.GetComponent<Card>().ability == CardAbility.None");
+                    continue;
+                }
+
+                if(cardObj.GetComponent<Card>().ability == CardAbility.DeActivate)
+                {
+                    Debug.Log("cardObj.GetComponent<Card>().ability == CardAbility.DeActivate");
+                    continue;
+                }
+
+                Debug.Log("i value after " + i);
+
+                if (cardObj.GetComponent<GoodFavor>())
+                {
+                    cardObj.GetComponent<GoodFavor>().UseAbility(PhotonNetwork.IsMasterClient);
                     UpdateGoldUI();
                 }
-                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Meteor>())
+                else if (cardObj.GetComponent<Meteor>())
                 {
-                    Meteor meteor = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Meteor>();
+                    Meteor meteor = cardObj.GetComponent<Meteor>();
                     Debug.Log(meteor + " meteor called");
                     meteor.SetRoundNumber(1);
                     if (meteor.IsUseAbility())
@@ -3748,24 +3942,24 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         {
                             //if (enemyField.transform.GetChild(j).tag.Contains("Front Line"))
                             //{
-                                if (enemyField.transform.GetChild(j).childCount == 1)
+                            if (enemyField.transform.GetChild(j).childCount == 1)
+                            {
+                                if (enemyField.transform.GetChild(j).GetChild(0).childCount == 1)
                                 {
-                                    if (enemyField.transform.GetChild(j).GetChild(0).childCount == 1)
-                                    {
-                                        Card attackedCard = enemyField.transform.GetChild(j).GetChild(0).GetChild(0).GetComponent<Card>();
-                                        Debug.Log(attackedCard.name + " attack card ");
-                                        attackedCard.DealDamage(meteor.damageAmount, attackedCard.transform.parent.gameObject);
-                                    }
+                                    Card attackedCard = enemyField.transform.GetChild(j).GetChild(0).GetChild(0).GetComponent<Card>();
+                                    Debug.Log(attackedCard.name + " attack card ");
+                                    attackedCard.DealDamage(meteor.damageAmount, attackedCard.transform.parent.gameObject);
                                 }
+                            }
                             //}
                         }
                         Debug.Log(damage + " damage amount value");
                         pv.RPC("ApplyDamageToOthers", RpcTarget.Others, damage);
                     }
                 }
-                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Renewal>())
+                else if (cardObj.GetComponent<Renewal>())
                 {
-                    Renewal renewal = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Renewal>();
+                    Renewal renewal = cardObj.GetComponent<Renewal>();
                     Card currentCard = renewal.GetComponent<Card>();
                     CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
                     Debug.Log(renewal + " Renewal called");
@@ -3773,9 +3967,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     string parentId = renewal.transform.parent.parent.name.Split(" ")[2];
                     pv.RPC("HealCardToOthers", RpcTarget.Others, cardHP, parentId);
                 }
-                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Evolve>())
+                else if (cardObj.GetComponent<Evolve>())
                 {
-                    Evolve evolve = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Evolve>();
+                    Evolve evolve = cardObj.GetComponent<Evolve>();
                     Debug.Log(evolve + " evlove called");
                     evolve.SetRoundNumber(1);
                     if (evolve.IsUseAbility())
@@ -3796,9 +3990,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         pv.RPC("EvolveCardInOthers", RpcTarget.Others, attackValue, healthValue, parentId);
                     }
                 }
-                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Mutate>())
+                else if (cardObj.GetComponent<Mutate>())
                 {
-                    Mutate mutate = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Mutate>();
+                    Mutate mutate = cardObj.GetComponent<Mutate>();
                     Card currentCard = mutate.GetComponent<Card>();
                     Debug.Log(mutate + " Mutate called");
                     CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
@@ -3811,9 +4005,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     string parentId = mutate.transform.parent.parent.name.Split(" ")[2];
                     pv.RPC("MutateCardToOthers", RpcTarget.Others, result.Item1, result.Item2, parentId);
                 }
-                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Malignant>())
+                else if (cardObj.GetComponent<Malignant>())
                 {
-                    Malignant malignant = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Malignant>();
+                    Malignant malignant = cardObj.GetComponent<Malignant>();
                     Card currentCard = malignant.GetComponent<Card>();
                     Debug.Log(malignant + " Malignant called");
                     List<int> enemyFieldCardsList = new();
@@ -3824,14 +4018,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     {
                         //if (enemyField.transform.GetChild(j).tag.Contains("Front Line"))
                         //{
-                            if (enemyField.transform.GetChild(j).childCount == 1)
+                        if (enemyField.transform.GetChild(j).childCount == 1)
+                        {
+                            if (enemyField.transform.GetChild(j).GetChild(0).childCount == 1)
                             {
-                                if (enemyField.transform.GetChild(j).GetChild(0).childCount == 1)
-                                {
-                                    int parentId = int.Parse(enemyField.transform.GetChild(j).name.Split(" ")[2]);
-                                    enemyFieldCardsList.Add(parentId);
-                                }
+                                int parentId = int.Parse(enemyField.transform.GetChild(j).name.Split(" ")[2]);
+                                enemyFieldCardsList.Add(parentId);
                             }
+                        }
                         //}
                     }
                     Debug.Log("list added =>");
@@ -3879,11 +4073,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     }
 
                 }
-                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Summon>())
+                else if (cardObj.GetComponent<Summon>())
                 {
-                    if((playerField.transform.GetChild(i).tag.Contains("Front Line")))
+                    if ((playerField.transform.GetChild(i).tag.Contains("Front Line")))
                     {
-                        Summon summon = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Summon>();
+                        Summon summon = cardObj.GetComponent<Summon>();
                         Card currentCard = summon.GetComponent<Card>();
                         CardDetails bigCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
                         int parentId = int.Parse(playerField.transform.GetChild(i).name.Split(" ")[2]);
@@ -3908,42 +4102,38 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                     }
                 }
-                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Serenity>())
+                else if (cardObj.GetComponent<Serenity>())
                 {
                     //if ((playerField.transform.GetChild(i).tag.Contains("Front Line")))
                     //{
-                        Serenity serenity = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Serenity>();
-                        Card currentCard = serenity.GetComponent<Card>();
-                        CardDetails bigCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
-                        int parentId = int.Parse(playerField.transform.GetChild(i).name.Split(" ")[2]);
-                        Debug.Log(serenity + " Serenity called");
-                        
-                        
-                        List<int> playerFieldList = CardDataBase.instance.GetSurroundingPositions(parentId);
-                        Debug.Log(string.Join(", ", playerFieldList) + "  player field list ");
+                    Serenity serenity = cardObj.GetComponent<Serenity>();
+                    Card currentCard = serenity.GetComponent<Card>();
+                    CardDetails bigCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
+                    int parentId = int.Parse(playerField.transform.GetChild(i).name.Split(" ")[2]);
+                    Debug.Log(serenity + " Serenity called");
 
-                        serenity.UseSerenityAbility(playerFieldList, playerField, pv);
+
+                    List<int> playerFieldList = CardDataBase.instance.GetSurroundingPositions(parentId);
+                    Debug.Log(string.Join(", ", playerFieldList) + "  player field list ");
+
+                    serenity.UseSerenityAbility(playerFieldList, playerField, pv);
                     //}
                 }
-                else if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Mason>())
+                else if (cardObj.GetComponent<Mason>())
                 {
                     //if (playerField.transform.GetChild(i).tag.Contains("Front Line"))
                     //{
-                        //GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
-                        Mason mason
-                        = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Mason>();
-                        Card currentCard = mason.GetComponent<Card>();
-                        Debug.Log(mason + " Mason called");
-                        CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
-                        mason.OnSetAndActiveHealWall(playerWall, pv);
+                    //GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
+                    Mason mason
+                    = cardObj.GetComponent<Mason>();
+                    Card currentCard = mason.GetComponent<Card>();
+                    Debug.Log(mason + " Mason called");
+                    CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
+                    mason.OnSetAndActiveHealWall(playerWall, pv);
                     //}
                 }
 
-                if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().GetParalyzedCard())
-                {
-                    int count = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().GetParalyzedCardCount();
-                    //playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().SetParalyzedCard(count > 0 ? -1 : 0);
-                }
+
             }
         }
     }
@@ -5231,14 +5421,20 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (playerField.transform.GetChild(i).childCount == 1)
             {
                 Debug.Log(playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Clone>() + " clone ");
-                if (playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Clone>())
+                GameObject cardObj = playerField.transform.GetChild(i).GetChild(0).GetChild(0).gameObject;
+                if (cardObj.GetComponent<Card>().ability == CardAbility.None)
                 {
-                    Clone clone = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Clone>();
+                    return;
+                }
+
+                if (cardObj.GetComponent<Clone>())
+                {
+                    Clone clone = cardObj.GetComponent<Clone>();
                     Debug.Log(clone + " clone called");
                     clone.SetRoundNumber(1);
                     if (clone.IsUseAbility())
                     {
-                        Card playerCard = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>();
+                        Card playerCard = cardObj.GetComponent<Card>();
                         CardDetails originalCard = cardDetails.Find(cardId => cardId.id == playerCard.id);
                         string parentId = clone.transform.parent.parent.name.Split(" ")[2];
 
@@ -5291,7 +5487,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         if (card.GetComponent<Repair>())
         {
             Debug.Log(" inside card repair " + parent.name);
-            if(parent.gameObject.tag.Contains("Front Line"))
+            if (parent.gameObject.tag.Contains("Front Line"))
             {
                 Debug.Log("front line");
                 GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
@@ -5300,7 +5496,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 repair.OnSetHealWall(playerWall, pv);
             }
         }
-        else if(card.GetComponent<GeneralBoon>())
+        else if (card.GetComponent<GeneralBoon>())
         {
             Debug.Log(" inside card general boon " + parent.name);
             if (parent.gameObject.tag.Contains("Front Line"))
@@ -5329,15 +5525,146 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             {
                 Paralyze paralyze = card.GetComponent<Paralyze>();
                 List<int> totalCardList = paralyze.GenerateEnemyCardList(enemyField, IsWallDestroyed(enemyWall));
-                Debug.Log(totalCardList.Count + " total card list count ");
+                Debug.Log(totalCardList.Count + " total card list count " + paralyze + " paralyzed card ");
 
-                for(int i = 0; i < totalCardList.Count; i++)
+                for (int i = 0; i < totalCardList.Count; i++)
                 {
-                   Card currentCard = enemyField.transform.GetChild(totalCardList[i] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+                    Card currentCard = enemyField.transform.GetChild(totalCardList[i] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+                    Debug.Log("current card " + currentCard.name);
                     currentCard.SetParalyzedCard(paralyze.cardsToBeParalyzedForTurns, currentCard.id);
                     currentCard.ability = CardAbility.None;
                     pv.RPC("ParalyzeCardInOthers", RpcTarget.Others, (totalCardList[i] - 1), paralyze.cardsToBeParalyzedForTurns);
                 }
+            }
+        }
+        else if (card.GetComponent<Curse>())
+        {
+            Debug.Log(" inside card Curse " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                Curse curse = card.GetComponent<Curse>();
+                List<int> totalCardList = curse.GenerateEnemyCardList(enemyField, IsWallDestroyed(enemyWall));
+                Debug.Log(totalCardList.Count + " total card list count " + curse + " paralyzed card ");
+
+                for (int i = 0; i < totalCardList.Count; i++)
+                {
+                    Card currentCard = enemyField.transform.GetChild(totalCardList[i] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+                    Debug.Log("current card " + currentCard.name);
+                    CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
+                    int attackValue = currentCard.SetCardAttack(-curse.reduceAttackValue, originalCard.attack);
+                    pv.RPC("CurseCardInOthers", RpcTarget.Others, (totalCardList[i] - 1), attackValue);
+                }
+            }
+        }
+        //else if (card.GetComponent<Smite>())
+        //{
+        //    Debug.Log(" inside card Smite " + parent.name);
+        //    if (parent.gameObject.tag.Contains("Front Line"))
+        //    {
+        //        Smite smite = card.GetComponent<Smite>();
+        //        bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+        //        int choosenEnemyCardPosition = smite.ChooseEnemyUnit(enemyField, isEnemyWallDestroyed);
+        //        if (enemyField.transform.GetChild(choosenEnemyCardPosition - 1) != null)
+        //        {
+        //            Destroy(enemyField.transform.GetChild(choosenEnemyCardPosition - 1).GetChild(0).gameObject);
+        //            pv.RPC("SmiteInOthers", RpcTarget.Others, (choosenEnemyCardPosition - 1));
+        //        }
+        //    }
+        //}
+        else if (card.GetComponent<Doom>())
+        {
+            Debug.Log(" inside card Doom " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                Doom doom = card.GetComponent<Doom>();
+                bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+                List<int> doomedPositions = doom.GenerateDoomedCardList(enemyField, isEnemyWallDestroyed);
+                for (int i = 0; i < doomedPositions.Count; i++)
+                {
+                    if (enemyField.transform.GetChild(doomedPositions[i] - 1) != null)
+                    {
+                        Card enemyCard = enemyField.transform.GetChild(doomedPositions[i] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+                        enemyCard.ability = CardAbility.DeActivate;
+                        pv.RPC("DoomInOthers", RpcTarget.Others, (doomedPositions[i] - 1));
+                    }
+                }
+            }
+        }
+        else if (card.GetComponent<Gambit>())
+        {
+            Debug.Log(" inside card Gambit " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                Gambit gambit = card.GetComponent<Gambit>();
+                bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+                bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
+                int playerFieldPos = gambit.GetRandomValue(playerField, isEnemyWallDestroyed);
+                int enemyFieldPos = gambit.GetRandomValue(enemyField, isEnemyWallDestroyed);
+
+                Debug.Log(playerFieldPos + " playerFieldPos " + enemyFieldPos + " enemyFieldPos");
+                 
+
+                if (playerFieldPos > 0 &&  enemyFieldPos > 0)
+                {
+                    GameObject playerRandomCard = playerField.transform.GetChild(playerFieldPos - 1).GetChild(0).gameObject;
+                    GameObject enemyRandomCard = enemyField.transform.GetChild(enemyFieldPos - 1).GetChild(0).gameObject;
+                    Debug.Log(playerRandomCard + " playerRandomCard " + enemyRandomCard + " enemyRandomCard");
+                    playerRandomCard.transform.SetParent(enemyField.transform.GetChild(enemyFieldPos - 1));
+                    playerRandomCard.transform.SetPositionAndRotation(enemyField.transform.GetChild(enemyFieldPos - 1).position, enemyField.transform.GetChild(enemyFieldPos - 1).rotation);
+                    enemyRandomCard.transform.SetParent(playerField.transform.GetChild(playerFieldPos - 1));
+                    enemyRandomCard.transform.SetPositionAndRotation(playerField.transform.GetChild(playerFieldPos - 1).position, playerField.transform.GetChild(playerFieldPos - 1).rotation);
+
+                    pv.RPC("GambitOnOther", RpcTarget.Others, (playerFieldPos - 1), (enemyFieldPos - 1));
+                }
+                //for (int i = 0; i < doomedPositions.Count; i++)
+                //{
+                //    if (enemyField.transform.GetChild(doomedPositions[i] - 1) != null)
+                //    {
+                //        Card enemyCard = enemyField.transform.GetChild(doomedPositions[i] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+                //        enemyCard.ability = CardAbility.DeActivate;
+                //        pv.RPC("DoomInOthers", RpcTarget.Others, (doomedPositions[i] - 1));
+                //    }
+                //}
+            }
+        }
+        else if (card.GetComponent<GeneralBane>())
+        {
+            Debug.Log(" inside card GeneralBane " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                GeneralBane generalBane = card.GetComponent<GeneralBane>();
+                GameObject enemyGeneral = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Profile").gameObject;
+                Debug.Log("enemy general " + enemyGeneral);
+                int currentHealth = int.Parse(enemyGeneral.transform.GetChild(1).Find("Remaining Health").gameObject.GetComponent<TMP_Text>().text);
+
+                int attackValue = generalBane.GetAttackValue(currentHealth, generalBane.damageValue);
+                enemyGeneral.transform.GetChild(1).Find("Remaining Health").gameObject.GetComponent<TMP_Text>().SetText(attackValue.ToString());
+                Debug.Log("attacki value " + attackValue);
+                pv.RPC("GeneralBaneInOthers", RpcTarget.Others, attackValue);
+            }
+        }
+        else if (card.GetComponent<Blackhole>())
+        {
+            Debug.Log(" inside card Blackhole " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                Blackhole blackhole = card.GetComponent<Blackhole>();
+                bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
+                bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+                int playerFieldCount = isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2; 
+                    int enemyFieldCount = isEnemyWallDestroyed ? enemyField.transform.childCount : enemyField.transform.childCount / 2;
+                blackhole.UseBlackHoleAbility(playerField, pv, playerFieldCount);
+                blackhole.UseBlackHoleAbility(enemyField, pv, enemyFieldCount );
+            }
+        }
+        else if (card.GetComponent<Nuclear>())
+        {
+            Debug.Log(" inside card Nuclear " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                Nuclear nuclear = card.GetComponent<Nuclear>();
+                nuclear.UseNuclearAbility(playerField, pv);
+                nuclear.UseNuclearAbility(enemyField, pv);
             }
         }
     }
@@ -5529,7 +5856,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 miniCard.SetMiniCard(bigCard.id, bigCard.ergoTokenId, bigCard.ergoTokenAmount, bigCard.cardName, bigCard.attack, bigCard.HP, bigCard.gold, bigCard.XP, bigCard.cardImage, CardAbility.None
                     //, sortedList[i].requirements, sortedList[i].abilityLevel
                     );
-                if(enemyField.transform.GetChild(positions[i] - 1).tag.Contains("Back Line"))
+                if (enemyField.transform.GetChild(positions[i] - 1).tag.Contains("Back Line"))
                 {
                     miniCard.gameObject.SetActive(false);
                 }
@@ -5552,14 +5879,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log("SetGeneralHealthToOthers called " + health);
         GameObject enemyGeneral = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Profile").gameObject;
-        enemyGeneral.transform.Find("Player Deck Health").GetChild(0).gameObject.GetComponent<TMP_Text>().SetText(health.ToString());
+        enemyGeneral.transform.Find("Enemy Deck Health").GetChild(0).gameObject.GetComponent<TMP_Text>().SetText(health.ToString());
 
     }
 
     [PunRPC]
     private void SerenityAbilityForOthers(int pos, int health)
     {
-        Debug.Log("SerenityAbilityForOthers called " 
+        Debug.Log("SerenityAbilityForOthers called "
             + health + " health "
             + pos + " pos ");
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
@@ -5581,12 +5908,162 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     private void ParalyzeCardInOthers(int position, int turns)
     {
+        Debug.Log("ParalyzeCardInOthers on others " + position + " position " + turns);
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        Debug.Log(playerField + " player field on others");
+        Card currentCard = playerField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
+        Debug.Log(currentCard + " current card ");
+        currentCard.SetParalyzedCard(turns, currentCard.id);
+        currentCard.ability = CardAbility.None;
+    }
+
+    [PunRPC]
+    private void ChangesOnParalyzedCount(int position, int turns)
+    {
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         Card currentCard = playerField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
         currentCard.SetParalyzedCard(turns, currentCard.id);
         currentCard.ability = CardAbility.None;
     }
 
+    [PunRPC]
+    private void CurseCardInOthers(int position, int attack)
+    {
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        Card currentCard = playerField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
+        currentCard.SetAttack(attack);
+    }
+
+    [PunRPC]
+    private void SmiteInOthers(int pos)
+    {
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        Destroy(playerField.transform.GetChild(pos).GetChild(0).gameObject);
+    }
+
+    [PunRPC]
+    private void DoomInOthers(int pos)
+    {
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        Card currentCard = playerField.transform.GetChild(pos).GetChild(0).GetChild(0).GetComponent<Card>();
+        currentCard.ability = CardAbility.DeActivate;
+    }
+
+    [PunRPC]
+    private void GambitOnOther(int playerPos, int enemyPos)
+    {
+        Debug.Log(" GambitOnOther called " + playerPos + " psetlayer pos " + enemyPos + " enemy pos");
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+
+        for(int i = 0;  i < playerField.transform.childCount; i++) 
+        { 
+            if(playerField.transform.GetChild(i).childCount == 1)
+            {
+                Debug.Log(" child found " + i + " value " + playerField.transform.GetChild(i).GetChild(0));
+            }
+        }
+        for(int i = 0;  i < enemyField.transform.childCount; i++) 
+        {
+            if (enemyField.transform.GetChild(i).childCount == 1)
+            {
+                Debug.Log(" child found " + i + " value " + enemyField.transform.GetChild(i).GetChild(0));
+            }
+        }
+
+        GameObject playerRandomCard = playerField.transform.GetChild(enemyPos).GetChild(0).gameObject;
+        Debug.Log(playerRandomCard + " *#* playerRandomCard " );
+        GameObject enemyRandomCard = enemyField.transform.GetChild(playerPos).GetChild(0).gameObject;
+        Debug.Log( enemyRandomCard + " *#* enemyRandomCard");
+
+        playerRandomCard.transform.SetParent(enemyField.transform.GetChild(playerPos));
+        enemyRandomCard.transform.SetParent(playerField.transform.GetChild(enemyPos));
+
+        playerRandomCard.transform.SetPositionAndRotation
+            (enemyField.transform.GetChild(playerPos).position, enemyField.transform.GetChild(playerPos).rotation);
+        enemyRandomCard.transform.SetPositionAndRotation(playerField.transform.GetChild(enemyPos).position, playerField.transform.GetChild(enemyPos).rotation);
+
+    }
+
+    [PunRPC]
+    private void GeneralBaneInOthers(int attackValue)
+    {
+        Debug.Log(" GeneralBaneInOthers called");
+        GameObject playerProfile = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Profile").gameObject;
+        GameObject enemyHealth = playerProfile.transform.GetChild(1).Find("Remaining Health").gameObject;
+        enemyHealth.GetComponent<TMP_Text>().SetText(attackValue.ToString());
+    }
+
+    [PunRPC]
+    private void BlackHoleInOthers()
+    {
+        Debug.Log("BlackHoleInOthers called ");
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+
+        bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
+        bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+        int playerFieldCount = isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2;
+        int enemyFieldCount = isEnemyWallDestroyed ? enemyField.transform.childCount : enemyField.transform.childCount / 2;
+
+        Debug.Log(isPlayerWallDestroyed + " isplayer wall destroyed " + isEnemyWallDestroyed + " is enemy wall destroy " + playerFieldCount + " p count " + enemyFieldCount + " e count");
+
+        for(int i = 0; i < playerFieldCount; i++)
+        {
+            if (playerField.transform.GetChild(i).childCount == 1)
+            {
+                Debug.Log(i + " i value");
+                Destroy(playerField.transform.GetChild(i).GetChild(0).gameObject);
+            }
+        }
+
+        for (int i = 0; i < enemyFieldCount; i++)
+        {
+            if (enemyField.transform.GetChild(i).childCount == 1)
+            {
+                Debug.Log(i + " i value");
+                Destroy(enemyField.transform.GetChild(i).GetChild(0).gameObject);
+            }
+        }
+        
+    }
+
+    [PunRPC]
+    private void NuclearAbilityInOthers()
+    {
+        Debug.Log("NuclearAbilityInOthers called ");
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+
+        
+        for (int i = 0; i < playerField.transform.childCount; i++)
+        {
+            if (playerField.transform.GetChild(i).childCount == 1)
+            {
+                Debug.Log(i + " i value");
+                Destroy(playerField.transform.GetChild(i).GetChild(0).gameObject);
+            }
+        }
+
+        for (int i = 0; i < enemyField.transform.childCount; i++)
+        {
+            if (enemyField.transform.GetChild(i).childCount == 1)
+            {
+                Debug.Log(i + " i value");
+                Destroy(enemyField.transform.GetChild(i).GetChild(0).gameObject);
+            }
+        }
+
+    }
+
+
     #endregion
+
+
+    //private int TestFunction()
+    //{
+    //    List<int> yourList = new List<int> { 2, 4, 5 };
+    //    return UnityEngine.Random.Range(0, yourList.Count);
+    //}
 }
 

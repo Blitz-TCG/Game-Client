@@ -51,6 +51,13 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Berserker, new CardRequirements("Unlimited", "None"));
         requirements.Add(CardAbility.Mason, new CardRequirements("1", "Frontline"));
         requirements.Add(CardAbility.Paralyze, new CardRequirements("2", "Frontline"));
+        requirements.Add(CardAbility.Curse, new CardRequirements("2", "Frontline"));
+        requirements.Add(CardAbility.Smite, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Doom, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Gambit, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.GeneralBane, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Blackhole, new CardRequirements("Unlimited", "Frontline"));
+        requirements.Add(CardAbility.Nuclear, new CardRequirements("1", "Frontline"));
     }
 
     public List<int> GetSurroundingPositions(int selectedPosition)

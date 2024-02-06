@@ -99,7 +99,8 @@ public enum CardAbility
     Respite,
     Savings,
     Flourish,
-    None
+    None, 
+    DeActivate
 }
 
 //public enum AbilityRequirements
@@ -262,6 +263,7 @@ public class Card : MonoBehaviour
         attack += attackAmount;
         Debug.Log(attackAmount + " attack Amount " + attack + " attack value");
         if(attack > maxCardAttack) {  attack = maxCardAttack; }
+        if(attack <= 0) { attack = 0; }
         attackText.SetText(attack.ToString());
         return attack;
     }
@@ -271,6 +273,7 @@ public class Card : MonoBehaviour
         XP += XPAmount;
         Debug.Log(XPAmount + " XPAmount " + XP + " XP value");
         if(XP > maxCardXP) {  XP = maxCardXP; }
+        if(XP <= 0) {  XP = 0; }
         XPText.SetText(XP.ToString());
         return XP;
     }
@@ -280,6 +283,7 @@ public class Card : MonoBehaviour
         gold += goldAmount;
         Debug.Log(goldAmount + " goldAmount " + gold + " gold value");
         if(gold > maxCardGold) { gold = maxCardGold; }
+        if(gold <= 0) { gold = 0; }
         attackText.SetText(gold.ToString());
         return gold;
     }
@@ -359,10 +363,13 @@ public class Card : MonoBehaviour
 
     public void SetParalyzedCard(int paralyzedValue,int id)
     {
+        Debug.Log(cardName + " card name " + id + " card id");
         isParalyzedCard = true;
         paralyzedCardCount += paralyzedValue;
+        Debug.Log(paralyzedCardCount + " paralyzedCardCount " + paralyzedValue + " paralyzedValue");
         if (paralyzedCardCount == 0) 
         {
+            Debug.Log("paralyzedCardCount == 0");
             isParalyzedCard = false;
             CardDetails getCard = CardDataBase.instance.cardDetails.Find(currCard => currCard.id == id);
             ability = getCard.ability;
