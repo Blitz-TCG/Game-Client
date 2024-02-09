@@ -1,9 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class CardDataBase : MonoBehaviour
 {
     public static CardDataBase instance;
+    public string cardPath = "Cards/";
     public List<CardDetails> cardDetails;
     [HideInInspector] public Dictionary<CardAbility, CardRequirements>  requirements = new();
 
@@ -58,6 +63,8 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.GeneralBane, new CardRequirements("Unlimited", "Frontline"));
         requirements.Add(CardAbility.Blackhole, new CardRequirements("Unlimited", "Frontline"));
         requirements.Add(CardAbility.Nuclear, new CardRequirements("1", "Frontline"));
+        requirements.Add(CardAbility.None, new CardRequirements("Unlimited", "None"));
+        requirements.Add(CardAbility.DeActivate, new CardRequirements("Unlimited", "None"));
     }
 
     public List<int> GetSurroundingPositions(int selectedPosition)
@@ -136,3 +143,51 @@ public class CardRequirements
         fieldPosition = position;
     }
 }
+
+
+//#if UNITY_EDITOR
+//[CustomEditor(typeof(CardDetails))]
+//public class CardDetailsEditor : Editor
+//{
+//    private void DrawPropertiesExcluding(SerializedObject serializedObject, string[] excludeProperties)
+//    {
+//        SerializedProperty[] properties = serializedObject.GetArrayElementAtIndex(0).GetChildren();
+//        foreach (SerializedProperty property in properties)
+//        {
+//            if (!String.IsNullOrEmpty(property.name) && !property.name.Contains(".") && !property.hasChildren && !Array.Exists(property.propertyPath.Split('.'), x => excludeProperties.Contains(x)))
+//            {
+//                EditorGUILayout.PropertyField(property);
+//            }
+//        }
+//    }
+
+//    public override void OnInspectorGUI()
+//    {
+//        base.OnInspectorGUI();
+
+//        CardDetails cardDetails = (CardDetails)target;
+
+//        EditorGUILayout.BeginToggleGroup("Card Ability Properties");
+
+//        switch (cardDetails.ability)
+//        {
+//            case CardAbility.Clone:
+//                EditorGUILayout.PropertyField(serializedObject.FindProperty("multiplier"));
+//                EditorGUILayout.PropertyField(serializedObject.FindProperty("failurechance"));
+//                break;
+//            case CardAbility.Meteor:
+//                EditorGUILayout.PropertyField(serializedObject.FindProperty("health"));
+//                break;
+//            case CardAbility.Evolve:
+//                EditorGUILayout.PropertyField(serializedObject.FindProperty("damage"));
+//                break;
+//            // ... add cases for other abilities
+//            default:
+//                DrawPropertiesExcluding(serializedObject, new string[] { "ability" });
+//                break;
+//        }
+
+//        EditorGUILayout.EndToggleGroup();
+//    }
+//}
+//#endif

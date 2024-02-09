@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Berserker: Card
+public class Berserker : Card
 {
     public int multiplier = 3;
-    public float failureChance = 0.25f;
+    public float failureChance = 0.50f;
 
     public int UseBerserkerAbility(int damage)
     {
@@ -18,7 +16,7 @@ public class Berserker: Card
 
         actualDamage = damage * multiplier;
         Debug.Log("Attack passed! " + actualDamage);
-        
+
         return actualDamage;
     }
 }

@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 4119259949409373824}
   - component: {fileID: 7483569789572691550}
   m_Layer: 5
-  m_Name: Gobgala Trio
+  m_Name: Circus Scum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -974,7 +974,7 @@ GameObject:
   - component: {fileID: 5901337030028931605}
   - component: {fileID: 5901337030028931604}
   - component: {fileID: 711433075764131044}
-  - component: {fileID: 5537179324545481635}
+  - component: {fileID: 4873888135974052030}
   m_Layer: 5
   m_Name: Mini_Card
   m_TagString: Untagged
@@ -1063,27 +1063,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f8229bdf57e450092e3435a0c2587c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: 3
   ergoTokenId: 
   ergoTokenAmount: 0
-  cardName: Gobgala Trio
-  cardDescription: 'The Gobgala Trio comprises mischievous goblins that revel in
-    their masked antics. '
+  cardName: Circus Scum
+  cardDescription: 'Good Favor: At the start of your turn, gain 25 Gold. '
   attack: 1
   HP: 4
-  gold: 3
-  XP: 21
-  fieldLimit: 2
+  gold: 10
+  XP: 25
+  fieldLimit: 1
   levelRequired: 0
   clan: Masquerades
   cardClass: 1
-  cardImage: {fileID: 21300000, guid: 05b7ff4323a2acf4f950a1a7a39ceed6, type: 3}
+  cardImage: {fileID: 21300000, guid: e084b72242e7b25409a24ac51edd1785, type: 3}
   cardFrame: {fileID: 21300000, guid: 2dac1198fc852274fac1ed546ba2c63a, type: 3}
   isAlreadyAttacked: 0
   dropPosition: 0
-  ability: 0
-  requirements: 0
-  abilityLevel: 0
+  ability: 4
+  isParalyzedCard: 0
+  paralyzedCardCount: 0
   cardId: 0
   cId: {fileID: 4769503425350701266}
   cardErgoTokenId: {fileID: 8965210065424527632}
@@ -1099,7 +1098,7 @@ MonoBehaviour:
   levelRequiredText: {fileID: 0}
   image: {fileID: 1034328921915163786}
   frame: {fileID: 8853010561769174093}
---- !u!114 &5537179324545481635
+--- !u!114 &4873888135974052030
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1111,26 +1110,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e4014a9984feb4fbf7c47485edde78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  id: 3
   ergoTokenId: 
   ergoTokenAmount: 0
-  cardName: Gobgala Trio
+  cardName: 
   cardDescription: 
-  attack: 1
-  HP: 4
-  gold: 3
-  XP: 21
-  fieldLimit: 1
+  attack: 0
+  HP: 0
+  gold: 0
+  XP: 0
+  fieldLimit: 0
   levelRequired: 0
   clan: 
   cardClass: 0
-  cardImage: {fileID: 21300000, guid: 05b7ff4323a2acf4f950a1a7a39ceed6, type: 3}
+  cardImage: {fileID: 0}
   cardFrame: {fileID: 0}
   isAlreadyAttacked: 0
   dropPosition: 0
   ability: 0
-  requirements: 0
-  abilityLevel: 0
+  isParalyzedCard: 0
+  paralyzedCardCount: 0
   cardId: 0
   cId: {fileID: 0}
   cardErgoTokenId: {fileID: 0}
@@ -1147,7 +1146,7 @@ MonoBehaviour:
   image: {fileID: 0}
   frame: {fileID: 0}
   multiplier: 1
-  baseGoldValue: 25
+  baseGoldValue: 20
 --- !u!1 &6367617383460964164
 GameObject:
   m_ObjectHideFlags: 0

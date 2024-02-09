@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 9
+  m_text: 4
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4768c569c898cf46ad1695984399917, type: 2}
   m_sharedMaterial: {fileID: 8178919212179479677, guid: f4768c569c898cf46ad1695984399917, type: 2}
@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 4119259949409373824}
   - component: {fileID: 7483569789572691550}
   m_Layer: 5
-  m_Name: Chuckles the Stout
+  m_Name: Shanty Tents
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -547,7 +547,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4768c569c898cf46ad1695984399917, type: 2}
   m_sharedMaterial: {fileID: 8178919212179479677, guid: f4768c569c898cf46ad1695984399917, type: 2}
@@ -574,7 +574,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.3
+  m_fontSize: 35.65
   m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -682,7 +682,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -974,7 +974,7 @@ GameObject:
   - component: {fileID: 5901337030028931605}
   - component: {fileID: 5901337030028931604}
   - component: {fileID: 711433075764131044}
-  - component: {fileID: 5537179324545481635}
+  - component: {fileID: 9221124135561061506}
   m_Layer: 5
   m_Name: Mini_Card
   m_TagString: Untagged
@@ -1063,27 +1063,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f8229bdf57e450092e3435a0c2587c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
+  id: 5
   ergoTokenId: 
   ergoTokenAmount: 0
-  cardName: Chuckles the Stout
-  cardDescription: In the face of those who said he'd never make it in the circus,
-    he proved them dead wrong - literally.
-  attack: 10
-  HP: 9
-  gold: 8
-  XP: 10
+  cardName: Shanty Tents
+  cardDescription: 'Renewal: At the start of your turn, this unit heals 3 Health.'
+  attack: 1
+  HP: 3
+  gold: 10
+  XP: 25
   fieldLimit: 2
   levelRequired: 0
   clan: Masquerades
   cardClass: 1
-  cardImage: {fileID: 21300000, guid: 43066ceb81dd57c459a982e24e1efc2f, type: 3}
+  cardImage: {fileID: 21300000, guid: d21a00c24e4fbe8489a93c07663fb57b, type: 3}
   cardFrame: {fileID: 21300000, guid: 2dac1198fc852274fac1ed546ba2c63a, type: 3}
   isAlreadyAttacked: 0
   dropPosition: 0
-  ability: 0
-  requirements: 0
-  abilityLevel: 0
+  ability: 8
+  isParalyzedCard: 0
+  paralyzedCardCount: 0
   cardId: 0
   cId: {fileID: 4769503425350701266}
   cardErgoTokenId: {fileID: 8965210065424527632}
@@ -1099,7 +1098,7 @@ MonoBehaviour:
   levelRequiredText: {fileID: 0}
   image: {fileID: 1034328921915163786}
   frame: {fileID: 8853010561769174093}
---- !u!114 &5537179324545481635
+--- !u!114 &9221124135561061506
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1108,29 +1107,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 5901337030028931606}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78e4014a9984feb4fbf7c47485edde78, type: 3}
+  m_Script: {fileID: 11500000, guid: 25e9b4988e7f5144dbfef9c474265a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  id: 5
   ergoTokenId: 
   ergoTokenAmount: 0
-  cardName: Gobgala Trio
+  cardName: 
   cardDescription: 
-  attack: 10
-  HP: 9
-  gold: 8
-  XP: 10
-  fieldLimit: 1
+  attack: 0
+  HP: 0
+  gold: 0
+  XP: 0
+  fieldLimit: 0
   levelRequired: 0
   clan: 
   cardClass: 0
-  cardImage: {fileID: 21300000, guid: 05b7ff4323a2acf4f950a1a7a39ceed6, type: 3}
+  cardImage: {fileID: 0}
   cardFrame: {fileID: 0}
   isAlreadyAttacked: 0
   dropPosition: 0
   ability: 0
-  requirements: 0
-  abilityLevel: 0
+  isParalyzedCard: 0
+  paralyzedCardCount: 0
   cardId: 0
   cId: {fileID: 0}
   cardErgoTokenId: {fileID: 0}
@@ -1146,8 +1145,7 @@ MonoBehaviour:
   levelRequiredText: {fileID: 0}
   image: {fileID: 0}
   frame: {fileID: 0}
-  multiplier: 1
-  baseGoldValue: 30
+  healthAmount: 3
 --- !u!1 &6367617383460964164
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,7 +1212,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 8
+  m_text: 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4768c569c898cf46ad1695984399917, type: 2}
   m_sharedMaterial: {fileID: 8178919212179479677, guid: f4768c569c898cf46ad1695984399917, type: 2}
@@ -1482,7 +1480,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 21
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4768c569c898cf46ad1695984399917, type: 2}
   m_sharedMaterial: {fileID: 8178919212179479677, guid: f4768c569c898cf46ad1695984399917, type: 2}
@@ -1617,7 +1615,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 43066ceb81dd57c459a982e24e1efc2f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 05b7ff4323a2acf4f950a1a7a39ceed6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

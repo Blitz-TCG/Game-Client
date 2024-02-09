@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -23,8 +24,27 @@ public class CardDetails
     public Sprite cardImage;
     public Sprite cardFrame;
     public CardAbility ability;
+
+    public static explicit operator CardDetails(UnityEngine.Object v)
+    {
+        throw new NotImplementedException();
+    }
+    // public T abilityscript;
     //public AbilityRequirements requirements;
     //public int abilityLevel = 0;
+
+#if UNITY_EDITOR
+    [HideInInspector] public bool showMultiplierAndFailureChance;
+    [HideInInspector] public bool showHealth;
+    [HideInInspector] public bool showDamage;
+
+    private void OnValidate()
+    {
+        showMultiplierAndFailureChance = ability == CardAbility.Clone;
+        showHealth = ability == CardAbility.Meteor;
+        showDamage = ability == CardAbility.Evolve;
+    }
+#endif
 }
 
 //[Serializable]
@@ -33,3 +53,4 @@ public class CardDetails
 //    public CardAbility ability;
 //    public Good_Favor good_Favor;
 //}
+

@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -135,6 +136,7 @@ public class Card : MonoBehaviour
     public CardAbility ability;
     public bool isParalyzedCard =  false;
     public int paralyzedCardCount = 0;
+    public Type type;
     //public AbilityRequirements requirements;
     //public int abilityLevel = 0;
 

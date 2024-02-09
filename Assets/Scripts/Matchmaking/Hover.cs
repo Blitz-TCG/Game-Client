@@ -203,22 +203,57 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     Debug.LogError("level " + level + " total xp " + playerController.totalXP);
                     if (IsRecruit(playerController.totalXP, level))
                     {
-                        GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
-                        miniCard.transform.SetParent(hand.transform.GetChild(i));
-                        miniCard.transform.position = hand.transform.GetChild(i).transform.position;
-                        miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
-                        miniCard.GetComponent<DragMiniCards>().enabled = true;
-                        Debug.Log(miniCard.name + " mini card ");
-                        //miniCard.AddComponent<DragMiniCards>();
-                        //miniCard.AddComponent<PhotonView>();
-                        Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
-                            //, cardClicked.requirements, cardClicked.abilityLevel
-                            );
-                        card.name = cardClicked.cardName;
-                        card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-                        gameboardManager.UpdateSkill(cardClicked.ability, card);
-                        Debug.Log(card + " card value");
+                        GameObject miniCardParent;
+                        string prefabPath = cardClicked.cardName;
+                        GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
+                        if (cardPrefab != null)
+                        {
+                            Debug.LogError("Prefab found at path: " + prefabPath);
+                            miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation); miniCardParent.transform.SetParent(hand.transform.GetChild(i));
+                            miniCardParent.transform.position = hand.transform.GetChild(i).transform.position;
+                            miniCardParent.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+                            miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+                            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                            miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                                //, cardClicked.requirements, cardClicked.abilityLevel
+                                );
+                            miniCard.name = cardClicked.cardName;
+                            miniCardParent.name = cardClicked.cardName;
+
+                        }
+                        else
+                        {
+                            miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
+                            miniCardParent.transform.SetParent(hand.transform.GetChild(i));
+                            miniCardParent.transform.SetParent(hand.transform.GetChild(i));
+                            miniCardParent.transform.position = hand.transform.GetChild(i).transform.position;
+                            miniCardParent.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+                            miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+                            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                            miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                                //, cardClicked.requirements, cardClicked.abilityLevel
+                                );
+                            gameboardManager.UpdateSkill(cardClicked.ability, miniCard);
+                            miniCard.name = cardClicked.cardName;
+                            miniCardParent.name = cardClicked.cardName;
+                        }
+
+                        //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
+                        //miniCard.transform.SetParent(hand.transform.GetChild(i));
+                        //miniCard.transform.position = hand.transform.GetChild(i).transform.position;
+                        //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+                        //miniCard.GetComponent<DragMiniCards>().enabled = true;
+                        //Debug.Log(miniCard.name + " mini card ");
+                        ////miniCard.AddComponent<DragMiniCards>();
+                        ////miniCard.AddComponent<PhotonView>();
+                        //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
+                        //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                        //    //, cardClicked.requirements, cardClicked.abilityLevel
+                        //    );
+                        //card.name = cardClicked.cardName;
+                        //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+                        //gameboardManager.UpdateSkill(cardClicked.ability, card);
+                        //Debug.Log(card + " card value");
 
                         if (PhotonNetwork.IsMasterClient)
                         {
@@ -280,20 +315,59 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     Debug.LogError("level " + level + " total xp " + playerController.totalXP);
                     if (IsRecruit(playerController.totalXP, level))
                     {
-                        GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
-                        miniCard.transform.SetParent(enemyHand.transform.GetChild(i));
-                        miniCard.transform.position = enemyHand.transform.GetChild(i).transform.position;
-                        miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
-                        miniCard.AddComponent<DragMiniCards>();
-                        Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
-                            //, cardClicked.requirements, cardClicked.abilityLevel
-                            );
-                        Debug.Log(card + " card");
-                        card.name = cardClicked.cardName;
-                        card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-                        gameboardManager.UpdateSkill(cardClicked.ability, card);
-                        miniCard.SetActive(false);
+
+                        GameObject miniCardParent;
+                        string prefabPath =  cardClicked.cardName;
+                        GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
+                        if (cardPrefab != null)
+                        {
+                            Debug.LogError("Prefab found at path: " + prefabPath);
+                            miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation); 
+                            miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
+                            miniCardParent.transform.position = enemyHand.transform.GetChild(i).transform.position;
+                            miniCardParent.transform.localScale = enemyHand.transform.GetChild(i).transform.localScale;
+                            miniCardParent.AddComponent<DragMiniCards>(); ;
+                            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                            miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                                //, cardClicked.requirements, cardClicked.abilityLevel
+                                );
+                            miniCard.name = cardClicked.cardName;
+                            miniCard.transform.GetChild(miniCard.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+                            miniCardParent.name = cardClicked.cardName;
+                            miniCardParent.SetActive(false);
+
+                        }
+                        else
+                        {
+                            miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
+                            miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
+                            miniCardParent.transform.position = enemyHand.transform.GetChild(i).transform.position;
+                            miniCardParent.transform.localScale = enemyHand.transform.GetChild(i).transform.localScale;
+                            miniCardParent.AddComponent<DragMiniCards>();
+                            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                            miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                                //, cardClicked.requirements, cardClicked.abilityLevel
+                                );
+                            gameboardManager.UpdateSkill(cardClicked.ability, miniCard);
+                            miniCard.name = cardClicked.cardName;
+                            miniCardParent.name = cardClicked.cardName;
+                            miniCardParent.SetActive(false);
+                        }
+
+                        //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
+                        //miniCard.transform.SetParent(enemyHand.transform.GetChild(i));
+                        //miniCard.transform.position = enemyHand.transform.GetChild(i).transform.position;
+                        //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+                        //miniCard.AddComponent<DragMiniCards>();
+                        //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
+                        //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                        //    //, cardClicked.requirements, cardClicked.abilityLevel
+                        //    );
+                        //Debug.Log(card + " card");
+                        //card.name = cardClicked.cardName;
+                        //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+                        //gameboardManager.UpdateSkill(cardClicked.ability, card);
+                        //miniCard.SetActive(false);
                     }
                     break;
                 }

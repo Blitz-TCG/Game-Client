@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Clone : Card
@@ -57,5 +55,17 @@ public class Clone : Card
         int replicateXP = card.SetCardXP(card.XP, originalCard.XP);
         Debug.Log(" new values are " + replicateAttack + " attack " + replicateGold + " gold " + replicateHealth + " health " + replicateXP + " xp");
         return new Tuple<int, int, int, int>(replicateAttack, replicateHealth, replicateGold, replicateXP);
+    }
+
+    public int FindThePosition(GameObject field)
+    {
+        for (int i = 0; i < field.transform.childCount; i++)
+        {
+            if (field.transform.GetChild(i).childCount == 0)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 }

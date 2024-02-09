@@ -2,11 +2,28 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
 public class GoodFavor : Card
 {
+#if UNITY_EDITOR
+    [CustomEditor(typeof(GoodFavor))]
+    public class DerivedClassEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            //DrawDefaultInspector();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("id"));
+            //EditorGUILayout.PropertyField(serializedObject.FindProperty("multiplier"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("baseGoldValue"));
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+#endif
+
     public int multiplier = 1;
     public int baseGoldValue = 25;
 

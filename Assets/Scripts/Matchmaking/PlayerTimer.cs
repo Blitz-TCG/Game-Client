@@ -74,6 +74,6 @@ public class PlayerTimer : MonoBehaviour
 
     private void Start()
     {
-        currentTime = 180;
+        currentTime = 300;
     }
 }

@@ -352,10 +352,12 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             Debug.Log(" child count 1" + selectedCardParent.name + " selected card parent " + selectedcard + " selected card ");
             
             Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedcard.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
-            if(selectedcard.transform.GetChild(0).GetComponent<Card>().id != clickedCard.id)
+            //Destroy(selectedCardParent.transform.GetChild(0).gameObject);
+            Debug.Log("Destroyed if already present " + selectedCardParent.transform.GetChild(0));
+            if (selectedcard.transform.GetChild(0).GetComponent<Card>().id != clickedCard.id)
             {
                 Debug.Log("not matched");
-                Destroy(selectedCardParent.transform.GetChild(0).gameObject);
+                //Destroy(selectedCardParent.transform.GetChild(0).gameObject);
                 GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedCardParent.transform.position, selectedCardParent.transform.rotation);
                 miniCardParent.transform.SetParent(selectedCardParent.transform);
                 miniCardParent.transform.localScale = selectedCardParent.transform.localScale;
@@ -370,7 +372,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             }
         }
 
-        if(selectedCardParent.transform.childCount == 0)
+        if (selectedCardParent.transform.childCount == 0)
         {
             Debug.Log("selectedCardParent.transform.childCount == 0");
             GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedCardParent.transform.position, selectedCardParent.transform.rotation);

@@ -495,6 +495,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 Berserker berserker = attackingcard.GetComponent<Berserker>();
                                 damageVal = berserker.UseBerserkerAbility(attackingcard.attack);
                             }
+                            else if (attackingcard.GetComponent<Kamikaze>())
+                            {
+                                Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
+                                Debug.Log(" Kamikaze card " + kamikaze);
+                                damageVal = kamikaze.CalculateDamage(attackingcard.attack);
+                                string parentId = kamikaze.transform.parent.parent.name.Split(" ")[2];
+                                Destroy(kamikaze.transform.parent.gameObject);
+                                pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, parentId, 1);
+                            }
                             else
                             {
                                 Debug.Log("normal attack called");
@@ -514,10 +523,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 enemyWall.GetComponent<PolygonCollider2D>().enabled = false;
                                 enemyWall.GetComponent<Button>().enabled = false;
                                 enemyHealthObject.GetComponent<TMP_Text>().SetText(0.ToString());
-                                ChangeEnemyTag();
                                 pv.RPC("AttackWall", RpcTarget.Others, 0);
                                 isWallDestroyed = true;
                                 ShowHiddenCard();
+                                ChangeEnemyTag();
                                 GameManager.instance.clicked = 0;
                             }
                             else
@@ -580,6 +589,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 Berserker berserker = attackingcard.GetComponent<Berserker>();
                                 damageVal = berserker.UseBerserkerAbility(attackingcard.attack);
                             }
+                            else if (attackingcard.GetComponent<Kamikaze>())
+                            {
+                                Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
+                                Debug.Log(" Kamikaze card " + kamikaze);
+                                damageVal = kamikaze.CalculateDamage(attackingcard.attack);
+                                string parentId = kamikaze.transform.parent.parent.name.Split(" ")[2];
+                                Destroy(kamikaze.transform.parent.gameObject);
+                                pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, parentId, 2);
+                            }
                             else
                             {
                                 Debug.Log("normal attack called");
@@ -599,10 +617,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 enemyWall.GetComponent<PolygonCollider2D>().enabled = false;
                                 enemyWall.GetComponent<Button>().enabled = false;
                                 enemyHealthObject.GetComponent<TMP_Text>().SetText(0.ToString());
-                                ChangeEnemyTag();
                                 pv.RPC("AttackWall", RpcTarget.Others, 0);
                                 isWallDestroyed = true;
                                 ShowHiddenCard();
+                                ChangeEnemyTag();
                                 GameManager.instance.clicked = 0;
                             }
                             else
@@ -691,11 +709,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 Crit crit = attackingcard.GetComponent<Crit>();
                                 damageVal = crit.UseAbilityAndCalculateDamage(attackingcard.attack);
                             }
-                            else if (attackingcard.GetComponent<Buster>())
+                            else if (attackingcard.GetComponent<Kamikaze>())
                             {
-                                Debug.Log("Buster called");
-                                Buster buster = attackingcard.GetComponent<Buster>();
-                                damageVal = buster.UseBusterAbility(attackingcard.attack);
+                                Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
+                                Debug.Log(" Kamikaze card " + kamikaze);
+                                damageVal = kamikaze.CalculateDamage(attackingcard.attack);
+                                string parentId = kamikaze.transform.parent.parent.name.Split(" ")[2];
+                                Destroy(kamikaze.transform.parent.gameObject);
+                                pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, parentId, PhotonNetwork.IsMasterClient ? 1 : 2);
                             }
                             else if (attackingcard.GetComponent<Berserker>())
                             {
@@ -1285,7 +1306,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
                         Debug.Log(" berserker card " + berserker);
                         int totalAttack = berserker.UseBerserkerAbility(attacking.attack);
-                        if (totalAttack == 0) return;
+                        if (totalAttack == 0)
+                        {
+                            attackingcard.SetAttackValue(true);
+                            return;
+                        }
                         string parentId = berserker.transform.parent.parent.name.Split(" ")[2];
                         destroyPlayerAttackValue = target.attack;
                         destroyEnemyAttackValue = totalAttack;
@@ -1359,7 +1384,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
                 Debug.Log(" berserker card " + berserker);
                 int totalAttack = berserker.UseBerserkerAbility(attacking.attack);
-                if (totalAttack == 0) return;
+                if (totalAttack == 0)
+                {
+                    attackingcard.SetAttackValue(true);
+                    return;
+                }
                 string parentId = berserker.transform.parent.parent.name.Split(" ")[2];
                 destroyPlayerAttackValue = target.attack;
                 destroyEnemyAttackValue = totalAttack;
@@ -1380,7 +1409,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 List<int> enemyFieldList = CardDataBase.instance.GetSurroundingPositions(int.Parse(targetId));
                 Debug.Log(string.Join(", ", enemyFieldList) + "  player field list ");
 
-                DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv , scattershot.damageAmount);
+                DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv, scattershot.damageAmount);
 
 
             }
@@ -1552,7 +1581,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
                         Debug.Log(" berserker card " + berserker);
                         int totalAttack = berserker.UseBerserkerAbility(attacking.attack);
-                        if (totalAttack == 0) return;
+                        if (totalAttack == 0)
+                        {
+                            attackingcard.SetAttackValue(true);
+                            return;
+                        }
                         string parentId = berserker.transform.parent.parent.name.Split(" ")[2];
                         destroyPlayerAttackValue = target.attack;
                         destroyEnemyAttackValue = totalAttack;
@@ -1573,7 +1606,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         List<int> enemyFieldList = CardDataBase.instance.GetSurroundingPositions(int.Parse(targetId));
                         Debug.Log(string.Join(", ", enemyFieldList) + "  player field list ");
 
-                        DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv,  scattershot.damageAmount);
+                        DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv, scattershot.damageAmount);
                     }
                     else
                     {
@@ -1640,7 +1673,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
                 Debug.Log(" berserker card " + berserker);
                 int totalAttack = berserker.UseBerserkerAbility(attacking.attack);
-                if (totalAttack == 0) return;
+                if (totalAttack == 0)
+                {
+                    attackingcard.SetAttackValue(true);
+                    return;
+                }
                 string parentId = berserker.transform.parent.parent.name.Split(" ")[2];
                 destroyPlayerAttackValue = target.attack;
                 destroyEnemyAttackValue = totalAttack;
@@ -1772,7 +1809,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             {
                 Card targetCard = enemyField.transform.GetChild(positions[element] - 1).GetChild(0).GetChild(0).GetComponent<Card>();
                 targetCard.DealDamage(damageAmt, targetCard.transform.parent.gameObject);
-                view.RPC("CardDestroyedOnOthers", RpcTarget.Others,damageAmt, positions[element] - 1);
+                view.RPC("CardDestroyedOnOthers", RpcTarget.Others, damageAmt, positions[element] - 1);
             }
             //bool scattershot.UseScattershotAbility(playerFieldList, currentCard, pv);
         }
@@ -1831,17 +1868,32 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Farmer farmer = card.GetComponent<Farmer>();
             damage = farmer.UseFarmerAbility(card.attack);
         }
-        else if (attackingcard.GetComponent<Buster>())
+        else if (card.GetComponent<Hunger>())
         {
-            Debug.Log("Buster called");
-            Buster buster = attackingcard.GetComponent<Buster>();
-            damage = buster.UseBusterAbility(attackingcard.attack);
+            Debug.Log("Hunger called");
+            Hunger hunger = card.GetComponent<Hunger>();
+            CardDetails originalCard = cardDetails.Find(cardId => cardId.id == card.id);
+            Debug.Log(" Hunger card " + hunger);
+            int totalHealth = hunger.UseAbility(card, originalCard.HP);
+            string cardParentId = hunger.transform.parent.parent.name.Split(" ")[2];
+            pv.RPC("CalculateHealBeforeAttack", RpcTarget.Others, hunger.id, cardParentId, totalHealth);
+            Debug.Log(hunger.name + " name " + card.HP + " hp value after updated ");
+            damage = card.attack;
         }
-        else if (attackingcard.GetComponent<Berserker>())
+        else if (card.GetComponent<Berserker>())
         {
             Debug.Log("Berserker called");
-            Berserker berserker = attackingcard.GetComponent<Berserker>();
-            damage = berserker.UseBerserkerAbility(attackingcard.attack);
+            Berserker berserker = card.GetComponent<Berserker>();
+            damage = berserker.UseBerserkerAbility(card.attack);
+        }
+        else if (card.GetComponent<Kamikaze>())
+        {
+            Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
+            Debug.Log(" Kamikaze card " + kamikaze);
+            damage = kamikaze.CalculateDamage(card.attack);
+            string cardParentId = kamikaze.transform.parent.parent.name.Split(" ")[2];
+            Destroy(kamikaze.transform.parent.gameObject);
+            pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, cardParentId, PhotonNetwork.IsMasterClient ? 1 : 2);
         }
         else
         {
@@ -2275,10 +2327,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         //sortedList = currentCards.OrderBy(card => card.levelRequired).ToList();
         currentCards.Sort(SortByLevelAndOrder);
         sortedList = currentCards;
-        foreach (CardDetails card in sortedList)
-        {
-            Debug.Log($"Card Name: {card.cardName}, Level: {card.levelRequired}");
-        }
 
         for (int i = 0; i < sortedList.Count; i++)
         {
@@ -2288,22 +2336,51 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (view.IsMine)
             {
                 Debug.LogError(" inside the mine called");
-                GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", cardListParent.transform.position, cardListParent.transform.rotation);
-                miniCardParent.transform.SetParent(cardListParent.transform);
-                miniCardParent.transform.localScale = cardListParent.transform.localScale;
-                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-                var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
-                Debug.Log(" completed card level " + completeCard.levelRequired);
-                int level = (int)(completeCard.levelRequired);
-                miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage, sortedList[i].ability
-                    //, sortedList[i].requirements, sortedList[i].abilityLevel
-                    );
-                UpdateSkill(sortedList[i].ability, miniCard);
-                miniCard.name = sortedList[i].cardName;
-                miniCardParent.name = sortedList[i].cardName;
-                miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
-                Debug.LogError(" photon view " + miniCardParent.GetComponent<PhotonView>());
-                DisplayWithXP(miniCard.gameObject, level);
+                GameObject miniCardParent;
+                string prefabPath = sortedList[i].cardName;
+                GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
+                Debug.Log("CardDataBase.instance.cardPath " + CardDataBase.instance.cardPath + " sortedList[i].cardName " + sortedList[i].cardName);
+                Debug.Log(cardPrefab + " cardPrefab " + prefabPath + " prefab path");
+                if (cardPrefab != null)
+                {
+                    Debug.LogError("Prefab found at path: " + prefabPath);
+                    Debug.LogError("prefab base gold value : " + cardPrefab?.gameObject?.GetComponent<GoodFavor>()?.baseGoldValue);
+                    miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, cardListParent.transform.position, cardListParent.transform.rotation); miniCardParent.transform.SetParent(cardListParent.transform);
+                    miniCardParent.transform.localScale = cardListParent.transform.localScale;
+                    Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                    var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
+                    Debug.Log(" completed card level " + completeCard.levelRequired);
+                    int level = (int)(completeCard.levelRequired);
+                    miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage, sortedList[i].ability
+                        //, sortedList[i].requirements, sortedList[i].abilityLevel
+                        );
+                    miniCard.name = sortedList[i].cardName;
+                    miniCardParent.name = sortedList[i].cardName;
+                    miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
+                    Debug.LogError(" photon view " + miniCardParent.GetComponent<PhotonView>());
+                    DisplayWithXP(miniCard.gameObject, level);
+
+                }
+                else
+                {
+                    miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", cardListParent.transform.position, cardListParent.transform.rotation);
+                    miniCardParent.transform.SetParent(cardListParent.transform);
+                    miniCardParent.transform.localScale = cardListParent.transform.localScale;
+                    Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                    var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
+                    Debug.Log(" completed card level " + completeCard.levelRequired);
+                    int level = (int)(completeCard.levelRequired);
+                    miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage, sortedList[i].ability
+                        //, sortedList[i].requirements, sortedList[i].abilityLevel
+                        );
+                    UpdateSkill(sortedList[i].ability, miniCard);
+                    miniCard.name = sortedList[i].cardName;
+                    miniCardParent.name = sortedList[i].cardName;
+                    miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
+                    Debug.LogError(" photon view " + miniCardParent.GetComponent<PhotonView>());
+                    DisplayWithXP(miniCard.gameObject, level);
+
+                }
             }
         }
     }
@@ -2443,7 +2520,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 generalBane.ability = CardAbility.GeneralBane;
                 break;
             case CardAbility.Blackhole:
-                Blackhole blackHole = card.gameObject.AddComponent <Blackhole>();
+                Blackhole blackHole = card.gameObject.AddComponent<Blackhole>();
                 blackHole.ability = CardAbility.Blackhole;
                 break;
             default: break;
@@ -2591,19 +2668,60 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         for (int i = 0; i < selectedCardList.Count; i++)
         {
-            GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", cardListParent.transform.position, cardListParent.transform.rotation);
-            miniCardParent.transform.SetParent(cardListParent.transform);
-            miniCardParent.transform.localScale = cardListParent.transform.localScale;
-            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-            var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
-            Debug.Log(" completed card level " + completeCard.levelRequired);
-            int level = (int)(completeCard.levelRequired);
-            miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage, selectedCardList[i].ability
+            GameObject miniCardParent;
+            string prefabPath = selectedCardList[i].cardName;
+            GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
+            if (cardPrefab != null)
+            {
+                Debug.LogError("Prefab found at path: " + prefabPath);
+                miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, cardListParent.transform.position, cardListParent.transform.rotation); miniCardParent.transform.SetParent(cardListParent.transform);
+                miniCardParent.transform.localScale = cardListParent.transform.localScale;
+                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
+                Debug.Log(" completed card level " + completeCard.levelRequired);
+                int level = (int)(completeCard.levelRequired);
+                miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage, selectedCardList[i].ability
+                    //, selectedCardList[i].requirements, selectedCardList[i].abilityLevel
+                    );
+                miniCard.name = selectedCardList[i].cardName;
+                miniCardParent.name = selectedCardList[i].cardName;
+                miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
+                DisplayWithXP(miniCard.gameObject, level);
+            }
+            else
+            {
+                miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", cardListParent.transform.position, cardListParent.transform.rotation);
+                miniCardParent.transform.SetParent(cardListParent.transform);
+                miniCardParent.transform.localScale = cardListParent.transform.localScale;
+                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
+                Debug.Log(" completed card level " + completeCard.levelRequired);
+                int level = (int)(completeCard.levelRequired);
+                miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage, selectedCardList[i].ability
                 //, selectedCardList[i].requirements, selectedCardList[i].abilityLevel
                 );
-            miniCard.name = selectedCardList[i].cardName;
-            miniCardParent.name = selectedCardList[i].cardName;
-            //DisplayWithXP(miniCard.gameObject, level);
+                UpdateSkill(selectedCardList[i].ability, miniCard);
+                miniCard.name = selectedCardList[i].cardName;
+                miniCardParent.name = selectedCardList[i].cardName;
+                miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
+                Debug.LogError(" photon view " + miniCardParent.GetComponent<PhotonView>());
+                DisplayWithXP(miniCard.gameObject, level);
+
+            }
+
+            //GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", cardListParent.transform.position, cardListParent.transform.rotation);
+            //miniCardParent.transform.SetParent(cardListParent.transform);
+            //miniCardParent.transform.localScale = cardListParent.transform.localScale;
+            //Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+            //var completeCard = cardDetails.Find(card => card.id == sortedList[i].id);
+            //Debug.Log(" completed card level " + completeCard.levelRequired);
+            //int level = (int)(completeCard.levelRequired);
+            //miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage, selectedCardList[i].ability
+            //    //, selectedCardList[i].requirements, selectedCardList[i].abilityLevel
+            //    );
+            //miniCard.name = selectedCardList[i].cardName;
+            //miniCardParent.name = selectedCardList[i].cardName;
+            ////DisplayWithXP(miniCard.gameObject, level);
         }
     }
 
@@ -3265,6 +3383,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log(" child count 1" + selectedObjectParent.name + " selected card parent " + clickedCard + " selected card ");
 
             Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedObject.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
+            //Destroy(selectedObjectParent.transform.GetChild(0).gameObject);
+            Debug.Log("Destroyed if already present " + selectedObjectParent.transform.GetChild(0));
             if (selectedObject.transform.GetChild(0).GetComponent<Card>().id != id)
             {
                 Debug.Log("not matched");
@@ -3282,7 +3402,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 miniCardParent.name = clickedCard.cardName;
             }
         }
-
+        Debug.Log("selectedObjectParent.transform.childCount" + selectedObjectParent.transform.childCount);
         if (selectedObjectParent.transform.childCount == 0)
         {
             Debug.Log(" child count 0" + selectedObjectParent.name + " selected card parent " + clickedCard + " selected card ");
@@ -3723,7 +3843,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 {
                     StopCoroutine(coroutine);
                 }
-                coroutine = StartCoroutine(EndTheTurn(21, false));
+                coroutine = StartCoroutine(EndTheTurn(41, false));
                 int totalSec = (int.Parse(minText) * 60) + int.Parse(secText);
 
                 timeUp.PauseTimer("up");
@@ -3864,7 +3984,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 pv.RPC("SetDownTimeText", RpcTarget.Others, min, sec);
                 timeDown.InitTimers("Down", totalSec);
-                pv.RPC("CoroutineMethod", RpcTarget.Others, 21f, minText, secText);
+                pv.RPC("CoroutineMethod", RpcTarget.Others, 41f, minText, secText);
                 pv.RPC("PauseTimerForTurnEndPlayer", RpcTarget.Others, totalSec);
             }
         }
@@ -3913,7 +4033,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     continue;
                 }
 
-                if(cardObj.GetComponent<Card>().ability == CardAbility.DeActivate)
+                if (cardObj.GetComponent<Card>().ability == CardAbility.DeActivate)
                 {
                     Debug.Log("cardObj.GetComponent<Card>().ability == CardAbility.DeActivate");
                     continue;
@@ -4095,6 +4215,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 miniCard.SetMiniCard(bigCard.id, bigCard.ergoTokenId, bigCard.ergoTokenAmount, bigCard.cardName, bigCard.attack, bigCard.HP, bigCard.gold, bigCard.XP, bigCard.cardImage, CardAbility.None
                         //, sortedList[i].requirements, sortedList[i].abilityLevel
                         );
+                                miniCardParent.AddComponent<DragFieldCard>();
                             }
                             string playerFieldListString = ConvertListToString(playerFieldList);
                             pv.RPC("SpawnSummonCardsToOthers", RpcTarget.Others, playerFieldListString, parentId);
@@ -5389,6 +5510,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     public void HidePanel(GameObject cardError)
     {
+        if (cardError == null || cardError.transform.childCount < 0) return;
         GameObject currentObject = cardError.transform.GetChild(0).gameObject;
         bool currentPanelState = currentObject.activeSelf;
 
@@ -5439,17 +5561,30 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         string parentId = clone.transform.parent.parent.name.Split(" ")[2];
 
                         Debug.Log(playerCard.XP + " player xp " + playerCard.gold + " gold " + playerCard.attack + " attack " + playerCard.HP + " hp");
-
-                        Tuple<int, int, int, int> result = clone.ReplicateCard(playerCard, originalCard);
-
-                        Debug.Log(playerCard.XP + " player updated xp " + playerCard.gold + " gold " + playerCard.attack + " attack " + playerCard.HP + " hp");
-
-                        playerCard.SetAttack(result.Item1);
-                        playerCard.SetHP(result.Item2);
-                        playerCard.SetGold(result.Item3);
-                        playerCard.SetXP(result.Item4);
-                        pv.RPC("CloneCardOthers", RpcTarget.Others, result.Item1, result.Item2, result.Item3, result.Item4, parentId);
+                        int id = clone.FindThePosition(playerField);
+                        if (id == -1) return;
+                        GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", playerField.transform.GetChild(id).position, playerField.transform.GetChild(id).rotation);
+                        miniCardParent.transform.SetParent(playerField.transform.GetChild(id));
+                        miniCardParent.transform.localScale = playerField.transform.GetChild(id).localScale;
+                        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+                        miniCard.SetMiniCard(originalCard.id, originalCard.ergoTokenId, originalCard.ergoTokenAmount, "Clone", originalCard.attack, originalCard.HP, originalCard.gold, originalCard.XP, originalCard.cardImage, CardAbility.None
+                //, sortedList[i].requirements, sortedList[i].abilityLevel
+                );
+                        miniCardParent.AddComponent<DragFieldCard>();
+                        miniCardParent.name = "ClonedCard";
+                        miniCard.name = "ClonedCard";
+                        pv.RPC("CloneCardOthers", RpcTarget.Others, id, originalCard.id);
                     }
+                    //Tuple<int, int, int, int> result = clone.ReplicateCard(playerCard, originalCard);
+
+                    //Debug.Log(playerCard.XP + " player updated xp " + playerCard.gold + " gold " + playerCard.attack + " attack " + playerCard.HP + " hp");
+
+                    //playerCard.SetAttack(result.Item1);
+                    //playerCard.SetHP(result.Item2);
+                    //playerCard.SetGold(result.Item3);
+                    //playerCard.SetXP(result.Item4);
+
+
                 }
 
             }
@@ -5602,9 +5737,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 int enemyFieldPos = gambit.GetRandomValue(enemyField, isEnemyWallDestroyed);
 
                 Debug.Log(playerFieldPos + " playerFieldPos " + enemyFieldPos + " enemyFieldPos");
-                 
 
-                if (playerFieldPos > 0 &&  enemyFieldPos > 0)
+
+                if (playerFieldPos > 0 && enemyFieldPos > 0)
                 {
                     GameObject playerRandomCard = playerField.transform.GetChild(playerFieldPos - 1).GetChild(0).gameObject;
                     GameObject enemyRandomCard = enemyField.transform.GetChild(enemyFieldPos - 1).GetChild(0).gameObject;
@@ -5651,10 +5786,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Blackhole blackhole = card.GetComponent<Blackhole>();
                 bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
                 bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
-                int playerFieldCount = isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2; 
-                    int enemyFieldCount = isEnemyWallDestroyed ? enemyField.transform.childCount : enemyField.transform.childCount / 2;
+                int playerFieldCount = isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2;
+                int enemyFieldCount = isEnemyWallDestroyed ? enemyField.transform.childCount : enemyField.transform.childCount / 2;
                 blackhole.UseBlackHoleAbility(playerField, pv, playerFieldCount);
-                blackhole.UseBlackHoleAbility(enemyField, pv, enemyFieldCount );
+                blackhole.UseBlackHoleAbility(enemyField, pv, enemyFieldCount);
             }
         }
         else if (card.GetComponent<Nuclear>())
@@ -5793,20 +5928,39 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     [PunRPC]
-    private void CloneCardOthers(int attack, int health, int gold, int xp, string parId)
+    private void CloneCardOthers(int pos, int cardId)
     {
         Debug.Log("CloneCardOthers ");
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
-        int parentId = int.Parse(parId);
-        Debug.Log(enemyField + " enemy field " + parentId + " parent id " + " health set to other " + attack + " attack set to other player " + health + " health " + gold + " gold " + xp + " xp");
-        if (enemyField.transform.GetChild(parentId - 1) != null)
+
+        CardDetails originalCard = cardDetails.Find(cId => cId.id == cardId);
+
+        GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyField.transform.GetChild(pos).position, enemyField.transform.GetChild(pos).rotation);
+        miniCardParent.transform.SetParent(enemyField.transform.GetChild(pos));
+        miniCardParent.transform.localScale = enemyField.transform.GetChild(pos).localScale;
+        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+        miniCard.SetMiniCard(originalCard.id, originalCard.ergoTokenId, originalCard.ergoTokenAmount, "Clone", originalCard.attack, originalCard.HP, originalCard.gold, originalCard.XP, originalCard.cardImage, CardAbility.None
+//, sortedList[i].requirements, sortedList[i].abilityLevel
+);
+        Destroy(miniCardParent?.GetComponent<DragFieldCard>());
+        miniCardParent.AddComponent<DragMiniCards>();
+        miniCardParent.AddComponent<DropFieldCard>();
+        miniCardParent.name = "ClonedCard";
+        miniCard.name = "ClonedCard";
+        if (enemyField.transform.GetChild(pos).tag.Contains("Back Line"))
         {
-            Card card = enemyField.transform.GetChild(parentId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
-            card.SetHP(health);
-            card.SetAttack(attack);
-            card.SetGold(gold);
-            card.SetXP(xp);
+            miniCard.gameObject.SetActive(false);
         }
+        //int parentId = int.Parse(parId);
+        //Debug.Log(enemyField + " enemy field " + parentId + " parent id " + " health set to other " + attack + " attack set to other player " + health + " health " + gold + " gold " + xp + " xp");
+        //if (enemyField.transform.GetChild(parentId - 1) != null)
+        //{
+        //    //Card card = enemyField.transform.GetChild(parentId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+        //    //card.SetHP(health);
+        //    //card.SetAttack(attack);
+        //    //card.SetGold(gold);
+        //    //card.SetXP(xp);
+        //}
     }
 
     [PunRPC]
@@ -5856,6 +6010,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 miniCard.SetMiniCard(bigCard.id, bigCard.ergoTokenId, bigCard.ergoTokenAmount, bigCard.cardName, bigCard.attack, bigCard.HP, bigCard.gold, bigCard.XP, bigCard.cardImage, CardAbility.None
                     //, sortedList[i].requirements, sortedList[i].abilityLevel
                     );
+                Destroy(miniCardParent?.GetComponent<DragFieldCard>());
+                miniCardParent.AddComponent<DragMiniCards>();
+                miniCardParent.AddComponent<DropFieldCard>();
                 if (enemyField.transform.GetChild(positions[i] - 1).tag.Contains("Back Line"))
                 {
                     miniCard.gameObject.SetActive(false);
@@ -5956,14 +6113,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
 
-        for(int i = 0;  i < playerField.transform.childCount; i++) 
-        { 
-            if(playerField.transform.GetChild(i).childCount == 1)
+        for (int i = 0; i < playerField.transform.childCount; i++)
+        {
+            if (playerField.transform.GetChild(i).childCount == 1)
             {
                 Debug.Log(" child found " + i + " value " + playerField.transform.GetChild(i).GetChild(0));
             }
         }
-        for(int i = 0;  i < enemyField.transform.childCount; i++) 
+        for (int i = 0; i < enemyField.transform.childCount; i++)
         {
             if (enemyField.transform.GetChild(i).childCount == 1)
             {
@@ -5972,9 +6129,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
 
         GameObject playerRandomCard = playerField.transform.GetChild(enemyPos).GetChild(0).gameObject;
-        Debug.Log(playerRandomCard + " *#* playerRandomCard " );
+        Debug.Log(playerRandomCard + " *#* playerRandomCard ");
         GameObject enemyRandomCard = enemyField.transform.GetChild(playerPos).GetChild(0).gameObject;
-        Debug.Log( enemyRandomCard + " *#* enemyRandomCard");
+        Debug.Log(enemyRandomCard + " *#* enemyRandomCard");
 
         playerRandomCard.transform.SetParent(enemyField.transform.GetChild(playerPos));
         enemyRandomCard.transform.SetParent(playerField.transform.GetChild(enemyPos));
@@ -6008,7 +6165,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         Debug.Log(isPlayerWallDestroyed + " isplayer wall destroyed " + isEnemyWallDestroyed + " is enemy wall destroy " + playerFieldCount + " p count " + enemyFieldCount + " e count");
 
-        for(int i = 0; i < playerFieldCount; i++)
+        for (int i = 0; i < playerFieldCount; i++)
         {
             if (playerField.transform.GetChild(i).childCount == 1)
             {
@@ -6025,7 +6182,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Destroy(enemyField.transform.GetChild(i).GetChild(0).gameObject);
             }
         }
-        
+
     }
 
     [PunRPC]
@@ -6035,7 +6192,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
 
-        
+
         for (int i = 0; i < playerField.transform.childCount; i++)
         {
             if (playerField.transform.GetChild(i).childCount == 1)
