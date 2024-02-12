@@ -222,7 +222,7 @@ public class FirebaseManager : MonoBehaviour
 
     private void InitializeFirebase() //setting the various firebase variables
     {
-       // FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false); //trying to disable caching to fix the firebase bug of finding usernames that don't exist
+        FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false); //trying to disable caching to fix the firebase bug of finding usernames that don't exist
 
         auth = FirebaseAuth.DefaultInstance;
 
@@ -441,7 +441,7 @@ public class FirebaseManager : MonoBehaviour
     {
         ResetAnimationOn();
         coroutineIsRunning = true;
-        yield return new WaitForSeconds(0.5f); //mimicking a loading time
+        //yield return new WaitForSeconds(0.5f); //mimicking a loading time
 
         var resetTask = auth.SendPasswordResetEmailAsync(resetPasswordEmail.text);
         yield return new WaitUntil(predicate: () => resetTask.IsCompleted);
@@ -487,7 +487,7 @@ public class FirebaseManager : MonoBehaviour
     {
         LoadingAnimationRegOn(); //shows a loading animation and disables buttons
         coroutineIsRunning = true;
-        yield return new WaitForSeconds(0.5f); //mimicking a loading time
+       //yield return new WaitForSeconds(0.5f); //mimicking a loading time
 
         yield return StartCoroutine(CheckIfUsernameExists((string checkedUsername) =>
          {
