@@ -144,50 +144,28 @@ public class CardRequirements
     }
 }
 
+public enum FieldLimit
+{
+    One = 1,
+    Two = 2,
+    Three = 3,
+    Four = 4,
+    Five = 5,
+    Six = 6,
+    Seven = 7,
+    Unlimited = 8
+}
 
-//#if UNITY_EDITOR
-//[CustomEditor(typeof(CardDetails))]
-//public class CardDetailsEditor : Editor
-//{
-//    private void DrawPropertiesExcluding(SerializedObject serializedObject, string[] excludeProperties)
-//    {
-//        SerializedProperty[] properties = serializedObject.GetArrayElementAtIndex(0).GetChildren();
-//        foreach (SerializedProperty property in properties)
-//        {
-//            if (!String.IsNullOrEmpty(property.name) && !property.name.Contains(".") && !property.hasChildren && !Array.Exists(property.propertyPath.Split('.'), x => excludeProperties.Contains(x)))
-//            {
-//                EditorGUILayout.PropertyField(property);
-//            }
-//        }
-//    }
+public enum FieldPosition
+{
+    FrontLine,
+    None
+}
 
-//    public override void OnInspectorGUI()
-//    {
-//        base.OnInspectorGUI();
-
-//        CardDetails cardDetails = (CardDetails)target;
-
-//        EditorGUILayout.BeginToggleGroup("Card Ability Properties");
-
-//        switch (cardDetails.ability)
-//        {
-//            case CardAbility.Clone:
-//                EditorGUILayout.PropertyField(serializedObject.FindProperty("multiplier"));
-//                EditorGUILayout.PropertyField(serializedObject.FindProperty("failurechance"));
-//                break;
-//            case CardAbility.Meteor:
-//                EditorGUILayout.PropertyField(serializedObject.FindProperty("health"));
-//                break;
-//            case CardAbility.Evolve:
-//                EditorGUILayout.PropertyField(serializedObject.FindProperty("damage"));
-//                break;
-//            // ... add cases for other abilities
-//            default:
-//                DrawPropertiesExcluding(serializedObject, new string[] { "ability" });
-//                break;
-//        }
-
-//        EditorGUILayout.EndToggleGroup();
-//    }
-//}
-//#endif
+[Serializable]
+public class AllField
+{
+    public CardAbility ability;
+    public FieldLimit limit;
+    public FieldPosition position;
+}

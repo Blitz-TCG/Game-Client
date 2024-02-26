@@ -14342,6 +14342,367 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638233998}
   m_CullTransparentMesh: 1
+--- !u!1 &640233705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 640233707}
+  - component: {fileID: 640233706}
+  m_Layer: 0
+  m_Name: FieldManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &640233706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640233705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7850dc447efae64bbace0fc26dbacab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fieldsLimit:
+  - ability: 0
+    limit: 1
+    position: 0
+  - ability: 1
+    limit: 1
+    position: 0
+  - ability: 2
+    limit: 8
+    position: 0
+  - ability: 3
+    limit: 1
+    position: 0
+  - ability: 4
+    limit: 1
+    position: 0
+  - ability: 5
+    limit: 1
+    position: 1
+  - ability: 6
+    limit: 1
+    position: 0
+  - ability: 7
+    limit: 8
+    position: 0
+  - ability: 8
+    limit: 8
+    position: 0
+  - ability: 9
+    limit: 2
+    position: 0
+  - ability: 10
+    limit: 8
+    position: 0
+  - ability: 11
+    limit: 8
+    position: 1
+  - ability: 12
+    limit: 8
+    position: 1
+  - ability: 13
+    limit: 8
+    position: 1
+  - ability: 14
+    limit: 8
+    position: 1
+  - ability: 15
+    limit: 8
+    position: 0
+  - ability: 16
+    limit: 8
+    position: 0
+  - ability: 17
+    limit: 1
+    position: 0
+  - ability: 18
+    limit: 2
+    position: 0
+  - ability: 19
+    limit: 2
+    position: 0
+  - ability: 20
+    limit: 8
+    position: 0
+  - ability: 21
+    limit: 8
+    position: 0
+  - ability: 22
+    limit: 1
+    position: 0
+  - ability: 23
+    limit: 2
+    position: 1
+  - ability: 24
+    limit: 8
+    position: 0
+  - ability: 25
+    limit: 8
+    position: 1
+  - ability: 26
+    limit: 8
+    position: 1
+  - ability: 27
+    limit: 8
+    position: 0
+  - ability: 28
+    limit: 8
+    position: 0
+  - ability: 29
+    limit: 1
+    position: 0
+  - ability: 30
+    limit: 1
+    position: 0
+  - ability: 31
+    limit: 2
+    position: 1
+  - ability: 32
+    limit: 8
+    position: 1
+  - ability: 33
+    limit: 8
+    position: 1
+  - ability: 34
+    limit: 1
+    position: 0
+  - ability: 35
+    limit: 1
+    position: 0
+  - ability: 36
+    limit: 8
+    position: 1
+  - ability: 37
+    limit: 2
+    position: 0
+  - ability: 38
+    limit: 8
+    position: 0
+  - ability: 39
+    limit: 8
+    position: 0
+  - ability: 40
+    limit: 8
+    position: 0
+  - ability: 41
+    limit: 8
+    position: 0
+  - ability: 42
+    limit: 1
+    position: 0
+  - ability: 43
+    limit: 8
+    position: 1
+  - ability: 44
+    limit: 8
+    position: 1
+  - ability: 45
+    limit: 8
+    position: 0
+  - ability: 46
+    limit: 2
+    position: 0
+  - ability: 47
+    limit: 1
+    position: 1
+  - ability: 48
+    limit: 1
+    position: 1
+  - ability: 49
+    limit: 8
+    position: 1
+  - ability: 50
+    limit: 1
+    position: 0
+  - ability: 51
+    limit: 8
+    position: 1
+  - ability: 52
+    limit: 2
+    position: 1
+  - ability: 53
+    limit: 8
+    position: 0
+  - ability: 54
+    limit: 1
+    position: 0
+  - ability: 55
+    limit: 8
+    position: 1
+  - ability: 56
+    limit: 8
+    position: 1
+  - ability: 57
+    limit: 8
+    position: 1
+  - ability: 58
+    limit: 1
+    position: 0
+  - ability: 59
+    limit: 1
+    position: 0
+  - ability: 60
+    limit: 1
+    position: 0
+  - ability: 61
+    limit: 8
+    position: 0
+  - ability: 62
+    limit: 1
+    position: 0
+  - ability: 63
+    limit: 1
+    position: 0
+  - ability: 64
+    limit: 1
+    position: 0
+  - ability: 65
+    limit: 1
+    position: 0
+  - ability: 66
+    limit: 8
+    position: 1
+  - ability: 67
+    limit: 8
+    position: 1
+  - ability: 68
+    limit: 1
+    position: 0
+  - ability: 69
+    limit: 1
+    position: 0
+  - ability: 70
+    limit: 1
+    position: 0
+  - ability: 71
+    limit: 8
+    position: 0
+  - ability: 72
+    limit: 1
+    position: 0
+  - ability: 73
+    limit: 1
+    position: 0
+  - ability: 74
+    limit: 1
+    position: 0
+  - ability: 75
+    limit: 1
+    position: 0
+  - ability: 76
+    limit: 1
+    position: 0
+  - ability: 77
+    limit: 8
+    position: 1
+  - ability: 78
+    limit: 8
+    position: 1
+  CloneCounter: 0
+  MeteorCounter: 0
+  EvolveCounter: 0
+  MalignantCounter: 0
+  GoodFavorCounter: 0
+  SummonCounter: 0
+  SerenityCounter: 0
+  MutateCounter: 0
+  RenewalCounter: 0
+  GoadCounter: 0
+  KamikazeCounter: 0
+  BerserkerCounter: 0
+  CritCounter: 0
+  HungerCounter: 0
+  ScattershotCounter: 0
+  FarmerCounter: 0
+  BusterCounter: 0
+  MasonCounter: 0
+  ParalyzeCounter: 0
+  CurseCounter: 0
+  DoomCounter: 0
+  GambitCounter: 0
+  SilenceCounter: 0
+  StealthCounter: 0
+  SmiteCounter: 0
+  SacrificeCounter: 0
+  MimicCounter: 0
+  GeneralBaneCounter: 0
+  BlackholeCounter: 0
+  NuclearCounter: 0
+  EndgameCounter: 0
+  FodderCounter: 0
+  RepairCounter: 0
+  GeneralBoonCounter: 0
+  WhiteFlagCounter: 0
+  EclipseCounter: 0
+  GeneralAegisCounter: 0
+  FearCounter: 0
+  ToxicCounter: 0
+  ShhhCounter: 0
+  SwapCounter: 0
+  HexCounter: 0
+  BanCounter: 0
+  ConsumeCounter: 0
+  MergeCounter: 0
+  DrainCounter: 0
+  WarcryCounter: 0
+  StackedOddsCounter: 0
+  CowardCounter: 0
+  IllusionCounter: 0
+  HecklerCounter: 0
+  OvertimeCounter: 0
+  AssassinCounter: 0
+  BlitzCounter: 0
+  ExecutionerCounter: 0
+  LimitlessCounter: 0
+  ShieldCounter: 0
+  RallyCounter: 0
+  FeastCounter: 0
+  TruesightCounter: 0
+  HeathenCounter: 0
+  EvasiveCounter: 0
+  FleetFootedCounter: 0
+  StifleCounter: 0
+  TimecrunchCounter: 0
+  TaxesCounter: 0
+  RageCounter: 0
+  DuelCounter: 0
+  GeneralWardCounter: 0
+  SubsidyCounter: 0
+  StalemateCounter: 0
+  MorphCounter: 0
+  TankCounter: 0
+  GuardianCounter: 0
+  RespiteCounter: 0
+  SavingsCounter: 0
+  FlourishCounter: 0
+  NoneCounter: 0
+  DeActivateCounter: 0
+--- !u!4 &640233707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640233705}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &641754194
 GameObject:
   m_ObjectHideFlags: 0
@@ -27296,7 +27657,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[0].HP
-      value: 3
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[0].XP
@@ -27304,7 +27665,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[1].HP
-      value: 6
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[1].XP
@@ -27312,7 +27673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[2].HP
-      value: 4
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[2].XP
@@ -29228,7 +29589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[0].attack
-      value: 1
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[100].clan

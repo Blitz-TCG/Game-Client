@@ -29,9 +29,6 @@ public class CardDetails
     {
         throw new NotImplementedException();
     }
-    // public T abilityscript;
-    //public AbilityRequirements requirements;
-    //public int abilityLevel = 0;
 
 #if UNITY_EDITOR
     [HideInInspector] public bool showMultiplierAndFailureChance;
@@ -46,11 +43,3 @@ public class CardDetails
     }
 #endif
 }
-
-//[Serializable]
-//public class AbilityPair
-//{
-//    public CardAbility ability;
-//    public Good_Favor good_Favor;
-//}
-

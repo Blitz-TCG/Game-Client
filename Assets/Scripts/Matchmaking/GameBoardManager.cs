@@ -5368,6 +5368,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     public bool IsSatisfyRequirements(Card card, GameObject playerField, GameObject position, bool commingFromDrag)
     {
+        FieldManager.instance.ResetCounters();
+        //FieldManager.instance.CalculateAbilityCounter(playerField);
         int totalCardsForThisAbility = GetTotalAbilityCards(card, playerField);
         Debug.Log(totalCardsForThisAbility + " total card ability " + card.ability + " position name " + position.transform?.parent.name);
         if (position.transform?.parent.name != "Player Field" && commingFromDrag) return false;
