@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class CardDataBase : MonoBehaviour
 {
     public static CardDataBase instance;
     public string cardPath = "Cards/";
     public List<CardDetails> cardDetails;
-    [HideInInspector] public Dictionary<CardAbility, CardRequirements>  requirements = new();
+    [HideInInspector] public Dictionary<CardAbility, AllField> requirements = new();
 
     private List<int> aboveCards = new List<int> { 1, 2, 3, 4, 5, 6 };
     private List<int> belowCards = new List<int> { 7, 8, 9, 10, 11, 12 };
@@ -28,43 +26,46 @@ public class CardDataBase : MonoBehaviour
             Destroy(gameObject);
         }
 
+        
+    }
+
+    private void Start()
+    {
         AddLimit();
     }
 
-   
-
     public void AddLimit()
     {
-        requirements.Add(CardAbility.GoodFavor, new CardRequirements("2", "Frontline"));
-        requirements.Add(CardAbility.Crit, new CardRequirements("Unlimited", "None"));
-        requirements.Add(CardAbility.Goad, new CardRequirements("2", "Frontline"));
-        requirements.Add(CardAbility.Meteor, new CardRequirements("1", "Frontline"));
-        requirements.Add(CardAbility.Kamikaze, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Renewal, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Hunger, new CardRequirements("Unlimited", "None"));
-        requirements.Add(CardAbility.Clone, new CardRequirements("1", "Frontline"));
-        requirements.Add(CardAbility.Evolve, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Malignant, new CardRequirements("1", "Frontline"));
-        requirements.Add(CardAbility.Mutate, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Farmer, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Buster, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Summon, new CardRequirements("1", "None"));
-        requirements.Add(CardAbility.Repair, new CardRequirements("Unlimited", "None"));
-        requirements.Add(CardAbility.GeneralBoon, new CardRequirements("Unlimited", "None"));
-        requirements.Add(CardAbility.Serenity, new CardRequirements("1", "Frontline"));
-        requirements.Add(CardAbility.Scattershot, new CardRequirements("Unlimited", "None"));
-        requirements.Add(CardAbility.Berserker, new CardRequirements("Unlimited", "None"));
-        requirements.Add(CardAbility.Mason, new CardRequirements("1", "Frontline"));
-        requirements.Add(CardAbility.Paralyze, new CardRequirements("2", "Frontline"));
-        requirements.Add(CardAbility.Curse, new CardRequirements("2", "Frontline"));
-        requirements.Add(CardAbility.Smite, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Doom, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Gambit, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.GeneralBane, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Blackhole, new CardRequirements("Unlimited", "Frontline"));
-        requirements.Add(CardAbility.Nuclear, new CardRequirements("1", "Frontline"));
-        requirements.Add(CardAbility.None, new CardRequirements("Unlimited", "None"));
-        requirements.Add(CardAbility.DeActivate, new CardRequirements("Unlimited", "None"));
+        requirements.Add(CardAbility.GoodFavor, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.GoodFavor));
+        requirements.Add(CardAbility.Crit, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Crit));
+        requirements.Add(CardAbility.Goad, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Goad));
+        requirements.Add(CardAbility.Meteor, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Meteor));
+        requirements.Add(CardAbility.Kamikaze, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Kamikaze));
+        requirements.Add(CardAbility.Renewal, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Renewal));
+        requirements.Add(CardAbility.Hunger, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Hunger));
+        requirements.Add(CardAbility.Clone, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Clone));
+        requirements.Add(CardAbility.Evolve, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Evolve));
+        requirements.Add(CardAbility.Malignant, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Malignant));
+        requirements.Add(CardAbility.Mutate, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Mutate));
+        requirements.Add(CardAbility.Farmer, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Farmer));
+        requirements.Add(CardAbility.Buster, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Buster));
+        requirements.Add(CardAbility.Summon, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Summon));
+        requirements.Add(CardAbility.Repair, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Repair));
+        requirements.Add(CardAbility.GeneralBoon, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.GeneralBoon));
+        requirements.Add(CardAbility.Serenity, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Serenity));
+        requirements.Add(CardAbility.Scattershot, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Scattershot));
+        requirements.Add(CardAbility.Berserker, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Berserker));
+        requirements.Add(CardAbility.Mason, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Mason));
+        requirements.Add(CardAbility.Paralyze, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Paralyze));
+        requirements.Add(CardAbility.Curse, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Curse));
+        requirements.Add(CardAbility.Smite, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Smite));
+        requirements.Add(CardAbility.Doom, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Doom));
+        requirements.Add(CardAbility.Gambit, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Gambit));
+        requirements.Add(CardAbility.GeneralBane, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.GeneralBane));
+        requirements.Add(CardAbility.Blackhole, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Blackhole));
+        requirements.Add(CardAbility.Nuclear, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Nuclear));
+        requirements.Add(CardAbility.None, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.None));
+        requirements.Add(CardAbility.DeActivate, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.DeActivate));
     }
 
     public List<int> GetSurroundingPositions(int selectedPosition)

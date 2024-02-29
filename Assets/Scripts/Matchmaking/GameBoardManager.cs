@@ -5369,76 +5369,51 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     public bool IsSatisfyRequirements(Card card, GameObject playerField, GameObject position, bool commingFromDrag)
     {
         FieldManager.instance.ResetCounters();
-        //FieldManager.instance.CalculateAbilityCounter(playerField);
-        int totalCardsForThisAbility = GetTotalAbilityCards(card, playerField);
+        FieldManager.instance.CalculateAbilityCounter(playerField);
+        //int totalCardsForThisAbility = GetTotalAbilityCards(card, playerField);
+        int totalCardsForThisAbility = FieldManager.instance.GetAbilityCounter(card.ability);
         Debug.Log(totalCardsForThisAbility + " total card ability " + card.ability + " position name " + position.transform?.parent.name);
         if (position.transform?.parent.name != "Player Field" && commingFromDrag) return false;
+
+        foreach (var kvp in CardDataBase.instance.requirements)
+        {
+            // Log the key and value of each key-value pair
+            Debug.Log($"Key: {kvp.Key}, Value: {kvp.Value}");
+            if (CardDataBase.instance.requirements.ContainsKey(card.ability))
+            {
+                Debug.Log(" key found :- " + kvp.Key);
+            }
+        }
+
         if (CardDataBase.instance.requirements.ContainsKey(card.ability))
         {
             Debug.Log("inside CardDataBase.instance.requirements.ContainsKey(card.ability)");
+
             if (TryGetCardRequirements(card.ability, out var cardRequirements))
             {
-                Debug.Log($"GoodFavor fieldLimit: {cardRequirements.fieldLimit}, fieldPosition: {cardRequirements.fieldPosition}");
-                if (cardRequirements.fieldLimit == "Unlimited" && cardRequirements.fieldPosition == "None")
+                Debug.Log($"GoodFavor fieldLimit: {cardRequirements.limit}, fieldPosition: {cardRequirements.position}");
+
+                if ((int)cardRequirements.limit > totalCardsForThisAbility)
                 {
-                    Debug.Log("cardRequirements.fieldLimit == Unlimited && cardRequirements.fieldPosition == None");
-                    return true;
-                }
-                else if (cardRequirements.fieldLimit == "1" && totalCardsForThisAbility < 1 && cardRequirements.fieldPosition == "None")
-                {
-                    Debug.Log("cardRequirements.fieldLimit == 1 && totalCardsForThisAbility <= 1 && cardRequirements.fieldPosition == None");
-                    return true;
-                }
-                else if (cardRequirements.fieldLimit == "2" && totalCardsForThisAbility < 2 && cardRequirements.fieldPosition == "None")
-                {
-                    Debug.Log("cardRequirements.fieldLimit == 2 && totalCardsForThisAbility <= 2 && cardRequirements.fieldPosition == None");
-                    return true;
-                }
-                else if (cardRequirements.fieldLimit == "Unlimited" && cardRequirements.fieldPosition == "Frontline")
-                {
-                    Debug.Log("cardRequirements.fieldLimit == Unlimited && cardRequirements.fieldPosition == Frontline");
-                    if (position.tag.ToLower().Contains("Front line".ToLower()))
+                    if (cardRequirements.position == FieldPosition.FrontLine && position.tag.ToLower().Contains("Front Line".ToLower()))
                     {
-                        Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
+                        Debug.Log("position is at FrontLine");
+                        return true;
+                    }
+                    else if (cardRequirements.position == FieldPosition.None)
+                    {
+                        Debug.Log("Field position is None");
                         return true;
                     }
                     else
                     {
-                        Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
-                        return false;
-                    }
-                }
-                else if (cardRequirements.fieldLimit == "1" && totalCardsForThisAbility < 1 && cardRequirements.fieldPosition == "Frontline")
-                {
-                    Debug.Log("cardRequirements.fieldLimit == 1 && totalCardsForThisAbility <= 1 && cardRequirements.fieldPosition == Frontline");
-                    if (position.tag.ToLower().Contains("Front line".ToLower()))
-                    {
-                        Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
-                        return true;
-                    }
-                    else
-                    {
-                        Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
-                        return false;
-                    }
-                }
-                else if (cardRequirements.fieldLimit == "2" && totalCardsForThisAbility < 2 && cardRequirements.fieldPosition == "Frontline")
-                {
-                    Debug.Log("cardRequirements.fieldLimit == 2 && totalCardsForThisAbility <= 2 && cardRequirements.fieldPosition == Frontline");
-                    if (position.tag.ToLower().Contains("Front line".ToLower()))
-                    {
-                        Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
-                        return true;
-                    }
-                    else
-                    {
-                        Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
+                        Debug.Log("Position does not meet field position requirements");
                         return false;
                     }
                 }
                 else
                 {
-                    Debug.Log("false in if");
+                    Debug.Log("Field limit exceeded");
                     return false;
                 }
             }
@@ -5447,12 +5422,188 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log("!TryGetCardRequirements(card.ability, out var cardRequirements)");
                 return false;
             }
+    
+
+            //if (TryGetCardRequirements(card.ability, out var cardRequirements))
+            //{
+            //    Debug.Log($"GoodFavor fieldLimit: {cardRequirements.limit}, fieldPosition: {cardRequirements.position}");
+            //    if((int)cardRequirements.limit == (int)FieldLimit.One && totalCardsForThisAbility < 1)
+            //    {
+            //        if(cardRequirements.position == FieldPosition.FrontLine)
+            //        {
+            //            if (position.tag.ToLower().Contains("Front line".ToLower()))
+            //            {
+            //                Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
+            //                return true;
+            //            }
+            //            else
+            //            {
+            //                Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
+            //                return false;
+            //            }
+            //        }
+            //        else if(cardRequirements.position == FieldPosition.None)
+            //        {
+            //            Debug.Log("Field position none");
+            //            return true;
+            //        }
+            //    }
+            //    //if (cardRequirements.limit == "Unlimited" && cardRequirements.position == "None")
+            //    //{
+            //    //    Debug.Log("cardRequirements.fieldLimit == Unlimited && cardRequirements.fieldPosition == None");
+            //    //    return true;
+            //    //}
+            //    //else if (cardRequirements.fieldLimit == "1" && totalCardsForThisAbility < 1 && cardRequirements.fieldPosition == "None")
+            //    //{
+            //    //    Debug.Log("cardRequirements.fieldLimit == 1 && totalCardsForThisAbility <= 1 && cardRequirements.fieldPosition == None");
+            //    //    return true;
+            //    //}
+            //    //else if (cardRequirements.fieldLimit == "2" && totalCardsForThisAbility < 2 && cardRequirements.fieldPosition == "None")
+            //    //{
+            //    //    Debug.Log("cardRequirements.fieldLimit == 2 && totalCardsForThisAbility <= 2 && cardRequirements.fieldPosition == None");
+            //    //    return true;
+            //    //}
+            //    //else if (cardRequirements.fieldLimit == "Unlimited" && cardRequirements.fieldPosition == "Frontline")
+            //    //{
+            //    //    Debug.Log("cardRequirements.fieldLimit == Unlimited && cardRequirements.fieldPosition == Frontline");
+            //    //    if (position.tag.ToLower().Contains("Front line".ToLower()))
+            //    //    {
+            //    //        Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
+            //    //        return true;
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
+            //    //        return false;
+            //    //    }
+            //    //}
+            //    //else if (cardRequirements.fieldLimit == "1" && totalCardsForThisAbility < 1 && cardRequirements.fieldPosition == "Frontline")
+            //    //{
+            //    //    Debug.Log("cardRequirements.fieldLimit == 1 && totalCardsForThisAbility <= 1 && cardRequirements.fieldPosition == Frontline");
+            //    //    if (position.tag.ToLower().Contains("Front line".ToLower()))
+            //    //    {
+            //    //        Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
+            //    //        return true;
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
+            //    //        return false;
+            //    //    }
+            //    //}
+            //    //else if (cardRequirements.fieldLimit == "2" && totalCardsForThisAbility < 2 && cardRequirements.fieldPosition == "Frontline")
+            //    //{
+            //    //    Debug.Log("cardRequirements.fieldLimit == 2 && totalCardsForThisAbility <= 2 && cardRequirements.fieldPosition == Frontline");
+            //    //    if (position.tag.ToLower().Contains("Front line".ToLower()))
+            //    //    {
+            //    //        Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
+            //    //        return true;
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
+            //    //        return false;
+            //    //    }
+            //    //}
+            //    //else
+            //    //{
+            //    //    Debug.Log("false in if");
+            //    //    return false;
+            //    //}
+            //}
+            //else
+            //{
+            //    Debug.Log("!TryGetCardRequirements(card.ability, out var cardRequirements)");
+            //    return false;
+            //}
+
         }
         else
         {
-            Debug.Log(" main else");
+            Debug.Log("Card ability not found in requirements");
             return false;
         }
+
+        //if (CardDataBase.instance.requirements.ContainsKey(card.ability))
+        //{
+        //    Debug.Log("inside CardDataBase.instance.requirements.ContainsKey(card.ability)");
+        //    if (TryGetCardRequirements(card.ability, out var cardRequirements))
+        //    {
+        //        Debug.Log($"GoodFavor fieldLimit: {cardRequirements.fieldLimit}, fieldPosition: {cardRequirements.fieldPosition}");
+        //        if (cardRequirements.fieldLimit == "Unlimited" && cardRequirements.fieldPosition == "None")
+        //        {
+        //            Debug.Log("cardRequirements.fieldLimit == Unlimited && cardRequirements.fieldPosition == None");
+        //            return true;
+        //        }
+        //        else if (cardRequirements.fieldLimit == "1" && totalCardsForThisAbility < 1 && cardRequirements.fieldPosition == "None")
+        //        {
+        //            Debug.Log("cardRequirements.fieldLimit == 1 && totalCardsForThisAbility <= 1 && cardRequirements.fieldPosition == None");
+        //            return true;
+        //        }
+        //        else if (cardRequirements.fieldLimit == "2" && totalCardsForThisAbility < 2 && cardRequirements.fieldPosition == "None")
+        //        {
+        //            Debug.Log("cardRequirements.fieldLimit == 2 && totalCardsForThisAbility <= 2 && cardRequirements.fieldPosition == None");
+        //            return true;
+        //        }
+        //        else if (cardRequirements.fieldLimit == "Unlimited" && cardRequirements.fieldPosition == "Frontline")
+        //        {
+        //            Debug.Log("cardRequirements.fieldLimit == Unlimited && cardRequirements.fieldPosition == Frontline");
+        //            if (position.tag.ToLower().Contains("Front line".ToLower()))
+        //            {
+        //                Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
+        //                return true;
+        //            }
+        //            else
+        //            {
+        //                Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
+        //                return false;
+        //            }
+        //        }
+        //        else if (cardRequirements.fieldLimit == "1" && totalCardsForThisAbility < 1 && cardRequirements.fieldPosition == "Frontline")
+        //        {
+        //            Debug.Log("cardRequirements.fieldLimit == 1 && totalCardsForThisAbility <= 1 && cardRequirements.fieldPosition == Frontline");
+        //            if (position.tag.ToLower().Contains("Front line".ToLower()))
+        //            {
+        //                Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
+        //                return true;
+        //            }
+        //            else
+        //            {
+        //                Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
+        //                return false;
+        //            }
+        //        }
+        //        else if (cardRequirements.fieldLimit == "2" && totalCardsForThisAbility < 2 && cardRequirements.fieldPosition == "Frontline")
+        //        {
+        //            Debug.Log("cardRequirements.fieldLimit == 2 && totalCardsForThisAbility <= 2 && cardRequirements.fieldPosition == Frontline");
+        //            if (position.tag.ToLower().Contains("Front line".ToLower()))
+        //            {
+        //                Debug.Log("position.tag.ToLower().Contains(Front line.ToLower())");
+        //                return true;
+        //            }
+        //            else
+        //            {
+        //                Debug.Log("!position.tag.ToLower().Contains(Front line.ToLower())");
+        //                return false;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Debug.Log("false in if");
+        //            return false;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("!TryGetCardRequirements(card.ability, out var cardRequirements)");
+        //        return false;
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.Log(" main else");
+        //    return false;
+        //}
 
         //int totalValue = 0;
         //for (int i = 0; i < playerField.transform.childCount; i++)
@@ -5481,34 +5632,34 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         ////return false;
     }
 
-    public bool TryGetCardRequirements(CardAbility ability, out CardRequirements cardRequirements)
+    public bool TryGetCardRequirements(CardAbility ability, out AllField cardRequirements)
     {
         return CardDataBase.instance.requirements.TryGetValue(ability, out cardRequirements);
     }
 
-    private int GetTotalAbilityCards(Card card, GameObject playerField)
-    {
-        Debug.Log("GetTotalAbilityCards ");
-        int totalValue = 0;
+    //private int GetTotalAbilityCards(Card card, GameObject playerField)
+    //{
+    //    Debug.Log("GetTotalAbilityCards ");
+    //    int totalValue = 0;
 
-        for (int i = 0; i < playerField.transform.childCount; i++)
-        {
-            if (playerField.transform.GetChild(i).childCount == 1)
-            {
-                Card fieldCard = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>();
-                Debug.Log(card.name + " card name " + card.id + " id " + fieldCard.name + " field card " + fieldCard.id);
-                if (card.ability == fieldCard.ability
-                    //&& card.id == fieldCard.id
-                    )
-                {
-                    Debug.Log("card.ability == fieldCard.ability && card.id == fieldCard.id");
-                    totalValue++;
-                }
+    //    for (int i = 0; i < playerField.transform.childCount; i++)
+    //    {
+    //        if (playerField.transform.GetChild(i).childCount == 1)
+    //        {
+    //            Card fieldCard = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>();
+    //            Debug.Log(card.name + " card name " + card.id + " id " + fieldCard.name + " field card " + fieldCard.id);
+    //            if (card.ability == fieldCard.ability
+    //                //&& card.id == fieldCard.id
+    //                )
+    //            {
+    //                Debug.Log("card.ability == fieldCard.ability && card.id == fieldCard.id");
+    //                totalValue++;
+    //            }
 
-            }
-        }
-        return totalValue;
-    }
+    //        }
+    //    }
+    //    return totalValue;
+    //}
 
     public void HidePanel(GameObject cardError)
     {

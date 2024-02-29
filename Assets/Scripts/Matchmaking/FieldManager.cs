@@ -102,278 +102,284 @@ public class FieldManager : MonoBehaviour
 
     public void CalculateAbilityCounter(GameObject playerField)
     {
-        foreach (Transform item in playerField.transform)
+        for (int i = 0; i < playerField.transform.childCount; i++)
         {
-            Debug.Log(item.name + " name of item " + item?.parent.name + " item parent name");
-            if (item.GetChild(0).GetChild(0).GetComponent<Clone>())
+            Debug.Log(playerField.transform.childCount + " playerField.transform.childCount ");
+            if (playerField.transform.GetChild(i).childCount > 0)
             {
-                CloneCounter++;
+                Debug.Log(playerField.transform.GetChild(i).childCount + " playerField.transform.GetChild(i).childCount ");
+                GameObject playerCard = playerField.transform.GetChild(i).GetChild(0).GetChild(0).gameObject;
+                Debug.Log(playerCard + " player card");
+                if (playerCard.GetComponent<Clone>())
+                {
+                    CloneCounter++;
+                }
+                else if (playerCard.GetComponent<Meteor>())
+                {
+                    MeteorCounter++;
+                }
+                else if (playerCard.GetComponent<Evolve>())
+                {
+                    EvolveCounter++;
+                }
+                else if (playerCard.GetComponent<Malignant>())
+                {
+                    MalignantCounter++;
+                }
+                else if (playerCard.GetComponent<GoodFavor>())
+                {
+                    GoodFavorCounter++;
+                }
+                else if (playerCard.GetComponent<Summon>())
+                {
+                    SummonCounter++;
+                }
+                else if (playerCard.GetComponent<Serenity>())
+                {
+                    SerenityCounter++;
+                }
+                else if (playerCard.GetComponent<Mutate>())
+                {
+                    MutateCounter++;
+                }
+                else if (playerCard.GetComponent<Renewal>())
+                {
+                    RenewalCounter++;
+                }
+                else if (playerCard.GetComponent<Goad>())
+                {
+                    GoadCounter++;
+                }
+                else if (playerCard.GetComponent<Kamikaze>())
+                {
+                    KamikazeCounter++;
+                }
+                else if (playerCard.GetComponent<Berserker>())
+                {
+                    BerserkerCounter++;
+                }
+                else if (playerCard.GetComponent<Crit>())
+                {
+                    CritCounter++;
+                }
+                else if (playerCard.GetComponent<Hunger>())
+                {
+                    HungerCounter++;
+                }
+                else if (playerCard.GetComponent<Scattershot>())
+                {
+                    ScattershotCounter++;
+                }
+                else if (playerCard.GetComponent<Farmer>())
+                {
+                    FarmerCounter++;
+                }
+                else if (playerCard.GetComponent<Buster>())
+                {
+                    BusterCounter++;
+                }
+                else if (playerCard.GetComponent<Mason>())
+                {
+                    MasonCounter++;
+                }
+                else if (playerCard.GetComponent<Paralyze>())
+                {
+                    ParalyzeCounter++;
+                }
+                else if (playerCard.GetComponent<Curse>())
+                {
+                    CurseCounter++;
+                }
+                else if (playerCard.GetComponent<Doom>())
+                {
+                    DoomCounter++;
+                }
+                else if (playerCard.GetComponent<Gambit>())
+                {
+                    GambitCounter++;
+                }
+                else if (playerCard.GetComponent<Smite>())
+                {
+                    SmiteCounter++;
+                }
+                else if (playerCard.GetComponent<GeneralBane>())
+                {
+                    GeneralBaneCounter++;
+                }
+                else if (playerCard.GetComponent<Blackhole>())
+                {
+                    BlackholeCounter++;
+                }
+                else if (playerCard.GetComponent<Nuclear>())
+                {
+                    NuclearCounter++;
+                }
+                else if (playerCard.GetComponent<Repair>())
+                {
+                    RepairCounter++;
+                }
+                else if (playerCard.GetComponent<GeneralBoon>())
+                {
+                    GeneralBoonCounter++;
+                }
+                //else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}else if (playerCard.GetComponent<Meteor>())
+                //{
+                //    MeteorCounter++;
+                //}
             }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            {
-                MeteorCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Evolve>())
-            {
-                EvolveCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Malignant>())
-            {
-                MalignantCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<GoodFavor>())
-            {
-                GoodFavorCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Summon>())
-            {
-                SummonCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Serenity>())
-            {
-                SerenityCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Mutate>())
-            {
-                MutateCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Renewal>())
-            {
-                RenewalCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Goad>())
-            {
-                GoadCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Kamikaze>())
-            {
-                KamikazeCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Berserker>())
-            {
-                BerserkerCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Crit>())
-            {
-                CritCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Hunger>())
-            {
-                HungerCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Scattershot>())
-            {
-                ScattershotCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Farmer>())
-            {
-                FarmerCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Buster>())
-            {
-                BusterCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Mason>())
-            {
-                MasonCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Paralyze>())
-            {
-                ParalyzeCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Curse>())
-            {
-                CurseCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Doom>())
-            {
-                DoomCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Gambit>())
-            {
-                GambitCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Smite>())
-            {
-                SmiteCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<GeneralBane>())
-            {
-                GeneralBaneCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Blackhole>())
-            {
-                BlackholeCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Nuclear>())
-            {
-                NuclearCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<Repair>())
-            {
-                RepairCounter++;
-            }
-            else if (item.GetChild(0).GetChild(0).GetComponent<GeneralBoon>())
-            {
-                GeneralBoonCounter++;
-            }
-            //else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}else if (item.GetChild(0).GetChild(0).GetComponent<Meteor>())
-            //{
-            //    MeteorCounter++;
-            //}
         }
         Debug.Log(CloneCounter + " CloneCounter");
         Debug.Log(MeteorCounter + " MeteorCounter");
@@ -404,6 +410,197 @@ public class FieldManager : MonoBehaviour
         Debug.Log(RepairCounter + " RepairCounter");
         Debug.Log(GeneralBoonCounter + " GeneralBoonCounter");
         Debug.Log(EndgameCounter + " EndgameCounter");
+    }
+
+    public int GetAbilityCounter(CardAbility cardAbility)
+    {
+
+        Debug.Log(cardAbility + " ability card");
+
+        switch (cardAbility)
+        {
+            case CardAbility.Clone: return CloneCounter;
+            case CardAbility.Meteor: return MeteorCounter;
+            case CardAbility.Evolve: return EvolveCounter;
+            case CardAbility.Malignant: return MalignantCounter;
+            case CardAbility.GoodFavor: return GoodFavorCounter;
+            case CardAbility.Summon: return SummonCounter;
+            case CardAbility.Serenity: return SerenityCounter;
+            case CardAbility.Mutate: return MutateCounter;
+            case CardAbility.Renewal: return RenewalCounter;
+            case CardAbility.Goad: return GoadCounter;
+            case CardAbility.Kamikaze: return KamikazeCounter;
+            case CardAbility.Berserker: return BerserkerCounter;
+            case CardAbility.Crit: return CritCounter;
+            case CardAbility.Hunger: return HungerCounter;
+            case CardAbility.Scattershot: return ScattershotCounter;
+            case CardAbility.Farmer: return FarmerCounter;
+            case CardAbility.Buster: return BusterCounter;
+            case CardAbility.Mason: return MasonCounter;
+            case CardAbility.Paralyze: return ParalyzeCounter;
+            case CardAbility.Curse: return CurseCounter;
+            case CardAbility.Doom: return DoomCounter;
+            case CardAbility.Gambit: return GambitCounter;
+            case CardAbility.Smite: return SmiteCounter;
+            case CardAbility.GeneralBane: return GeneralBaneCounter;
+            case CardAbility.Nuclear: return NuclearCounter;
+            case CardAbility.Repair: return RepairCounter;
+            case CardAbility.GeneralBoon: return GeneralBoonCounter;
+            case CardAbility.None: return NoneCounter;
+            case CardAbility.DeActivate: return DeActivateCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            default:
+                return 0; 
+        }
     }
 
     public void ResetCounters()
