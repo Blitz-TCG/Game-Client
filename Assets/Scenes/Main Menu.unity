@@ -14397,7 +14397,7 @@ MonoBehaviour:
     limit: 8
     position: 0
   - ability: 8
-    limit: 8
+    limit: 5
     position: 0
   - ability: 9
     limit: 2
