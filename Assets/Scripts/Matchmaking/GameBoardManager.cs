@@ -164,7 +164,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         audioManager = GameObject.FindObjectOfType<AudioManager>();
         StartCoroutine(audioManager.PlayInGameMusic());
         Debug.LogWarning("start called ");
-        //PhotonManager.RemoveSceneFromBuildIndex();
         isWallDestroyed = false;
         endGame = false;
         MainMenuUIManager.instance.isUserXPLoaded = false;
@@ -216,11 +215,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             customProp["clientCurrentLevel"] = MainMenuUIManager.instance.currentUserLevel;
             customProp["clientRequiredXPForNext"] = MainMenuUIManager.instance.nextXpRequired;
             customProp["clientUserId"] = FirebaseManager.instance.user.UserId;
-            //Debug.Log(" current master client id " + FirebaseManager.instance.user.UserId);
-            //Debug.Log(" current master client currentUserXP " + MainMenuUIManager.instance.currentUserXP);
-            //Debug.Log(" current master client currentUserLevel " + MainMenuUIManager.instance.currentUserLevel);
-            //Debug.Log(" current master client max " + MainMenuUIManager.instance.maxXPForCurrentLevel);
-            //Debug.Log(" current master client nextXpRequired " + MainMenuUIManager.instance.nextXpRequired);
             PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
             identifiedPlayerIsMaster = false;
         }
@@ -4003,6 +3997,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
 
         bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
+        FieldManager.instance.ResetCounters();
+        FieldManager.instance.CalculateAbilityCounter(playerField);
         //Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount + " is wall destroyed " + isPlayerWallDestroyed + " count of field " + (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2));
         for (int i = 0; i < (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2); i++)
         {
@@ -5375,16 +5371,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log(totalCardsForThisAbility + " total card ability " + card.ability + " position name " + position.transform?.parent.name);
         if (position.transform?.parent.name != "Player Field" && commingFromDrag) return false;
 
-        //foreach (var kvp in CardDataBase.instance.requirements)
-        //{
-        //    // Log the key and value of each key-value pair
-        //    Debug.Log($"Key: {kvp.Key}, Value: {kvp.Value}");
-        //    if (CardDataBase.instance.requirements.ContainsKey(card.ability))
-        //    {
-        //        Debug.Log(" key found :- " + kvp.Key);
-        //    }
-        //}
-
         if (CardDataBase.instance.requirements.ContainsKey(card.ability))
         {
             Debug.Log("inside CardDataBase.instance.requirements.ContainsKey(card.ability)");
@@ -5955,6 +5941,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 nuclear.UseNuclearAbility(enemyField, pv);
             }
         }
+
+        FieldManager.instance.ResetCounters();
+        FieldManager.instance.CalculateAbilityCounter(playerField);
     }
 
     private bool IsWallDestroyed(GameObject wall)
