@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Nuclear : Card
 {
-    public void UseNuclearAbility(GameObject field, PhotonView view)
+    public void UseNuclearAbility(GameObject field)
     {
-        Debug.Log("UseNuclearAbility called " + field + " field " + view);
+        //Debug.Log("UseNuclearAbility called " + field + " field ");
         for (int i = 0; i < field.transform.childCount; i++)
         {
             if (field.transform.GetChild(i).childCount == 1)
@@ -16,6 +16,5 @@ public class Nuclear : Card
                 Destroy(field.transform.GetChild(i).GetChild(0).gameObject);
             }
         }
-        view.RPC("NuclearAbilityInOthers", RpcTarget.Others);
     }
 }

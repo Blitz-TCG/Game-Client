@@ -5937,8 +5937,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (parent.gameObject.tag.Contains("Front Line"))
             {
                 Nuclear nuclear = card.GetComponent<Nuclear>();
-                nuclear.UseNuclearAbility(playerField, pv);
-                nuclear.UseNuclearAbility(enemyField, pv);
+                nuclear.UseNuclearAbility(playerField);
+                nuclear.UseNuclearAbility(enemyField);
+                pv.RPC("NuclearAbilityInOthers", RpcTarget.Others);
             }
         }
 
