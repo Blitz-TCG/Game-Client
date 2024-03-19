@@ -30981,7 +30981,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[30].ability
-      value: 13
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[31].ability

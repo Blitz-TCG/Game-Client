@@ -1137,6 +1137,8 @@ MonoBehaviour:
   isAlreadyAttacked: 0
   dropPosition: 0
   ability: 0
+  isParalyzedCard: 0
+  paralyzedCardCount: 0
   cardId: 0
   cId: {fileID: 5241093512186658464}
   cardErgoTokenId: {fileID: 8567649490831826786}
