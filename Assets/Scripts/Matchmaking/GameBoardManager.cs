@@ -2778,6 +2778,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log("move card called not in others " + handCount + " hand count " + fieldCount);
                 Debug.Log("Card setted ");
                 pv.RPC("MoveCard", RpcTarget.Others, previousPos, currentPos, handCount, fieldCount, cardId);
+                Debug.Log(" hover card " + hoveredCard + " settedParent " + settedParent);
                 OnSetCard(hoveredCard, PhotonNetwork.IsMasterClient, settedParent);
                 Debug.Log("==== master-end ====");
             }
@@ -5839,7 +5840,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Smite smite = card.GetComponent<Smite>();
                 bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
                 string message = "You set smite ability card. Please select any enemy's card";
-                BlurCards(playerField, enemyField, 0.8f, true, false, true ,message);
+                BlurCards(playerField, enemyField, 0.8f, true, true, true, message);
                 //int choosenEnemyCardPosition = smite.ChooseEnemyUnit(enemyField, isEnemyWallDestroyed);
                 //if (enemyField.transform.GetChild(choosenEnemyCardPosition - 1) != null)
                 //{
@@ -6359,10 +6360,23 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     }
 
+    [PunRPC]
+    private void SmiteOnOthers(string parId)
+    {
+        Debug.Log(" SmiteOnOthers called ");
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        int parentId = int.Parse(parId);
+        Debug.Log(playerField + " playerField  " + parentId + " parent id");
+        if (playerField.transform.GetChild(parentId - 1) != null)
+        {
+            Destroy(playerField.transform.GetChild(parentId - 1).GetChild(0).gameObject);
+        }
+    }
+
 
     #endregion
 
-    public void BlurCards(GameObject playerField, GameObject enemyField, float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled,string text = "" )
+    public void BlurCards(GameObject playerField, GameObject enemyField, float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, string text = "")
     {
 
         Debug.Log("playerField " + playerField + " enemyField " + enemyField + " blurValue " + blurValue + " isBlurCards " + isBlurCards + " isErrorDialogOpen " + isErrorDialogOpen + " cardEnabled " + cardEnabled + " text " + text);
@@ -6372,8 +6386,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             {
                 playerField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().alpha = blurValue;
                 playerField.transform.GetChild(i).GetChild(0).GetComponent<Button>().interactable = isBlurCards;
+                Debug.Log(cardError.transform.GetChild(0).gameObject + " cardError.transform.GetChild(0).gameObject");
                 cardError.transform.GetChild(0).gameObject.SetActive(isErrorDialogOpen);
-                cardError.GetComponentInChildren<TMP_Text>().SetText(text);
+                Debug.Log("cardError.GetComponentInChildren<TMP_Text>() " + cardError.GetComponentInChildren<TMP_Text>());
+                if (isErrorDialogOpen)
+                {
+                    cardError.GetComponentInChildren<TMP_Text>().SetText(text);
+                }
             }
         }
 
@@ -6392,22 +6411,38 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log("Card selected");
         Debug.Log(card.name + " card name");
+        string parentId = card.transform.parent.parent.name.Split(" ")[2];
+        Destroy(card.gameObject);
+
+        pv.RPC("SmiteOnOthers", RpcTarget.Others, parentId);
         ResetSelectedCards();
     }
 
     public void ResetSelectedCards()
     {
-        Transform playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").transform;
-        Transform enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").transform;
-        foreach (Transform child in playerField)
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        Debug.Log("player field " + playerField + " enemy field " + enemyField);
+
+        for (int i = 0; i < playerField.transform.childCount; i++)
         {
-            child.GetChild(0).GetComponent<ChooseCard>().enabled = false;
-        } 
-        
-        foreach (Transform child in enemyField)
-        {
-            child.GetChild(0).GetComponent<ChooseCard>().enabled = false;
+            if (playerField.transform.GetChild(i).childCount == 1 && playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().enabled)
+            {
+                Debug.Log("inside player child == 1");
+                playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().enabled = false;
+            }
         }
+
+        for (int i = 0; i < enemyField.transform.childCount; i++)
+        {
+            Debug.Log("inside enemy child == 1");
+            if (enemyField.transform.GetChild(i).childCount == 1 && enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().enabled)
+            {
+                enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().enabled = false;
+            }
+        }
+
+        BlurCards(playerField, enemyField, 1, false, false, false, "");
     }
 }
 
