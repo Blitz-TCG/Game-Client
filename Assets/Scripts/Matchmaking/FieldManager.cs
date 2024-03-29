@@ -222,10 +222,11 @@ public class FieldManager : MonoBehaviour
                 {
                     GeneralBoonCounter++;
                 }
+                else if (playerCard.GetComponent<Sacrifice>())
+                {
+                    SacrificeCounter++;
+                }
                 //else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
                 //}else if (playerCard.GetComponent<Meteor>())
@@ -446,6 +447,7 @@ public class FieldManager : MonoBehaviour
             case CardAbility.Nuclear: return NuclearCounter;
             case CardAbility.Repair: return RepairCounter;
             case CardAbility.GeneralBoon: return GeneralBoonCounter;
+            case CardAbility.Sacrifice: return SacrificeCounter;
             case CardAbility.None: return NoneCounter;
             case CardAbility.DeActivate: return DeActivateCounter;
             //case CardAbility.Clone:

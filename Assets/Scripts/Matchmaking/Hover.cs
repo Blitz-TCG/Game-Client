@@ -134,7 +134,12 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     private void HideInfoCard()
     {
         Debug.Log("hide card");
-        gameObject.transform.GetChild(0).GetChild(gameObject.transform.GetChild(0).childCount - 1).gameObject.SetActive(false);
+        Debug.Log(gameObject.name + " game object name");
+        if(transform.childCount == 1)
+        {
+            transform?.GetChild(0)?.GetChild(gameObject.transform.GetChild(0).childCount - 1)?.gameObject?.SetActive(false);
+        }
+        
         if (cardparent1.transform.childCount > 0)
         {
             for (int i = 0; i < cardparent1.transform.childCount; i++)

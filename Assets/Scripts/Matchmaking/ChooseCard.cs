@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class ChooseCard : MonoBehaviour
 {
     public UnityEvent OnSelected;
+    public bool isEnabled = false;
 
     private bool isSelected = false;
 
@@ -19,7 +20,7 @@ public class ChooseCard : MonoBehaviour
     {
         Debug.Log("inside Select " + transform.name + " child name  " + transform.GetChild(0).name);
         Debug.Log(transform.GetComponent<ChooseCard>().enabled + " enabled or not ");
-        if (transform.GetComponent<ChooseCard>().enabled)
+        if (isEnabled)
         {
             isSelected = true;
             OnSelected.Invoke();
@@ -46,8 +47,4 @@ public class ChooseCard : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        Debug.Log("Enable called " + transform.name + " transform name " + transform.parent.name);
-    }
 }
