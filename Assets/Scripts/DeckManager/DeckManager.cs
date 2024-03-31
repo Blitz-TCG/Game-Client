@@ -1451,6 +1451,7 @@ public class DeckManager : MonoBehaviour
         /*deckNotesGraphic.SetActive(false);
         deckNotes.SetActive(false);*/
         loading.SetActive(true);
+        cursorManager.LoadingSoundLoopPlay();
         Invoke("OnClickEditDeck", 0.5f);
     }
 
@@ -1589,6 +1590,7 @@ public class DeckManager : MonoBehaviour
         addDeckObject.SetActive(false);
         editDeckObject.SetActive(true);
         search.GetComponent<TMP_InputField>().text = "";
+        cursorManager.LoadingSoundLoopStop();
         loading.SetActive(false);
     }
 

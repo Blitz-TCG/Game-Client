@@ -460,9 +460,6 @@ public class MainMenuUIManager : MonoBehaviour
 
     }
 
-
-
-
     private void Update() //various windows exits and checks
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !settingsUI.activeSelf && !friendsUI.activeSelf && !changePfpUI.activeSelf &&
@@ -563,7 +560,7 @@ public class MainMenuUIManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
             {
-                cursorManager.AudioClickButtonStandard();
+                cursorManager.ChatSendButtonStandard();
                 ChatMessengerSend();
             }
         }

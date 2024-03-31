@@ -14,6 +14,8 @@ public class CursorManager : MonoBehaviour
 
     public AudioSource audioHoverButtonStandard;
     public AudioSource audioClickButtonStandard;
+    public AudioSource chatSendButtonStandard;
+    public AudioSource loadingSoundLoop;
 
     //private void Awake()
     //{
@@ -65,5 +67,19 @@ public class CursorManager : MonoBehaviour
     public void AudioClickButtonStandard()
     {
         audioClickButtonStandard.Play();
+    }
+
+    public void ChatSendButtonStandard()
+    {
+        chatSendButtonStandard.Play();
+    }
+
+    public void LoadingSoundLoopPlay()
+    {
+        loadingSoundLoop.Play();
+    }
+    public void LoadingSoundLoopStop()
+    {
+        loadingSoundLoop.Stop();
     }
 }

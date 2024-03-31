@@ -303,9 +303,20 @@ public class FirebaseManager : MonoBehaviour
         Cursor.SetCursor(null, Vector2.zero, cursorModeReset);
     }
 
+    public void LoadingAnimationSoundLoopPlay()
+    {
+        cursorManager.loadingSoundLoop.Play();
+    }
+    public void LoadingAnimationSoundLoopStop()
+    {
+        cursorManager.loadingSoundLoop.Stop();
+    }
+
+
     public void LoadingAnimationRegOn()
     {
         registerAnimation.SetActive(true); //loading screen
+        LoadingAnimationSoundLoopPlay();
         ResetCursor();
         registerUI.SetActive(false);
 
@@ -319,6 +330,7 @@ public class FirebaseManager : MonoBehaviour
     public void LoadingAnimationRegOff()
     {
         registerAnimation.SetActive(false);
+        LoadingAnimationSoundLoopStop();
         registerUI.SetActive(true);
 
         registerButton.enabled = true;
@@ -335,6 +347,7 @@ public class FirebaseManager : MonoBehaviour
     public void LoadingAnimationLoginOn()
     {
         loginAnimation.SetActive(true); //loading screen
+        LoadingAnimationSoundLoopPlay();
         ResetCursor();
         loginUI.SetActive(false);
 
@@ -351,6 +364,7 @@ public class FirebaseManager : MonoBehaviour
     public void LoadingAnimationLoginOff()
     {
         loginAnimation.SetActive(false);
+        LoadingAnimationSoundLoopStop();
         loginUI.SetActive(true);
 
         loginButton.enabled = true;
@@ -370,6 +384,7 @@ public class FirebaseManager : MonoBehaviour
     public void ResetAnimationOn()
     {
         resetAnimation.SetActive(true); //loading screen
+        LoadingAnimationSoundLoopPlay();
         ResetCursor();
         resetPasswordUI.SetActive(false);
 
@@ -383,6 +398,7 @@ public class FirebaseManager : MonoBehaviour
     public void ResetAnimationOff()
     {
         resetAnimation.SetActive(false);
+        LoadingAnimationSoundLoopStop();
         resetPasswordUI.SetActive(true);
 
         resetBackButton.enabled = true;
