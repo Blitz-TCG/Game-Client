@@ -20408,6 +20408,7 @@ MonoBehaviour:
   audioHoverButtonStandard: {fileID: 1377998163}
   audioClickButtonStandard: {fileID: 385426891}
   chatSendButtonStandard: {fileID: 1987148609}
+  loadingSoundLoop: {fileID: 0}
 --- !u!4 &799636800
 Transform:
   m_ObjectHideFlags: 0
@@ -44075,7 +44076,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 23a41e290b8d341438c2c85ff8d6923c, type: 3}
+  m_Texture: {fileID: 2800000, guid: dd03b9bf1e02ee147af6b37d9af94fe4, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -59096,7 +59097,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1796.1, y: 955.23}
-  m_SizeDelta: {x: 118, y: 118}
+  m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1996399094
 CanvasRenderer:
