@@ -5974,7 +5974,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             {
                 Sacrifice sacrifice = card.GetComponent<Sacrifice>();
                 string message = "You choose the sacrifice ability. Please select card which you sacrifice.";
-                BlurCardsForSacrifice(0.8f, true, true, true, message);
+                BlurCardsForSacrifice(0.8f, true, true, true, sacrifice, message);
                 //sacrifice.GainGoldAndXP(sacrifice.gold, sacrifice.XP, isMaster);
             }
         }
@@ -6414,10 +6414,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     [PunRPC]
-    private void SacrificeOnOthers(string parId)
+    private void SacrificeOnOthers(string parId, int gainedXP)
     {
-        Debug.Log(" SacrificeOnOthers called ");
+        Debug.Log(" SacrificeOnOthers called " + gainedXP);
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(gainedXP);
         int parentId = int.Parse(parId);
         Debug.Log(enemyField + " playerField  " + parentId + " parent id");
         if (enemyField.transform.GetChild(parentId - 1) != null)
@@ -6460,12 +6461,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log("enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>() choose " + enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>());
                 enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().isEnabled = cardEnabled;
                 Card selectedCard = enemyField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>();
-                enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectTheCard(selectedCard));
+                enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectSmiteCard(selectedCard));
             }
         }
     }
 
-    public void BlurCardsForSacrifice(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, string text = "")
+    public void BlurCardsForSacrifice(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, Sacrifice sacrifice, string text = "")
     {
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
@@ -6494,12 +6495,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log(playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>() + " playerField.transform.GetChild(i).GetChild(0) choose ");
                 playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().isEnabled = cardEnabled;
                 Card selectedCard = playerField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>();
-                playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectTheCard(selectedCard));
+                playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectSacrificeCard(selectedCard, sacrifice));
             }
         }
     }
 
-    public void SelectTheCard(Card card)
+    public void SelectSmiteCard(Card card)
     {
         Debug.Log("Card selected");
         Debug.Log(card.name + " card name");
@@ -6510,14 +6511,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         ResetSelectedCards();
     }
 
-    public void SelectSacrificeCard(Card card)
+    public void SelectSacrificeCard(Card card, Sacrifice secCard)
     {
         Debug.Log("Card selected SelectSacrificeCard");
         Debug.Log(card.name + " card name");
         string parentId = card.transform.parent.parent.name.Split(" ")[2];
+        int gainedXP = secCard.GainGoldAndXP(card.gold, card.XP, PhotonNetwork.IsMasterClient);
+        playerXPProgressBar.GetComponent<ProgressBar>().SetFillValue(gainedXP);
         Destroy(card.transform.parent.gameObject);
 
-        pv.RPC("SacrificeOnOthers", RpcTarget.Others, parentId);
+        pv.RPC("SacrificeOnOthers", RpcTarget.Others, parentId, gainedXP);
         ResetSelectedCards();
     }
 
