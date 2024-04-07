@@ -31470,7 +31470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[13].cardName
-      value: Scarlet Shadeblade
+      value: Scarlet Duskblade
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[140].ability
@@ -31818,7 +31818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[58].cardName
-      value: Sun God, Ra
+      value: Sun God Ra
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[59].cardName
@@ -31946,7 +31946,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[81].cardName
-      value: Raging Ocean, Thetis
+      value: Raging Ocean Thetis
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[82].cardName
@@ -31962,7 +31962,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[85].cardName
-      value: Weeping Moon, Nyx
+      value: Weeping Moon Nyx
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[86].cardName
@@ -31970,7 +31970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[87].cardName
-      value: Winged Queen, Psyche
+      value: Winged Queen Psyche
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[88].cardName
@@ -32098,7 +32098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[111].cardName
-      value: Emerald Gaze, Lilith
+      value: Emerald Gaze Lilith
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[112].cardName
@@ -32118,7 +32118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[116].cardName
-      value: Fallen Queen, Lia
+      value: Fallen Queen Lia
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[117].cardName
@@ -32210,7 +32210,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[135].cardName
-      value: Flashdriver, Kira
+      value: Flashdriver Kira
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[136].cardName
@@ -32246,7 +32246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[142].cardName
-      value: Buster Blader, Stan
+      value: Buster Blader Stan
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[143].cardName
