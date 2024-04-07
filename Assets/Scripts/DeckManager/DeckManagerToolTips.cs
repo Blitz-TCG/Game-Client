@@ -17,7 +17,7 @@ public class DeckManagerToolTips : MonoBehaviour, IPointerEnterHandler, IPointer
             if (DeckManager.instance != null && PlayerPrefs.HasKey("tooltipDisabled") == false)
             {
                 if (name == "Attack" || name =="Ergo Token Amount" || name == "HP"|| name == "Gold"|| name =="XP" ||
-                     name == "Field Limit" || name == "Clan"|| name =="Level")
+                     name == "Field Limit" || name == "Clan"|| name =="Level" || name == "Field Position")
                 {
                     Tooltip.SetActive(true);
                 }
@@ -34,7 +34,7 @@ public class DeckManagerToolTips : MonoBehaviour, IPointerEnterHandler, IPointer
             if (DeckManager.instance != null && PlayerPrefs.HasKey("tooltipDisabled") == false)
             {
                 if (name == "Attack" || name == "Ergo Token Amount" || name == "HP" || name == "Gold" || name == "XP" ||
-                     name == "Field Limit" || name == "Clan" || name == "Level")
+                     name == "Field Limit" || name == "Clan" || name == "Level" || name == "Field Position")
                 {
                     Tooltip.SetActive(false);
                 }

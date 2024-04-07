@@ -126,6 +126,7 @@ public class Card : MonoBehaviour
     public int gold;
     public int XP;
     public int fieldLimit;
+    public string fieldPosition;
     public CardLevel levelRequired;
     public string clan;
     public CardClass cardClass;
@@ -152,11 +153,12 @@ public class Card : MonoBehaviour
     public TMP_Text goldText;
     public TMP_Text XPText;
     public TMP_Text fieldLimitText;
+    public TMP_Text fieldPositionText;
     public TMP_Text cardClan;
     public TMP_Text levelRequiredText;
     public Image image;
     public Image frame;
-    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName, string cDescription, int cAttack, int cHP, int cGold, int cXP, int cFieldLimit, string cClan, CardLevel cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass, CardAbility cAbility
+    public void SetProperties(int identity, string ergoId, long ergoAmount, string cName, string cDescription, int cAttack, int cHP, int cGold, int cXP, int cFieldLimit, string cFieldPosition, string cClan, CardLevel cLevelRequired, Sprite cImage, Sprite cFrame, CardClass cardclass, CardAbility cAbility
         //, AbilityRequirements req, int ablvl
         )
     {
@@ -171,6 +173,7 @@ public class Card : MonoBehaviour
         goldText.text = cGold.ToString();
         XPText.text = cXP.ToString();
         fieldLimitText.text = cFieldLimit.ToString();
+        fieldPositionText.text = cFieldPosition.ToString();
         cardClan.text = cClan.ToString();
         levelRequiredText.text = cLevelRequired.ToString();
         image.sprite = cImage;
@@ -188,6 +191,7 @@ public class Card : MonoBehaviour
         gold = cGold;
         XP = cXP;
         fieldLimit = cFieldLimit;
+        fieldPosition = cFieldPosition;
 
         if (fieldLimit == 8)
         {

@@ -16,8 +16,8 @@ public class CardDetails
     public int HP;
     public int gold;
     public int XP;
-    //public int race;
     public int fieldLimit;
+    public string fieldPosition;
     public CardLevel levelRequired;
     public string clan;
     public CardClass cardClass;

@@ -27658,7 +27658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[0].HP
-      value: 300
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[0].XP
@@ -29590,7 +29590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[0].attack
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[100].clan
@@ -34425,12 +34425,24 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[0].fieldPosition
+      value: F
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[0].levelRequired
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[1].fieldPosition
+      value: B
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[1].levelRequired
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[2].fieldPosition
+      value: B
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[2].levelRequired
@@ -34457,8 +34469,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[3].fieldPosition
+      value: F
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[3].levelRequired
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[4].fieldPosition
+      value: B
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[4].levelRequired
