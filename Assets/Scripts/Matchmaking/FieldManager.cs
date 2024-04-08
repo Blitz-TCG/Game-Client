@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -226,10 +227,11 @@ public class FieldManager : MonoBehaviour
                 {
                     SacrificeCounter++;
                 }
+                else if (playerCard.GetComponent<Mimic>())
+                {
+                    MimicCounter++;
+                }
                 //else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
                 //}else if (playerCard.GetComponent<Meteor>())
@@ -450,7 +452,7 @@ public class FieldManager : MonoBehaviour
             case CardAbility.Sacrifice: return SacrificeCounter;
             case CardAbility.None: return NoneCounter;
             case CardAbility.DeActivate: return DeActivateCounter;
-            //case CardAbility.Clone:
+            case CardAbility.Mimic: return MimicCounter;
             //    CloneCounter++;
             //    return CloneCounter;
             //case CardAbility.Clone:
@@ -602,6 +604,198 @@ public class FieldManager : MonoBehaviour
             //    return CloneCounter;
             default:
                 return 0; 
+        }
+    }
+
+    public Type GetAbility(CardAbility cardAbility)
+    {
+
+        Debug.Log(cardAbility + " ability card");
+
+        switch (cardAbility)
+        {
+            case CardAbility.Clone: return typeof(Clone);
+            case CardAbility.Meteor: return typeof(Meteor);
+            case CardAbility.Evolve: return typeof(Evolve);
+            case CardAbility.Malignant: return typeof(Malignant);
+            case CardAbility.GoodFavor: return typeof(GoodFavor);
+            case CardAbility.Summon: return typeof(Summon);
+            case CardAbility.Serenity: return typeof(Serenity);
+            case CardAbility.Mutate: return typeof(Mutate);
+            case CardAbility.Renewal: return typeof(Renewal);
+            case CardAbility.Goad: return typeof(Goad);
+            case CardAbility.Kamikaze: return typeof(Kamikaze);
+            case CardAbility.Berserker: return typeof(Berserker);
+            case CardAbility.Crit: return typeof(Crit);
+            case CardAbility.Hunger: return typeof(Hunger);
+            case CardAbility.Scattershot: return typeof(Scattershot);
+            case CardAbility.Farmer: return typeof(Farmer);
+            case CardAbility.Buster: return typeof(Buster);
+            case CardAbility.Mason: return typeof(Mason);
+            case CardAbility.Paralyze: return typeof(Paralyze);
+            case CardAbility.Curse: return typeof(Curse);
+            case CardAbility.Doom: return typeof(Doom); 
+            case CardAbility.Gambit: return typeof(Gambit);
+            case CardAbility.Smite: return typeof(Smite);
+            case CardAbility.GeneralBane: return typeof(GeneralBane);
+            case CardAbility.Nuclear: return typeof(Nuclear);
+            case CardAbility.Repair: return typeof(Repair);
+            case CardAbility.GeneralBoon: return typeof(GeneralBoon);
+            case CardAbility.Sacrifice: return typeof(Sacrifice);
+            case CardAbility.None: return typeof(None);
+            case CardAbility.DeActivate: return typeof(None);
+            case CardAbility.Mimic: return typeof(Mimic);
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            //case CardAbility.Clone:
+            //    CloneCounter++;
+            //    return CloneCounter;
+            default:
+                return typeof(Mimic);
         }
     }
 

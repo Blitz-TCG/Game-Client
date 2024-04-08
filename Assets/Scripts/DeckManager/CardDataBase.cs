@@ -67,6 +67,7 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.None, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.None));
         requirements.Add(CardAbility.DeActivate, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.DeActivate));
         requirements.Add(CardAbility.Sacrifice, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Sacrifice));
+        requirements.Add(CardAbility.Mimic, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Mimic));
     }
 
     public List<int> GetSurroundingPositions(int selectedPosition)

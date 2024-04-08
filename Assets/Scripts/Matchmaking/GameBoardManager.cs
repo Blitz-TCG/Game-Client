@@ -2521,6 +2521,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Sacrifice sacrifice = card.gameObject.AddComponent<Sacrifice>();
                 sacrifice.ability = CardAbility.Sacrifice;
                 break;
+            case CardAbility.Mimic:
+                Mimic mimic = card.gameObject.AddComponent<Mimic>();
+                mimic.ability = CardAbility.Mimic;
+                break;
             default: break;
         }
     }
@@ -5861,7 +5865,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }
 
                 string message = "You set smite ability card. Please select any enemy's card";
-                BlurCards(0.8f, true, true, true, message);
+                BlurCards(0.8f, true, true, true, card, message);
                 //int choosenEnemyCardPosition = smite.ChooseEnemyUnit(enemyField, isEnemyWallDestroyed);
                 //if (enemyField.transform.GetChild(choosenEnemyCardPosition - 1) != null)
                 //{
@@ -5973,9 +5977,59 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (parent.gameObject.tag.Contains("Front Line"))
             {
                 Sacrifice sacrifice = card.GetComponent<Sacrifice>();
+
+                bool isPlayerWallDestroyed = IsWallDestroyed(playerWall);
+                int playerFieldCount = isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2;
+                bool foundChild = false;
+                for (int i = 0; i < playerFieldCount; i++)
+                {
+                    if (playerField.transform.GetChild(i).childCount > 0)
+                    {
+                        foundChild = true;
+                        break;
+                    }
+                }
+
+                if (!foundChild)
+                {
+                    Debug.Log(" no child found");
+                    return;
+                }
+
                 string message = "You choose the sacrifice ability. Please select card which you sacrifice.";
-                BlurCardsForSacrifice(0.8f, true, true, true, sacrifice, message);
-                //sacrifice.GainGoldAndXP(sacrifice.gold, sacrifice.XP, isMaster);
+                int parentId = int.Parse(parent.name.Split(" ")[2]);
+                BlurCardsForSacrifice(0.8f, true, true, true, sacrifice, message, parentId);
+            }
+            else if (card.GetComponent<Mimic>())
+            {
+                Debug.Log(" inside card Mimic " + parent.name);
+                if (parent.gameObject.tag.Contains("Front Line"))
+                {
+                    Mimic mimic = card.GetComponent<Mimic>();
+
+                    bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+                    int enemyFieldCount = isEnemyWallDestroyed ? enemyField.transform.childCount : enemyField.transform.childCount / 2;
+                    bool foundChild = false;
+                    for (int i = 0; i < enemyFieldCount; i++)
+                    {
+                        if (enemyField.transform.GetChild(i).childCount > 0)
+                        {
+                            foundChild = true;
+                            break;
+                        }
+                    }
+
+                    if (!foundChild)
+                    {
+                        Debug.Log(" no child found");
+                        return;
+                    }
+
+                    string message = "You choose the Mimic ability. Please select card enemy's one card to copy all stats of enemy.";
+                    int parentId = int.Parse(parent.name.Split(" ")[2]);
+                    BlurCards(0.8f, true, true, true, card, message);
+                   
+                }
             }
         }
 
@@ -6407,6 +6461,27 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     [PunRPC]
+    private void MimicOnOthers(string parId, int id)
+    {
+        Debug.Log(" SmiteOnOthers called ");
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        int parentId = int.Parse(parId);
+        Debug.Log(playerField + " playerField  " + parentId + " parent id");
+        if (playerField.transform.GetChild(parentId - 1) != null)
+        {
+            Debug.Log("playerField.transform.GetChild(parentId - 1).GetChild(0) " + playerField.transform.GetChild(parentId - 1).GetChild(0).name);
+            CardDetails enemyCardToBeCopy = cardDetails.Find(item => item.id == id);
+            Card currentCard = playerField.transform.GetChild(parentId - 1).GetChild(0).GetComponent<Card>();
+            currentCard.SetProperties(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName, currentCard.cardDescription, enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, enemyCardToBeCopy.fieldLimit, enemyCardToBeCopy.clan, enemyCardToBeCopy.levelRequired, currentCard.cardFrame, enemyCardToBeCopy.cardClass, enemyCardToBeCopy.ability);
+
+                
+            Destroy(currentCard.GetComponent<Mimic>());
+            Type cardType = FieldManager.instance.GetAbility(enemyCardToBeCopy.ability);
+            currentCard.gameObject.AddComponent(cardType);
+        }
+    }
+
+    [PunRPC]
     private void ResetCardsInOthers()
     {
         Debug.Log("ResetCardsInOthers called");
@@ -6430,7 +6505,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     #endregion
 
-    public void BlurCards(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, string text = "")
+    public void BlurCards(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, Card currentCard, string text = "")
     {
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
@@ -6461,12 +6536,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log("enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>() choose " + enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>());
                 enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().isEnabled = cardEnabled;
                 Card selectedCard = enemyField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>();
-                enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectSmiteCard(selectedCard));
+                if(currentCard.ability == CardAbility.Smite)
+                {
+                    enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectSmiteCard(selectedCard));
+                }   
+                else if(currentCard.ability == CardAbility.Mimic)
+                {
+                    enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectMimicCard(currentCard, selectedCard));
+                }
             }
         }
     }
 
-    public void BlurCardsForSacrifice(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, Sacrifice sacrifice, string text = "")
+    public void BlurCardsForSacrifice(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, Sacrifice sacrifice, string text = "", int id = 1)
     {
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
@@ -6491,6 +6573,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             if (playerField.transform.GetChild(i).childCount == 1)
             {
+                if(id - 1 == i)
+                {
+                    continue;
+                }
                 Debug.Log(playerField.transform.GetChild(i).GetChild(0) + " playerField.transform.GetChild(i).GetChild(0) ");
                 Debug.Log(playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>() + " playerField.transform.GetChild(i).GetChild(0) choose ");
                 playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().isEnabled = cardEnabled;
@@ -6508,6 +6594,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Destroy(card.transform.parent.gameObject);
 
         pv.RPC("SmiteOnOthers", RpcTarget.Others, parentId);
+        ResetSelectedCards();
+    }
+
+    public void SelectMimicCard(Card fromCard, Card toCard)
+    {
+        Debug.Log("Card selected");
+        Debug.Log(fromCard.name + " card name");
+        string parentId = fromCard.transform.parent.parent.name.Split(" ")[2];
+        fromCard.GetComponent<Mimic>().SetMimicData(fromCard, toCard);
+        pv.RPC("MimicOnOthers", RpcTarget.Others, parentId, fromCard.id);
         ResetSelectedCards();
     }
 

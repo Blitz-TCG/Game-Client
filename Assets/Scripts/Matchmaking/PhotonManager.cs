@@ -28,7 +28,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private const string CANCEL_KEY = "isGameCancelled";
     private List<RoomInfo> roomNames = new List<RoomInfo>();
     private bool isJoined = false;
-    
+    private CursorManager cursorManager;
 
     private void Awake()
     {
@@ -69,6 +69,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         skirmishManager = SkirmishManager.instance;
         Debug.Log("Nmae " + SceneManager.GetActiveScene().name);
         Debug.Log(PhotonNetwork.InRoom + " photon room ");
+        cursorManager = skirmishManager.cursorSkirmish;
         //if (PhotonNetwork.InRoom)
         //{
         //    Invoke("LeaveGame", 30f);
@@ -190,10 +191,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         if (!connected)
         {
             initialLoading.SetActive(true);
+            cursorManager.loadingSoundLoop.Play();
         }
         else
         {
             initialLoading.SetActive(false);
+            cursorManager.loadingSoundLoop.Stop();
         }
         if (GameBoardManager.connectUsing)
         {
@@ -250,6 +253,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             Debug.Log(" Faulted ");
             loadingPanel.SetActive(true);
+            cursorManager.loadingSoundLoop.Play();
             skirmishOutputTextError.text = "Unable to validate current game version";
             Invoke(nameof(HideLoadingPanel), 5f);
         }
@@ -271,6 +275,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("versionData.Value == 0");
                 loadingPanel.SetActive(true);
+                cursorManager.loadingSoundLoop.Play();
                 skirmishOutputTextError.text = "Blitz is down for maintenance";
                 Invoke(nameof(HideLoadingPanel), 5f);
             }
@@ -278,6 +283,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("versionData.Value != FirebaseManager.instance.versionCheck");
                 loadingPanel.SetActive(true);
+                cursorManager.loadingSoundLoop.Play();
                 skirmishOutputTextError.text = "Please download latest version: " + versionString;//.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 Invoke(nameof(HideLoadingPanel), 5f);
             }
@@ -296,6 +302,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                         PhotonNetwork.JoinLobby();
                     }
                     loadingPanel.SetActive(true);
+                    cursorManager.loadingSoundLoop.Play();
                 }
             }
         }
@@ -308,6 +315,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         if (loadingPanel.activeSelf)
         {
             loadingPanel.SetActive(false);
+            cursorManager.loadingSoundLoop.Stop();
             isPlayerClicked = false;
         }
     }
@@ -333,6 +341,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 connected = false;
             }
             loadingPanel.SetActive(false);
+            cursorManager.loadingSoundLoop.Stop();
         }
         deckProfile.sprite = profileImage;
         skirmishOutputTextError.text = "";
