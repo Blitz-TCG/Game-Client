@@ -6472,7 +6472,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log("playerField.transform.GetChild(parentId - 1).GetChild(0) " + playerField.transform.GetChild(parentId - 1).GetChild(0).name);
             CardDetails enemyCardToBeCopy = cardDetails.Find(item => item.id == id);
             Card currentCard = playerField.transform.GetChild(parentId - 1).GetChild(0).GetComponent<Card>();
-            currentCard.SetProperties(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName, currentCard.cardDescription, enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, enemyCardToBeCopy.fieldLimit, enemyCardToBeCopy.clan, enemyCardToBeCopy.levelRequired, currentCard.cardFrame, enemyCardToBeCopy.cardClass, enemyCardToBeCopy.ability);
+            currentCard.SetProperties(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName, currentCard.cardDescription, enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, enemyCardToBeCopy.fieldLimit, enemyCardToBeCopy.fieldPosition,enemyCardToBeCopy.clan, enemyCardToBeCopy.levelRequired, currentCard.cardImage, currentCard.cardFrame, enemyCardToBeCopy.cardClass, enemyCardToBeCopy.ability);
 
                 
             Destroy(currentCard.GetComponent<Mimic>());

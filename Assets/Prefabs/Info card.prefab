@@ -658,6 +658,7 @@ MonoBehaviour:
   gold: 0
   XP: 0
   fieldLimit: 0
+  fieldPosition: 
   levelRequired: 0
   clan: 
   cardClass: 0
@@ -665,6 +666,9 @@ MonoBehaviour:
   cardFrame: {fileID: 0}
   isAlreadyAttacked: 0
   dropPosition: 0
+  ability: 0
+  isParalyzedCard: 0
+  paralyzedCardCount: 0
   cardId: 0
   cId: {fileID: 5714708910895695449}
   cardErgoTokenId: {fileID: 5254626948483617223}
@@ -676,6 +680,7 @@ MonoBehaviour:
   goldText: {fileID: 3593209607813038083}
   XPText: {fileID: 4404570229975149034}
   fieldLimitText: {fileID: 2797054050631063072}
+  fieldPositionText: {fileID: 0}
   cardClan: {fileID: 284566369291716656}
   levelRequiredText: {fileID: 2844993073808095538}
   image: {fileID: 729829163326725905}

@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecfe83f064dc65b4f9f0e5866a3be296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoCard: {fileID: 5899796972264973658, guid: 23497b43f872e9141b260187c9fa07e6, type: 3}
+  infoCard: {fileID: 4276069275343109782, guid: 2618462ceb5dde1479927028e8ca0b68, type: 3}
   miniCardParent: {fileID: 760181310526775206}
 --- !u!225 &8618123275201654392
 CanvasGroup:
@@ -1073,6 +1073,7 @@ MonoBehaviour:
   gold: 10
   XP: 25
   fieldLimit: 2
+  fieldPosition: 
   levelRequired: 0
   clan: Masquerades
   cardClass: 1
@@ -1094,6 +1095,7 @@ MonoBehaviour:
   goldText: {fileID: 4483494710561789798}
   XPText: {fileID: 5906800187081285616}
   fieldLimitText: {fileID: 0}
+  fieldPositionText: {fileID: 0}
   cardClan: {fileID: 0}
   levelRequiredText: {fileID: 0}
   image: {fileID: 1034328921915163786}
@@ -1120,6 +1122,7 @@ MonoBehaviour:
   gold: 0
   XP: 0
   fieldLimit: 0
+  fieldPosition: 
   levelRequired: 0
   clan: 
   cardClass: 0
@@ -1141,6 +1144,7 @@ MonoBehaviour:
   goldText: {fileID: 0}
   XPText: {fileID: 0}
   fieldLimitText: {fileID: 0}
+  fieldPositionText: {fileID: 0}
   cardClan: {fileID: 0}
   levelRequiredText: {fileID: 0}
   image: {fileID: 0}

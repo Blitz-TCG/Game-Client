@@ -109,6 +109,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.fieldPosition, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability
                 //, hoveredCard.requirements, hoveredCard.abilityLevel
                 );
+            cardInfo.transform.localScale = new Vector3(1 / 2.31f, 1 / 2.34f, 1);
         }
         else if (gameObject?.transform?.parent?.parent?.name == "Player Hand")
         {
@@ -124,6 +125,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.fieldPosition, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability
                 //, hoveredCard.requirements, hoveredCard.abilityLevel
                 );
+            cardInfo.transform.localScale = new Vector3(1 / 2.31f, 1 / 2.34f, 1);
         }
         else if (gameObject.transform.parent.name == "Canvas")
         {

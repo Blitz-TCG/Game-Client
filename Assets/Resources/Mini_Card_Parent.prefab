@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecfe83f064dc65b4f9f0e5866a3be296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoCard: {fileID: 5899796972264973658, guid: 23497b43f872e9141b260187c9fa07e6, type: 3}
+  infoCard: {fileID: 4276069275343109782, guid: 2618462ceb5dde1479927028e8ca0b68, type: 3}
   miniCardParent: {fileID: 760181310526775206}
 --- !u!225 &8618123275201654392
 CanvasGroup:
