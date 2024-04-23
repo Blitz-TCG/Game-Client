@@ -64,14 +64,14 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Firebase service files (should not be included in public repos)
-#/google-services.json
-#/google-services.json.meta
-#/Assets/StreamingAssets/google-services-desktop.json
-#/Assets/StreamingAssets/google-services-desktop.json.meta
+/google-services.json
+/google-services.json.meta
+/Assets/StreamingAssets/google-services-desktop.json
+/Assets/StreamingAssets/google-services-desktop.json.meta
 
 # Photon Networking files (contains server connection details)
-#/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
-#/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset.meta
+/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
+/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset.meta
 
 # Environment-specific configuration files
 .env
