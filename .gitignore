@@ -64,8 +64,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Firebase service files (should not be included in public repos)
-/google-services.json
-/google-services.json.meta
+/Assets/google-services.json
+/Assets/google-services.json.meta
 /Assets/StreamingAssets/google-services-desktop.json
 /Assets/StreamingAssets/google-services-desktop.json.meta
 
