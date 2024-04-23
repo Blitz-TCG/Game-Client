@@ -86,3 +86,9 @@ crashlytics-build.properties
 
 # Log files
 *.log
+
+# IDE - Visual Studio Code
+.vscode/
+
+# JetBrains Rider, IntelliJ IDEA, PhpStorm, etc.
+.idea/
