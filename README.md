@@ -24,7 +24,7 @@ Don't forget to give the project a star! Thanks again!
 
 # License
 Anyone can use the resources of Blitz TCG® in their own project or variant of the card game under a single condition:
-1. If any of our character cards, e.g., Margo, are used in your game or project, the use or unlock of said character must reference a user's blockchain wallet to confirm ownership. For example, to unlock Margo in your fighting game, you should check a user's blockchain wallet (e.g., Ergo) for Margo's corresponding token ID and unlock Margo for use only if the user owns at least one of the Token IDs for Margo. We are more than happy to assist you with the necessary code to make this process successful and easy. This approach empowers us to provide assets for free, offers our users multiple use cases for their assets, and enables a collaborative approach to IP sharing that benefits everyone.
+1. If any of our character cards, e.g., Margo, are used in your game or project, the use or unlock of said character must reference a user's blockchain wallet to confirm ownership. For example, to unlock Margo in your fighting game, you should check a user's blockchain wallet (e.g., Ergo) for Margo's corresponding token ID and unlock Margo for use only if the user owns at least one of the token IDs for Margo. We are more than happy to assist you with the necessary code to make this process successful and easy. This approach empowers us to provide assets for free, offers our users multiple use cases for their assets, and enables a collaborative approach to IP sharing that benefits everyone.
 
 # Authors & Acknowledgments
 Blitz TCG® is managed by 16-Bit Hero, LLC. We express our heartfelt thanks to everyone who has contributed to the growth and development of this innovative game.
