@@ -22904,7 +22904,7 @@ GameObject:
   - component: {fileID: 1201805763}
   - component: {fileID: 1201805762}
   m_Layer: 0
-  m_Name: Ergo Query TESTING
+  m_Name: Ergo Query Testing Token Hard Set
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22924,8 +22924,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardIdChecks: {fileID: 0}
   tokenIDs:
-  - 30974274078845f263b4f21787e33cc99e9ec19a17ad85a5bc6da2cca91c5a2e
-  - fbbaac7337d051c10fc3da0ccb864f4d32d40027551e1c3ea3ce361f39b91e40
+  - set token ids here
+  - 
   - 
   - 
   tokenAmounts: ee02000000000000c80000000000000000000000000000000000000000000000
