@@ -841,6 +841,27 @@ public class MainMenuUIManager : MonoBehaviour
         ClearUI();
     }
 
+    public void MyCollections() //profile dropdown ui interactions
+    {
+        Application.OpenURL("https://blitztcg.com/collectibles");
+        profileDropdown.SetActive(false);
+        ClearUI();
+    }
+
+    public void BuyPacks() //profile dropdown ui interactions
+    {
+        Application.OpenURL("https://blitztcg.com/buy-packs");
+        profileDropdown.SetActive(false);
+        ClearUI();
+    }
+
+    public void OpenPacks() //profile dropdown ui interactions
+    {
+        Application.OpenURL("https://blitztcg.com/open-packs");
+        profileDropdown.SetActive(false);
+        ClearUI();
+    }
+
     //
     //misc menu work
     //
