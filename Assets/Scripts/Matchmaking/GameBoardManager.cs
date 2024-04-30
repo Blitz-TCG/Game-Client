@@ -6000,36 +6000,37 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 int parentId = int.Parse(parent.name.Split(" ")[2]);
                 BlurCardsForSacrifice(0.8f, true, true, true, sacrifice, message, parentId);
             }
-            else if (card.GetComponent<Mimic>())
+            
+        }
+        else if (card.GetComponent<Mimic>())
+        {
+            Debug.LogError(" inside card Mimic " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
             {
-                Debug.Log(" inside card Mimic " + parent.name);
-                if (parent.gameObject.tag.Contains("Front Line"))
+                Mimic mimic = card.GetComponent<Mimic>();
+
+                bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
+                int enemyFieldCount = isEnemyWallDestroyed ? enemyField.transform.childCount : enemyField.transform.childCount / 2;
+                bool foundChild = false;
+                for (int i = 0; i < enemyFieldCount; i++)
                 {
-                    Mimic mimic = card.GetComponent<Mimic>();
-
-                    bool isEnemyWallDestroyed = IsWallDestroyed(enemyWall);
-                    int enemyFieldCount = isEnemyWallDestroyed ? enemyField.transform.childCount : enemyField.transform.childCount / 2;
-                    bool foundChild = false;
-                    for (int i = 0; i < enemyFieldCount; i++)
+                    if (enemyField.transform.GetChild(i).childCount > 0)
                     {
-                        if (enemyField.transform.GetChild(i).childCount > 0)
-                        {
-                            foundChild = true;
-                            break;
-                        }
+                        foundChild = true;
+                        break;
                     }
-
-                    if (!foundChild)
-                    {
-                        Debug.Log(" no child found");
-                        return;
-                    }
-
-                    string message = "You choose the Mimic ability. Please select card enemy's one card to copy all stats of enemy.";
-                    int parentId = int.Parse(parent.name.Split(" ")[2]);
-                    BlurCards(0.8f, true, true, true, card, message);
-                   
                 }
+
+                if (!foundChild)
+                {
+                    Debug.Log(" no child found");
+                    return;
+                }
+
+                string message = "You choose the Mimic ability. Please select card enemy's one card to copy all stats of enemy.";
+                int parentId = int.Parse(parent.name.Split(" ")[2]);
+                BlurCards(0.8f, true, true, true, card, message);
+
             }
         }
 
@@ -6472,7 +6473,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log("playerField.transform.GetChild(parentId - 1).GetChild(0) " + playerField.transform.GetChild(parentId - 1).GetChild(0).name);
             CardDetails enemyCardToBeCopy = cardDetails.Find(item => item.id == id);
             Card currentCard = playerField.transform.GetChild(parentId - 1).GetChild(0).GetComponent<Card>();
-            currentCard.SetProperties(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName, currentCard.cardDescription, enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, enemyCardToBeCopy.fieldLimit, enemyCardToBeCopy.fieldPosition,enemyCardToBeCopy.clan, enemyCardToBeCopy.levelRequired, currentCard.cardImage, currentCard.cardFrame, enemyCardToBeCopy.cardClass, enemyCardToBeCopy.ability);
+            Debug.Log(enemyCardToBeCopy.id + " enemyCardToBeCopy.id " + currentCard.ergoTokenId + " currentCard.ergoTokenId " + currentCard.ergoTokenAmount + " currentCard.ergoTokenAmount " + currentCard.cardName + " currentCard.cardName " + enemyCardToBeCopy.attack + " enemyCardToBeCopy.attack " + enemyCardToBeCopy.HP + " enemyCardToBeCopy.HP " + enemyCardToBeCopy.gold + " enemyCardToBeCopy.gold " + enemyCardToBeCopy.XP + " enemyCardToBeCopy.XP " + currentCard.cardImage + "  currentCard.cardImage " + enemyCardToBeCopy.ability + " enemyCardToBeCopy.ability");
+            currentCard.SetMiniCard(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName,  enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, currentCard.cardImage, enemyCardToBeCopy.ability);
 
                 
             Destroy(currentCard.GetComponent<Mimic>());
@@ -6509,7 +6511,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
-        Debug.Log("playerField " + playerField + " enemyField " + enemyField + " blurValue " + blurValue + " isBlurCards " + isBlurCards + " isErrorDialogOpen " + isErrorDialogOpen + " cardEnabled " + cardEnabled + " text " + text);
+        Debug.LogError("playerField " + playerField + " enemyField " + enemyField + " blurValue " + blurValue + " isBlurCards " + isBlurCards + " isErrorDialogOpen " + isErrorDialogOpen + " cardEnabled " + cardEnabled + " text " + text);
         for (int i = 0; i < playerField.transform.childCount; i++)
         {
             Debug.Log(playerField.transform.GetChild(i).childCount + "layerField.transform.GetChild(i).childCount");
