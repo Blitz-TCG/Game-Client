@@ -156,6 +156,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private float openTimeThreshold = 2.0f;
     private float timePanelHasBeenOpen = 0.0f;
     private bool identifiedPlayerIsMaster = false;
+    private Transform cardParent = null;
 
     #endregion
 
@@ -5767,6 +5768,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
         playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
+        Debug.Log(parent.transform.GetChild(0).GetChild(0).GetComponent<Card>() + " parent.transform.GetChild(0).GetChild(0).GetComponent<Card>() ");
+        card = parent.transform.GetChild(0).GetChild(0).GetComponent<Card>();
+        Debug.Log(card.name + " card name");
+        ResetSelectedCards();
 
         if (card.GetComponent<Repair>())
         {
@@ -5865,7 +5870,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }
 
                 string message = "You set smite ability card. Please select any enemy's card";
-                BlurCards(0.8f, true, true, true, card, message);
+                BlurCards(0.8f, true, true, true, false, card, message);
                 //int choosenEnemyCardPosition = smite.ChooseEnemyUnit(enemyField, isEnemyWallDestroyed);
                 //if (enemyField.transform.GetChild(choosenEnemyCardPosition - 1) != null)
                 //{
@@ -5998,7 +6003,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 string message = "You choose the sacrifice ability. Please select card which you sacrifice.";
                 int parentId = int.Parse(parent.name.Split(" ")[2]);
-                BlurCardsForSacrifice(0.8f, true, true, true, sacrifice, message, parentId);
+                BlurCardsForSacrifice(0.8f, true, true, true, false, sacrifice, message, parentId);
             }
             
         }
@@ -6029,7 +6034,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 string message = "You choose the Mimic ability. Please select card enemy's one card to copy all stats of enemy.";
                 int parentId = int.Parse(parent.name.Split(" ")[2]);
-                BlurCards(0.8f, true, true, true, card, message);
+                BlurCards(0.8f, true, true, true, false, card, message);
 
             }
         }
@@ -6464,22 +6469,24 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     private void MimicOnOthers(string parId, int id)
     {
-        Debug.Log(" SmiteOnOthers called ");
-        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        Debug.Log(" MimicOnOthers called ");
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
         int parentId = int.Parse(parId);
         Debug.Log(playerField + " playerField  " + parentId + " parent id");
         if (playerField.transform.GetChild(parentId - 1) != null)
         {
             Debug.Log("playerField.transform.GetChild(parentId - 1).GetChild(0) " + playerField.transform.GetChild(parentId - 1).GetChild(0).name);
             CardDetails enemyCardToBeCopy = cardDetails.Find(item => item.id == id);
-            Card currentCard = playerField.transform.GetChild(parentId - 1).GetChild(0).GetComponent<Card>();
+            Card currentCard = playerField.transform.GetChild(parentId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+            Debug.Log(enemyCardToBeCopy + " enemyCardToBeCopy " + currentCard + " currentCard");
             Debug.Log(enemyCardToBeCopy.id + " enemyCardToBeCopy.id " + currentCard.ergoTokenId + " currentCard.ergoTokenId " + currentCard.ergoTokenAmount + " currentCard.ergoTokenAmount " + currentCard.cardName + " currentCard.cardName " + enemyCardToBeCopy.attack + " enemyCardToBeCopy.attack " + enemyCardToBeCopy.HP + " enemyCardToBeCopy.HP " + enemyCardToBeCopy.gold + " enemyCardToBeCopy.gold " + enemyCardToBeCopy.XP + " enemyCardToBeCopy.XP " + currentCard.cardImage + "  currentCard.cardImage " + enemyCardToBeCopy.ability + " enemyCardToBeCopy.ability");
-            currentCard.SetMiniCard(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName,  enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, currentCard.cardImage, enemyCardToBeCopy.ability);
+            currentCard.SetMiniCard(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName,  enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, currentCard.image.sprite, enemyCardToBeCopy.ability);
 
                 
             Destroy(currentCard.GetComponent<Mimic>());
             Type cardType = FieldManager.instance.GetAbility(enemyCardToBeCopy.ability);
             currentCard.gameObject.AddComponent(cardType);
+            Debug.Log(cardType + " card type");
         }
     }
 
@@ -6507,7 +6514,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     #endregion
 
-    public void BlurCards(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, Card currentCard, string text = "")
+    public void BlurCards(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, bool isRayCast, Card currentCard, string text = "")
     {
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
@@ -6518,6 +6525,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (playerField.transform.GetChild(i).childCount == 1)
             {
                 playerField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().alpha = blurValue;
+                playerField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().blocksRaycasts = isRayCast;
                 //playerField.transform.GetChild(i).GetChild(0).GetComponent<Button>().interactable = isBlurCards;
                 Debug.Log(cardError.transform.GetChild(0).gameObject + " cardError.transform.GetChild(0).gameObject");
                 cardError.transform.GetChild(0).gameObject.SetActive(isErrorDialogOpen);
@@ -6529,6 +6537,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             }
         }
 
+        Debug.Log(currentCard + " current card " + currentCard.transform.parent.parent);
+        Transform parent = currentCard.transform.parent.parent;
+        Debug.Log(parent + " current card parent");
+        cardParent = parent;
+        Component[] components = currentCard.GetComponents<Component>();
+
+       
+        foreach (Component component in components)
+        {
+            Debug.Log("*** Component Name: " + component.GetType().Name);
+        }
         for (int i = 0; i < enemyField.transform.childCount; i++)
         {
             Debug.Log(enemyField.transform.GetChild(i).childCount + "enemyField.transform.GetChild(i).childCount");
@@ -6544,13 +6563,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }   
                 else if(currentCard.ability == CardAbility.Mimic)
                 {
-                    enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectMimicCard(currentCard, selectedCard));
+                    enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectMimicCard(selectedCard));
                 }
             }
         }
     }
 
-    public void BlurCardsForSacrifice(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, Sacrifice sacrifice, string text = "", int id = 1)
+    public void BlurCardsForSacrifice(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, bool isRayCast, Sacrifice sacrifice, string text = "", int id = 1)
     {
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
@@ -6560,6 +6579,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (enemyField.transform.GetChild(i).childCount == 1)
             {
                 enemyField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().alpha = blurValue;
+                enemyField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().blocksRaycasts = isRayCast;
                 //enemyField.transform.GetChild(i).GetChild(0).GetComponent<Button>().interactable = isBlurCards;
                 Debug.Log(cardError.transform.GetChild(0).gameObject + " cardError.transform.GetChild(0).gameObject");
                 cardError.transform.GetChild(0).gameObject.SetActive(isErrorDialogOpen);
@@ -6599,12 +6619,30 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         ResetSelectedCards();
     }
 
-    public void SelectMimicCard(Card fromCard, Card toCard)
+    public void SelectMimicCard(Card fromCard)
     {
-        Debug.Log("Card selected");
-        Debug.Log(fromCard.name + " card name");
-        string parentId = fromCard.transform.parent.parent.name.Split(" ")[2];
-        fromCard.GetComponent<Mimic>().SetMimicData(fromCard, toCard);
+        Debug.Log("Card selected " + cardParent);
+        Card toCard = cardParent.GetChild(0).GetChild(0).GetComponent<Card>();
+        Debug.Log(toCard + " to card name");
+        Component[] components = toCard.GetComponents<Component>();
+
+        // Print the name of each component
+        foreach (Component component in components)
+        {
+            Debug.Log("### Component Name: " + component.GetType().Name + " parent name " + cardParent);
+        }
+        Debug.Log(fromCard.name + " from card name " + toCard + " to card name" );
+        Debug.Log(fromCard.GetComponent<Card>() + " from card card " + toCard.GetComponent<Card>() + " to card card");
+        string parentId = toCard.transform.parent.parent.name.Split(" ")[2];
+        Component[] component1 = toCard.GetComponents<Component>();
+
+        // Print the name of each component
+        foreach (Component component in component1)
+        {
+            Debug.Log("*** Component Name: " + component.GetType().Name);
+        }
+        Debug.Log("Mimic card " + toCard.GetComponent<Mimic>());
+        toCard.GetComponent<Mimic>().SetMimicData(fromCard, toCard);
         pv.RPC("MimicOnOthers", RpcTarget.Others, parentId, fromCard.id);
         ResetSelectedCards();
     }
@@ -6634,6 +6672,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
         Debug.Log("player field " + playerField + " enemy field " + enemyField);
+        cardParent = null;
 
         for (int i = 0; i < playerField.transform.childCount; i++)
         {
@@ -6641,6 +6680,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             {
                 Debug.Log("inside player child == 1");
                 playerField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().isEnabled = false;
+                playerField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().blocksRaycasts = true;
                 playerField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().alpha = 1;
                 cardError.transform.GetChild(0).gameObject.SetActive(false);
                 //playerField.transform.GetChild(i).GetChild(0).GetComponent<Button>().interactable = false;
@@ -6659,6 +6699,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 if (enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().isEnabled)
                 {
                     enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().isEnabled = false;
+                    enemyField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().blocksRaycasts = true;
                     enemyField.transform.GetChild(i).GetChild(0).GetComponent<CanvasGroup>().alpha = 1;
                     cardError.transform.GetChild(0).gameObject.SetActive(false);
                     //enemyField.transform.GetChild(i).GetChild(0).GetComponent<Button>().interactable = false;
