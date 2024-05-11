@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3051,7 +3051,7 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &120398510
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3068,8 +3068,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!212 &120398511
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -22348,7 +22347,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -27738,7 +27736,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.size
-      value: 172
+      value: 173
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[0].HP
@@ -29209,6 +29207,18 @@ PrefabInstance:
       value: 172
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].HP
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].XP
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].id
+      value: 173
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[1].clan
       value: Masquerades
       objectReference: {fileID: 0}
@@ -30541,6 +30551,14 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].clan
+      value: Factionless
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].gold
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[1].attack
       value: 1
       objectReference: {fileID: 0}
@@ -31002,6 +31020,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[171].attack
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].attack
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
@@ -31694,6 +31716,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[171].ability
+      value: 77
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].ability
       value: 77
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
@@ -32471,6 +32497,10 @@ PrefabInstance:
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[171].cardName
       value: Hoskies
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].cardName
+      value: Misfit's Auction House
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[17].cardFrame
@@ -34321,6 +34351,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 2143d42e763d67947985c03257bd1adb, type: 3}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].cardFrame
+      value: 
+      objectReference: {fileID: 21300000, guid: 86346688240c8784ebbb1fb9707b432b, type: 3}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].cardImage
+      value: 
+      objectReference: {fileID: 21300000, guid: bfd1e4a9b904ec6468aba53fc513d1cd, type: 3}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[17].fieldLimit
       value: 8
       objectReference: {fileID: 0}
@@ -34530,6 +34568,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[171].fieldLimit
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].fieldLimit
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
@@ -35107,6 +35149,10 @@ PrefabInstance:
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[171].ergoTokenId
       value: 6ad70cdbf928a2bdd397041a36a5c2490a35beb4d20eabb5666f004b103c7189
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].ergoTokenId
+      value: 18c938e1924fc3eadc266e75ec02d81fe73b56e4e9f4e268dffffcb30387c42d
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[1].fieldPosition
@@ -35841,6 +35887,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].levelRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[1].cardDescription
       value: 'Goad: Enemy units must attack goaded units before any other units. '
       objectReference: {fileID: 0}
@@ -36326,6 +36376,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
       propertyPath: cardDetails.Array.data[171].cardDescription
+      value: No Ability (yet)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
+      propertyPath: cardDetails.Array.data[172].cardDescription
       value: No Ability (yet)
       objectReference: {fileID: 0}
     - target: {fileID: 8022256210553369990, guid: f0dc9e1b93fcaa246b7f6d5bea399052, type: 3}
@@ -38832,7 +38886,7 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1256447405
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -38849,8 +38903,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!212 &1256447406
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -46912,7 +46965,7 @@ CanvasRenderer:
   m_CullTransparentMesh: 1
 --- !u!95 &1450377741
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -46929,8 +46982,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!212 &1450377742
 SpriteRenderer:
   m_ObjectHideFlags: 0
