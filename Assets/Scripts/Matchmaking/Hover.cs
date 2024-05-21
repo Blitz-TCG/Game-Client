@@ -119,7 +119,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             Debug.Log(gameObject.transform.parent.name.Split(" ")[2] + " name of card postition");
             int index = int.Parse(gameObject.transform.parent.name.Split(" ")[2]);
             Debug.Log(index + " index ");
-            GameObject actualParent = cardparent2.transform.GetChild(index - 1).gameObject;
+            GameObject actualParent = cardparent2.transform.GetChild(0).gameObject;
             Debug.Log(actualParent + " actual parent name");
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
@@ -127,6 +127,12 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.fieldPosition, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability
                 //, hoveredCard.requirements, hoveredCard.abilityLevel
                 );
+            Debug.Log(transform.position + " transform pos " + cardInfo.transform.position + " card info pos " + transform.name);
+            Debug.Log(transform.localPosition + " transform local pos " + cardInfo.transform.localPosition + " card info local pos " + transform.parent.name);
+            Debug.Log(transform.parent.localPosition + " transform local pos " + transform.position + " card info local pos " + transform.parent.name);
+            Transform cardPos = cardInfo.transform;
+            //cardPos.localPosition = 
+            cardInfo.transform.localPosition = new Vector3(transform.parent.localPosition.x + 350f , transform.parent.localPosition.y - 500f , 0);
             cardInfo.transform.Find("Amount Image").gameObject.GetComponent<Image>().enabled = false;
             cardInfo.transform.Find("Ergo Token Amount").gameObject.GetComponent<TMP_Text>().enabled = false;
             cardInfo.transform.localScale = new Vector3(1 / 2.31f, 1 / 2.34f, 1);
@@ -220,10 +226,12 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         if (cardPrefab != null)
                         {
                             Debug.LogError("Prefab found at path: " + prefabPath);
+                            hand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation); miniCardParent.transform.SetParent(hand.transform.GetChild(i));
                             miniCardParent.transform.position = hand.transform.GetChild(i).transform.position;
                             miniCardParent.transform.localScale = hand.transform.GetChild(i).transform.localScale;
                             miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+                            miniCardParent.GetComponent<HoverMiniCard>().isEnable = true;
                             Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
                             miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
                                 //, cardClicked.requirements, cardClicked.abilityLevel
@@ -234,12 +242,14 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         }
                         else
                         {
+                            hand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
                             miniCardParent.transform.SetParent(hand.transform.GetChild(i));
                             miniCardParent.transform.SetParent(hand.transform.GetChild(i));
                             miniCardParent.transform.position = hand.transform.GetChild(i).transform.position;
                             miniCardParent.transform.localScale = hand.transform.GetChild(i).transform.localScale;
                             miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+                            miniCardParent.GetComponent<HoverMiniCard>().isEnable = true;
                             Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
                             miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
                                 //, cardClicked.requirements, cardClicked.abilityLevel
@@ -333,6 +343,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         if (cardPrefab != null)
                         {
                             Debug.LogError("Prefab found at path: " + prefabPath);
+                            enemyHand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation); 
                             miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
                             miniCardParent.transform.position = enemyHand.transform.GetChild(i).transform.position;
@@ -350,6 +361,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         }
                         else
                         {
+                            enemyHand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
                             miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
                             miniCardParent.transform.position = enemyHand.transform.GetChild(i).transform.position;
@@ -545,7 +557,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     //    //        StartCoroutine(ProcessGoldUpdateQueue(isMaster));
     //    //    }
     //    //}
-        
+
     //}
 
     //private IEnumerator ProcessGoldUpdateQueue(bool isMaster)
@@ -565,4 +577,17 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
     //    isProcessingGoldUpdate = false;
     //}
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.M))
+        {
+            Time.timeScale = 0;
+        }
+        
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            Time.timeScale = 1;
+        }
+    }
 }

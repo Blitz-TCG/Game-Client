@@ -157,6 +157,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private float timePanelHasBeenOpen = 0.0f;
     private bool identifiedPlayerIsMaster = false;
     private Transform cardParent = null;
+    private Color normalColor = Color.white;
 
     #endregion
 
@@ -325,6 +326,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("left click " + EventSystem.current.currentSelectedGameObject);
+            ResetClickedColor();
             if (EventSystem.current.currentSelectedGameObject == null)
             {
                 GameManager.instance.clicked = 0;
@@ -2526,6 +2528,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Mimic mimic = card.gameObject.AddComponent<Mimic>();
                 mimic.ability = CardAbility.Mimic;
                 break;
+            case CardAbility.Endgame:
+                EndGame endGame = card.gameObject.AddComponent<EndGame>();
+                endGame.ability = CardAbility.Endgame;
+                endGame.SetAbility();
+                break;
             default: break;
         }
     }
@@ -2608,6 +2615,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.LogError("Display card called");
         Color currentColor = card.transform.GetChild(0).GetComponent<Image>().color;
         //currentColor.a = 1f;
+        card.transform.parent.GetComponent<HoverMiniCard>().isEnable = true;
         card.transform.GetChild(0).GetComponent<Image>().color = color;
 
     }
@@ -2779,7 +2787,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Hover.cardParent.AddComponent<DragFieldCard>();
                 Debug.Log(Hover.cardParent.name + " Hover.cardParent");
                 Debug.Log("EventSystem.current.currentSelectedGameObject.gameObject " + EventSystem.current.currentSelectedGameObject.gameObject.name);
-
+                settedParent.transform.GetChild(0).gameObject.GetComponent<ClickedMiniCard>().isEnable = true;
+                playerHand.transform.GetChild(previousPos - 1).gameObject.SetActive(false);
                 Tuple<int, int> result = GetTotalCardsCount(playerHand, playerField);
                 int handCount = result.Item1;
                 int fieldCount = result.Item2;
@@ -2826,7 +2835,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Hover.cardParent.AddComponent<DragFieldCard>();
                 Debug.Log(Hover.cardParent.name + " Hover.cardParent");
                 Debug.Log("EventSystem.current.currentSelectedGameObject.gameObject " + EventSystem.current.currentSelectedGameObject.gameObject.name);
-
+                settedParent.transform.GetChild(0).gameObject.GetComponent<ClickedMiniCard>().isEnable = true;
+                playerHand.transform.GetChild(previousPos - 1).gameObject.SetActive(false);
                 Tuple<int, int> result = GetTotalCardsCount(playerHand, playerField);
                 int handCount = result.Item1;
                 int fieldCount = result.Item2;
@@ -3030,7 +3040,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         ResetAnimation("player");
         ResetAnimation("field");
         ResetAllCard();
-        
+        ResetClickedColor();
         yield return new WaitForSeconds(time);
         if (PhotonNetwork.PlayerList.Count() == 2)
         {
@@ -3378,6 +3388,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GameObject selectedObjectParent = enemyField.transform.GetChild(currPos - 1).gameObject;
         selectedObject.transform.SetParent(selectedObjectParent.transform);
         selectedObject.transform.position = selectedObjectParent.transform.position;
+        enemyHand.transform.GetChild(prevPos - 1).gameObject.SetActive(false);
         selectedObject.AddComponent<DropFieldCard>();
 
         //Debug.Log(selectedObjectParent.name + " selected obje parent name ");
@@ -4252,15 +4263,26 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     //if (playerField.transform.GetChild(i).tag.Contains("Front Line"))
                     //{
                     //GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
-                    Mason mason
-                    = cardObj.GetComponent<Mason>();
+                    Mason mason = cardObj.GetComponent<Mason>();
                     Card currentCard = mason.GetComponent<Card>();
                     Debug.Log(mason + " Mason called");
                     CardDetails originalCard = cardDetails.Find(cardId => cardId.id == currentCard.id);
                     mason.OnSetAndActiveHealWall(playerWall, pv);
                     //}
                 }
-
+                else if (cardObj.GetComponent<EndGame>())
+                {
+                    Debug.Log(" inside card end gamje " + cardObj.name);
+                    EndGame endGame = cardObj.GetComponent<EndGame>();
+                    Card currentCard = endGame.GetComponent<Card>();
+                    Debug.Log(endGame + " endGame called");
+                    Tuple<int, int> result = endGame.SetAttackAndHealth(currentCard);
+                    int attackValue = result.Item1;
+                    int healthValue = result.Item2;
+                    string parentId = endGame.transform.parent.parent.name.Split(" ")[2];
+                    Debug.Log(attackValue + " attack value " + healthValue + " health value ");
+                    pv.RPC("EndGameInOthers", RpcTarget.Others, attackValue, healthValue, parentId);
+                }
 
             }
         }
@@ -6038,7 +6060,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             }
         }
-
+       
         FieldManager.instance.ResetCounters();
         FieldManager.instance.CalculateAbilityCounter(playerField);
     }
@@ -6512,6 +6534,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
     }
 
+    [PunRPC]
+    private void EndGameInOthers(int attackVal, int healthVal, string parId)
+    {
+        Debug.Log(" EndGameInOthers called " + attackVal + " atta " + healthVal + " health " + parId + " parentId");
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        int parentId = int.Parse(parId);
+        Debug.Log(enemyField + " playerField  " + parentId + " parent id");
+        if (enemyField.transform.GetChild(parentId - 1) != null)
+        {
+            Debug.Log(enemyField.transform.GetChild(parentId - 1).name + " enemyField.transform.GetChild(parentId - 1)");
+            Card card = enemyField.transform.GetChild(parentId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+            card.SetHP(healthVal);
+            card.SetAttack(attackVal);
+        }
+    }
+
     #endregion
 
     public void BlurCards(float blurValue, bool isBlurCards, bool isErrorDialogOpen, bool cardEnabled, bool isRayCast, Card currentCard, string text = "")
@@ -6707,6 +6745,67 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             } 
         }
 
+    }
+
+    //public void ClickedColor()
+    //{
+    //    if(player1Turn && PhotonNetwork.IsMasterClient)
+    //    {
+    //        Debug.Log(gameObject.name + " game object name " + EventSystem.current.currentSelectedGameObject);
+    //        GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
+    //        if (selectedObject != null)
+    //        {
+    //            string callerName = selectedObject.name;
+    //            Debug.Log("Button clicked by: " + callerName);
+    //            selectedObject.transform.GetChild(0).Find("Image").GetComponent<Image>().color = clickedColor;
+    //            selectedObject.transform.GetChild(0).Find("Frame").GetComponent<Image>().color = clickedColor;
+    //        }
+    //    }
+
+    //    if(!player1Turn && !PhotonNetwork.IsMasterClient)
+    //    {
+    //        Debug.Log(gameObject.name + " game object name " + EventSystem.current.currentSelectedGameObject);
+    //        GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
+    //        if (selectedObject != null)
+    //        {
+    //            string callerName = selectedObject.name;
+    //            Debug.Log("Button clicked by: " + callerName);
+    //            selectedObject.transform.GetChild(0).Find("Image").GetComponent<Image>().color = clickedColor;
+    //            selectedObject.transform.GetChild(0).Find("Frame").GetComponent<Image>().color = clickedColor;
+    //        }
+    //    }
+    //}
+
+    private void ResetClickedColor()
+    {
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+
+        if (playerField != null) 
+        { 
+            for(int i = 0; i < playerField.transform.childCount; i++)
+            {
+                if(playerField.transform.GetChild(i).childCount > 0)
+                {
+                    playerField.transform.GetChild(i).GetChild(0).GetChild(0).Find("Image").GetComponent<Image>().color = normalColor;
+                    playerField.transform.GetChild(i).GetChild(0).GetChild(0).Find("Frame").GetComponent<Image>().color = normalColor;
+                    playerField.transform.GetChild(i).GetChild(0).GetComponent<ClickedMiniCard>().isClicked = false;
+                }
+            }
+        }
+
+        if (enemyField != null) 
+        {
+            for (int i = 0; i < enemyField.transform.childCount; i++)
+            {
+                if (enemyField.transform.GetChild(i).childCount > 0)
+                {
+                    enemyField.transform.GetChild(i).GetChild(0).GetChild(0).Find("Image").GetComponent<Image>().color = normalColor;
+                    enemyField.transform.GetChild(i).GetChild(0).GetChild(0).Find("Frame").GetComponent<Image>().color = normalColor;
+                    enemyField.transform.GetChild(i).GetChild(0).GetComponent<ClickedMiniCard>().isClicked = false;
+                }
+            }
+        }
     }
 }
 

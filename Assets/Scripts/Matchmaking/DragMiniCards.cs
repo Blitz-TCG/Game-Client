@@ -167,6 +167,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             Debug.Log(" --== gameobject master  end " + obj.name);
             endParent = previousParent;
             endSubParent = previousSubParent;
+            //GameObject playerHand
             dragEnd = true;
             Debug.Log("Card setted");
             gameboardManager.OnSetCard(card, PhotonNetwork.IsMasterClient, parentAfterDrag);
@@ -260,6 +261,9 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
                
                 Destroy(obj.GetComponent<DragMiniCards>());
                 obj.AddComponent<DragFieldCard>();
+                int id = int.Parse(endSubParent.Split(" ")[2]);
+                Debug.Log(id + " #id value ");
+                playerHand.transform.GetChild(id - 1).gameObject.SetActive(false);
                 Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(playerHand, playerField);
                 int handCount = result.Item1;
                 int fieldCount = result.Item2;
@@ -299,6 +303,9 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
 
                 Destroy(obj.GetComponent<DragMiniCards>());
                 obj.AddComponent<DragFieldCard>();
+                int id = int.Parse(endSubParent.Split(" ")[2]);
+                Debug.Log(id + " #id value ");
+                playerHand.transform.GetChild(id - 1).gameObject.SetActive(false);
                 Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(playerHand, playerField);
                 int handCount = result.Item1;
                 int fieldCount = result.Item2;
@@ -353,6 +360,9 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         Debug.Log(selectedcard + " selectedcard ");
         selectedcard.transform.SetParent(selectedCardParent.transform);
         selectedcard.transform.localPosition = Vector3.zero;
+        int enemyId = int.Parse(parent.Split(" ")[2]);
+        Debug.Log(enemyId + " #enemyId value ");
+        enemyHand.transform.GetChild(enemyId - 1).gameObject.SetActive(false);
         selectedcard.AddComponent<DropFieldCard>();
 
         Debug.Log(selectedcard.name + " selected card name ");

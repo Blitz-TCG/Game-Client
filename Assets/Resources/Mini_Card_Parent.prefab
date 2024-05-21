@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 7483569789572691550}
   - component: {fileID: 2166134775279847600}
   - component: {fileID: 1651118199878345665}
+  - component: {fileID: 4887753505649391827}
+  - component: {fileID: 8072466872059750586}
   m_Layer: 5
   m_Name: Mini_Card_Parent
   m_TagString: Untagged
@@ -119,6 +121,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1651118199878345665}
         m_TargetAssemblyTypeName: ChooseCard, Assembly-CSharp
         m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8072466872059750586}
+        m_TargetAssemblyTypeName: ClickedMiniCard, Assembly-CSharp
+        m_MethodName: ClickedCard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -241,6 +255,33 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   isEnabled: 0
+--- !u!114 &4887753505649391827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760181310526775206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 402c32c40261c334586b0cf3c43cf572, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnable: 0
+--- !u!114 &8072466872059750586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760181310526775206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61c61d4cab2d8847a03a2a717b4daa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnable: 0
+  isClicked: 0
 --- !u!1001 &760181309329174130
 PrefabInstance:
   m_ObjectHideFlags: 0
