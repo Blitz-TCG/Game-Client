@@ -41,14 +41,14 @@ public class Silence : Card
         Debug.Log(currectTurnCount + " current round");
     }
 
-    public bool IsUseAbility()
-    {
-        Debug.Log(currectTurnCount + " current round " + requireRoundToUseAbility + " requireRoundToUseAbility ");
-        if (currectTurnCount == requireRoundToUseAbility)
-        {
-            Debug.Log("currentRound == requireRoundToUseAbility return true");
-            return true;
-        }
-        return false;
-    }
+    //public bool IsUseAbility()
+    //{
+    //    Debug.Log(currectTurnCount + " current round " + requireRoundToUseAbility + " requireRoundToUseAbility ");
+    //    if (currectTurnCount == requireRoundToUseAbility)
+    //    {
+    //        Debug.Log("currentRound == requireRoundToUseAbility return true");
+    //        return true;
+    //    }
+    //    return false;
+    //}
 }
