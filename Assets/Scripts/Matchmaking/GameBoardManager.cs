@@ -48,6 +48,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [SerializeField] private TMP_Text countDownSecText;
     [SerializeField] private List<Sprites> playerFields;
     [SerializeField] private List<Sprites> playerBrokenFields;
+    [SerializeField] private List<Sprite> playerLeftDivider;
+    [SerializeField] private List<Sprite> playerRightDivider;
     [SerializeField] private Image bottomLeftImage;
     [SerializeField] private Image topLeftImage;
     [SerializeField] private Image bottomRightImage;
@@ -66,6 +68,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [SerializeField] private GameObject notMatchedPanel;
     [SerializeField] private List<GameObject> playerParent;
     [SerializeField] private List<GameObject> enemyParent;
+    [SerializeField] private Image leftDivider;
+    [SerializeField] private Image rightDivider;
 
 
     private SkirmishManager skirmishManager;
@@ -3619,6 +3623,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 downProfileIamge.GetComponent<Image>().sprite = profileImages[playerDeckProfileId];
                 upProfileImage.GetComponent<Image>().sprite = profileImages[opponentDeckProfileId];
+                leftDivider.sprite = playerLeftDivider[playerId];
+                rightDivider.sprite = playerRightDivider[opponentId];
 
                 if (countdownTimer == null)
                 {

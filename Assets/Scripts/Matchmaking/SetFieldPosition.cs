@@ -8,13 +8,13 @@ public class SetFieldPosition : MonoBehaviour
 
     Vector2[] BottomRightPositions = new Vector2[]
         {
-            new Vector2(866f, -845f),
-            new Vector2(866f, -845f),
-            new Vector2(1290f, -1077f),
-            new Vector2(1310f, -1077f),
-            new Vector2(1280f, -1077f),
-            new Vector2(1325f, -1077f),
-            new Vector2(1600f, -1077f)
+            new Vector2(864f, -845f),
+            new Vector2(864f, -845f),
+            new Vector2(1288f, -1077f),
+            new Vector2(1308f, -1077f),
+            new Vector2(1278f, -1077f),
+            new Vector2(1323f, -1077f),
+            new Vector2(1598f, -1077f)
         }; 
     //Vector2[] BottomOldRightPositions = new Vector2[]
     //    {
@@ -34,7 +34,7 @@ public class SetFieldPosition : MonoBehaviour
             new Vector2(1295f, 1077f),
             new Vector2(1315f, 1085f),
             new Vector2(1285f, 1077f),
-            new Vector2(1330f, 1077f),
+            new Vector2(1330f, 1080f),
             new Vector2(1605f, 1105f)
         };
     //Vector2[] BottomOldRightSizes = new Vector2[]
@@ -50,24 +50,24 @@ public class SetFieldPosition : MonoBehaviour
 
     Vector2[] TopRightPositions = new Vector2[]
        {
-            new Vector2(1365f, -177f),
-            new Vector2(1365f, -177f),
-            new Vector2(1310f, -216f),
-            new Vector2(1420f, -227f),
-            new Vector2(1455f, -260f),
-            new Vector2(1400f, -263f),
-            new Vector2(1630f, -253f)
+            new Vector2(1363f, -173.5f),
+            new Vector2(1363f, -177f),
+            new Vector2(1308f, -210f),
+            new Vector2(1418f, -227f),
+            new Vector2(1453f, -250f),
+            new Vector2(1398f, -255f),
+            new Vector2(1628f, -245f)
        };
 
     Vector2[] TopRightSizes = new Vector2[]
         {
+            new Vector2(1370f, 1001.5f),
             new Vector2(1370f, 1005f),
-            new Vector2(1370f, 1005f),
-            new Vector2(1315f, 1287f),
+            new Vector2(1315f, 1281f),
             new Vector2(1425f, 1305f),
-            new Vector2(1460f, 1340f),
-            new Vector2(1405f, 1335f),
-            new Vector2(1635f, 1330f)
+            new Vector2(1460f, 1330f),
+            new Vector2(1405f, 1325f),
+            new Vector2(1635f, 1322f)
         };
 
     Vector2[] TopLeftPositions = new Vector2[]
@@ -75,10 +75,10 @@ public class SetFieldPosition : MonoBehaviour
             new Vector2(0f, 27f),
             new Vector2(0f, 27f),
             new Vector2(0f, -42f),
-            new Vector2(0f, -37f),
+            new Vector2(0f, -25f),
             new Vector2(0f, -20f),
             new Vector2(0f, -11f),
-            new Vector2(0f, -37f)
+            new Vector2(0f, -28f)
        }; 
     //Vector2[] TopOldLeftPositions = new Vector2[]
     //   {
@@ -96,10 +96,10 @@ public class SetFieldPosition : MonoBehaviour
             new Vector2(845f, 808f),
             new Vector2(845f, 808f),
             new Vector2(1300f, 1120f),
+            new Vector2(1300f, 1105f),
             new Vector2(1300f, 1115f),
-            new Vector2(1300f, 1100f),
             new Vector2(1320f, 1090f),
-            new Vector2(1562f, 1115f)
+            new Vector2(1562f, 1106f)
         };
     //Vector2[] TopOldLeftSizes = new Vector2[]
     //    {
@@ -136,12 +136,12 @@ public class SetFieldPosition : MonoBehaviour
     Vector2[] BottomLeftSizes = new Vector2[]
         {
             new Vector2(1365f, 1020f),
-            new Vector2(1365f, 1020f),
-            new Vector2(1270f, 1265f),
+            new Vector2(1365f, 1023f),
+            new Vector2(1270f, 1273f),
             new Vector2(1385f, 1300f),
-            new Vector2(1400f, 1325f),
-            new Vector2(1370f, 1330f),
-            new Vector2(1595f, 1315f),
+            new Vector2(1400f, 1330f),
+            new Vector2(1370f, 1335f),
+            new Vector2(1595f, 1322f),
         };
     //Vector2[] BottomOldLeftSizes = new Vector2[]
     //    {

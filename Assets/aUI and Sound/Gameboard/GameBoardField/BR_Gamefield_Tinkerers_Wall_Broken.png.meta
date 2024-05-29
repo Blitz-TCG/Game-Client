@@ -117,90 +117,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BR_Gamefield_Tinkerers_Wall_Broken_0
-      rect:
-        serializedVersion: 2
-        x: 4761
-        y: 2433
-        width: 2078
-        height: 1885
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2028231b83e9c5e49931463c9f70b44c
-      internalID: 1379293630
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BR_Gamefield_Tinkerers_Wall_Broken_1
-      rect:
-        serializedVersion: 2
-        x: 4825
-        y: 2215
-        width: 675
-        height: 259
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48cf15d942a2c80468be3419c6f9a734
-      internalID: -156370254
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BR_Gamefield_Tinkerers_Wall_Broken_2
-      rect:
-        serializedVersion: 2
-        x: 3843
-        y: 2182
-        width: 776
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 32997c95ee51d4443acd395a7863becd
-      internalID: 494693561
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BR_Gamefield_Tinkerers_Wall_Broken_3
-      rect:
-        serializedVersion: 2
-        x: 4645
-        y: 2219
-        width: 7
-        height: 4
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 041fbb321a8d2a84fa7a37c878381052
-      internalID: -1911185699
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: BR_Gamefield_Tinkerers_Wall_Broken_4
       rect:
         serializedVersion: 2
@@ -209,7 +125,7 @@ TextureImporter:
         width: 3177
         height: 2204
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

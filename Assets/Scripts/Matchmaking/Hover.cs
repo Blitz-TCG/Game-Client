@@ -357,6 +357,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                             miniCard.transform.GetChild(miniCard.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
                             miniCardParent.name = cardClicked.cardName;
                             miniCardParent.SetActive(false);
+                            miniCardParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
                         }
                         else
@@ -375,6 +376,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                             miniCard.name = cardClicked.cardName;
                             miniCardParent.name = cardClicked.cardName;
                             miniCardParent.SetActive(false);
+                            miniCardParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
                         }
 
                         //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);

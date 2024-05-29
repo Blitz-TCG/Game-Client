@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7403867831459452124}
   - component: {fileID: 2500570048585029483}
   - component: {fileID: 4197346034399591524}
+  - component: {fileID: 7092112634855227976}
   m_Layer: 5
   m_Name: Mini_Card_Parent
   m_TagString: Untagged
@@ -161,6 +162,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   isEnabled: 0
+--- !u!114 &7092112634855227976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760181310526775206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06a0dbcf6af9b604783c8c6d9e79818a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &760181309329174130
 PrefabInstance:
   m_ObjectHideFlags: 0

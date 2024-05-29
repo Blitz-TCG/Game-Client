@@ -117,90 +117,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BL_Gamefield_FairyTales_Wall_0
-      rect:
-        serializedVersion: 2
-        x: 1046
-        y: 2399
-        width: 301
-        height: 983
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6261027733ef3804cb1e9105b98ba406
-      internalID: -648163238
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BL_Gamefield_FairyTales_Wall_1
-      rect:
-        serializedVersion: 2
-        x: 1865
-        y: 3372
-        width: 907
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fc7ad78766ff21d4b8ab6b9b20a5ed12
-      internalID: -1341293536
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BL_Gamefield_FairyTales_Wall_2
-      rect:
-        serializedVersion: 2
-        x: 1929
-        y: 3310
-        width: 899
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 017d72426790457448429764bd78759e
-      internalID: -671587783
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BL_Gamefield_FairyTales_Wall_3
-      rect:
-        serializedVersion: 2
-        x: 2021
-        y: 2616
-        width: 7
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aedba471cdb8a464cb7bbf7bbf909276
-      internalID: 2130176041
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: BL_Gamefield_FairyTales_Wall_4
       rect:
         serializedVersion: 2
@@ -209,7 +125,7 @@ TextureImporter:
         width: 2789
         height: 2551
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

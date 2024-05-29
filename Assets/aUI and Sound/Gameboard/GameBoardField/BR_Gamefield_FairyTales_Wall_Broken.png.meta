@@ -117,90 +117,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BR_Gamefield_FairyTales_Wall_Broken_0
-      rect:
-        serializedVersion: 2
-        x: 5699
-        y: 2515
-        width: 22
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1e2986e796efb0e40915e8d166778544
-      internalID: -1283891278
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BR_Gamefield_FairyTales_Wall_Broken_1
-      rect:
-        serializedVersion: 2
-        x: 5721
-        y: 2504
-        width: 56
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2172bae409dda5b469b61d4ea4f8dcfc
-      internalID: 1319777822
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BR_Gamefield_FairyTales_Wall_Broken_2
-      rect:
-        serializedVersion: 2
-        x: 6087
-        y: 2511
-        width: 40
-        height: 83
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9d5d7823f80174544ba9ffcf33a550e5
-      internalID: 405220237
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BR_Gamefield_FairyTales_Wall_Broken_3
-      rect:
-        serializedVersion: 2
-        x: 5358
-        y: 2271
-        width: 314
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8c9f3f153c3228640af0226fbe083b8d
-      internalID: -351907608
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: BR_Gamefield_FairyTales_Wall_Broken_4
       rect:
         serializedVersion: 2
@@ -209,7 +125,7 @@ TextureImporter:
         width: 2564
         height: 2149
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -217,48 +133,6 @@ TextureImporter:
       bones: []
       spriteID: 486bc399dacc8bc4bb6f7e33f75cde2f
       internalID: -1145612263
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BR_Gamefield_FairyTales_Wall_Broken_5
-      rect:
-        serializedVersion: 2
-        x: 4158
-        y: 2237
-        width: 18
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 111e0ad08bf1cf74583bc804ccae64e5
-      internalID: -483070824
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BR_Gamefield_FairyTales_Wall_Broken_6
-      rect:
-        serializedVersion: 2
-        x: 4371
-        y: 2219
-        width: 293
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 544ef7d585031b742b55b5d6211c54c7
-      internalID: 183554777
       vertices: []
       indices: 
       edges: []

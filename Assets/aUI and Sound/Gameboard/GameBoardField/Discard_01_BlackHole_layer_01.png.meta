@@ -117,48 +117,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Discard_01_BlackHole_layer_01_0
-      rect:
-        serializedVersion: 2
-        x: 6391
-        y: 2274
-        width: 16
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7ec20409c7903344ebf798308f1c948e
-      internalID: 1235007513
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Discard_01_BlackHole_layer_01_1
-      rect:
-        serializedVersion: 2
-        x: 5534
-        y: 1203
-        width: 7
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ffd954c78b59e8049b7de65c5fecd1f6
-      internalID: -1984710645
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Discard_01_BlackHole_layer_01_2
       rect:
         serializedVersion: 2
@@ -167,7 +125,7 @@ TextureImporter:
         width: 2059
         height: 2051
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -175,27 +133,6 @@ TextureImporter:
       bones: []
       spriteID: 69a572e9a274a16418f11d5b69a31e10
       internalID: -177973129
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Discard_01_BlackHole_layer_01_3
-      rect:
-        serializedVersion: 2
-        x: 6696
-        y: 221
-        width: 7
-        height: 4
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8566528f6777c3c45b7b857908f4e056
-      internalID: -2004739545
       vertices: []
       indices: 
       edges: []

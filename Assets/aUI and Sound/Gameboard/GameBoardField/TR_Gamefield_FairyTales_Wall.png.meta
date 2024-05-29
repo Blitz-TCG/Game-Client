@@ -125,7 +125,7 @@ TextureImporter:
         width: 2797
         height: 2582
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -133,27 +133,6 @@ TextureImporter:
       bones: []
       spriteID: 320e5f32f2008fd43840f22a723e9af4
       internalID: 1472158440
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TR_Gamefield_FairyTales_Wall_1
-      rect:
-        serializedVersion: 2
-        x: 6346
-        y: 917
-        width: 301
-        height: 983
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 588f807842ef52e489fcf7f131bb3a30
-      internalID: -107475850
       vertices: []
       indices: 
       edges: []
@@ -167,7 +146,7 @@ TextureImporter:
         width: 11
         height: 11
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -175,48 +154,6 @@ TextureImporter:
       bones: []
       spriteID: 8813a8d646450c9488b6f6edb95c906e
       internalID: -1222616801
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TR_Gamefield_FairyTales_Wall_3
-      rect:
-        serializedVersion: 2
-        x: 4865
-        y: 978
-        width: 899
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8002d5d7c2d551a46b83423b03772670
-      internalID: 452642282
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TR_Gamefield_FairyTales_Wall_4
-      rect:
-        serializedVersion: 2
-        x: 4921
-        y: 917
-        width: 910
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a2ae05626faeaa946a31e75caa9536c9
-      internalID: -1438387120
       vertices: []
       indices: 
       edges: []
