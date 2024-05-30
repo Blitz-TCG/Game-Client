@@ -3,7 +3,7 @@ guid: ec1bcd235ed8f154bbe09eabe2a9d9ed
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,7 +63,6 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -120,12 +119,12 @@ TextureImporter:
       name: DIVIDERS_UNIQUE_sep_0
       rect:
         serializedVersion: 2
-        x: 3588
-        y: 1990
-        width: 573
-        height: 294
+        x: 3656
+        y: 2016
+        width: 401
+        height: 264
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

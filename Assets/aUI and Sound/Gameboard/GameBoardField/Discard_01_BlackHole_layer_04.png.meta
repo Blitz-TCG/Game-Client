@@ -3,7 +3,7 @@ guid: 4e48647484555e546b87b47a05142bec
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,7 +63,6 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -115,18 +114,88 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Discard_01_BlackHole_layer_04_48
+      rect:
+        serializedVersion: 2
+        x: 5629
+        y: 315
+        width: 1683
+        height: 1882
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a78f04ec79871c34783ff2cc29046d26
+      internalID: 2061983164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 99a34bc7e37dec84fbc92aaed98d3389
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Discard_01_BlackHole_layer_04_35: 56483469
+      Discard_01_BlackHole_layer_04_28: -402734484
+      Discard_01_BlackHole_layer_04_25: 1331701778
+      Discard_01_BlackHole_layer_04_14: -396843320
+      Discard_01_BlackHole_layer_04_40: -1148151275
+      Discard_01_BlackHole_layer_04_13: 1541306521
+      Discard_01_BlackHole_layer_04_10: -1187153839
+      Discard_01_BlackHole_layer_04_9: -2104055610
+      Discard_01_BlackHole_layer_04_41: 1257465797
+      Discard_01_BlackHole_layer_04_38: 1413893431
+      Discard_01_BlackHole_layer_04_47: 2009530363
+      Discard_01_BlackHole_layer_04_23: 458458637
+      Discard_01_BlackHole_layer_04_24: -1463881723
+      Discard_01_BlackHole_layer_04_29: 171786112
+      Discard_01_BlackHole_layer_04_0: 846669090
+      Discard_01_BlackHole_layer_04_26: -388439441
+      Discard_01_BlackHole_layer_04_33: 1806309185
+      Discard_01_BlackHole_layer_04_16: 756142343
+      Discard_01_BlackHole_layer_04_34: 31063311
+      Discard_01_BlackHole_layer_04_22: -654680310
+      Discard_01_BlackHole_layer_04_18: -25261063
+      Discard_01_BlackHole_layer_04_37: -1215071378
+      Discard_01_BlackHole_layer_04_4: -1530634783
+      Discard_01_BlackHole_layer_04_43: -1941758452
+      Discard_01_BlackHole_layer_04_1: 294533360
+      Discard_01_BlackHole_layer_04_17: 166748927
+      Discard_01_BlackHole_layer_04_31: -465711368
+      Discard_01_BlackHole_layer_04_12: -1051577454
+      Discard_01_BlackHole_layer_04_20: 1269844425
+      Discard_01_BlackHole_layer_04_36: 1109991341
+      Discard_01_BlackHole_layer_04_19: -152112191
+      Discard_01_BlackHole_layer_04_2: -64035123
+      Discard_01_BlackHole_layer_04_30: -1777651904
+      Discard_01_BlackHole_layer_04_3: -1092980805
+      Discard_01_BlackHole_layer_04_7: -1956972863
+      Discard_01_BlackHole_layer_04_46: -1793044495
+      Discard_01_BlackHole_layer_04_6: -488469336
+      Discard_01_BlackHole_layer_04_27: 1190366266
+      Discard_01_BlackHole_layer_04_11: -242854696
+      Discard_01_BlackHole_layer_04_21: 546966063
+      Discard_01_BlackHole_layer_04_45: 2131570718
+      Discard_01_BlackHole_layer_04_42: 1608273694
+      Discard_01_BlackHole_layer_04_48: 2061983164
+      Discard_01_BlackHole_layer_04_8: 1981930784
+      Discard_01_BlackHole_layer_04_15: 514169576
+      Discard_01_BlackHole_layer_04_44: 1200428726
+      Discard_01_BlackHole_layer_04_32: 1200156722
+      Discard_01_BlackHole_layer_04_5: 144769113
+      Discard_01_BlackHole_layer_04_39: 914527694
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

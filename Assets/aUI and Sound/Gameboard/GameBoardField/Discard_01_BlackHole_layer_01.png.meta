@@ -3,7 +3,7 @@ guid: 18606298419e2df4faa7f5b04483aab9
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,7 +63,6 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -113,6 +112,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -121,9 +132,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 5544
-        y: 217
+        y: 218
         width: 2059
-        height: 2051
+        height: 2050
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,6 +144,27 @@ TextureImporter:
       bones: []
       spriteID: 69a572e9a274a16418f11d5b69a31e10
       internalID: -177973129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Discard_01_BlackHole_layer_01_1
+      rect:
+        serializedVersion: 2
+        x: 5534
+        y: 1204
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79982d75193a0b34ca37cc4a4e71c964
+      internalID: -1984710645
       vertices: []
       indices: 
       edges: []
@@ -148,10 +180,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Discard_01_BlackHole_layer_01_0: 1235007513
-      Discard_01_BlackHole_layer_01_1: -1984710645
-      Discard_01_BlackHole_layer_01_2: -177973129
       Discard_01_BlackHole_layer_01_3: -2004739545
+      Discard_01_BlackHole_layer_01_1: -1984710645
+      Discard_01_BlackHole_layer_01_0: 1235007513
+      Discard_01_BlackHole_layer_01_2: -177973129
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
