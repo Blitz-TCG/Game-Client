@@ -199,7 +199,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     [PunRPC]
     public void Recruit(int id)
     {
-        Debug.Log("Recruit called " + id);
+        Debug.Log("%%%%%$$$ Recruit called " + id);
         playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
         enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
 
@@ -207,25 +207,27 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         Debug.Log(pv + " photon view " + pv.IsMine);
         if (pv.IsMine)
         {
-            Debug.Log(" is mine called ");
+            Debug.Log("%%%%%$$$ is mine called ");
             for (int i = 0; i < hand.transform.childCount; i++)
             {
                 if (hand.transform.GetChild(i).childCount == 0)
                 {
-                    Debug.Log(hand.transform.GetChild(i).childCount + " child count " + i);
-                    Debug.Log(playerController.totalXP + " player total xp " + enemyController.totalXP + " enemy's XP");
+                    Debug.Log("%%%%%$$$ inside instantiate with the i :- " + i + " parent value " + hand.transform.parent.parent.parent);
+                    Debug.Log(hand.transform.GetChild(i).childCount + " %%%%%$$$ child count " + i);
+                    Debug.Log(playerController.totalXP + " %%%%%$$$ player total xp " + enemyController.totalXP + " enemy's XP");
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
                     Debug.Log(cardClicked.levelRequired + " level req");
                     int level = (int)(cardClicked.levelRequired);
                     Debug.LogError("level " + level + " total xp " + playerController.totalXP);
                     if (IsRecruit(playerController.totalXP, level))
                     {
+                        Debug.Log("%%%%%$$$ inside recruit i:- " + i + " parent value " + hand.transform.parent.parent.parent);
                         GameObject miniCardParent;
                         string prefabPath = cardClicked.cardName;
                         GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
                         if (cardPrefab != null)
                         {
-                            Debug.LogError("Prefab found at path: " + prefabPath);
+                            Debug.LogError("%%%%%$$$ Prefab found at path: " + prefabPath +  " i val "+ i );
                             hand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation); miniCardParent.transform.SetParent(hand.transform.GetChild(i));
                             miniCardParent.transform.position = hand.transform.GetChild(i).transform.position;
@@ -242,6 +244,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         }
                         else
                         {
+                            Debug.LogError("%%%%%$$$ Prefab not found at path: " + prefabPath + " i val " + i);
                             hand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
                             miniCardParent.transform.SetParent(hand.transform.GetChild(i));
@@ -323,26 +326,26 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         }
         else
         {
-            Debug.Log(" not mine " + pv.IsMine);
+            Debug.Log("%%%%%$$$ not mine " + pv.IsMine);
             for (int i = 0; i < hand.transform.childCount; i++)
             {
                 if (enemyHand.transform.GetChild(i).childCount == 0)
                 {
-                    Debug.Log(enemyHand.transform.GetChild(i).childCount + " enemyHand.transform.GetChild(i).childCount");
-                    Debug.Log(playerController.totalXP + " player total xp " + enemyController.totalXP + " enemy's XP");
+                    Debug.Log(enemyHand.transform.GetChild(i).childCount + " %%%%%$$$ enemyHand.transform.GetChild(i).childCount " + enemyHand.transform.parent.parent.parent + " parent of enemy hand with I: " + i);
+                    Debug.Log(playerController.totalXP + " %%%%%$$$ player total xp " + enemyController.totalXP + " enemy's XP");
                     CardDetails cardClicked = cardDetails.Find(item => item.id == id);
-                    Debug.Log(cardClicked.levelRequired + " level required");
+                    Debug.Log(cardClicked.levelRequired + " %%%%%$$$ level required");
                     int level = (int)(cardClicked.levelRequired);
-                    Debug.LogError("level " + level + " total xp " + playerController.totalXP);
+                    Debug.LogError("%%%%%$$$ level " + level + " total xp " + playerController.totalXP);
                     if (IsRecruit(playerController.totalXP, level))
                     {
-
+                        Debug.Log("%%%%%$$$ inside recruit ");
                         GameObject miniCardParent;
                         string prefabPath =  cardClicked.cardName;
                         GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
                         if (cardPrefab != null)
                         {
-                            Debug.LogError("Prefab found at path: " + prefabPath);
+                            Debug.LogError("%%%%%$$$ Prefab found at path: " + prefabPath);
                             enemyHand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation); 
                             miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
@@ -362,6 +365,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         }
                         else
                         {
+                            Debug.LogError("%%%%%$$$ Prefab not found at path: " + prefabPath);
                             enemyHand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
                             miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));

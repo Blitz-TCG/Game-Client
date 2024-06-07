@@ -399,7 +399,7 @@ public class Card : MonoBehaviour
 
     public void OnDestroy()
     {
-        Debug.LogError("*#** destroy card called " + this.cardName + " parent " + this.transform.parent.name);
-        if (this.cardName != null && this.transform.parent != null && this.transform.parent.childCount > 0 && this.transform) ;
+        //Debug.LogError("*#** destroy card called " + this.cardName + " parent " + this.transform.parent.name);
+        //if (this.cardName != null && this.transform.parent != null && this.transform.parent.childCount > 0 && this.transform) ;
     }
 }
