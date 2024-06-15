@@ -1,7 +1,5 @@
 using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +10,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     #region Variables
     [SerializeField] private Card infoCard;
     [SerializeField] private GameObject miniCardParent;
-    
+
 
     private GameObject cardUI;
     private GameObject goldErrorTooltip;
@@ -65,11 +63,11 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     public void OnPointerExit(PointerEventData eventData)
     {
         Debug.Log("pointer exit ");
-        if(transform.GetComponent<Card>() != null && transform.GetComponent<Card>().transform.parent.name != null)
+        if (transform.GetComponent<Card>() != null && transform.GetComponent<Card>().transform.parent.name != null)
         {
             Debug.Log("transform name " + transform.GetComponent<Card>() + " card parent " + transform.GetComponent<Card>().transform.parent.name);
         }
-        isHovering =false;
+        isHovering = false;
         isClicked = false;
         Invoke("HideInfoCard", 0.1f);
         //HideInfoCard();
@@ -106,7 +104,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
             CardDetails hoveredCard = cardDetails.Find(item => item.id == id);
             Card cardInfo = Instantiate<Card>(infoCard, cardparent1.transform);
-            cardInfo.SetProperties(hoveredCard.id,hoveredCard.ergoTokenId,hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.fieldPosition, hoveredCard.clan , hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability
+            cardInfo.SetProperties(hoveredCard.id, hoveredCard.ergoTokenId, hoveredCard.ergoTokenAmount, hoveredCard.cardName, hoveredCard.cardDescription, hoveredCard.attack, hoveredCard.HP, hoveredCard.gold, hoveredCard.XP, hoveredCard.fieldLimit, hoveredCard.fieldPosition, hoveredCard.clan, hoveredCard.levelRequired, hoveredCard.cardImage, hoveredCard.cardFrame, hoveredCard.cardClass, hoveredCard.ability
                 //, hoveredCard.requirements, hoveredCard.abilityLevel
                 );
             cardInfo.transform.Find("Amount Image").gameObject.GetComponent<Image>().enabled = false;
@@ -132,7 +130,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             Debug.Log(transform.parent.localPosition + " transform local pos " + transform.position + " card info local pos " + transform.parent.name);
             Transform cardPos = cardInfo.transform;
             //cardPos.localPosition = 
-            cardInfo.transform.localPosition = new Vector3(transform.parent.localPosition.x + 350f , transform.parent.localPosition.y - 500f , 0);
+            cardInfo.transform.localPosition = new Vector3(transform.parent.localPosition.x + 350f, transform.parent.localPosition.y - 500f, 0);
             cardInfo.transform.Find("Amount Image").gameObject.GetComponent<Image>().enabled = false;
             cardInfo.transform.Find("Ergo Token Amount").gameObject.GetComponent<TMP_Text>().enabled = false;
             cardInfo.transform.localScale = new Vector3(1 / 2.31f, 1 / 2.34f, 1);
@@ -147,11 +145,11 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     {
         Debug.Log("hide card");
         Debug.Log(gameObject.name + " game object name");
-        if(transform.childCount == 1)
+        if (transform.childCount == 1)
         {
             transform?.GetChild(0)?.GetChild(gameObject.transform.GetChild(0).childCount - 1)?.gameObject?.SetActive(false);
         }
-        
+
         if (cardparent1.transform.childCount > 0)
         {
             for (int i = 0; i < cardparent1.transform.childCount; i++)
@@ -163,11 +161,32 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         {
             for (int i = 0; i < cardparent2.transform.childCount; i++)
             {
-                if(cardparent2.transform.GetChild(i).childCount > 0)
+                if (cardparent2.transform.GetChild(i).childCount > 0)
                     Destroy(cardparent2.transform.GetChild(i).GetChild(0).gameObject);
             }
         }
     }
+
+    //public void RecruitCard()
+    //{
+    //    ResetAnimation();
+    //    CardDetails clickedCard = cardDetails.Find(item => item.id == gameObject.transform.GetChild(0).GetComponent<Card>().id);
+    //    Debug.Log("clicked card " + clickedCard);
+    //    int clickedCardid = clickedCard.id;
+
+    //    if (Gold.instance.GetGold() >= clickedCard.gold)
+    //    {
+    //        pv = gameObject.transform.GetComponent<PhotonView>();
+    //        Debug.Log(" gold called");
+    //        pv.RPC("Recruit", RpcTarget.All, clickedCardid);
+    //    }
+    //    else
+    //    {
+    //        errorText.gameObject.SetActive(true);
+    //        errorText.SetText("You can not buy card more than gold you have.");
+    //        Invoke("DisableGoldErrorTooltip", 1f);
+    //    }
+    //}
 
     public void RecruitCard()
     {
@@ -178,36 +197,11 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
         if (Gold.instance.GetGold() >= clickedCard.gold)
         {
-            pv = gameObject.transform.GetComponent<PhotonView>();
+            PhotonView pv = gameObject.transform.GetComponent<PhotonView>();
             Debug.Log(" gold called");
-            pv.RPC("Recruit", RpcTarget.All, clickedCardid);
-        }
-        else
-        {
-            errorText.gameObject.SetActive(true);
-            errorText.SetText("You can not buy card more than gold you have.");
-            Invoke("DisableGoldErrorTooltip", 1f);
-        }
-    }
+            playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+            enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
 
-    private void DisableGoldErrorTooltip()
-    {
-        errorText.gameObject.SetActive(false);
-    }
-
-    #region RPC Method
-    [PunRPC]
-    public void Recruit(int id)
-    {
-        Debug.Log("%%%%%$$$ Recruit called " + id);
-        playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
-        enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
-
-        pv = gameObject.transform.GetComponent<PhotonView>();
-        Debug.Log(pv + " photon view " + pv.IsMine);
-        if (pv.IsMine)
-        {
-            Debug.Log("%%%%%$$$ is mine called ");
             for (int i = 0; i < hand.transform.childCount; i++)
             {
                 if (hand.transform.GetChild(i).childCount == 0)
@@ -215,7 +209,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     Debug.Log("%%%%%$$$ inside instantiate with the i :- " + i + " parent value " + hand.transform.parent.parent.parent);
                     Debug.Log(hand.transform.GetChild(i).childCount + " %%%%%$$$ child count " + i);
                     Debug.Log(playerController.totalXP + " %%%%%$$$ player total xp " + enemyController.totalXP + " enemy's XP");
-                    CardDetails cardClicked = cardDetails.Find(item => item.id == id);
+                    CardDetails cardClicked = cardDetails.Find(item => item.id == clickedCardid);
                     Debug.Log(cardClicked.levelRequired + " level req");
                     int level = (int)(cardClicked.levelRequired);
                     Debug.LogError("level " + level + " total xp " + playerController.totalXP);
@@ -227,7 +221,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
                         if (cardPrefab != null)
                         {
-                            Debug.LogError("%%%%%$$$ Prefab found at path: " + prefabPath +  " i val "+ i );
+                            Debug.LogError("%%%%%$$$ Prefab found at path: " + prefabPath + " i val " + i);
                             hand.transform.GetChild(i).gameObject.SetActive(true);
                             miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation); miniCardParent.transform.SetParent(hand.transform.GetChild(i));
                             miniCardParent.transform.position = hand.transform.GetChild(i).transform.position;
@@ -262,33 +256,16 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                             miniCardParent.name = cardClicked.cardName;
                         }
 
-                        //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
-                        //miniCard.transform.SetParent(hand.transform.GetChild(i));
-                        //miniCard.transform.position = hand.transform.GetChild(i).transform.position;
-                        //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
-                        //miniCard.GetComponent<DragMiniCards>().enabled = true;
-                        //Debug.Log(miniCard.name + " mini card ");
-                        ////miniCard.AddComponent<DragMiniCards>();
-                        ////miniCard.AddComponent<PhotonView>();
-                        //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
-                        //    //, cardClicked.requirements, cardClicked.abilityLevel
-                        //    );
-                        //card.name = cardClicked.cardName;
-                        //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-                        //gameboardManager.UpdateSkill(cardClicked.ability, card);
-                        //Debug.Log(card + " card value");
-
                         if (PhotonNetwork.IsMasterClient)
                         {
                             Debug.Log("master client " + PhotonNetwork.IsMasterClient);
                             //int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
                             int getGold = Gold.instance.GetGold();
-                                //(int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+                            //(int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
                             Debug.Log(getGold + " get gold ");
                             int availableGold = getGold - cardClicked.gold;
                             //goldList.Add(cardClicked.gold);
-                            Debug.Log(availableGold + " available gold "); Debug.Log(getGold + " get gold " +  availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
+                            Debug.Log(availableGold + " available gold "); Debug.Log(getGold + " get gold " + availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
                             //UpdateGoldLocally(availableGold, PhotonNetwork.IsMasterClient, goldList);
                             //UpdateGold(availableGold, PhotonNetwork.IsMasterClient);
                             Gold.instance.SetGold(availableGold);
@@ -299,7 +276,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                         {
                             Debug.Log("!master client " + PhotonNetwork.IsMasterClient);
                             //int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
-                            int getGold = Gold.instance.GetGold(); 
+                            int getGold = Gold.instance.GetGold();
                             Debug.Log(getGold + " get gold ");
                             int availableGold = getGold - cardClicked.gold;
                             Debug.Log(availableGold + " available gold ");
@@ -311,6 +288,8 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                             properties["clientGold"] = availableGold;
                             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
                         }
+
+                        pv.RPC("RecruitCardOnOthers", RpcTarget.Others, clickedCardid, i);
                     }
                     else
                     {
@@ -323,86 +302,393 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                     break;
                 }
             }
+
+
+            //pv.RPC("Recruit", RpcTarget.All, clickedCardid);
         }
         else
         {
-            Debug.Log("%%%%%$$$ not mine " + pv.IsMine);
-            for (int i = 0; i < hand.transform.childCount; i++)
-            {
-                if (enemyHand.transform.GetChild(i).childCount == 0)
-                {
-                    Debug.Log(enemyHand.transform.GetChild(i).childCount + " %%%%%$$$ enemyHand.transform.GetChild(i).childCount " + enemyHand.transform.parent.parent.parent + " parent of enemy hand with I: " + i);
-                    Debug.Log(playerController.totalXP + " %%%%%$$$ player total xp " + enemyController.totalXP + " enemy's XP");
-                    CardDetails cardClicked = cardDetails.Find(item => item.id == id);
-                    Debug.Log(cardClicked.levelRequired + " %%%%%$$$ level required");
-                    int level = (int)(cardClicked.levelRequired);
-                    Debug.LogError("%%%%%$$$ level " + level + " total xp " + playerController.totalXP);
-                    if (IsRecruit(playerController.totalXP, level))
-                    {
-                        Debug.Log("%%%%%$$$ inside recruit ");
-                        GameObject miniCardParent;
-                        string prefabPath =  cardClicked.cardName;
-                        GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
-                        if (cardPrefab != null)
-                        {
-                            Debug.LogError("%%%%%$$$ Prefab found at path: " + prefabPath);
-                            enemyHand.transform.GetChild(i).gameObject.SetActive(true);
-                            miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation); 
-                            miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
-                            miniCardParent.transform.position = enemyHand.transform.GetChild(i).transform.position;
-                            miniCardParent.transform.localScale = enemyHand.transform.GetChild(i).transform.localScale;
-                            miniCardParent.AddComponent<DragMiniCards>(); ;
-                            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-                            miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
-                                //, cardClicked.requirements, cardClicked.abilityLevel
-                                );
-                            miniCard.name = cardClicked.cardName;
-                            miniCard.transform.GetChild(miniCard.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-                            miniCardParent.name = cardClicked.cardName;
-                            miniCardParent.SetActive(false);
-                            miniCardParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
-
-                        }
-                        else
-                        {
-                            Debug.LogError("%%%%%$$$ Prefab not found at path: " + prefabPath);
-                            enemyHand.transform.GetChild(i).gameObject.SetActive(true);
-                            miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
-                            miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
-                            miniCardParent.transform.position = enemyHand.transform.GetChild(i).transform.position;
-                            miniCardParent.transform.localScale = enemyHand.transform.GetChild(i).transform.localScale;
-                            miniCardParent.AddComponent<DragMiniCards>();
-                            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-                            miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
-                                //, cardClicked.requirements, cardClicked.abilityLevel
-                                );
-                            gameboardManager.UpdateSkill(cardClicked.ability, miniCard);
-                            miniCard.name = cardClicked.cardName;
-                            miniCardParent.name = cardClicked.cardName;
-                            miniCardParent.SetActive(false);
-                            miniCardParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                        }
-
-                        //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
-                        //miniCard.transform.SetParent(enemyHand.transform.GetChild(i));
-                        //miniCard.transform.position = enemyHand.transform.GetChild(i).transform.position;
-                        //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
-                        //miniCard.AddComponent<DragMiniCards>();
-                        //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
-                        //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
-                        //    //, cardClicked.requirements, cardClicked.abilityLevel
-                        //    );
-                        //Debug.Log(card + " card");
-                        //card.name = cardClicked.cardName;
-                        //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
-                        //gameboardManager.UpdateSkill(cardClicked.ability, card);
-                        //miniCard.SetActive(false);
-                    }
-                    break;
-                }
-            }
+            ShowError("You can not buy card more than gold you have.");
         }
     }
+
+    private void ShowError(string message)
+    {
+        errorText.gameObject.SetActive(true);
+        errorText.SetText(message);
+        Invoke("DisableGoldErrorTooltip", 1f);
+    }
+
+
+    private void DisableGoldErrorTooltip()
+    {
+        errorText.gameObject.SetActive(false);
+    }
+
+    #region RPC Method
+    [PunRPC]
+    public void RecruitCardOnOthers(int id, int pos)
+    {
+
+        Debug.Log("%%%%%$$$ inside instantiate with the i :- " + pos + " parent value " + enemyHand.transform.parent.parent.parent);
+        Debug.Log(enemyHand.transform.GetChild(pos).childCount + " %%%%%$$$ child count " + id);
+        CardDetails cardClicked = cardDetails.Find(item => item.id == id);
+
+        GameObject miniCardParent;
+        string prefabPath = cardClicked.cardName;
+        GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
+        Debug.Log(enemyHand.transform.GetChild(pos).childCount + " enemyHand.transform.GetChild(pos).childCount");
+        for(int  i = 0; i < enemyHand.transform.GetChild(pos).childCount; i++)
+        {
+            Destroy(enemyHand.transform.GetChild(pos).GetChild(i).gameObject);
+        }
+
+        if (cardPrefab != null)
+        {
+            Debug.LogError("%%%%%$$$ Prefab found at path: " + prefabPath + " i val " + pos);
+            enemyHand.transform.GetChild(pos).gameObject.SetActive(true);
+            miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, enemyHand.transform.GetChild(pos).position, enemyHand.transform.GetChild(pos).rotation); miniCardParent.transform.SetParent(enemyHand.transform.GetChild(pos));
+            miniCardParent.transform.position = enemyHand.transform.GetChild(pos).transform.position;
+            miniCardParent.transform.localScale = enemyHand.transform.GetChild(pos).transform.localScale;
+            miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+            miniCardParent.GetComponent<HoverMiniCard>().isEnable = true;
+            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+            miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                //, cardClicked.requirements, cardClicked.abilityLevel
+                );
+            miniCard.name = cardClicked.cardName;
+            miniCardParent.name = cardClicked.cardName;
+            miniCardParent.SetActive(false);
+            miniCardParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+        }
+        else
+        {
+            Debug.LogError("%%%%%$$$ Prefab not found at path: " + prefabPath + " i val " + pos);
+            enemyHand.transform.GetChild(pos).gameObject.SetActive(true);
+            miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(pos).position, enemyHand.transform.GetChild(pos).rotation);
+            miniCardParent.transform.SetParent(enemyHand.transform.GetChild(pos));
+            miniCardParent.transform.SetParent(enemyHand.transform.GetChild(pos));
+            miniCardParent.transform.position = enemyHand.transform.GetChild(pos).transform.position;
+            miniCardParent.transform.localScale = enemyHand.transform.GetChild(pos).transform.localScale;
+            miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+            miniCardParent.GetComponent<HoverMiniCard>().isEnable = true;
+            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+            miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+                //, cardClicked.requirements, cardClicked.abilityLevel
+                );
+            gameboardManager.UpdateSkill(cardClicked.ability, miniCard);
+            miniCard.name = cardClicked.cardName;
+            miniCardParent.name = cardClicked.cardName;
+            miniCardParent.SetActive(false);
+            miniCardParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        }
+
+    }
+
+    //[PunRPC]
+    //public void Recruit(int id)
+    //{
+    //    Debug.Log("%%%%%$$$ Recruit called " + id);
+    //    playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+    //    enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
+
+    //    pv = gameObject.transform.GetComponent<PhotonView>();
+    //    Debug.Log(pv + " photon view " + pv.IsMine);
+    //    if (pv.IsMine)
+    //    {
+    //        Debug.Log("%%%%%$$$ is mine called ");
+    //        for (int i = 0; i < hand.transform.childCount; i++)
+    //        {
+    //            if (hand.transform.GetChild(i).childCount == 0)
+    //            {
+    //                Debug.Log("%%%%%$$$ inside instantiate with the i :- " + i + " parent value " + hand.transform.parent.parent.parent);
+    //                Debug.Log(hand.transform.GetChild(i).childCount + " %%%%%$$$ child count " + i);
+    //                Debug.Log(playerController.totalXP + " %%%%%$$$ player total xp " + enemyController.totalXP + " enemy's XP");
+    //                CardDetails cardClicked = cardDetails.Find(item => item.id == id);
+    //                Debug.Log(cardClicked.levelRequired + " level req");
+    //                int level = (int)(cardClicked.levelRequired);
+    //                Debug.LogError("level " + level + " total xp " + playerController.totalXP);
+    //                if (IsRecruit(playerController.totalXP, level))
+    //                {
+    //                    Debug.Log("%%%%%$$$ inside recruit i:- " + i + " parent value " + hand.transform.parent.parent.parent);
+    //                    GameObject miniCardParent;
+    //                    string prefabPath = cardClicked.cardName;
+    //                    GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
+    //                    if (cardPrefab != null)
+    //                    {
+    //                        Debug.LogError("%%%%%$$$ Prefab found at path: " + prefabPath +  " i val "+ i );
+    //                        hand.transform.GetChild(i).gameObject.SetActive(true);
+    //                        miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation); miniCardParent.transform.SetParent(hand.transform.GetChild(i));
+    //                        miniCardParent.transform.position = hand.transform.GetChild(i).transform.position;
+    //                        miniCardParent.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+    //                        miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+    //                        miniCardParent.GetComponent<HoverMiniCard>().isEnable = true;
+    //                        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+    //                        miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+    //                            //, cardClicked.requirements, cardClicked.abilityLevel
+    //                            );
+    //                        miniCard.name = cardClicked.cardName;
+    //                        miniCardParent.name = cardClicked.cardName;
+
+    //                    }
+    //                    else
+    //                    {
+    //                        Debug.LogError("%%%%%$$$ Prefab not found at path: " + prefabPath + " i val " + i);
+    //                        hand.transform.GetChild(i).gameObject.SetActive(true);
+    //                        miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
+    //                        miniCardParent.transform.SetParent(hand.transform.GetChild(i));
+    //                        miniCardParent.transform.SetParent(hand.transform.GetChild(i));
+    //                        miniCardParent.transform.position = hand.transform.GetChild(i).transform.position;
+    //                        miniCardParent.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+    //                        miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+    //                        miniCardParent.GetComponent<HoverMiniCard>().isEnable = true;
+    //                        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+    //                        miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+    //                            //, cardClicked.requirements, cardClicked.abilityLevel
+    //                            );
+    //                        gameboardManager.UpdateSkill(cardClicked.ability, miniCard);
+    //                        miniCard.name = cardClicked.cardName;
+    //                        miniCardParent.name = cardClicked.cardName;
+    //                    }
+
+    //                    //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", hand.transform.GetChild(i).position, hand.transform.GetChild(i).rotation);
+    //                    //miniCard.transform.SetParent(hand.transform.GetChild(i));
+    //                    //miniCard.transform.position = hand.transform.GetChild(i).transform.position;
+    //                    //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+    //                    //miniCard.GetComponent<DragMiniCards>().enabled = true;
+    //                    //Debug.Log(miniCard.name + " mini card ");
+    //                    ////miniCard.AddComponent<DragMiniCards>();
+    //                    ////miniCard.AddComponent<PhotonView>();
+    //                    //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
+    //                    //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+    //                    //    //, cardClicked.requirements, cardClicked.abilityLevel
+    //                    //    );
+    //                    //card.name = cardClicked.cardName;
+    //                    //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+    //                    //gameboardManager.UpdateSkill(cardClicked.ability, card);
+    //                    //Debug.Log(card + " card value");
+
+    //                    if (PhotonNetwork.IsMasterClient)
+    //                    {
+    //                        Debug.Log("master client " + PhotonNetwork.IsMasterClient);
+    //                        //int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+    //                        int getGold = Gold.instance.GetGold();
+    //                            //(int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
+    //                        Debug.Log(getGold + " get gold ");
+    //                        int availableGold = getGold - cardClicked.gold;
+    //                        //goldList.Add(cardClicked.gold);
+    //                        Debug.Log(availableGold + " available gold "); Debug.Log(getGold + " get gold " +  availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
+    //                        //UpdateGoldLocally(availableGold, PhotonNetwork.IsMasterClient, goldList);
+    //                        //UpdateGold(availableGold, PhotonNetwork.IsMasterClient);
+    //                        Gold.instance.SetGold(availableGold);
+    //                        properties["masterGold"] = availableGold;
+    //                        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    //                    }
+    //                    else if (!PhotonNetwork.IsMasterClient)
+    //                    {
+    //                        Debug.Log("!master client " + PhotonNetwork.IsMasterClient);
+    //                        //int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
+    //                        int getGold = Gold.instance.GetGold(); 
+    //                        Debug.Log(getGold + " get gold ");
+    //                        int availableGold = getGold - cardClicked.gold;
+    //                        Debug.Log(availableGold + " available gold ");
+    //                        Debug.Log(availableGold + " available gold "); Debug.Log(getGold + " get gold " + availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
+    //                        //goldList.Add(cardClicked.gold);
+    //                        //UpdateGoldLocally(availableGold, PhotonNetwork.IsMasterClient, goldList);
+    //                        //UpdateGold(availableGold, PhotonNetwork.IsMasterClient);
+    //                        Gold.instance.SetGold(availableGold);
+    //                        properties["clientGold"] = availableGold;
+    //                        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    //                    }
+    //                }
+    //                else
+    //                {
+    //                    Debug.Log(" else called ");
+    //                    Debug.Log(" Gold error tool tip " + goldErrorTooltip);
+    //                    errorText.gameObject.SetActive(true);
+    //                    errorText.SetText("You can not recruit this card!!!");
+    //                    Invoke("DisableGoldErrorTooltip", 1f);
+    //                }
+    //                break;
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("%%%%%$$$ not mine " + pv.IsMine);
+    //        for (int i = 0; i < hand.transform.childCount; i++)
+    //        {
+    //            if (enemyHand.transform.GetChild(i).childCount == 0)
+    //            {
+    //                Debug.Log(enemyHand.transform.GetChild(i).childCount + " %%%%%$$$ enemyHand.transform.GetChild(i).childCount " + enemyHand.transform.parent.parent.parent + " parent of enemy hand with I: " + i);
+    //                Debug.Log(playerController.totalXP + " %%%%%$$$ player total xp " + enemyController.totalXP + " enemy's XP");
+    //                CardDetails cardClicked = cardDetails.Find(item => item.id == id);
+    //                Debug.Log(cardClicked.levelRequired + " %%%%%$$$ level required");
+    //                int level = (int)(cardClicked.levelRequired);
+    //                Debug.LogError("%%%%%$$$ level " + level + " total xp " + playerController.totalXP);
+    //                if (IsRecruit(playerController.totalXP, level))
+    //                {
+    //                    Debug.Log("%%%%%$$$ inside recruit ");
+    //                    GameObject miniCardParent;
+    //                    string prefabPath =  cardClicked.cardName;
+    //                    GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
+    //                    if (cardPrefab != null)
+    //                    {
+    //                        Debug.LogError("%%%%%$$$ Prefab found at path: " + prefabPath);
+    //                        enemyHand.transform.GetChild(i).gameObject.SetActive(true);
+    //                        miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation); 
+    //                        miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
+    //                        miniCardParent.transform.position = enemyHand.transform.GetChild(i).transform.position;
+    //                        miniCardParent.transform.localScale = enemyHand.transform.GetChild(i).transform.localScale;
+    //                        miniCardParent.AddComponent<DragMiniCards>(); ;
+    //                        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+    //                        miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+    //                            //, cardClicked.requirements, cardClicked.abilityLevel
+    //                            );
+    //                        miniCard.name = cardClicked.cardName;
+    //                        miniCard.transform.GetChild(miniCard.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+    //                        miniCardParent.name = cardClicked.cardName;
+    //                        miniCardParent.SetActive(false);
+    //                        miniCardParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+    //                    }
+    //                    else
+    //                    {
+    //                        Debug.LogError("%%%%%$$$ Prefab not found at path: " + prefabPath);
+    //                        enemyHand.transform.GetChild(i).gameObject.SetActive(true);
+    //                        miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
+    //                        miniCardParent.transform.SetParent(enemyHand.transform.GetChild(i));
+    //                        miniCardParent.transform.position = enemyHand.transform.GetChild(i).transform.position;
+    //                        miniCardParent.transform.localScale = enemyHand.transform.GetChild(i).transform.localScale;
+    //                        miniCardParent.AddComponent<DragMiniCards>();
+    //                        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+    //                        miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+    //                            //, cardClicked.requirements, cardClicked.abilityLevel
+    //                            );
+    //                        gameboardManager.UpdateSkill(cardClicked.ability, miniCard);
+    //                        miniCard.name = cardClicked.cardName;
+    //                        miniCardParent.name = cardClicked.cardName;
+    //                        miniCardParent.SetActive(false);
+    //                        miniCardParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
+    //                    }
+
+    //                    //GameObject miniCard = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyHand.transform.GetChild(i).position, enemyHand.transform.GetChild(i).rotation);
+    //                    //miniCard.transform.SetParent(enemyHand.transform.GetChild(i));
+    //                    //miniCard.transform.position = enemyHand.transform.GetChild(i).transform.position;
+    //                    //miniCard.transform.localScale = hand.transform.GetChild(i).transform.localScale;
+    //                    //miniCard.AddComponent<DragMiniCards>();
+    //                    //Card card = miniCard.transform.GetChild(0).GetComponent<Card>();
+    //                    //card.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
+    //                    //    //, cardClicked.requirements, cardClicked.abilityLevel
+    //                    //    );
+    //                    //Debug.Log(card + " card");
+    //                    //card.name = cardClicked.cardName;
+    //                    //card.transform.GetChild(card.transform.childCount - 1).GetComponent<Button>().gameObject.SetActive(false);
+    //                    //gameboardManager.UpdateSkill(cardClicked.ability, card);
+    //                    //miniCard.SetActive(false);
+    //                }
+    //                break;
+    //            }
+    //        }
+    //    }
+    //}
+
+    //[PunRPC]
+    //public void Recruit(int id)
+    //{
+    //    Debug.Log("Recruit called with id: " + id);
+
+    //    PhotonView pv = gameObject.transform.GetComponent<PhotonView>();
+    //    bool isMine = pv.IsMine;
+    //    Debug.Log("photon view " + isMine);
+
+    //    if (isMine)
+    //    {
+    //        ProcessRecruit(id, true);
+    //    }
+    //    else
+    //    {
+    //        ProcessRecruit(id, false);
+    //    }
+    //}
+
+    //private void ProcessRecruit(int id, bool isMine)
+    //{
+    //    PlayerController playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
+    //    EnemyController enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
+
+    //    Transform handTransform = isMine ? hand.transform : enemyHand.transform;
+    //    Transform fieldTransform = isMine ? playerController.transform : enemyController.transform;
+
+    //    for (int i = 0; i < handTransform.childCount; i++)
+    //    {
+    //        if (handTransform.GetChild(i).childCount == 0)
+    //        {
+    //            CardDetails cardClicked = cardDetails.Find(item => item.id == id);
+    //            int level = (int)(cardClicked.levelRequired);
+
+    //            if (IsRecruit(playerController.totalXP, level))
+    //            {
+    //                GameObject miniCardParent;
+    //                string prefabPath = cardClicked.cardName;
+    //                GameObject cardPrefab = Resources.Load<GameObject>(prefabPath);
+
+    //                if (cardPrefab != null)
+    //                {
+    //                    miniCardParent = PhotonNetwork.Instantiate(cardPrefab.name, handTransform.GetChild(i).position, handTransform.GetChild(i).rotation);
+    //                }
+    //                else
+    //                {
+    //                    miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", handTransform.GetChild(i).position, handTransform.GetChild(i).rotation);
+    //                }
+
+    //                miniCardParent.transform.SetParent(handTransform.GetChild(i));
+    //                miniCardParent.transform.localPosition = Vector3.zero;
+    //                miniCardParent.transform.localScale = Vector3.one;
+    //                miniCardParent.GetComponent<DragMiniCards>().enabled = true;
+    //                miniCardParent.GetComponent<HoverMiniCard>().isEnable = true;
+
+    //                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+    //                miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability);
+    //                miniCard.name = cardClicked.cardName;
+    //                miniCardParent.name = cardClicked.cardName;
+
+    //                if (PhotonNetwork.IsMasterClient)
+    //                {
+    //                    UpdateGold(cardClicked.gold, true);
+    //                }
+    //                else
+    //                {
+    //                    UpdateGold(cardClicked.gold, false);
+    //                }
+    //            }
+    //            else
+    //            {
+    //                ShowError("You can not recruit this card!!!");
+    //            }
+    //            break;
+    //        }
+    //    }
+    //}
+
+    //private void UpdateGold(int cardCost, bool isMasterClient)
+    //{
+    //    int currentGold = Gold.instance.GetGold();
+    //    int updatedGold = currentGold - cardCost;
+    //    Gold.instance.SetGold(updatedGold);
+
+    //    ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+    //    if (isMasterClient)
+    //    {
+    //        properties["masterGold"] = updatedGold;
+    //    }
+    //    else
+    //    {
+    //        properties["clientGold"] = updatedGold;
+    //    }
+    //    PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    //}
     #endregion
 
     //private void UpdatedProperties()
@@ -457,17 +743,17 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
     public bool IsRecruit(int playerXP, int level)
     {
         Debug.Log("is recruit called " + playerXP + " level " + level);
-        if(playerXP >= 0 && playerXP < 200)
+        if (playerXP >= 0 && playerXP < 200)
         {
-            if(level < 1)
+            if (level < 1)
             {
                 Debug.Log(level + " level value");
                 return true;
             }
         }
-        else if(playerXP >= 0 && playerXP < 400)
+        else if (playerXP >= 0 && playerXP < 400)
         {
-            if(level <= 1)
+            if (level <= 1)
             {
                 Debug.Log(level + " level value");
                 return true;
@@ -586,12 +872,12 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             Time.timeScale = 0;
         }
-        
-        if(Input.GetKeyDown(KeyCode.C))
+
+        if (Input.GetKeyDown(KeyCode.C))
         {
             Time.timeScale = 1;
         }

@@ -8,8 +8,8 @@ public class CursorHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         manager = GameObject.Find("CursorManager").GetComponent<CursorManager>();
-        if (transform.name == "Enemy Profile" || transform.name == "Player Profile") return;
         manager.CursorSelect();
+        if (transform.name == "Enemy Profile" || transform.name == "Player Profile") return;
         manager.AudioHoverButtonStandard();
     }
 

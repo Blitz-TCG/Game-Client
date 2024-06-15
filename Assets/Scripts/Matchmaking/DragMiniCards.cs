@@ -453,11 +453,29 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
                 selectedcard.SetActive(false);
             
         }
+        HideBackLineCards();
     }
     #endregion
 
     private void RemoveErrorObject()
     {
         cardError.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    private void HideBackLineCards()
+    {
+        GameObject enemyField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        Debug.Log("HideBackLineCards() called " + enemyField + " field " + enemyField.transform.childCount);
+        for (int i = 0; i < enemyField.transform.childCount; i++)
+        {
+            if(enemyField.transform.GetChild(i).tag == "Back Line Enemy")
+            {
+                if(enemyField.transform.GetChild(i).childCount == 1)
+                {
+                    enemyField.transform.GetChild(i).GetChild(0).gameObject.SetActive(false);
+                }
+                
+            }
+        }
     }
 }

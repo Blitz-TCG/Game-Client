@@ -3406,6 +3406,23 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             return;
         }
 
+        if(enemyHand.transform.GetChild(prevPos - 1).childCount <= 0)
+        {
+            GameObject go = gameBoardParent.transform.Find("TestGameObject").gameObject;
+            Debug.LogError($"child count prevPos is 0 enemyHand.transform.GetChild(prevPos - 1)");
+            go.SetActive(true);
+            return;
+        }
+        
+        if(enemyField.transform.GetChild(currPos - 1).childCount > 0)
+        {
+            GameObject go =  gameBoardParent.transform.Find("TestGameObject").gameObject;
+            Debug.Log(go.name + " gameobject name enemyField.transform.GetChild(currPos - 1)");
+            go.SetActive(true);
+            Debug.LogError($"child count currPos is >s 0");
+            return;
+        }
+
         Debug.Log(enemyHand.transform.GetChild(prevPos - 1) + " previous pos 1 ");
         Debug.Log(enemyHand.transform.GetChild(prevPos - 1).childCount + " previous pos 1 total child ");
         GameObject selectedObject = enemyHand.transform.GetChild(prevPos - 1).GetChild(0).gameObject;
@@ -3421,52 +3438,52 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         //Debug.Log(selectedObjectParent.name + " selected obje parent name ");
         //Debug.Log(selectedObject.name + " selected obje  name ");
         //Debug.Log("selectedObjectParent.transform.childCount " + selectedObjectParent.transform.childCount);
-        if (selectedObjectParent.transform.childCount == 1)
-        {
-            //Debug.Log(" child count 1" + selectedObjectParent.name + " selected card parent " + clickedCard + " selected card ");
+        //if (selectedObjectParent.transform.childCount == 1)
+        //{
+        //    //Debug.Log(" child count 1" + selectedObjectParent.name + " selected card parent " + clickedCard + " selected card ");
 
-            //Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedObject.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
-            ////Destroy(selectedObjectParent.transform.GetChild(0).gameObject);
-            //Debug.Log("Destroyed if already present " + selectedObjectParent.transform.GetChild(0));
-            if (selectedObject.transform.GetChild(0).GetComponent<Card>().id != id)
-            {
-                //Debug.Log("not matched");
-                Destroy(selectedObjectParent.transform.GetChild(0).gameObject);
-                GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedObjectParent.transform.position, selectedObjectParent.transform.rotation);
-                miniCardParent.transform.SetParent(selectedObjectParent.transform);
-                miniCardParent.transform.localScale = selectedObjectParent.transform.localScale;
-                Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-                //Debug.Log(" completed card level " + clickedCard.levelRequired);
-                int level = (int)(clickedCard.levelRequired);
-                miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability
-                    //, clickedCard.requirements, clickedCard.abilityLevel
-                    );
-                miniCard.name = clickedCard.cardName;
-                miniCardParent.name = clickedCard.cardName;
-            }
-        }
+        //    //Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedObject.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
+        //    ////Destroy(selectedObjectParent.transform.GetChild(0).gameObject);
+        //    //Debug.Log("Destroyed if already present " + selectedObjectParent.transform.GetChild(0));
+        //    if (selectedObject.transform.GetChild(0).GetComponent<Card>().id != id)
+        //    {
+        //        //Debug.Log("not matched");
+        //        Destroy(selectedObjectParent.transform.GetChild(0).gameObject);
+        //        GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedObjectParent.transform.position, selectedObjectParent.transform.rotation);
+        //        miniCardParent.transform.SetParent(selectedObjectParent.transform);
+        //        miniCardParent.transform.localScale = selectedObjectParent.transform.localScale;
+        //        Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+        //        //Debug.Log(" completed card level " + clickedCard.levelRequired);
+        //        int level = (int)(clickedCard.levelRequired);
+        //        miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability
+        //            //, clickedCard.requirements, clickedCard.abilityLevel
+        //            );
+        //        miniCard.name = clickedCard.cardName;
+        //        miniCardParent.name = clickedCard.cardName;
+        //    }
+        //}
         //Debug.Log("selectedObjectParent.transform.childCount" + selectedObjectParent.transform.childCount);
-        if (selectedObjectParent.transform.childCount == 0)
-        {
-            //Debug.Log(" child count 0" + selectedObjectParent.name + " selected card parent " + clickedCard + " selected card ");
+        //if (selectedObjectParent.transform.childCount == 0)
+        //{
+        //    //Debug.Log(" child count 0" + selectedObjectParent.name + " selected card parent " + clickedCard + " selected card ");
 
-            //Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedObject.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
-            GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedObjectParent.transform.position, selectedObjectParent.transform.rotation);
-            miniCardParent.transform.SetParent(selectedObjectParent.transform);
-            miniCardParent.transform.localScale = selectedObjectParent.transform.localScale;
-            Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-            //Debug.Log(" completed card level " + clickedCard.levelRequired);
-            int level = (int)(clickedCard.levelRequired);
-            miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability
-                //, clickedCard.requirements, clickedCard.abilityLevel
-                );
-            miniCard.name = clickedCard.cardName;
-            miniCardParent.name = clickedCard.cardName;
-        }
+        //    //Debug.Log(" selectedcard.transform.GetChild(0).GetComponent<Card>().id  " + selectedObject.transform.GetChild(0).GetComponent<Card>().id + " click card id " + clickedCard.id);
+        //    GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", selectedObjectParent.transform.position, selectedObjectParent.transform.rotation);
+        //    miniCardParent.transform.SetParent(selectedObjectParent.transform);
+        //    miniCardParent.transform.localScale = selectedObjectParent.transform.localScale;
+        //    Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
+        //    //Debug.Log(" completed card level " + clickedCard.levelRequired);
+        //    int level = (int)(clickedCard.levelRequired);
+        //    miniCard.SetMiniCard(clickedCard.id, clickedCard.ergoTokenId, clickedCard.ergoTokenAmount, clickedCard.cardName, clickedCard.attack, clickedCard.HP, clickedCard.gold, clickedCard.XP, clickedCard.cardImage, clickedCard.ability
+        //        //, clickedCard.requirements, clickedCard.abilityLevel
+        //        );
+        //    miniCard.name = clickedCard.cardName;
+        //    miniCardParent.name = clickedCard.cardName;
+        //}
 
-        Tuple<int, int> result = GetTotalCardsCount(enemyHand, enemyField);
-        int handCount = result.Item1;
-        int fieldCount = result.Item2;
+        //Tuple<int, int> result = GetTotalCardsCount(enemyHand, enemyField);
+        //int handCount = result.Item1;
+        //int fieldCount = result.Item2;
         //Debug.Log(handCount + " hand count " + fieldCount + " field count");
 
         //Debug.Log("move card called in others " + handCount + " hand count " + fieldCount);
@@ -3489,12 +3506,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         if (selectedObjectParent.tag == "Front Line Enemy")
         {
+            Debug.Log(selectedObjectParent.name + " selectedObjectParent fornt line " + selectedObjectParent.tag);
+            Debug.Log(selectedObject.name + " selectedObject fornt line ");
             selectedObject.SetActive(true);
         }
         else if (selectedObjectParent.tag == "Back Line Enemy")
         {
+            Debug.Log(selectedObjectParent.name + " selectedObjectParent back line " + selectedObjectParent.tag);
+            Debug.Log(selectedObject.name + " selectedObject back line ");
             selectedObject.SetActive(false);
         }
+        HideBackLineCards();
     }
 
     [PunRPC]
@@ -7195,6 +7217,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     enemyField.transform.GetChild(i).GetChild(0).GetChild(0).Find("Image").GetComponent<Image>().color = normalColor;
                     enemyField.transform.GetChild(i).GetChild(0).GetChild(0).Find("Frame").GetComponent<Image>().color = normalColor;
                     enemyField.transform.GetChild(i).GetChild(0).GetComponent<ClickedMiniCard>().isClicked = false;
+                }
+            }
+        }
+    }
+
+    private void HideBackLineCards()
+    {
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        Debug.Log("HideBackLineCards() called " + enemyField + " field " + enemyField.transform.childCount);
+        for (int i = 0; i < enemyField.transform.childCount; i++)
+        {
+            if (enemyField.transform.GetChild(i).tag == "Back Line Enemy")
+            {
+                if (enemyField.transform.GetChild(i).childCount == 1)
+                {
+                    enemyField.transform.GetChild(i).GetChild(0).gameObject.SetActive(false);
                 }
             }
         }

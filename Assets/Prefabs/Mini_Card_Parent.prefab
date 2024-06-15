@@ -189,6 +189,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mini_Card
       objectReference: {fileID: 0}
+    - target: {fileID: 6586925795150617700, guid: 2ec160dd25a9d544ab7f2bc3fb19cae9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6586925795150617701, guid: 2ec160dd25a9d544ab7f2bc3fb19cae9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
