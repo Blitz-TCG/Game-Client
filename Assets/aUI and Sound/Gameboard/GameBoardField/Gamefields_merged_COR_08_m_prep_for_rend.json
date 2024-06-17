@@ -1,0 +1,420 @@
+{ "skeleton": { "images": "/e/Work-Max_Backup/Freelance-04_06_2021/246_Mick_Blacwell_Gamefields_Misc_update/PNG/" },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "Back_Space", "bone": "root", "attachment": "Back_Space" },
+	{ "name": "Game_Scr_UI_Outline", "bone": "root", "attachment": "Game_Scr_UI_Outline" },
+	{ "name": "TL_Gamefield_Grass_Wall", "bone": "root", "attachment": "TL_Gamefield_Grass_Wall" },
+	{ "name": "TL_Gamefield_Grass_Wall_Broken", "bone": "root", "attachment": "TL_Gamefield_Grass_Wall_Broken" },
+	{ "name": "TL_Gamefield_Moon_Wall", "bone": "root", "attachment": "TL_Gamefield_Moon_Wall" },
+	{ "name": "TL_Gamefield_Moon_Wall_Broken", "bone": "root", "attachment": "TL_Gamefield_Moon_Wall_Broken" },
+	{ "name": "TL_Gamefield_Tinkerers_Wall", "bone": "root", "attachment": "TL_Gamefield_Tinkerers_Wall" },
+	{ "name": "TL_Gamefield_Tinkerers_Wall_Broken", "bone": "root", "attachment": "TL_Gamefield_Tinkerers_Wall_Broken" },
+	{ "name": "TL_Gamefield_FairyTales_Wall", "bone": "root", "attachment": "TL_Gamefield_FairyTales_Wall" },
+	{ "name": "TL_Gamefield_FairyTales_Wall_Broken", "bone": "root", "attachment": "TL_Gamefield_FairyTales_Wall_Broken" },
+	{ "name": "TL_Gamefield_Masquerades_Wall", "bone": "root", "attachment": "TL_Gamefield_Masquerades_Wall" },
+	{ "name": "TL_Gamefield_Masquerades_Wall_Broken", "bone": "root", "attachment": "TL_Gamefield_Masquerades_Wall_Broken" },
+	{ "name": "TL_Gamefield_OldKingdom_Wall", "bone": "root", "attachment": "TL_Gamefield_OldKingdom_Wall" },
+	{ "name": "TL_Gamefield_OldKingdom_Wall_Broken", "bone": "root", "attachment": "TL_Gamefield_OldKingdom_Wall_Broken" },
+	{ "name": "TL_Gamefield_Dark_Matter_Wall", "bone": "root", "attachment": "TL_Gamefield_Dark_Matter_Wall" },
+	{ "name": "TL_Gamefield_Dark_Matter_Wall_Broken", "bone": "root", "attachment": "TL_Gamefield_Dark_Matter_Wall_Broken" },
+	{ "name": "BR_Gamefield_Grass_Wall", "bone": "root", "attachment": "BR_Gamefield_Grass_Wall" },
+	{ "name": "BR_Gamefield_Grass_Wall_Broken", "bone": "root", "attachment": "BR_Gamefield_Grass_Wall_Broken" },
+	{ "name": "BR_Gamefield_Moon_Wall", "bone": "root", "attachment": "BR_Gamefield_Moon_Wall" },
+	{ "name": "BR_Gamefield_Moon_Wall_Broken", "bone": "root", "attachment": "BR_Gamefield_Moon_Wall_Broken" },
+	{ "name": "BR_Gamefield_Tinkerers_Wall", "bone": "root", "attachment": "BR_Gamefield_Tinkerers_Wall" },
+	{ "name": "BR_Gamefield_Tinkerers_Wall_Broken", "bone": "root", "attachment": "BR_Gamefield_Tinkerers_Wall_Broken" },
+	{ "name": "BR_Gamefield_FairyTales_Wall", "bone": "root", "attachment": "BR_Gamefield_FairyTales_Wall" },
+	{ "name": "BR_Gamefield_FairyTales_Wall_Broken", "bone": "root", "attachment": "BR_Gamefield_FairyTales_Wall_Broken" },
+	{ "name": "BR_Gamefield_Masquerades_Wall", "bone": "root", "attachment": "BR_Gamefield_Masquerades_Wall" },
+	{ "name": "BR_Gamefield_Masquerades_Wall_Broken", "bone": "root", "attachment": "BR_Gamefield_Masquerades_Wall_Broken" },
+	{ "name": "BR_Gamefield_OldKingdom_Wall", "bone": "root", "attachment": "BR_Gamefield_OldKingdom_Wall" },
+	{ "name": "BR_Gamefield_OldKingdom_Wall_Broken", "bone": "root", "attachment": "BR_Gamefield_OldKingdom_Wall_Broken" },
+	{ "name": "BR_Gamefield_Dark_Matter_Wall", "bone": "root", "attachment": "BR_Gamefield_Dark_Matter_Wall" },
+	{ "name": "BR_Gamefield_Dark_Matter_Wall_Broken", "bone": "root", "attachment": "BR_Gamefield_Dark_Matter_Wall_Broken" },
+	{ "name": "BL_Gamefield_Grass_Wall", "bone": "root", "attachment": "BL_Gamefield_Grass_Wall" },
+	{ "name": "BL_Gamefield_Grass_Wall_Broken", "bone": "root", "attachment": "BL_Gamefield_Grass_Wall_Broken" },
+	{ "name": "BL_Gamefield_Grass_Wall_Cover_Layer", "bone": "root", "attachment": "BL_Gamefield_Grass_Wall_Cover_Layer" },
+	{ "name": "D_Grass_Moon_L Copy", "bone": "root", "attachment": "D_Grass_Moon_L Copy" },
+	{ "name": "BL_Gamefield_Moon_Wall", "bone": "root", "attachment": "BL_Gamefield_Moon_Wall" },
+	{ "name": "BL_Gamefield_Moon_Wall_Broken", "bone": "root", "attachment": "BL_Gamefield_Moon_Wall_Broken" },
+	{ "name": "BL_Gamefield_Moon_Wall_Cover_Layer", "bone": "root", "attachment": "BL_Gamefield_Moon_Wall_Cover_Layer" },
+	{ "name": "D_Grass_Moon_L", "bone": "root", "attachment": "D_Grass_Moon_L" },
+	{ "name": "BL_Gamefield_Tinkerers_Wall", "bone": "root", "attachment": "BL_Gamefield_Tinkerers_Wall" },
+	{ "name": "BL_Gamefield_Tinkerers_Wall_Broken", "bone": "root", "attachment": "BL_Gamefield_Tinkerers_Wall_Broken" },
+	{ "name": "D_Tinkerers_L", "bone": "root", "attachment": "D_Tinkerers_L" },
+	{ "name": "BL_Gamefield_Tinkerers_Cover_Layer", "bone": "root", "attachment": "BL_Gamefield_Tinkerers_Cover_Layer" },
+	{ "name": "BL_Gamefield_FairyTales_Wall", "bone": "root", "attachment": "BL_Gamefield_FairyTales_Wall" },
+	{ "name": "BL_Gamefield_FairyTales_Wall_Broken", "bone": "root", "attachment": "BL_Gamefield_FairyTales_Wall_Broken" },
+	{ "name": "D_Fairy_Tales_L", "bone": "root", "attachment": "D_Fairy_Tales_L" },
+	{ "name": "BL_Gamefield_FairyTales_Cover_Layer", "bone": "root", "attachment": "BL_Gamefield_FairyTales_Cover_Layer" },
+	{ "name": "BL_Gamefield_Masquerades_Wall", "bone": "root", "attachment": "BL_Gamefield_Masquerades_Wall" },
+	{ "name": "BL_Gamefield_Masquerades_Wall_Broken", "bone": "root", "attachment": "BL_Gamefield_Masquerades_Wall_Broken" },
+	{ "name": "D_Masquerades_L", "bone": "root", "attachment": "D_Masquerades_L" },
+	{ "name": "BL_Gamefield_Masquerades_Cover_Layer", "bone": "root", "attachment": "BL_Gamefield_Masquerades_Cover_Layer" },
+	{ "name": "BL_Gamefield_OldKingdom_Wall", "bone": "root", "attachment": "BL_Gamefield_OldKingdom_Wall" },
+	{ "name": "BL_Gamefield_OldKingdom_Wall_Broken", "bone": "root", "attachment": "BL_Gamefield_OldKingdom_Wall_Broken" },
+	{ "name": "D_Desert_L", "bone": "root", "attachment": "D_Desert_L" },
+	{ "name": "BL_Gamefield_OldKingdom_Cover_Layer", "bone": "root", "attachment": "BL_Gamefield_OldKingdom_Cover_Layer" },
+	{ "name": "BL_Gamefield_Dark_Matter_Wall", "bone": "root", "attachment": "BL_Gamefield_Dark_Matter_Wall" },
+	{ "name": "BL_Gamefield_Dark_Matter_Wall_Broken", "bone": "root", "attachment": "BL_Gamefield_Dark_Matter_Wall_Broken" },
+	{ "name": "D_Dark_Matter_L", "bone": "root", "attachment": "D_Dark_Matter_L" },
+	{ "name": "BL_Gamefield_Dark_Matter_Cover_Layer", "bone": "root", "attachment": "BL_Gamefield_Dark_Matter_Cover_Layer" },
+	{ "name": "TR_Gamefield_Grass_Wall", "bone": "root", "attachment": "TR_Gamefield_Grass_Wall" },
+	{ "name": "TR_Gamefield_Grass_Wall_Broken", "bone": "root", "attachment": "TR_Gamefield_Grass_Wall_Broken" },
+	{ "name": "TR_Gamefield_Grass_Cover_Layer Copy", "bone": "root", "attachment": "TR_Gamefield_Grass_Cover_Layer Copy" },
+	{ "name": "D_Grass_Moon_R Copy", "bone": "root", "attachment": "D_Grass_Moon_R Copy" },
+	{ "name": "TR_Gamefield_Moon_Wall", "bone": "root", "attachment": "TR_Gamefield_Moon_Wall" },
+	{ "name": "TR_Gamefield_Moon_Wall_Broken", "bone": "root", "attachment": "TR_Gamefield_Moon_Wall_Broken" },
+	{ "name": "TR_Gamefield_Moon_Cover_Layer", "bone": "root", "attachment": "TR_Gamefield_Moon_Cover_Layer" },
+	{ "name": "D_Grass_Moon_R", "bone": "root", "attachment": "D_Grass_Moon_R" },
+	{ "name": "TR_Gamefield_Tinkerers_Wall", "bone": "root", "attachment": "TR_Gamefield_Tinkerers_Wall" },
+	{ "name": "TR_Gamefield_Tinkerers_Wall_Broken", "bone": "root", "attachment": "TR_Gamefield_Tinkerers_Wall_Broken" },
+	{ "name": "D_Tinkerers_R", "bone": "root", "attachment": "D_Tinkerers_R" },
+	{ "name": "TR_Gamefield_Tinkerers_Cover_Layer", "bone": "root", "attachment": "TR_Gamefield_Tinkerers_Cover_Layer" },
+	{ "name": "TR_Gamefield_FairyTales_Wall", "bone": "root", "attachment": "TR_Gamefield_FairyTales_Wall" },
+	{ "name": "TR_Gamefield_FairyTales_Wall_Broken", "bone": "root", "attachment": "TR_Gamefield_FairyTales_Wall_Broken" },
+	{ "name": "D_Fairy_Tales_R", "bone": "root", "attachment": "D_Fairy_Tales_R" },
+	{ "name": "TR_Gamefield_FairyTales_Cover_Layer", "bone": "root", "attachment": "TR_Gamefield_FairyTales_Cover_Layer" },
+	{ "name": "TR_Gamefield_Masquerades_Wall", "bone": "root", "attachment": "TR_Gamefield_Masquerades_Wall" },
+	{ "name": "TR_Gamefield_Masquerades_Wall_Broken", "bone": "root", "attachment": "TR_Gamefield_Masquerades_Wall_Broken" },
+	{ "name": "D_Masquerades_R", "bone": "root", "attachment": "D_Masquerades_R" },
+	{ "name": "TR_Gamefield_Masquerades_Cover_Layer", "bone": "root", "attachment": "TR_Gamefield_Masquerades_Cover_Layer" },
+	{ "name": "TR_Gamefield_OldKingdom_Wall", "bone": "root", "attachment": "TR_Gamefield_OldKingdom_Wall" },
+	{ "name": "TR_Gamefield_OldKingdom_Wall_Broken", "bone": "root", "attachment": "TR_Gamefield_OldKingdom_Wall_Broken" },
+	{ "name": "D_Desert_R", "bone": "root", "attachment": "D_Desert_R" },
+	{ "name": "TR_Gamefield_OldKingdom_Cover_Layer", "bone": "root", "attachment": "TR_Gamefield_OldKingdom_Cover_Layer" },
+	{ "name": "TR_Gamefield_Dark_Matter_Wall", "bone": "root", "attachment": "TR_Gamefield_Dark_Matter_Wall" },
+	{ "name": "TR_Gamefield_Dark_Matter_Wall_Broken", "bone": "root", "attachment": "TR_Gamefield_Dark_Matter_Wall_Broken" },
+	{ "name": "D_Dark_Matter_R", "bone": "root", "attachment": "D_Dark_Matter_R" },
+	{ "name": "TR_Gamefield_Dark_Matter_Cover_Layer", "bone": "root", "attachment": "TR_Gamefield_Dark_Matter_Cover_Layer" },
+	{ "name": "Discard_02_MAGMA_layer_01", "bone": "root", "attachment": "Discard_02_MAGMA_layer_01" },
+	{ "name": "Discard_02_MAGMA_layer_02", "bone": "root", "attachment": "Discard_02_MAGMA_layer_02" },
+	{ "name": "Discard_02_MAGMA_layer_03", "bone": "root", "attachment": "Discard_02_MAGMA_layer_03" },
+	{ "name": "Discard_02_MAGMA_layer_04", "bone": "root", "attachment": "Discard_02_MAGMA_layer_04" },
+	{ "name": "Discard_02_MAGMA_layer_05", "bone": "root", "attachment": "Discard_02_MAGMA_layer_05" },
+	{ "name": "Discard_01_BlackHole_layer_01", "bone": "root", "attachment": "Discard_01_BlackHole_layer_01" },
+	{ "name": "Discard_01_BlackHole_layer_02", "bone": "root", "attachment": "Discard_01_BlackHole_layer_02" },
+	{ "name": "Discard_01_BlackHole_layer_03", "bone": "root", "attachment": "Discard_01_BlackHole_layer_03" },
+	{ "name": "Discard_01_BlackHole_layer_04", "bone": "root", "attachment": "Discard_01_BlackHole_layer_04" },
+	{ "name": "DIVIDERS_UNIQUE_sep", "bone": "root", "attachment": "DIVIDERS_UNIQUE_sep" },
+	{ "name": "DIVIDER_COMBINED_Transp", "bone": "root", "attachment": "DIVIDER_COMBINED_Transp" },
+	{ "name": "DIVIDER_COMBINED_Solid", "bone": "root", "attachment": "DIVIDER_COMBINED_Solid" },
+	{ "name": "DIVIDER_COMBINED_Solid_Gold", "bone": "root", "attachment": "DIVIDER_COMBINED_Solid_Gold" },
+	{ "name": "DIVIDER_COMBINED_Solid_Simple", "bone": "root", "attachment": "DIVIDER_COMBINED_Solid_Simple" },
+	{ "name": "DIVIDER_GENERAL", "bone": "root", "attachment": "DIVIDER_GENERAL" },
+	{ "name": "DIVIDER_GENERAL_bonus", "bone": "root", "attachment": "DIVIDER_GENERAL_bonus" }
+],
+"skins": {
+	"default": {
+		"Back_Space": {
+			"Back_Space": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Game_Scr_UI_Outline": {
+			"Game_Scr_UI_Outline": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Grass_Wall": {
+			"TL_Gamefield_Grass_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Grass_Wall_Broken": {
+			"TL_Gamefield_Grass_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Moon_Wall": {
+			"TL_Gamefield_Moon_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Moon_Wall_Broken": {
+			"TL_Gamefield_Moon_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Tinkerers_Wall": {
+			"TL_Gamefield_Tinkerers_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Tinkerers_Wall_Broken": {
+			"TL_Gamefield_Tinkerers_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_FairyTales_Wall": {
+			"TL_Gamefield_FairyTales_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_FairyTales_Wall_Broken": {
+			"TL_Gamefield_FairyTales_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Masquerades_Wall": {
+			"TL_Gamefield_Masquerades_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Masquerades_Wall_Broken": {
+			"TL_Gamefield_Masquerades_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_OldKingdom_Wall": {
+			"TL_Gamefield_OldKingdom_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_OldKingdom_Wall_Broken": {
+			"TL_Gamefield_OldKingdom_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Dark_Matter_Wall": {
+			"TL_Gamefield_Dark_Matter_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TL_Gamefield_Dark_Matter_Wall_Broken": {
+			"TL_Gamefield_Dark_Matter_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Grass_Wall": {
+			"BR_Gamefield_Grass_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Grass_Wall_Broken": {
+			"BR_Gamefield_Grass_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Moon_Wall": {
+			"BR_Gamefield_Moon_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Moon_Wall_Broken": {
+			"BR_Gamefield_Moon_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Tinkerers_Wall": {
+			"BR_Gamefield_Tinkerers_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Tinkerers_Wall_Broken": {
+			"BR_Gamefield_Tinkerers_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_FairyTales_Wall": {
+			"BR_Gamefield_FairyTales_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_FairyTales_Wall_Broken": {
+			"BR_Gamefield_FairyTales_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Masquerades_Wall": {
+			"BR_Gamefield_Masquerades_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Masquerades_Wall_Broken": {
+			"BR_Gamefield_Masquerades_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_OldKingdom_Wall": {
+			"BR_Gamefield_OldKingdom_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_OldKingdom_Wall_Broken": {
+			"BR_Gamefield_OldKingdom_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Dark_Matter_Wall": {
+			"BR_Gamefield_Dark_Matter_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BR_Gamefield_Dark_Matter_Wall_Broken": {
+			"BR_Gamefield_Dark_Matter_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Grass_Wall": {
+			"BL_Gamefield_Grass_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Grass_Wall_Broken": {
+			"BL_Gamefield_Grass_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Grass_Wall_Cover_Layer": {
+			"BL_Gamefield_Grass_Wall_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Grass_Moon_L Copy": {
+			"D_Grass_Moon_L Copy": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Moon_Wall": {
+			"BL_Gamefield_Moon_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Moon_Wall_Broken": {
+			"BL_Gamefield_Moon_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Moon_Wall_Cover_Layer": {
+			"BL_Gamefield_Moon_Wall_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Grass_Moon_L": {
+			"D_Grass_Moon_L": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Tinkerers_Wall": {
+			"BL_Gamefield_Tinkerers_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Tinkerers_Wall_Broken": {
+			"BL_Gamefield_Tinkerers_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Tinkerers_L": {
+			"D_Tinkerers_L": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Tinkerers_Cover_Layer": {
+			"BL_Gamefield_Tinkerers_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_FairyTales_Wall": {
+			"BL_Gamefield_FairyTales_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_FairyTales_Wall_Broken": {
+			"BL_Gamefield_FairyTales_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Fairy_Tales_L": {
+			"D_Fairy_Tales_L": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_FairyTales_Cover_Layer": {
+			"BL_Gamefield_FairyTales_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Masquerades_Wall": {
+			"BL_Gamefield_Masquerades_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Masquerades_Wall_Broken": {
+			"BL_Gamefield_Masquerades_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Masquerades_L": {
+			"D_Masquerades_L": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Masquerades_Cover_Layer": {
+			"BL_Gamefield_Masquerades_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_OldKingdom_Wall": {
+			"BL_Gamefield_OldKingdom_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_OldKingdom_Wall_Broken": {
+			"BL_Gamefield_OldKingdom_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Desert_L": {
+			"D_Desert_L": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_OldKingdom_Cover_Layer": {
+			"BL_Gamefield_OldKingdom_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Dark_Matter_Wall": {
+			"BL_Gamefield_Dark_Matter_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Dark_Matter_Wall_Broken": {
+			"BL_Gamefield_Dark_Matter_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Dark_Matter_L": {
+			"D_Dark_Matter_L": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"BL_Gamefield_Dark_Matter_Cover_Layer": {
+			"BL_Gamefield_Dark_Matter_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Grass_Wall": {
+			"TR_Gamefield_Grass_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Grass_Wall_Broken": {
+			"TR_Gamefield_Grass_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Grass_Cover_Layer Copy": {
+			"TR_Gamefield_Grass_Cover_Layer Copy": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Grass_Moon_R Copy": {
+			"D_Grass_Moon_R Copy": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Moon_Wall": {
+			"TR_Gamefield_Moon_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Moon_Wall_Broken": {
+			"TR_Gamefield_Moon_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Moon_Cover_Layer": {
+			"TR_Gamefield_Moon_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Grass_Moon_R": {
+			"D_Grass_Moon_R": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Tinkerers_Wall": {
+			"TR_Gamefield_Tinkerers_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Tinkerers_Wall_Broken": {
+			"TR_Gamefield_Tinkerers_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Tinkerers_R": {
+			"D_Tinkerers_R": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Tinkerers_Cover_Layer": {
+			"TR_Gamefield_Tinkerers_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_FairyTales_Wall": {
+			"TR_Gamefield_FairyTales_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_FairyTales_Wall_Broken": {
+			"TR_Gamefield_FairyTales_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Fairy_Tales_R": {
+			"D_Fairy_Tales_R": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_FairyTales_Cover_Layer": {
+			"TR_Gamefield_FairyTales_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Masquerades_Wall": {
+			"TR_Gamefield_Masquerades_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Masquerades_Wall_Broken": {
+			"TR_Gamefield_Masquerades_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Masquerades_R": {
+			"D_Masquerades_R": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Masquerades_Cover_Layer": {
+			"TR_Gamefield_Masquerades_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_OldKingdom_Wall": {
+			"TR_Gamefield_OldKingdom_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_OldKingdom_Wall_Broken": {
+			"TR_Gamefield_OldKingdom_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Desert_R": {
+			"D_Desert_R": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_OldKingdom_Cover_Layer": {
+			"TR_Gamefield_OldKingdom_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Dark_Matter_Wall": {
+			"TR_Gamefield_Dark_Matter_Wall": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Dark_Matter_Wall_Broken": {
+			"TR_Gamefield_Dark_Matter_Wall_Broken": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"D_Dark_Matter_R": {
+			"D_Dark_Matter_R": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"TR_Gamefield_Dark_Matter_Cover_Layer": {
+			"TR_Gamefield_Dark_Matter_Cover_Layer": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_02_MAGMA_layer_01": {
+			"Discard_02_MAGMA_layer_01": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_02_MAGMA_layer_02": {
+			"Discard_02_MAGMA_layer_02": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_02_MAGMA_layer_03": {
+			"Discard_02_MAGMA_layer_03": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_02_MAGMA_layer_04": {
+			"Discard_02_MAGMA_layer_04": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_02_MAGMA_layer_05": {
+			"Discard_02_MAGMA_layer_05": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_01_BlackHole_layer_01": {
+			"Discard_01_BlackHole_layer_01": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_01_BlackHole_layer_02": {
+			"Discard_01_BlackHole_layer_02": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_01_BlackHole_layer_03": {
+			"Discard_01_BlackHole_layer_03": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"Discard_01_BlackHole_layer_04": {
+			"Discard_01_BlackHole_layer_04": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"DIVIDERS_UNIQUE_sep": {
+			"DIVIDERS_UNIQUE_sep": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"DIVIDER_COMBINED_Transp": {
+			"DIVIDER_COMBINED_Transp": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"DIVIDER_COMBINED_Solid": {
+			"DIVIDER_COMBINED_Solid": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"DIVIDER_COMBINED_Solid_Gold": {
+			"DIVIDER_COMBINED_Solid_Gold": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"DIVIDER_COMBINED_Solid_Simple": {
+			"DIVIDER_COMBINED_Solid_Simple": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"DIVIDER_GENERAL": {
+			"DIVIDER_GENERAL": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		},
+		"DIVIDER_GENERAL_bonus": {
+			"DIVIDER_GENERAL_bonus": { "x": 3839, "y": -2159, "width": 7678, "height": 4318 }
+		}
+	}
+},
+"animations": { "animation": {} }
+}

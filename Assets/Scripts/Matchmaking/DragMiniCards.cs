@@ -167,6 +167,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
             Debug.Log(" --== gameobject master  end " + obj.name);
             endParent = previousParent;
             endSubParent = previousSubParent;
+            //GameObject playerHand
             dragEnd = true;
             Debug.Log("Card setted");
             gameboardManager.OnSetCard(card, PhotonNetwork.IsMasterClient, parentAfterDrag);
@@ -260,6 +261,9 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
                
                 Destroy(obj.GetComponent<DragMiniCards>());
                 obj.AddComponent<DragFieldCard>();
+                int id = int.Parse(endSubParent.Split(" ")[2]);
+                Debug.Log(id + " #id value ");
+                playerHand.transform.GetChild(id - 1).gameObject.SetActive(false);
                 Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(playerHand, playerField);
                 int handCount = result.Item1;
                 int fieldCount = result.Item2;
@@ -299,6 +303,9 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
 
                 Destroy(obj.GetComponent<DragMiniCards>());
                 obj.AddComponent<DragFieldCard>();
+                int id = int.Parse(endSubParent.Split(" ")[2]);
+                Debug.Log(id + " #id value ");
+                playerHand.transform.GetChild(id - 1).gameObject.SetActive(false);
                 Tuple<int, int> result = GameBoardManager.GetTotalCardsCount(playerHand, playerField);
                 int handCount = result.Item1;
                 int fieldCount = result.Item2;
@@ -353,6 +360,9 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         Debug.Log(selectedcard + " selectedcard ");
         selectedcard.transform.SetParent(selectedCardParent.transform);
         selectedcard.transform.localPosition = Vector3.zero;
+        int enemyId = int.Parse(parent.Split(" ")[2]);
+        Debug.Log(enemyId + " #enemyId value ");
+        enemyHand.transform.GetChild(enemyId - 1).gameObject.SetActive(false);
         selectedcard.AddComponent<DropFieldCard>();
 
         Debug.Log(selectedcard.name + " selected card name ");
@@ -443,11 +453,29 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
                 selectedcard.SetActive(false);
             
         }
+        HideBackLineCards();
     }
     #endregion
 
     private void RemoveErrorObject()
     {
         cardError.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    private void HideBackLineCards()
+    {
+        GameObject enemyField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        Debug.Log("HideBackLineCards() called " + enemyField + " field " + enemyField.transform.childCount);
+        for (int i = 0; i < enemyField.transform.childCount; i++)
+        {
+            if(enemyField.transform.GetChild(i).tag == "Back Line Enemy")
+            {
+                if(enemyField.transform.GetChild(i).childCount == 1)
+                {
+                    enemyField.transform.GetChild(i).GetChild(0).gameObject.SetActive(false);
+                }
+                
+            }
+        }
     }
 }

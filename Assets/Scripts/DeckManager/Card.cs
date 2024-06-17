@@ -137,6 +137,7 @@ public class Card : MonoBehaviour
     public CardAbility ability;
     public bool isParalyzedCard =  false;
     public int paralyzedCardCount = 0;
+    public int disableCount = 0;
     public Type type;
     //public AbilityRequirements requirements;
     //public int abilityLevel = 0;
@@ -394,5 +395,11 @@ public class Card : MonoBehaviour
     {
         Debug.Log("paralyzedCardCount " + paralyzedCardCount);
         return paralyzedCardCount;
+    }
+
+    public void OnDestroy()
+    {
+        //Debug.LogError("*#** destroy card called " + this.cardName + " parent " + this.transform.parent.name);
+        //if (this.cardName != null && this.transform.parent != null && this.transform.parent.childCount > 0 && this.transform) ;
     }
 }

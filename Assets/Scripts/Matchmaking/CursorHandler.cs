@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Profiling;
 
 public class CursorHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -9,8 +8,9 @@ public class CursorHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         manager = GameObject.Find("CursorManager").GetComponent<CursorManager>();
-        manager.AudioHoverButtonStandard();
         manager.CursorSelect();
+        if (transform.name == "Enemy Profile" || transform.name == "Player Profile") return;
+        manager.AudioHoverButtonStandard();
     }
 
     public void OnPointerExit(PointerEventData eventData)
