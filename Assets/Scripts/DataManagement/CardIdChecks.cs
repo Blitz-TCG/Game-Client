@@ -6,8 +6,6 @@ public class CardIdChecks : MonoBehaviour
 {
     public Dictionary<int, string> cardToErgoTokenId = new Dictionary<int, string>()
 {
-/*  { 1, "30974274078845f263b4f21787e33cc99e9ec19a17ad85a5bc6da2cca91c5a2e" }, //WT ADA
-    { 2, "fbbaac7337d051c10fc3da0ccb864f4d32d40027551e1c3ea3ce361f39b91e40" }, //Kushti*/
     {1,"649bcb989cd0dc162557ec822d8ea994052d1025fcae1416cd7b70fa463c34c4"},
     {2,"45b79eda40b1852963db10e9d0b785e13f359c46eb89ae5de74af49599bdcee3"},
     {3,"1ffbd45f8fe49d101e299c74e7660b4db593ee07d9eee204b75ff575fdf8111b"},
@@ -159,6 +157,7 @@ public class CardIdChecks : MonoBehaviour
     {149,"7a5da8145b01668f7cf80a109acaf7c50e5c0fe2a46ccb2e82491f1303c1a7fd"},
     {150,"c318894b69c67c5096f14ba50ca5a9b427463adcc89ed7ad76d99fcb9d904b7b"},
     {171,"6ad70cdbf928a2bdd397041a36a5c2490a35beb4d20eabb5666f004b103c7189"},
-    {172,"6ad70cdbf928a2bdd397041a36a5c2490a35beb4d20eabb5666f004b103c7189"}
+    {172,"6ad70cdbf928a2bdd397041a36a5c2490a35beb4d20eabb5666f004b103c7189"},
+    {173,"18c938e1924fc3eadc266e75ec02d81fe73b56e4e9f4e268dffffcb30387c42d"}
     };
 }
