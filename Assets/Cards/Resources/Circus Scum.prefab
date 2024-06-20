@@ -1083,6 +1083,7 @@ MonoBehaviour:
   ability: 4
   isParalyzedCard: 0
   paralyzedCardCount: 0
+  disableCount: 0
   cardId: 0
   cId: {fileID: 4769503425350701266}
   cardErgoTokenId: {fileID: 8965210065424527632}
@@ -1132,6 +1133,7 @@ MonoBehaviour:
   ability: 0
   isParalyzedCard: 0
   paralyzedCardCount: 0
+  disableCount: 0
   cardId: 0
   cId: {fileID: 0}
   cardErgoTokenId: {fileID: 0}
