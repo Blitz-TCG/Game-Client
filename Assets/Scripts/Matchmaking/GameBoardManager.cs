@@ -162,6 +162,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     private bool identifiedPlayerIsMaster = false;
     private Transform cardParent = null;
     private Color normalColor = Color.white;
+    private GameObject playerGlass;
+    private GameObject enemyGlass;
 
     #endregion
 
@@ -666,8 +668,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     }
 
                 }
-                else if (EventSystem.current.currentSelectedGameObject.name == "Enemy Profile")
+                else if (EventSystem.current.currentSelectedGameObject.name == "Enemy Glass")
                 {
+                    Debug.Log(" %%%% EventSystem.current.currentSelectedGameObject.name " + EventSystem.current.currentSelectedGameObject.name);
                     pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
                     GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
                     if (GameManager.instance.clicked == 1)
@@ -3902,6 +3905,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 turnCounter++;
                 customProp["totalTurnCount"] = turnCounter;
                 PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
+                playerGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Glass").gameObject; 
+                enemyGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Glass").gameObject;
+                Debug.Log(playerGlass + " playerGlass " + enemyGlass + " enemyGlass " + enemyGlass.transform.parent.parent);
+                EnableOrDisablePointerImage(playerGlass, false);
+                EnableOrDisablePointerImage(enemyGlass, true);
                 //Debug.LogError(PhotonNetwork.CurrentRoom.CustomProperties["totalTurnCount"] + " photon player name " + PhotonNetwork.LocalPlayer.NickName + " TURN counter " + turnCounter);
 
                 string minText = downMinText.text;
@@ -4053,6 +4061,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 timeDown.InitTimers("Down", totalSec);
                 pv.RPC("CoroutineMethod", RpcTarget.Others, 41f, minText, secText);
                 pv.RPC("PauseTimerForTurnEndPlayer", RpcTarget.Others, totalSec);
+            }
+            else
+            {
+                playerGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Glass").gameObject;
+                enemyGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Glass").gameObject;
+                Debug.Log(playerGlass + " playerGlass " + enemyGlass + " enemyGlass " + enemyGlass.transform.parent.parent);
+                EnableOrDisablePointerImage(playerGlass, false);
+                EnableOrDisablePointerImage(enemyGlass, true);
             }
         }
     }
@@ -7237,5 +7253,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             }
         }
     }
+
+    private void EnableOrDisablePointerImage(GameObject pointer, bool value)
+    {
+        pointer.GetComponent<Image>().enabled = value;
+    }
+
 }
 

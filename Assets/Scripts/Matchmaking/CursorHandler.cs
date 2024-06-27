@@ -18,4 +18,11 @@ public class CursorHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         manager = GameObject.Find("CursorManager").GetComponent<CursorManager>();
         manager.CursorNormal();
     }
+
+    public void AudioClickHandler()
+    {
+        manager = GameObject.Find("CursorManager").GetComponent<CursorManager>();
+        manager.AudioClickButtonStandard();
+    }
+
 }
