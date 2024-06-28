@@ -18,6 +18,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
     private Vector3 screenPoint;
     private Vector3 offset;
     public static bool dragEnd;
+    public static bool turnEnd;
     public static GameObject obj;
     public static string parent;
     private List<CardDetails> cardDetails;
@@ -221,6 +222,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         }
         else if (isDragging && !dragEnd && previousVal != currVal)
         {
+            turnEnd = true;
             EndForceTurn();
             isDragging = false;
         }
@@ -455,6 +457,25 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         }
         HideBackLineCards();
     }
+
+    [PunRPC]
+    private void DostroyCardOnOthers(int id)
+    {
+        Debug.Log("DostroyCardOnOthers");
+        GameObject CardParent = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Hand").gameObject;
+        Debug.Log(CardParent + " card parent");
+        if (CardParent.transform.GetChild(id - 1) != null)
+        {
+            Debug.Log(CardParent.transform.GetChild(id - 1).name + " name of parent");
+            CardParent.transform.GetChild(id - 1).gameObject.SetActive(false);
+        }
+        if (CardParent.transform.GetChild(id - 1).GetChild(0) != null)
+        {
+            Debug.Log(CardParent.transform.GetChild(id - 1).GetChild(0).name + " name of card");
+            Destroy(CardParent.transform.GetChild(id - 1).GetChild(0).gameObject);
+        }
+    }
+
     #endregion
 
     private void RemoveErrorObject()
