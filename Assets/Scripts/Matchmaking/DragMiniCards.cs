@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -28,6 +29,7 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
     private bool previousVal;
     private bool currVal;
     public bool isDragging = false;
+    public bool dragNotTurnedCards = false;
     #endregion
     
     private void Awake()
@@ -55,42 +57,72 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         
         if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
-            Debug.Log("inside player 1");
-            isDragging = true;
-            previousParent = transform.parent.parent.name;
-            previousSubParent = transform.parent.name;
-            
-            screenPoint = Camera.main.WorldToScreenPoint(transform.position);
-            offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(
-            Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-            parentAfterDrag = transform.parent;
-            transform.SetParent(transform.root);
-            transform.SetAsLastSibling();
-            transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            obj = gameObject;
-            Debug.Log(" --== gameobject master "+ obj.name);
-            endParent = previousParent;
-            endSubParent = previousSubParent;
-            Debug.Log(endParent + " end parent " + endSubParent + " end sub parent");
+            if(transform.parent.parent.name == "Player Hand")
+            {
+                Debug.Log("inside player 1");
+                isDragging = true;
+                previousParent = transform.parent.parent.name;
+                previousSubParent = transform.parent.name;
+
+                screenPoint = Camera.main.WorldToScreenPoint(transform.position);
+                offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(
+                Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+                parentAfterDrag = transform.parent;
+                transform.SetParent(transform.root);
+                transform.SetAsLastSibling();
+                transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                obj = gameObject;
+                Debug.Log(" --== gameobject master " + obj.name);
+                endParent = previousParent;
+                endSubParent = previousSubParent;
+                Debug.Log(endParent + " end parent " + endSubParent + " end sub parent");
+            }
         }
         else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
             Debug.Log("inside player 2");
-            isDragging = true;
-            previousParent = transform.parent.parent.name;
-            previousSubParent = transform.parent.name;
-            screenPoint = Camera.main.WorldToScreenPoint(transform.position);
-            offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(
-            Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-            parentAfterDrag = transform.parent;
-            transform.SetParent(transform.root);
-            transform.SetAsLastSibling();
-            transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            obj = gameObject;
-            Debug.Log(" --== gameobject client " + obj.name);
-            endParent = previousParent;
-            endSubParent = previousSubParent;
-            Debug.Log(endParent + " end parent " + endSubParent + " end sub parent");
+            if(transform.parent.parent.name == "Player Hand")
+            {
+                isDragging = true;
+                previousParent = transform.parent.parent.name;
+                previousSubParent = transform.parent.name;
+                screenPoint = Camera.main.WorldToScreenPoint(transform.position);
+                offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(
+                Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+                parentAfterDrag = transform.parent;
+                transform.SetParent(transform.root);
+                transform.SetAsLastSibling();
+                transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                obj = gameObject;
+                Debug.Log(" --== gameobject client " + obj.name);
+                endParent = previousParent;
+                endSubParent = previousSubParent;
+                Debug.Log(endParent + " end parent " + endSubParent + " end sub parent");
+            }
+        }
+        else
+        {
+            if(transform.parent.parent.name == "Player Hand")
+            {
+                dragNotTurnedCards = true;
+                Debug.Log("inside dragNotTurnedCards");
+                previousParent = transform.parent.parent.name;
+                previousSubParent = transform.parent.name;
+                screenPoint = Camera.main.WorldToScreenPoint(transform.position);
+                offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(
+                Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+                parentAfterDrag = transform.parent;
+                transform.SetParent(transform.root);
+                transform.SetAsLastSibling();
+                transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                obj = gameObject;
+                Debug.Log("gameobject client " + obj.name);
+                endParent = previousParent;
+                endSubParent = previousSubParent;
+                Debug.Log(endParent + " end parent " + endSubParent + " end sub parent");
+
+            }
+            
         }
     }
     
@@ -109,16 +141,44 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
             Debug.Log("inside player 1");
-            Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-            Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);//+ offset;
-            transform.position = curPosition;
+            if (isDragging)
+            {
+                Debug.Log("=========================");
+                Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+                Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);//+ offset;
+                transform.position = curPosition;
+            }
+           
+            
+               
         }
         else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
             Debug.Log("inside player 2");
-            Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-            Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);//+ offset;
-            transform.position = curPosition;
+            if(isDragging)
+            {
+                Debug.Log("=========================");
+                Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+                Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);//+ offset;
+                transform.position = curPosition;
+            }
+                
+            
+        }
+        else
+        {
+            
+                Debug.Log("inside dragNotTurnedCards " + dragNotTurnedCards);
+            if (dragNotTurnedCards)
+            {
+                Debug.Log("=========================");
+                Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+                Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);//+ offset;
+                transform.position = curPosition;
+            }
+               
+            
+            
         }
         
     }
@@ -137,77 +197,92 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         //Debug.Log(GameBoardManager.player1Turn + " GameBoardManager.player1Turn " + PhotonNetwork.IsMasterClient + " PhotonNetwork.IsMasterClient " + photonView.IsMine + " photonView.IsMine");
         if ((GameBoardManager.player1Turn && PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
-            Debug.Log("inside player 1 " + parentAfterDrag + " obj " + obj);
-            isDragging = false;
-
-            Card card = obj.transform.GetComponentInChildren<Card>();
-            Debug.Log(card + " card " + card.id);
-            GameObject playerField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Field").gameObject;
-            GameObject playerToBePositioned = parentAfterDrag.gameObject;
-            Debug.Log(playerToBePositioned + " player to be positioned");
-
-            bool isSatisfy = gameboardManager.IsSatisfyRequirements(card, playerField, playerToBePositioned, true);
-            if (!isSatisfy)
+            Debug.Log("inside player 1 " + parentAfterDrag + " obj " + obj + " is dragging " + isDragging);
+            if (isDragging)
             {
-                Debug.Log("!satisfy card drag not called ");
-                Debug.Log("!isSatisfy ");
-                cardError.transform.GetChild(0).gameObject.SetActive(true);
-                cardError.GetComponentInChildren<TMP_Text>().SetText("The card can not satisfy the requirement to put the field.");
-                EndForceTurn();
-                Invoke("RemoveErrorObject", 2f);
-                return;
+                isDragging = false;
 
+                Card card = obj.transform.GetComponentInChildren<Card>();
+                Debug.Log(card + " card " + card.id);
+                GameObject playerField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Field").gameObject;
+                GameObject playerToBePositioned = parentAfterDrag.gameObject;
+                Debug.Log(playerToBePositioned + " player to be positioned");
+
+                bool isSatisfy = gameboardManager.IsSatisfyRequirements(card, playerField, playerToBePositioned, true);
+                if (!isSatisfy)
+                {
+                    Debug.Log("!satisfy card drag not called ");
+                    Debug.Log("!isSatisfy ");
+                    cardError.transform.GetChild(0).gameObject.SetActive(true);
+                    cardError.GetComponentInChildren<TMP_Text>().SetText("The card can not satisfy the requirement to put the field.");
+                    EndForceTurn();
+                    Invoke("RemoveErrorObject", 2f);
+                    return;
+
+                }
+
+                Debug.Log(parentAfterDrag + " parentAfterDrag " + gameObject + " gameObject " + previousParent + " previousParent " + previousSubParent);
+                isDragging = false;
+                transform.SetParent(parentAfterDrag);
+                transform.position = parentAfterDrag.transform.position;
+                transform.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                obj = gameObject;
+                Debug.Log(" --== gameobject master  end " + obj.name);
+                endParent = previousParent;
+                endSubParent = previousSubParent;
+                //GameObject playerHand
+                dragEnd = true;
+                Debug.Log("Card setted");
+                gameboardManager.OnSetCard(card, PhotonNetwork.IsMasterClient, parentAfterDrag);
             }
-
-            Debug.Log(parentAfterDrag + " parentAfterDrag " + gameObject + " gameObject " + previousParent + " previousParent " + previousSubParent );
-            isDragging = false;
-            transform.SetParent(parentAfterDrag);
-            transform.position = parentAfterDrag.transform.position;
-            transform.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            obj = gameObject;
-            Debug.Log(" --== gameobject master  end " + obj.name);
-            endParent = previousParent;
-            endSubParent = previousSubParent;
-            //GameObject playerHand
-            dragEnd = true;
-            Debug.Log("Card setted");
-            gameboardManager.OnSetCard(card, PhotonNetwork.IsMasterClient, parentAfterDrag);
         }
         else if ((!GameBoardManager.player1Turn && !PhotonNetwork.IsMasterClient && photonView.IsMine))
         {
-            Debug.Log("inside player 2 " + parentAfterDrag + " obj " + obj);
-            isDragging = false;
-            
-            Card card = obj.transform.GetComponentInChildren<Card>();
-            Debug.Log(card + " card " + card.id);
-            GameObject playerField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Field").gameObject;
-            GameObject playerToBePositioned = parentAfterDrag.gameObject;
-            Debug.Log(playerToBePositioned + " player to be positioned");
+            Debug.Log("inside player 2 " + parentAfterDrag + " obj " + obj + " is dragging " + isDragging);
+            if (isDragging)
+            { 
+                isDragging = false;
 
-            bool isSatisfy = gameboardManager.IsSatisfyRequirements(card, playerField, playerToBePositioned, true);
-            if (!isSatisfy)
-            {
-                Debug.Log("!satisfy card drag not called ");
-                Debug.Log("!isSatisfy ");
-                cardError.transform.GetChild(0).gameObject.SetActive(true);
-                cardError.GetComponentInChildren<TMP_Text>().SetText("The card can not satisfy the requirement to put the field.");
-                EndForceTurn();
-                Invoke("RemoveErrorObject", 2f);
-                return;
+                Card card = obj.transform.GetComponentInChildren<Card>();
+                Debug.Log(card + " card " + card.id);
+                GameObject playerField = canvas.transform.Find("Game Board Parent").GetChild(1).GetChild(0).Find("Player Field").gameObject;
+                GameObject playerToBePositioned = parentAfterDrag.gameObject;
+                Debug.Log(playerToBePositioned + " player to be positioned");
 
+                bool isSatisfy = gameboardManager.IsSatisfyRequirements(card, playerField, playerToBePositioned, true);
+                if (!isSatisfy)
+                {
+                    Debug.Log("!satisfy card drag not called ");
+                    Debug.Log("!isSatisfy ");
+                    cardError.transform.GetChild(0).gameObject.SetActive(true);
+                    cardError.GetComponentInChildren<TMP_Text>().SetText("The card can not satisfy the requirement to put the field.");
+                    EndForceTurn();
+                    Invoke("RemoveErrorObject", 2f);
+                    return;
+
+                }
+
+                Debug.Log(parentAfterDrag + " parentAfterDrag " + gameObject + " gameObject " + previousParent + " previousParent " + previousSubParent);
+                isDragging = false;
+                transform.SetParent(parentAfterDrag); transform.position = parentAfterDrag.transform.position;
+                transform.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                obj = gameObject;
+                Debug.Log(" --== game object client end " + obj.name);
+                endParent = previousParent;
+                endSubParent = previousSubParent;
+                dragEnd = true;
+                Debug.Log("Card setted ");
+                gameboardManager.OnSetCard(card, PhotonNetwork.IsMasterClient, parentAfterDrag);
             }
-
-            Debug.Log(parentAfterDrag + " parentAfterDrag " + gameObject + " gameObject " + previousParent + " previousParent " + previousSubParent);
-            isDragging = false;
-            transform.SetParent(parentAfterDrag); transform.position = parentAfterDrag.transform.position;
-            transform.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            obj = gameObject;
-            Debug.Log(" --== game object client end "+obj.name);
-            endParent = previousParent;
-            endSubParent = previousSubParent;
-            dragEnd = true;
-            Debug.Log("Card setted ");
-            gameboardManager.OnSetCard(card, PhotonNetwork.IsMasterClient, parentAfterDrag);
+        }
+        else
+        {
+            Debug.Log("inside dragNotTurnedCards " + dragNotTurnedCards);
+            if (dragNotTurnedCards)
+            {
+                EndForceTurn();
+                dragNotTurnedCards = false;
+            }
         }
         
     }
@@ -224,6 +299,14 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         {
             turnEnd = true;
             EndForceTurn();
+            isDragging = false;
+            dragNotTurnedCards = false;
+        }
+        else if(dragNotTurnedCards && !dragEnd && previousVal != currVal)
+        {
+            turnEnd = true;
+            EndForceTurn();
+            dragNotTurnedCards = false;
             isDragging = false;
         }
         previousVal = currVal;
@@ -335,10 +418,16 @@ public class DragMiniCards : MonoBehaviourPunCallbacks, IBeginDragHandler, IDrag
         obj.transform.localScale = cardPosition.transform.localScale;
         obj.transform.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
         obj.transform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        //obj.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        //StartCoroutine(UpdateRayCasts(obj));
         obj = null;
     }
 
-   
+   IEnumerator UpdateRayCasts(GameObject obj)
+    {
+        yield return new WaitForSeconds(0.5f);
+        obj.GetComponent<CanvasGroup>().blocksRaycasts = true;
+    }
     
     #region RPC Method
     [PunRPC]

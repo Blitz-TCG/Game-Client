@@ -181,6 +181,7 @@ MonoBehaviour:
   previousSubParent: 
   parentAfterDrag: {fileID: 0}
   isDragging: 0
+  dragNotTurnedCards: 0
 --- !u!95 &4119259949409373824
 Animator:
   serializedVersion: 5
