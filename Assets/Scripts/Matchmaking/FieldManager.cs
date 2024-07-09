@@ -235,10 +235,11 @@ public class FieldManager : MonoBehaviour
                 {
                     EndgameCounter++;
                 }
+                else if (playerCard.GetComponent<Silence>())
+                {
+                    SilenceCounter++;
+                }
                 //else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
                 //}else if (playerCard.GetComponent<Meteor>())
@@ -455,6 +456,7 @@ public class FieldManager : MonoBehaviour
             case CardAbility.DeActivate: return DeActivateCounter;
             case CardAbility.Mimic: return MimicCounter;
             case CardAbility.Endgame: return EndgameCounter;
+            case CardAbility.Silence: return SilenceCounter;
             //    CloneCounter++;
             //    return CloneCounter;
             //case CardAbility.Clone:
@@ -648,6 +650,7 @@ public class FieldManager : MonoBehaviour
             case CardAbility.DeActivate: return typeof(None);
             case CardAbility.Mimic: return typeof(Mimic);
             case CardAbility.Endgame: return typeof(EndGame);
+            case CardAbility.Silence: return typeof(Silence);
             //    CloneCounter++;
             //    return CloneCounter;
             //case CardAbility.Clone:
@@ -798,7 +801,7 @@ public class FieldManager : MonoBehaviour
             //    CloneCounter++;
             //    return CloneCounter;
             default:
-                return typeof(Mimic);
+                return typeof(None);
         }
     }
 

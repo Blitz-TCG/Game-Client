@@ -2540,6 +2540,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 endGame.ability = CardAbility.Endgame;
                 endGame.SetAbility();
                 break;
+            case CardAbility.Silence:
+                Silence silence = card.gameObject.AddComponent<Silence>();
+                silence.ability = CardAbility.Silence;
+                break;
             default: break;
         }
     }
@@ -4350,7 +4354,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     //Debug.Log(attackValue + " attack value " + healthValue + " health value ");
                     pv.RPC("EndGameInOthers", RpcTarget.Others, attackValue, healthValue, parentId);
                 }
-
+                else if (cardObj.GetComponent<Silence>())
+                {
+                    Debug.Log(" inside card end gamje " + cardObj.name);
+                    Silence silence = cardObj.GetComponent<Silence>();
+                    Card currentCard = silence.GetComponent<Card>();
+                    Debug.Log(endGame + " silence called");
+                    //Tuple<int, int> result = endGame.SetAttackAndHealth(currentCard);
+                    //int attackValue = result.Item1;
+                    //int healthValue = result.Item2;
+                    //string parentId = endGame.transform.parent.parent.name.Split(" ")[2];
+                    ////Debug.Log(attackValue + " attack value " + healthValue + " health value ");
+                    //pv.RPC("EndGameInOthers", RpcTarget.Others, attackValue, healthValue, parentId);
+                }
             }
         }
     }
