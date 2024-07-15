@@ -9,6 +9,7 @@ public class CardDataBase : MonoBehaviour
     public string cardPath = "Cards/";
     public List<CardDetails> cardDetails;
     [HideInInspector] public Dictionary<CardAbility, AllField> requirements = new();
+    [HideInInspector] public readonly Dictionary<CardAbility, Type> abilityTypeMap = new();
 
     private List<int> aboveCards = new List<int> { 1, 2, 3, 4, 5, 6 };
     private List<int> belowCards = new List<int> { 7, 8, 9, 10, 11, 12 };
@@ -32,6 +33,7 @@ public class CardDataBase : MonoBehaviour
     private void Start()
     {
         AddLimit();
+        GetAbilityType();
     }
 
     public void AddLimit()
@@ -70,6 +72,44 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Mimic, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Mimic));
         requirements.Add(CardAbility.Endgame, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Endgame));
         requirements.Add(CardAbility.Silence, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Silence));
+    }
+
+    public void GetAbilityType()
+    {
+        abilityTypeMap.Add(CardAbility.GoodFavor, typeof(GoodFavor));
+        abilityTypeMap.Add(CardAbility.Crit, typeof(Crit));
+        abilityTypeMap.Add(CardAbility.Goad, typeof(Goad));
+        abilityTypeMap.Add(CardAbility.Meteor, typeof(Meteor));
+        abilityTypeMap.Add(CardAbility.Kamikaze, typeof(Kamikaze));
+        abilityTypeMap.Add(CardAbility.Renewal, typeof(Renewal));
+        abilityTypeMap.Add(CardAbility.Hunger, typeof(Hunger));
+        abilityTypeMap.Add(CardAbility.Clone, typeof(Clone));
+        abilityTypeMap.Add(CardAbility.Evolve, typeof(Evolve));
+        abilityTypeMap.Add(CardAbility.Malignant, typeof(Malignant));
+        abilityTypeMap.Add(CardAbility.Mutate, typeof(Mutate));
+        abilityTypeMap.Add(CardAbility.Farmer, typeof(Farmer));
+        abilityTypeMap.Add(CardAbility.Buster, typeof(Buster));
+        abilityTypeMap.Add(CardAbility.Summon, typeof(Summon));
+        abilityTypeMap.Add(CardAbility.Repair, typeof(Repair));
+        abilityTypeMap.Add(CardAbility.GeneralBoon, typeof(GeneralBoon));
+        abilityTypeMap.Add(CardAbility.Serenity, typeof(Serenity));
+        abilityTypeMap.Add(CardAbility.Scattershot, typeof(Scattershot));
+        abilityTypeMap.Add(CardAbility.Berserker, typeof(Berserker));
+        abilityTypeMap.Add(CardAbility.Mason, typeof(Mason));
+        abilityTypeMap.Add(CardAbility.Paralyze, typeof(Paralyze));
+        abilityTypeMap.Add(CardAbility.Curse, typeof(Curse));
+        abilityTypeMap.Add(CardAbility.Smite, typeof(Smite));
+        abilityTypeMap.Add(CardAbility.Doom, typeof(Doom));
+        abilityTypeMap.Add(CardAbility.Gambit, typeof(Gambit));
+        abilityTypeMap.Add(CardAbility.GeneralBane, typeof(GeneralBane));
+        abilityTypeMap.Add(CardAbility.Blackhole, typeof(Blackhole));
+        abilityTypeMap.Add(CardAbility.Nuclear, typeof(Nuclear));
+        abilityTypeMap.Add(CardAbility.None, typeof(None));
+        //abilityTypeMap.Add(CardAbility.DeActivate, typeof(dec));
+        abilityTypeMap.Add(CardAbility.Sacrifice, typeof(Sacrifice));
+        abilityTypeMap.Add(CardAbility.Mimic, typeof(Mimic));
+        abilityTypeMap.Add(CardAbility.Endgame, typeof(EndGame));
+        abilityTypeMap.Add(CardAbility.Silence, typeof(Silence));
     }
 
     public List<int> GetSurroundingPositions(int selectedPosition)

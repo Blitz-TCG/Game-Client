@@ -480,25 +480,25 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                             GameObject enemyHealthObject = enemyWall.transform.Find("Remaining Health").gameObject;
                             int currentHealth = int.Parse(enemyHealthObject.GetComponent<TMP_Text>().text.ToString());
                             int damageVal;
-                            if (attackingcard.GetComponent<Crit>())
+                            if (attackingcard.GetComponent<Crit>() && !attackingcard.isNone)
                             {
                                 Debug.Log("crit called");
                                 Crit crit = attackingcard.GetComponent<Crit>();
                                 damageVal = crit.UseAbilityAndCalculateDamage(attackingcard.attack);
                             }
-                            else if (attackingcard.GetComponent<Buster>())
+                            else if (attackingcard.GetComponent<Buster>() && !attackingcard.isNone)
                             {
                                 Debug.Log("Buster called");
                                 Buster buster = attackingcard.GetComponent<Buster>();
                                 damageVal = buster.UseBusterAbility(attackingcard.attack);
                             }
-                            else if (attackingcard.GetComponent<Berserker>())
+                            else if (attackingcard.GetComponent<Berserker>() && !attackingcard.isNone)
                             {
                                 Debug.Log("Berserker called");
                                 Berserker berserker = attackingcard.GetComponent<Berserker>();
                                 damageVal = berserker.UseBerserkerAbility(attackingcard.attack);
                             }
-                            else if (attackingcard.GetComponent<Kamikaze>())
+                            else if (attackingcard.GetComponent<Kamikaze>() && !attackingcard.isNone)
                             {
                                 Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
                                 Debug.Log(" Kamikaze card " + kamikaze);
@@ -574,25 +574,25 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                             GameObject enemyHealthObject = enemyWall.transform.Find("Remaining Health").gameObject;
                             int currentHealth = int.Parse(enemyHealthObject.GetComponent<TMP_Text>().text.ToString());
                             int damageVal;
-                            if (attackingcard.GetComponent<Crit>())
+                            if (attackingcard.GetComponent<Crit>() && !attackingcard.isNone)
                             {
                                 Debug.Log("crit called");
                                 Crit crit = attackingcard.GetComponent<Crit>();
                                 damageVal = crit.UseAbilityAndCalculateDamage(attackingcard.attack);
                             }
-                            else if (attackingcard.GetComponent<Buster>())
+                            else if (attackingcard.GetComponent<Buster>() && !attackingcard.isNone)
                             {
                                 Debug.Log("Buster called");
                                 Buster buster = attackingcard.GetComponent<Buster>();
                                 damageVal = buster.UseBusterAbility(attackingcard.attack);
                             }
-                            else if (attackingcard.GetComponent<Berserker>())
+                            else if (attackingcard.GetComponent<Berserker>() && attackingcard.isNone)
                             {
                                 Debug.Log("Berserker called");
                                 Berserker berserker = attackingcard.GetComponent<Berserker>();
                                 damageVal = berserker.UseBerserkerAbility(attackingcard.attack);
                             }
-                            else if (attackingcard.GetComponent<Kamikaze>())
+                            else if (attackingcard.GetComponent<Kamikaze>() && !attackingcard.isNone)
                             {
                                 Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
                                 Debug.Log(" Kamikaze card " + kamikaze);
@@ -707,13 +707,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                             GameObject enemyHealth = enemyProfile.transform.Find("Enemy Deck Health").Find("Remaining Health").gameObject;
                             int currentHealth = int.Parse(enemyHealth.GetComponent<TMP_Text>().text.ToString());
                             int damageVal;
-                            if (attackingcard.GetComponent<Crit>())
+                            if (attackingcard.GetComponent<Crit>() && !attackingcard.isNone)
                             {
                                 Debug.Log("crit called");
                                 Crit crit = attackingcard.GetComponent<Crit>();
                                 damageVal = crit.UseAbilityAndCalculateDamage(attackingcard.attack);
                             }
-                            else if (attackingcard.GetComponent<Kamikaze>())
+                            else if (attackingcard.GetComponent<Kamikaze>() && !attackingcard.isNone)
                             {
                                 Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
                                 Debug.Log(" Kamikaze card " + kamikaze);
@@ -722,7 +722,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 Destroy(kamikaze.transform.parent.gameObject);
                                 pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, parentId, PhotonNetwork.IsMasterClient ? 1 : 2);
                             }
-                            else if (attackingcard.GetComponent<Berserker>())
+                            else if (attackingcard.GetComponent<Berserker>() && attackingcard.isNone)
                             {
                                 Debug.Log("Berserker called");
                                 Berserker berserker = attackingcard.GetComponent<Berserker>();
@@ -1243,10 +1243,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (IsGoaded(enemyField))
             {
                 Debug.Log("goaded card");
-                if (target.GetComponent<Goad>())
+                if (target.GetComponent<Goad>() && !target.isNone)
                 {
                     Debug.Log("target goaded");
-                    if (attacking.GetComponent<Crit>())
+                    if (attacking.GetComponent<Crit>() && !attacking.isNone)
                     {
                         Debug.Log("attack crit");
                         Crit crit = attackingcard.GetComponent<Crit>();
@@ -1256,7 +1256,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                         destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                     }
-                    else if (attacking.GetComponent<Kamikaze>())
+                    else if (attacking.GetComponent<Kamikaze>() && !attacking.isNone)
                     {
                         Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
                         Debug.Log(" Kamikaze card " + kamikaze);
@@ -1270,7 +1270,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         Destroy(kamikaze.transform.parent.gameObject);
                         pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, parentId, 1);
                     }
-                    else if (attacking.GetComponent<Hunger>())
+                    else if (attacking.GetComponent<Hunger>() && !attacking.isNone)
                     {
                         Hunger hunger = attackingcard.GetComponent<Hunger>();
                         Card currentCard = attacking.GetComponent<Card>();
@@ -1286,7 +1286,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                         destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                     }
-                    else if (attacking.GetComponent<Scattershot>())
+                    else if (attacking.GetComponent<Scattershot>() && !attacking.isNone)
                     {
                         Scattershot scattershot = attacking.GetComponent<Scattershot>();
                         string targetId = target.transform.parent.parent.name.Split(" ")[2];
@@ -1303,7 +1303,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
 
                     }
-                    else if (attacking.GetComponent<Berserker>())
+                    else if (attacking.GetComponent<Berserker>() && !attacking.isNone)
                     {
                         Berserker berserker = attackingcard.GetComponent<Berserker>();
                         Card currentCard = attacking.GetComponent<Card>();
@@ -1324,7 +1324,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     }
                     else
                     {
-                        Debug.Log("not attack crit");
+                        Debug.Log("normal attack ");
                         destroyPlayerAttackValue = target.attack;
                         destroyEnemyAttackValue = attacking.attack;
                         destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
@@ -1342,7 +1342,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     return;
                 }
             }
-            else if (attacking.GetComponent<Crit>())
+            else if (attacking.GetComponent<Crit>() && !attacking.isNone)
             {
                 Crit crit = attackingcard.GetComponent<Crit>();
                 Debug.Log(" crit card " + crit);
@@ -1351,7 +1351,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                 destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
             }
-            else if (attacking.GetComponent<Kamikaze>())
+            else if (attacking.GetComponent<Kamikaze>() && !attacking.isNone)
             {
                 Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
                 Debug.Log(" Kamikaze card " + kamikaze);
@@ -1365,7 +1365,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Destroy(kamikaze.transform.parent.gameObject);
                 pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, parentId, 1);
             }
-            else if (attacking.GetComponent<Hunger>())
+            else if (attacking.GetComponent<Hunger>() && !attacking.isNone)
             {
                 Hunger hunger = attackingcard.GetComponent<Hunger>();
                 Card currentCard = attacking.GetComponent<Card>();
@@ -1381,7 +1381,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                 destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
             }
-            else if (attacking.GetComponent<Berserker>())
+            else if (attacking.GetComponent<Berserker>() && !attacking.isNone)
             {
                 Berserker berserker = attackingcard.GetComponent<Berserker>();
                 Card currentCard = attacking.GetComponent<Card>();
@@ -1400,7 +1400,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                 //pv.RPC("Calculate", RpcTarget.Others, hunger.id, parentId, totalHealth);
             }
-            else if (attacking.GetComponent<Scattershot>())
+            else if (attacking.GetComponent<Scattershot>() && !attacking.isNone)
             {
                 Scattershot scattershot = attacking.GetComponent<Scattershot>();
                 string targetId = target.transform.parent.parent.name.Split(" ")[2];
@@ -1535,10 +1535,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (IsGoaded(enemyField))
             {
                 Debug.Log("goaded called");
-                if (target.GetComponent<Goad>())
+                if (target.GetComponent<Goad>() && !target.isNone)
                 {
                     Debug.Log("target goaded");
-                    if (attacking.GetComponent<Crit>())
+                    if (attacking.GetComponent<Crit>() && !attacking.isNone)
                     {
                         Debug.Log("attack crit");
                         Crit crit = attackingcard.GetComponent<Crit>();
@@ -1548,7 +1548,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                         destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                     }
-                    else if (attacking.GetComponent<Kamikaze>())
+                    else if (attacking.GetComponent<Kamikaze>() && !attacking.isNone)
                     {
                         Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
                         Debug.Log(" Kamikaze card " + kamikaze);
@@ -1562,7 +1562,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         Destroy(kamikaze.transform.parent.gameObject);
                         pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, parentId, 2);
                     }
-                    else if (attacking.GetComponent<Hunger>())
+                    else if (attacking.GetComponent<Hunger>() && !attacking.isNone)
                     {
                         Hunger hunger = attackingcard.GetComponent<Hunger>();
                         Card currentCard = attacking.GetComponent<Card>();
@@ -1578,7 +1578,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                         destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                     }
-                    else if (attacking.GetComponent<Berserker>())
+                    else if (attacking.GetComponent<Berserker>() && !attacking.isNone)
                     {
                         Berserker berserker = attackingcard.GetComponent<Berserker>();
                         Card currentCard = attacking.GetComponent<Card>();
@@ -1597,7 +1597,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                         //pv.RPC("Calculate", RpcTarget.Others, hunger.id, parentId, totalHealth);
                     }
-                    else if (attacking.GetComponent<Scattershot>())
+                    else if (attacking.GetComponent<Scattershot>() && !attacking.isNone)
                     {
                         Scattershot scattershot = attacking.GetComponent<Scattershot>();
                         string targetId = target.transform.parent.parent.name.Split(" ")[2];
@@ -1614,7 +1614,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     }
                     else
                     {
-                        Debug.Log("not attack crit");
+                        Debug.Log("normal");
                         destroyPlayerAttackValue = target.attack;
                         destroyEnemyAttackValue = attacking.attack;
                         destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
@@ -1631,7 +1631,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     return;
                 }
             }
-            else if (attacking.GetComponent<Crit>())
+            else if (attacking.GetComponent<Crit>() && !attacking.isNone)
             {
                 Debug.Log("crit called");
                 Crit crit = attackingcard.GetComponent<Crit>();
@@ -1640,7 +1640,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                 destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
             }
-            else if (attacking.GetComponent<Kamikaze>())
+            else if (attacking.GetComponent<Kamikaze>() && !attacking.isNone)
             {
                 Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
                 Debug.Log(" Kamikaze card " + kamikaze);
@@ -1654,7 +1654,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Destroy(kamikaze.transform.parent.gameObject);
                 pv.RPC("DestroyCardOnOthers", RpcTarget.Others, kamikaze.id, parentId, 2);
             }
-            else if (attacking.GetComponent<Hunger>())
+            else if (attacking.GetComponent<Hunger>() && !attacking.isNone)
             {
                 Hunger hunger = attackingcard.GetComponent<Hunger>();
                 Card currentCard = attacking.GetComponent<Card>();
@@ -1670,7 +1670,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 destroyPlayer = attacking.DealDamage(destroyPlayerAttackValue, attackParent.transform.GetChild(0).gameObject);
                 destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
             }
-            else if (attacking.GetComponent<Berserker>())
+            else if (attacking.GetComponent<Berserker>() && !attacking.isNone)
             {
                 Berserker berserker = attackingcard.GetComponent<Berserker>();
                 Card currentCard = attacking.GetComponent<Card>();
@@ -1689,7 +1689,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 destroyEnemy = target.DealDamage(destroyEnemyAttackValue, targetParent.transform.GetChild(0).gameObject);
                 //pv.RPC("Calculate", RpcTarget.Others, hunger.id, parentId, totalHealth);
             }
-            else if (attacking.GetComponent<Scattershot>())
+            else if (attacking.GetComponent<Scattershot>() && !attacking.isNone)
             {
                 Scattershot scattershot = attacking.GetComponent<Scattershot>();
                 string targetId = target.transform.parent.parent.name.Split(" ")[2];
@@ -1861,18 +1861,18 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Invoke("RemoveErrorObject", 2f);
             return;
         }
-        if (card.GetComponent<Crit>())
+        if (card.GetComponent<Crit>() && !card.isNone)
         {
             Debug.Log("crit card called");
             Crit crit = card.GetComponent<Crit>();
             damage = crit.UseAbilityAndCalculateDamage(card.attack);
         }
-        else if (card.GetComponent<Farmer>())
+        else if (card.GetComponent<Farmer>() && !card.isNone)
         {
             Farmer farmer = card.GetComponent<Farmer>();
             damage = farmer.UseFarmerAbility(card.attack);
         }
-        else if (card.GetComponent<Hunger>())
+        else if (card.GetComponent<Hunger>() && !card.isNone)
         {
             Debug.Log("Hunger called");
             Hunger hunger = card.GetComponent<Hunger>();
@@ -1884,13 +1884,13 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Debug.Log(hunger.name + " name " + card.HP + " hp value after updated ");
             damage = card.attack;
         }
-        else if (card.GetComponent<Berserker>())
+        else if (card.GetComponent<Berserker>() && card.isNone)
         {
             Debug.Log("Berserker called");
             Berserker berserker = card.GetComponent<Berserker>();
             damage = berserker.UseBerserkerAbility(card.attack);
         }
-        else if (card.GetComponent<Kamikaze>())
+        else if (card.GetComponent<Kamikaze>() && card.isNone)
         {
             Kamikaze kamikaze = attackingcard.GetComponent<Kamikaze>();
             Debug.Log(" Kamikaze card " + kamikaze);
@@ -2558,10 +2558,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 currentType = typeof(GoodFavor);
                 break;
             case CardAbility.Crit:
-                currentType = typeof(GoodFavor);
+                currentType = typeof(Crit);
                 break;
             case CardAbility.Goad:
-                currentType = typeof(GoodFavor);
+                currentType = typeof(Goad);
                 break;
         }
         return currentType;
@@ -4081,7 +4081,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
     public void StartTheTurn()
     {
-        //Debug.Log(" start the turn called ");
+        Debug.Log(" start the turn called ");
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
         GameObject playerWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Wall").gameObject;
@@ -4093,6 +4093,51 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         FieldManager.instance.ResetCounters();
         FieldManager.instance.CalculateAbilityCounter(playerField);
         //Debug.Log("player field " + playerField.name + " child count " + playerField.transform.childCount + " is wall destroyed " + isPlayerWallDestroyed + " count of field " + (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2));
+
+        for (int i = 0; i < playerField.transform.childCount; i++)
+        {
+            if (playerField.transform.GetChild(i).childCount == 1)
+            {
+                GameObject cardObj = playerField.transform.GetChild(i).GetChild(0).GetChild(0).gameObject;
+                Debug.Log("Card object " + cardObj);
+                if (cardObj.GetComponent<None>())
+                {
+                    Debug.Log("ccard object with none");
+                    if (cardObj.GetComponent<None>().constraint == NoneConstraint.Permenent)
+                    {
+                        Debug.Log("No active ability");
+                        return;
+                    }
+                    else if (cardObj.GetComponent<None>().constraint == NoneConstraint.TurnBased)
+                    {
+                        int noneVal = cardObj.GetComponent<None>().UpdateValue(-1);
+                         Debug.Log("turn based " + noneVal);
+                        if (noneVal == 0)
+                        {
+                            cardObj.GetComponent<Card>().isNone = false;
+                            Destroy(cardObj.GetComponent<None>());
+                            if (CardDataBase.instance.abilityTypeMap.TryGetValue(cardObj.GetComponent<Card>().ability, out Type abilityType))
+                            {
+                                Component abilityComponent = cardObj.GetComponent(abilityType);
+                                Debug.Log(abilityComponent + " component");
+
+                                if (abilityComponent != null)
+                                {
+                                    ((MonoBehaviour)abilityComponent).enabled = true;
+                                }
+                            }
+                            else
+                            {
+                                Debug.LogWarning("Ability type not found: ");
+                            }
+                        }
+                        pv.RPC("ResetNoneOnOthers", RpcTarget.Others, i, noneVal);
+                    }
+                }
+            }
+
+        }
+
         for (int i = 0; i < (isPlayerWallDestroyed ? playerField.transform.childCount : playerField.transform.childCount / 2); i++)
         {
             //Debug.Log(" i value " + i + " playerField.transform.GetChild(i).childCount " + playerField.transform.GetChild(i).childCount);
@@ -4127,6 +4172,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     Debug.Log("cardObj.GetComponent<Card>().ability == CardAbility.DeActivate");
                     continue;
                 }
+
 
                 //Debug.Log("i value after " + i);
 
@@ -4353,19 +4399,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     string parentId = endGame.transform.parent.parent.name.Split(" ")[2];
                     //Debug.Log(attackValue + " attack value " + healthValue + " health value ");
                     pv.RPC("EndGameInOthers", RpcTarget.Others, attackValue, healthValue, parentId);
-                }
-                else if (cardObj.GetComponent<Silence>())
-                {
-                    Debug.Log(" inside card end gamje " + cardObj.name);
-                    Silence silence = cardObj.GetComponent<Silence>();
-                    Card currentCard = silence.GetComponent<Card>();
-                    Debug.Log(endGame + " silence called");
-                    //Tuple<int, int> result = endGame.SetAttackAndHealth(currentCard);
-                    //int attackValue = result.Item1;
-                    //int healthValue = result.Item2;
-                    //string parentId = endGame.transform.parent.parent.name.Split(" ")[2];
-                    ////Debug.Log(attackValue + " attack value " + healthValue + " health value ");
-                    //pv.RPC("EndGameInOthers", RpcTarget.Others, attackValue, healthValue, parentId);
                 }
             }
         }
@@ -5467,7 +5500,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 {
                     if (enemyfield.transform.GetChild(i).GetChild(0).childCount == 1)
                     {
-                        if (enemyfield.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().ability == CardAbility.Goad)
+                        if (enemyfield.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().ability == CardAbility.Goad && !enemyfield.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>().isNone)
                         {
                             goaded = true;
                         }
@@ -6140,6 +6173,65 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 string message = "You choose the Mimic ability. Please select card enemy's one card to copy all stats of enemy.";
                 int parentId = int.Parse(parent.name.Split(" ")[2]);
                 BlurCards(0.8f, true, true, true, false, card, message);
+
+            }
+        }
+        else if (card.GetComponent<Silence>())
+        {
+            Debug.LogError(" inside card Silence " + parent.name);
+            if (parent.gameObject.tag.Contains("Front Line"))
+            {
+                Silence silence = card.GetComponent<Silence>();
+                for(int i = 0; i < enemyField.transform.childCount; i++)
+                {
+                    if(enemyField.transform.GetChild(i).childCount == 1)
+                    {
+                        Debug.Log(enemyField.transform.GetChild(i) + " get child i");
+                        Debug.Log(enemyField.transform.GetChild(i).childCount + " get child i child count");
+                        Debug.Log(enemyField.transform.GetChild(i).childCount + " get child i child count");
+                        Card enemyCard = enemyField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>();
+                        Debug.Log(enemyCard + " enemy card ");
+                        Debug.Log(enemyCard.name + " enemy card name");
+                        //None none = enemyCard.GetComponent<None>();
+                        //Debug.Log(none + " none alled ");
+                        if (null == enemyCard.GetComponent<None>())
+                        { 
+                            None noneCard = enemyCard.gameObject.AddComponent<None>();
+                            noneCard.constraint = NoneConstraint.TurnBased;
+                            silence.SetRoundNumber(silence.turnToDeactivate);
+                            noneCard.constraintValue = silence.turnToDeactivate;
+                            enemyCard.isNone = true;
+                        }
+                        else if (enemyCard.GetComponent<None>() != null)
+                        {
+                            None noneCard = enemyCard.gameObject.AddComponent<None>();
+                            if(noneCard.constraint == NoneConstraint.TurnBased)
+                            {
+                                enemyCard.isNone = true;
+                                silence.SetRoundNumber(silence.turnToDeactivate);
+                                noneCard.constraintValue += silence.turnToDeactivate;
+                                if (CardDataBase.instance.abilityTypeMap.TryGetValue(enemyCard.ability, out Type abilityType))
+                                {
+                                    Component abilityComponent = enemyCard.GetComponent(abilityType);
+                                    Debug.Log(abilityComponent + " component");
+
+                                    if (abilityComponent != null)
+                                    {
+                                        Debug.Log(" not null component " + abilityComponent);
+                                        ((MonoBehaviour)abilityComponent).enabled = true;
+                                    }
+                                }
+                                else
+                                {
+                                    Debug.LogWarning("Ability type not found: ");
+                                }
+                                
+                            }
+                        }
+                       
+                        pv.RPC("SetNoneAbilityToOthers", RpcTarget.Others, i, silence.turnToDeactivate);
+                    }
+                } 
 
             }
         }
@@ -6988,6 +7080,73 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Card card = enemyField.transform.GetChild(parentId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
             card.SetHP(healthVal);
             card.SetAttack(attackVal);
+        }
+    }
+
+    [PunRPC]
+    private void SetNoneAbilityToOthers(int position, int deActivateValue)
+    {
+        Debug.Log(" SetNoneAbilityToOthers called " + position + " pos " );
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+
+        //Debug.Log(enemyField + " playerField  " + parentId + " parent id");
+        if (playerField.transform.GetChild(position) != null)
+        {
+
+            Debug.Log(playerField.transform.GetChild(position).name + " playerField.transform.GetChild(position).name");
+            Card card = playerField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
+
+            if (card.GetComponent<None>())
+            {
+                None noneCard = card.gameObject.AddComponent<None>();
+                if (noneCard.constraint == NoneConstraint.TurnBased)
+                {
+                    noneCard.constraintValue += deActivateValue;
+                    card.isNone = true;
+                }
+            }
+            else
+            {
+                None noneCard = card.gameObject.AddComponent<None>();
+                noneCard.constraint = NoneConstraint.TurnBased;
+                noneCard.constraintValue = deActivateValue;
+                card.isNone = true;
+            }
+        }
+    }
+
+    [PunRPC]
+    private void ResetNoneOnOthers(int position, int noneValue)
+    {
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+
+        if (enemyField.transform.GetChild(position) != null)
+        {
+
+            Debug.Log(enemyField.transform.GetChild(position).name + " enemyField.transform.GetChild(parentId - 1)");
+            GameObject enemyCard = enemyField.transform.GetChild(position).GetChild(0).GetChild(0).gameObject;
+
+            int noneVal = enemyCard.GetComponent<None>().SetConstraintValue(noneValue);
+            Debug.Log("turn based " + noneVal);
+            if (noneVal == 0)
+            {
+                enemyCard.GetComponent<Card>().isNone = false;
+                Destroy(enemyCard.GetComponent<None>());
+                if (CardDataBase.instance.abilityTypeMap.TryGetValue(enemyCard.GetComponent<Card>().ability, out Type abilityType))
+                {
+                    Component abilityComponent = enemyCard.GetComponent(abilityType);
+                    Debug.Log(abilityComponent + " component");
+
+                    if (abilityComponent != null)
+                    {
+                        ((MonoBehaviour)abilityComponent).enabled = true;
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("Ability type not found: ");
+                }
+            }
         }
     }
 
