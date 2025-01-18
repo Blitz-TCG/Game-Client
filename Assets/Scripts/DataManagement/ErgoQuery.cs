@@ -65,8 +65,7 @@ public class ErgoQuery : MonoBehaviour
 
         var client = new HttpClient();
         // API URL
-        //client.BaseAddress = new Uri("https://api.ergoplatform.com/");
-        client.BaseAddress = new Uri("https://ergo-explorer.anetabtc.io/");
+        client.BaseAddress = new Uri("https://api.ergoplatform.com/");
         //client.BaseAddress = new Uri("https://ergo-explorer.tosidrop.io/");
 
 
