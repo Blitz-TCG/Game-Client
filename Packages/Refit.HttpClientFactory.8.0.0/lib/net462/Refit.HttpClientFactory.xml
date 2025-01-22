@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Refit.HttpClientFactory</name>
+    </assembly>
+    <members>
+        <member name="T:Refit.HttpClientFactoryExtensions">
+            <summary>
+            HttpClientFactoryExtensions.
+            </summary>
+        </member>
+        <member name="M:Refit.HttpClientFactoryExtensions.AddRefitClient``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,Refit.RefitSettings)">
+            <summary>
+            Adds a Refit client to the DI container
+            </summary>
+            <typeparam name="T">Type of the Refit interface</typeparam>
+            <param name="services">container</param>
+            <param name="settings">Optional. Settings to configure the instance with</param>
+            <returns></returns>
+        </member>
+        <member name="M:Refit.HttpClientFactoryExtensions.AddRefitClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,Refit.RefitSettings)">
+            <summary>
+            Adds a Refit client to the DI container
+            </summary>
+            <param name="services">container</param>
+            <param name="refitInterfaceType">Type of the Refit interface</param>
+            <param name="settings">Optional. Settings to configure the instance with</param>
+            <returns></returns>
+        </member>
+        <member name="M:Refit.HttpClientFactoryExtensions.AddRefitClient``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,Refit.RefitSettings},System.String)">
+            <summary>
+            Adds a Refit client to the DI container
+            </summary>
+            <typeparam name="T">Type of the Refit interface</typeparam>
+            <param name="services">container</param>
+            <param name="settingsAction">Optional. Action to configure refit settings.  This method is called once and only once, avoid using any scoped dependencies that maybe be disposed automatically.</param>
+            <param name="httpClientName">Optional. Allows users to change the HttpClient name as provided to IServiceCollection.AddHttpClient. Useful for logging scenarios.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Refit.HttpClientFactoryExtensions.AddRefitClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Func{System.IServiceProvider,Refit.RefitSettings},System.String)">
+            <summary>
+            Adds a Refit client to the DI container
+            </summary>
+            <param name="services">container</param>
+            <param name="refitInterfaceType">Type of the Refit interface</param>
+            <param name="settingsAction">Optional. Action to configure refit settings.  This method is called once and only once, avoid using any scoped dependencies that maybe be disposed automatically.</param>
+            <param name="httpClientName">Optional. Allows users to change the HttpClient name as provided to IServiceCollection.AddHttpClient. Useful for logging scenarios.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.ISettingsFor">
+            <summary>
+            ISettingsFor
+            </summary>
+        </member>
+        <member name="P:Refit.ISettingsFor.Settings">
+            <summary>
+            Gets the settings.
+            </summary>
+            <value>
+            The settings.
+            </value>
+        </member>
+        <member name="T:Refit.SettingsFor`1">
+            <summary>
+            SettingsFor.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <seealso cref="T:Refit.ISettingsFor" />
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.SettingsFor`1"/> class.
+            </remarks>
+            <param name="settings">The settings.</param>
+        </member>
+        <member name="M:Refit.SettingsFor`1.#ctor(Refit.RefitSettings)">
+            <summary>
+            SettingsFor.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <seealso cref="T:Refit.ISettingsFor" />
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.SettingsFor`1"/> class.
+            </remarks>
+            <param name="settings">The settings.</param>
+        </member>
+        <member name="P:Refit.SettingsFor`1.Settings">
+            <summary>
+            Gets the settings.
+            </summary>
+            <value>
+            The settings.
+            </value>
+        </member>
+    </members>
+</doc>

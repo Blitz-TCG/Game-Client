@@ -1,0 +1,2087 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Refit</name>
+    </assembly>
+    <members>
+        <member name="T:Refit.ApiException">
+            <summary>
+            Represents an error that occured while sending an API request.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.StatusCode">
+            <summary>
+            HTTP response status code.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.ReasonPhrase">
+            <summary>
+            The reason phrase which typically is sent by the server together with the status code.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.Headers">
+            <summary>
+            HTTP response headers.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.HttpMethod">
+            <summary>
+            The HTTP method used to send the request.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.Uri">
+            <summary>
+            The <see cref="T:System.Uri"/> used to send the HTTP request.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.RequestMessage">
+            <summary>
+            The HTTP Request message used to send the request.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.ContentHeaders">
+            <summary>
+            HTTP response content headers as defined in RFC 2616.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.Content">
+            <summary>
+            HTTP Response content as string.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.HasContent">
+            <summary>
+            Does the response have content?
+            </summary>
+        </member>
+        <member name="P:Refit.ApiException.RefitSettings">
+            <summary>
+            Refit settings used to send the request.
+            </summary>
+        </member>
+        <member name="M:Refit.ApiException.#ctor(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpMethod,System.String,System.Net.HttpStatusCode,System.String,System.Net.Http.Headers.HttpResponseHeaders,Refit.RefitSettings,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.ApiException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="httpMethod">The HTTP method.</param>
+            <param name="content">The content.</param>
+            <param name="statusCode">The status code.</param>
+            <param name="reasonPhrase">The reason phrase.</param>
+            <param name="headers">The headers.</param>
+            <param name="refitSettings">The refit settings.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Refit.ApiException.#ctor(System.String,System.Net.Http.HttpRequestMessage,System.Net.Http.HttpMethod,System.String,System.Net.HttpStatusCode,System.String,System.Net.Http.Headers.HttpResponseHeaders,Refit.RefitSettings,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.ApiException"/> class.
+            </summary>
+            <param name="exceptionMessage">The exception message.</param>
+            <param name="message">The message.</param>
+            <param name="httpMethod">The HTTP method.</param>
+            <param name="content">The content.</param>
+            <param name="statusCode">The status code.</param>
+            <param name="reasonPhrase">The reason phrase.</param>
+            <param name="headers">The headers.</param>
+            <param name="refitSettings">The refit settings.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Refit.ApiException.GetContentAsAsync``1">
+            <summary>
+            Get the deserialized response content as nullable <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">Type to deserialize the content to</typeparam>
+            <returns>The response content deserialized as <typeparamref name="T"/></returns>
+        </member>
+        <member name="M:Refit.ApiException.Create(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpMethod,System.Net.Http.HttpResponseMessage,Refit.RefitSettings,System.Exception)">
+            <summary>
+            Create an instance of <see cref="T:Refit.ApiException"/>.
+            </summary>
+            <param name="message">The HTTP Request message used to send the request.</param>
+            <param name="httpMethod">The HTTP method used to send the request.</param>
+            <param name="response">The HTTP Response message.</param>
+            <param name="refitSettings">Refit settings used to sent the request.</param>
+            <param name="innerException">Add an inner exception to the <see cref="T:Refit.ApiException"/>.</param>
+            <returns>A newly created <see cref="T:Refit.ApiException"/>.</returns>
+        </member>
+        <member name="M:Refit.ApiException.Create(System.String,System.Net.Http.HttpRequestMessage,System.Net.Http.HttpMethod,System.Net.Http.HttpResponseMessage,Refit.RefitSettings,System.Exception)">
+            <summary>
+            Create an instance of <see cref="T:Refit.ApiException"/> with a custom exception message.
+            </summary>
+            <param name="exceptionMessage">A custom exception message.</param>
+            <param name="message">The HTTP Request message used to send the request.</param>
+            <param name="httpMethod">The HTTP method used to send the request.</param>
+            <param name="response">The HTTP Response message.</param>
+            <param name="refitSettings">Refit settings used to sent the request.</param>
+            <param name="innerException">Add an inner exception to the <see cref="T:Refit.ApiException"/>.</param>
+            <returns>A newly created <see cref="T:Refit.ApiException"/>.</returns>
+        </member>
+        <member name="T:Refit.ApiResponse`1">
+            <summary>
+            Implementation of <see cref="T:Refit.IApiResponse`1"/> that provides additional functionalities.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <remarks>
+            Create an instance of <see cref="T:Refit.ApiResponse`1"/> with type <typeparamref name="T"/>.
+            </remarks>
+            <param name="response">Original HTTP Response message.</param>
+            <param name="content">Response content.</param>
+            <param name="settings">Refit settings used to send the request.</param>
+            <param name="error">The ApiException, if the request failed.</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Refit.ApiResponse`1.#ctor(System.Net.Http.HttpResponseMessage,`0,Refit.RefitSettings,Refit.ApiException)">
+            <summary>
+            Implementation of <see cref="T:Refit.IApiResponse`1"/> that provides additional functionalities.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <remarks>
+            Create an instance of <see cref="T:Refit.ApiResponse`1"/> with type <typeparamref name="T"/>.
+            </remarks>
+            <param name="response">Original HTTP Response message.</param>
+            <param name="content">Response content.</param>
+            <param name="settings">Refit settings used to send the request.</param>
+            <param name="error">The ApiException, if the request failed.</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="P:Refit.ApiResponse`1.Content">
+            <summary>
+            Deserialized request content as <typeparamref name="T"/>.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.Settings">
+            <summary>
+            Refit settings used to send the request.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.Headers">
+            <summary>
+            HTTP response headers.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.ContentHeaders">
+            <summary>
+            HTTP response content headers as defined in RFC 2616.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.IsSuccessStatusCode">
+            <summary>
+            Indicates whether the request was successful.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.IsSuccessful">
+            <summary>
+            Indicates whether the request was successful and there wasn't any other error (for example, during content deserialization).
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.ReasonPhrase">
+            <summary>
+            The reason phrase which typically is sent by the server together with the status code.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.RequestMessage">
+            <summary>
+            The HTTP Request message which led to this response.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.StatusCode">
+            <summary>
+            HTTP response status code.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.Version">
+            <summary>
+            HTTP Message version.
+            </summary>
+        </member>
+        <member name="P:Refit.ApiResponse`1.Error">
+            <summary>
+            The <see cref="T:Refit.ApiException" /> object in case of unsuccessful response.
+            </summary>
+        </member>
+        <member name="M:Refit.ApiResponse`1.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Refit.ApiResponse`1.EnsureSuccessStatusCodeAsync">
+            <summary>
+            Ensures the request was successful by throwing an exception in case of failure
+            </summary>
+            <returns>The current <see cref="T:Refit.ApiResponse`1"/></returns>
+            <exception cref="T:Refit.ApiException"></exception>
+        </member>
+        <member name="M:Refit.ApiResponse`1.EnsureSuccessfulAsync">
+            <summary>
+            Ensures the request was successful and without any other error by throwing an exception in case of failure
+            </summary>
+            <returns>The current <see cref="T:Refit.ApiResponse`1"/></returns>
+            <exception cref="T:Refit.ApiException"></exception>
+        </member>
+        <member name="T:Refit.IApiResponse`1">
+            <inheritdoc/>
+        </member>
+        <member name="P:Refit.IApiResponse`1.Content">
+            <summary>
+            Deserialized request content as <typeparamref name="T"/>.
+            </summary>
+        </member>
+        <member name="T:Refit.IApiResponse">
+            <summary>
+            Base interface used to represent an API response.
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.Headers">
+            <summary>
+            HTTP response headers.
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.ContentHeaders">
+            <summary>
+            HTTP response content headers as defined in RFC 2616.
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.IsSuccessStatusCode">
+            <summary>
+            Indicates whether the request was successful.
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.IsSuccessful">
+            <summary>
+            Indicates whether the request was successful and there wasn't any other error (for example, during content deserialization).
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.StatusCode">
+            <summary>
+            HTTP response status code.
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.ReasonPhrase">
+            <summary>
+            The reason phrase which typically is sent by the server together with the status code.
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.RequestMessage">
+            <summary>
+            The HTTP Request message which led to this response.
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.Version">
+            <summary>
+            HTTP Message version.
+            </summary>
+        </member>
+        <member name="P:Refit.IApiResponse.Error">
+            <summary>
+            The <see cref="T:Refit.ApiException"/> object in case of unsuccessful response.
+            </summary>
+        </member>
+        <member name="T:Refit.HttpMethodAttribute">
+            <summary>
+            HttpMethodAttribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.HttpMethodAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Refit.HttpMethodAttribute.#ctor(System.String)">
+            <summary>
+            HttpMethodAttribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.HttpMethodAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Refit.HttpMethodAttribute.Method">
+            <summary>
+            Gets the method.
+            </summary>
+            <value>
+            The method.
+            </value>
+        </member>
+        <member name="P:Refit.HttpMethodAttribute.Path">
+            <summary>
+            Gets or sets the path.
+            </summary>
+            <value>
+            The path.
+            </value>
+        </member>
+        <member name="T:Refit.GetAttribute">
+            <summary>
+            Send the request with HTTP method 'GET'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.GetAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Refit.GetAttribute.#ctor(System.String)">
+            <summary>
+            Send the request with HTTP method 'GET'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.GetAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Refit.GetAttribute.Method">
+            <summary>
+            Gets the method.
+            </summary>
+            <value>
+            The method.
+            </value>
+        </member>
+        <member name="T:Refit.PostAttribute">
+            <summary>
+            Send the request with HTTP method 'POST'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.PostAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Refit.PostAttribute.#ctor(System.String)">
+            <summary>
+            Send the request with HTTP method 'POST'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.PostAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Refit.PostAttribute.Method">
+            <summary>
+            Gets the method.
+            </summary>
+            <value>
+            The method.
+            </value>
+        </member>
+        <member name="T:Refit.PutAttribute">
+            <summary>
+            Send the request with HTTP method 'PUT'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.PutAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Refit.PutAttribute.#ctor(System.String)">
+            <summary>
+            Send the request with HTTP method 'PUT'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.PutAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Refit.PutAttribute.Method">
+            <summary>
+            Gets the method.
+            </summary>
+            <value>
+            The method.
+            </value>
+        </member>
+        <member name="T:Refit.DeleteAttribute">
+            <summary>
+            Send the request with HTTP method 'DELETE'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.DeleteAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Refit.DeleteAttribute.#ctor(System.String)">
+            <summary>
+            Send the request with HTTP method 'DELETE'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.DeleteAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Refit.DeleteAttribute.Method">
+            <summary>
+            Gets the method.
+            </summary>
+            <value>
+            The method.
+            </value>
+        </member>
+        <member name="T:Refit.PatchAttribute">
+            <summary>
+            Send the request with HTTP method 'PATCH'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.PatchAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Refit.PatchAttribute.#ctor(System.String)">
+            <summary>
+            Send the request with HTTP method 'PATCH'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.PatchAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Refit.PatchAttribute.Method">
+            <summary>
+            Gets the method.
+            </summary>
+            <value>
+            The method.
+            </value>
+        </member>
+        <member name="T:Refit.OptionsAttribute">
+            <summary>
+            Send the request with HTTP method 'OPTION'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.OptionsAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Refit.OptionsAttribute.#ctor(System.String)">
+            <summary>
+            Send the request with HTTP method 'OPTION'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.OptionsAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Refit.OptionsAttribute.Method">
+            <summary>
+            Gets the method.
+            </summary>
+            <value>
+            The method.
+            </value>
+        </member>
+        <member name="T:Refit.HeadAttribute">
+            <summary>
+            Send the request with HTTP method 'HEAD'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.HeadAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:Refit.HeadAttribute.#ctor(System.String)">
+            <summary>
+            Send the request with HTTP method 'HEAD'.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.HeadAttribute"/> class.
+            </remarks>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Refit.HeadAttribute.Method">
+            <summary>
+            Gets the method.
+            </summary>
+            <value>
+            The method.
+            </value>
+        </member>
+        <member name="T:Refit.MultipartAttribute">
+            <summary>
+            Send the request as multipart.
+            </summary>
+            <remarks>
+            Currently, multipart methods only support the following parameter types: <see cref="T:System.String"/>, <see cref="T:System.Byte"/> array, <see cref="T:System.IO.Stream"/>, <see cref="T:System.IO.FileInfo"/>.
+            </remarks>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.MultipartAttribute"/> class.
+            </remarks>
+            <param name="boundaryText">The boundary text.</param>
+        </member>
+        <member name="M:Refit.MultipartAttribute.#ctor(System.String)">
+            <summary>
+            Send the request as multipart.
+            </summary>
+            <remarks>
+            Currently, multipart methods only support the following parameter types: <see cref="T:System.String"/>, <see cref="T:System.Byte"/> array, <see cref="T:System.IO.Stream"/>, <see cref="T:System.IO.FileInfo"/>.
+            </remarks>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.MultipartAttribute"/> class.
+            </remarks>
+            <param name="boundaryText">The boundary text.</param>
+        </member>
+        <member name="P:Refit.MultipartAttribute.BoundaryText">
+            <summary>
+            Gets the boundary text.
+            </summary>
+            <value>
+            The boundary text.
+            </value>
+        </member>
+        <member name="T:Refit.BodySerializationMethod">
+            <summary>
+            Defines methods to serialize HTTP requests' bodies.
+            </summary>
+        </member>
+        <member name="F:Refit.BodySerializationMethod.Default">
+            <summary>
+            Encodes everything using the ContentSerializer in RefitSettings except for strings. Strings are set as-is
+            </summary>
+        </member>
+        <member name="F:Refit.BodySerializationMethod.Json">
+            <summary>
+            Json encodes everything, including strings
+            </summary>
+        </member>
+        <member name="F:Refit.BodySerializationMethod.UrlEncoded">
+            <summary>
+            Form-UrlEncode's the values
+            </summary>
+        </member>
+        <member name="F:Refit.BodySerializationMethod.Serialized">
+            <summary>
+            Encodes everything using the ContentSerializer in RefitSettings
+            </summary>
+        </member>
+        <member name="T:Refit.BodyAttribute">
+            <summary>
+            Set a parameter to be sent as the HTTP request's body.
+            </summary>
+            <remarks>
+            There are four behaviors when sending a parameter as the request body:<br/>
+            - If the type is/implements <see cref="T:System.IO.Stream"/>, the content will be streamed via <see cref="T:System.Net.Http.StreamContent"/>.<br/>
+            - If the type is <see cref="T:System.String"/>, it will be used directly as the content unless <c>[Body(BodySerializationMethod.Json)]</c> is set
+            which will send it as a <see cref="T:System.Net.Http.StringContent"/>.<br/>
+            - If the parameter has the attribute <c>[Body(BodySerializationMethod.UrlEncoded)]</c>, the content will be URL-encoded.<br/>
+            - For all other types, the object will be serialized using the content serializer specified in the request's <see cref="T:Refit.RefitSettings"/>.
+            </remarks>
+        </member>
+        <member name="M:Refit.BodyAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.BodyAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:Refit.BodyAttribute.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.BodyAttribute"/> class.
+            </summary>
+            <param name="buffered">if set to <c>true</c> [buffered].</param>
+        </member>
+        <member name="M:Refit.BodyAttribute.#ctor(Refit.BodySerializationMethod,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.BodyAttribute"/> class.
+            </summary>
+            <param name="serializationMethod">The serialization method.</param>
+            <param name="buffered">if set to <c>true</c> [buffered].</param>
+        </member>
+        <member name="M:Refit.BodyAttribute.#ctor(Refit.BodySerializationMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.BodyAttribute"/> class.
+            </summary>
+            <param name="serializationMethod">The serialization method.</param>
+        </member>
+        <member name="P:Refit.BodyAttribute.Buffered">
+            <summary>
+            Gets or sets the buffered.
+            </summary>
+            <value>
+            The buffered.
+            </value>
+        </member>
+        <member name="P:Refit.BodyAttribute.SerializationMethod">
+            <summary>
+            Gets or sets the serialization method.
+            </summary>
+            <value>
+            The serialization method.
+            </value>
+        </member>
+        <member name="T:Refit.AliasAsAttribute">
+            <summary>
+            Override the key that will be sent in the query string.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.AliasAsAttribute"/> class.
+            </remarks>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:Refit.AliasAsAttribute.#ctor(System.String)">
+            <summary>
+            Override the key that will be sent in the query string.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.AliasAsAttribute"/> class.
+            </remarks>
+            <param name="name">The name.</param>
+        </member>
+        <member name="P:Refit.AliasAsAttribute.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="T:Refit.AttachmentNameAttribute">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.AttachmentNameAttribute"/> class.
+            </summary>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:Refit.AttachmentNameAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.AttachmentNameAttribute"/> class.
+            </summary>
+            <param name="name">The name.</param>
+        </member>
+        <member name="P:Refit.AttachmentNameAttribute.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="T:Refit.HeaderCollectionAttribute">
+            <summary>
+            Allows you to provide a Dictionary of headers to be added to the request.
+            </summary>
+        </member>
+        <member name="T:Refit.HeadersAttribute">
+            <summary>
+            Add multiple headers to the request.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.HeadersAttribute"/> class.
+            </remarks>
+            <param name="headers">The headers.</param>
+        </member>
+        <member name="M:Refit.HeadersAttribute.#ctor(System.String[])">
+            <summary>
+            Add multiple headers to the request.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.HeadersAttribute"/> class.
+            </remarks>
+            <param name="headers">The headers.</param>
+        </member>
+        <member name="P:Refit.HeadersAttribute.Headers">
+            <summary>
+            Gets the headers.
+            </summary>
+            <value>
+            The headers.
+            </value>
+        </member>
+        <member name="T:Refit.HeaderAttribute">
+            <summary>
+            Add a header to the request.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.HeaderAttribute"/> class.
+            </remarks>
+            <param name="header">The header.</param>
+        </member>
+        <member name="M:Refit.HeaderAttribute.#ctor(System.String)">
+            <summary>
+            Add a header to the request.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.HeaderAttribute"/> class.
+            </remarks>
+            <param name="header">The header.</param>
+        </member>
+        <member name="P:Refit.HeaderAttribute.Header">
+            <summary>
+            Gets the header.
+            </summary>
+            <value>
+            The header.
+            </value>
+        </member>
+        <member name="T:Refit.PropertyAttribute">
+            <summary>
+            Used to store the value in HttpRequestMessage.Properties for further processing in a custom DelegatingHandler.
+            If a string is supplied to the constructor then it will be used as the key in the HttpRequestMessage.Properties dictionary.
+            If no key is specified then the key will be defaulted to the name of the parameter.
+            </summary>
+        </member>
+        <member name="M:Refit.PropertyAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.PropertyAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:Refit.PropertyAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.PropertyAttribute"/> class.
+            </summary>
+            <param name="key">The key.</param>
+        </member>
+        <member name="P:Refit.PropertyAttribute.Key">
+            <summary>
+            Specifies the key under which to store the value on the HttpRequestMessage.Properties dictionary.
+            </summary>
+        </member>
+        <member name="T:Refit.AuthorizeAttribute">
+            <summary>
+            Add the Authorize header to the request with the value of the associated parameter.
+            </summary>
+            <remarks>
+            Default authorization scheme: Bearer
+            </remarks>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.AuthorizeAttribute"/> class.
+            </remarks>
+            <param name="scheme">The scheme.</param>
+        </member>
+        <member name="M:Refit.AuthorizeAttribute.#ctor(System.String)">
+            <summary>
+            Add the Authorize header to the request with the value of the associated parameter.
+            </summary>
+            <remarks>
+            Default authorization scheme: Bearer
+            </remarks>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.AuthorizeAttribute"/> class.
+            </remarks>
+            <param name="scheme">The scheme.</param>
+        </member>
+        <member name="P:Refit.AuthorizeAttribute.Scheme">
+            <summary>
+            Gets the scheme.
+            </summary>
+            <value>
+            The scheme.
+            </value>
+        </member>
+        <member name="T:Refit.QueryAttribute">
+            <summary>
+            Associated value will be added to the request Uri as query-string, using a delimiter to split the values. (default: '.')
+            </summary>
+        </member>
+        <member name="M:Refit.QueryAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.QueryAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:Refit.QueryAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.QueryAttribute"/> class.
+            </summary>
+            <param name="delimiter">The delimiter.</param>
+        </member>
+        <member name="M:Refit.QueryAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.QueryAttribute"/> class.
+            </summary>
+            <param name="delimiter">The delimiter.</param>
+            <param name="prefix">The prefix.</param>
+        </member>
+        <member name="M:Refit.QueryAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.QueryAttribute"/> class.
+            </summary>
+            <param name="delimiter">The delimiter.</param>
+            <param name="prefix">The prefix.</param>
+            <param name="format">The format.</param>
+        </member>
+        <member name="M:Refit.QueryAttribute.#ctor(Refit.CollectionFormat)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.QueryAttribute"/> class.
+            </summary>
+            <param name="collectionFormat">The collection format.</param>
+        </member>
+        <member name="P:Refit.QueryAttribute.Delimiter">
+            <summary>
+            Used to customize the name of either the query parameter pair or of the form field when form encoding.
+            </summary>
+            <seealso cref="P:Refit.QueryAttribute.Prefix"/>
+        </member>
+        <member name="P:Refit.QueryAttribute.Prefix">
+            <summary>
+            Used to customize the name of the encoded value.
+            </summary>
+            <remarks>
+            Gets combined with <see cref="P:Refit.QueryAttribute.Delimiter"/> in the format <code>var name = $"{Prefix}{Delimiter}{originalFieldName}"</code>
+            where <c>originalFieldName</c> is the name of the object property or method parameter.
+            </remarks>
+            <example>
+            <code>
+            class Form
+            {
+              [Query("-", "dontlog")]
+              public string password { get; }
+            }
+            </code>
+            will result in the encoded form having a field named <c>dontlog-password</c>.
+            </example>
+        </member>
+        <member name="P:Refit.QueryAttribute.Format">
+            <summary>
+            Used to customize the formatting of the encoded value.
+            </summary>
+            <example>
+            <code>
+            interface IServerApi
+            {
+              [Get("/expenses")]
+              Task addExpense([Query(Format="0.00")] double expense);
+            }
+            </code>
+            Calling <c>serverApi.addExpense(5)</c> will result in a URI of <c>{baseUri}/expenses?expense=5.00</c>.
+            </example>
+        </member>
+        <member name="P:Refit.QueryAttribute.CollectionFormat">
+            <summary>
+            Specifies how the collection should be encoded.
+            </summary>
+        </member>
+        <member name="P:Refit.QueryAttribute.IsCollectionFormatSpecified">
+            <summary>
+            Gets a value indicating whether this instance is collection format specified.
+            </summary>
+            <value>
+              <c>true</c> if this instance is collection format specified; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Refit.QueryUriFormatAttribute">
+            <summary>
+            QueryUriFormatAttribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.QueryUriFormatAttribute"/> class.
+            </remarks>
+            <param name="uriFormat">The URI format.</param>
+        </member>
+        <member name="M:Refit.QueryUriFormatAttribute.#ctor(System.UriFormat)">
+            <summary>
+            QueryUriFormatAttribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.QueryUriFormatAttribute"/> class.
+            </remarks>
+            <param name="uriFormat">The URI format.</param>
+        </member>
+        <member name="P:Refit.QueryUriFormatAttribute.UriFormat">
+            <summary>
+            Specifies how the Query Params should be encoded.
+            </summary>
+        </member>
+        <member name="T:Refit.Buffers.PooledBufferWriter">
+            <summary>
+            A <see langword="struct"/> that provides a fast implementation of a binary writer, leveraging <see cref="T:System.Buffers.ArrayPool`1"/> for memory pooling
+            </summary>
+        </member>
+        <member name="F:Refit.Buffers.PooledBufferWriter.DefaultSize">
+            <summary>
+            The default size to use to create new <see cref="T:Refit.Buffers.PooledBufferWriter"/> instances
+            </summary>
+        </member>
+        <member name="F:Refit.Buffers.PooledBufferWriter.buffer">
+            <summary>
+            The <see cref="T:System.Byte"/> array current in use
+            </summary>
+        </member>
+        <member name="F:Refit.Buffers.PooledBufferWriter.position">
+            <summary>
+            The current position into <see cref="F:Refit.Buffers.PooledBufferWriter.buffer"/>
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.#ctor">
+            <summary>
+            Creates a new <see cref="T:Refit.Buffers.PooledBufferWriter"/> instance
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.Advance(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.GetMemory(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.GetSpan(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.EnsureFreeCapacity(System.Int32)">
+            <summary>
+            Ensures the buffer in use has the free capacity to contain the specified amount of new data
+            </summary>
+            <param name="count">The size in bytes of the new data to insert into the buffer</param>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.DetachStream">
+            <summary>
+            Gets a readable <see cref="T:System.IO.Stream"/> for the current instance, by detaching the used buffer
+            </summary>
+            <returns>A readable <see cref="T:System.IO.Stream"/> with the contents of the current instance</returns>
+        </member>
+        <member name="T:Refit.Buffers.PooledBufferWriter.PooledMemoryStream">
+            <summary>
+            An in-memory <see cref="T:System.IO.Stream"/> that uses memory buffers rented from a shared pool
+            </summary>
+        </member>
+        <member name="F:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.length">
+            <summary>
+            The current used length for <see cref="F:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.pooledBuffer"/>
+            </summary>
+        </member>
+        <member name="F:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.pooledBuffer">
+            <summary>
+            The buffer rented from <see cref="T:System.Buffers.ArrayPool`1"/> currently in use
+            </summary>
+        </member>
+        <member name="F:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.position">
+            <summary>
+            The current position within <see cref="F:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.pooledBuffer"/>
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.#ctor(Refit.Buffers.PooledBufferWriter)">
+            <summary>
+            Creates a new <see cref="T:Refit.Buffers.PooledBufferWriter.PooledMemoryStream"/> instance
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.Finalize">
+            <summary>
+            Releases the resources for the current <see cref="T:Refit.Buffers.PooledBufferWriter.PooledMemoryStream"/> instance
+            </summary>
+        </member>
+        <member name="P:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.CanRead">
+            <inheritdoc/>
+        </member>
+        <member name="P:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.CanSeek">
+            <inheritdoc/>
+        </member>
+        <member name="P:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.CanWrite">
+            <inheritdoc/>
+        </member>
+        <member name="P:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.Length">
+            <inheritdoc/>
+        </member>
+        <member name="P:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.Position">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.Flush">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.FlushAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.CopyToAsync(System.IO.Stream,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.ReadAsync(System.Byte[],System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.ReadByte">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.SetLength(System.Int64)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.PooledMemoryStream.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.ThrowArgumentOutOfRangeExceptionForNegativeCount">
+            <summary>
+            Throws an <see cref="T:System.ArgumentOutOfRangeException"/> when a method receives a negative "count" parameter.
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.ThrowArgumentOutOfRangeExceptionForNegativeOffset">
+            <summary>
+            Throws an <see cref="T:System.ArgumentOutOfRangeException"/> when a method receives a negative "offset" parameter.
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.ThrowArgumentOutOfRangeExceptionForAdvancedTooFar">
+            <summary>
+            Throws an <see cref="T:System.ArgumentOutOfRangeException"/> when <see cref="M:Refit.Buffers.PooledBufferWriter.Advance(System.Int32)"/> advances too far.
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.ThrowArgumentOutOfRangeExceptionForEndOfStreamReached">
+            <summary>
+            Throws an <see cref="T:System.ArgumentException"/> when the end of a <see cref="T:Refit.Buffers.PooledBufferWriter.PooledMemoryStream"/> has been exceeded.
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.ThrowObjectDisposedException">
+            <summary>
+            Throws an <see cref="T:System.ObjectDisposedException"/> when a <see cref="T:Refit.Buffers.PooledBufferWriter.PooledMemoryStream"/> method is called on a disposed instance.
+            </summary>
+        </member>
+        <member name="M:Refit.Buffers.PooledBufferWriter.ThrowNotSupportedException">
+            <summary>
+            Throws an <see cref="T:System.NotSupportedException"/> when an operation in <see cref="T:Refit.Buffers.PooledBufferWriter.PooledMemoryStream"/> is not supported.
+            </summary>
+        </member>
+        <member name="T:Refit.MethodTableKey">
+            <summary>
+            Represents a method composed of its name, generic arguments and parameters.
+            </summary>
+        </member>
+        <member name="M:Refit.MethodTableKey.#ctor(System.String,System.Type[],System.Type[])">
+            <summary>
+            Constructs an instance of <see cref="T:Refit.MethodTableKey"/>.
+            </summary>
+            <param name="methodName">Represents the methods name.</param>
+            <param name="parameters">Array containing the methods parameters.</param>
+            <param name="genericArguments">Array containing the methods generic arguments.</param>
+        </member>
+        <member name="P:Refit.MethodTableKey.MethodName">
+            <summary>
+            The methods name.
+            </summary>
+        </member>
+        <member name="P:Refit.MethodTableKey.Parameters">
+            <summary>
+            Array containing the methods parameters.
+            </summary>
+        </member>
+        <member name="P:Refit.MethodTableKey.GenericArguments">
+            <summary>
+            Array containing the methods generic arguments.
+            </summary>
+        </member>
+        <member name="T:Refit.CamelCaseUrlParameterKeyFormatter">
+            <summary>
+            Provides an implementation of <see cref="T:Refit.IUrlParameterKeyFormatter"/> that formats URL parameter keys in camelCase.
+            </summary>
+        </member>
+        <member name="M:Refit.CamelCaseUrlParameterKeyFormatter.Format(System.String)">
+            <summary>
+            Formats the specified key.
+            </summary>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.CollectionFormat">
+            <summary>
+            Collection format defined in https://swagger.io/docs/specification/2-0/describing-parameters/
+            </summary>
+        </member>
+        <member name="F:Refit.CollectionFormat.RefitParameterFormatter">
+            <summary>
+            Values formatted with <see cref="P:Refit.RefitSettings.UrlParameterFormatter"/> or
+            <see cref="P:Refit.RefitSettings.FormUrlEncodedParameterFormatter"/>.
+            </summary>
+        </member>
+        <member name="F:Refit.CollectionFormat.Csv">
+            <summary>
+            Comma-separated values
+            </summary>
+        </member>
+        <member name="F:Refit.CollectionFormat.Ssv">
+            <summary>
+            Space-separated values
+            </summary>
+        </member>
+        <member name="F:Refit.CollectionFormat.Tsv">
+            <summary>
+            Tab-separated values
+            </summary>
+        </member>
+        <member name="F:Refit.CollectionFormat.Pipes">
+            <summary>
+            Pipe-separated values
+            </summary>
+        </member>
+        <member name="F:Refit.CollectionFormat.Multi">
+            <summary>
+            Multiple parameter instances
+            </summary>
+        </member>
+        <member name="T:Refit.FormValueMultimap">
+            <summary>
+            Transforms a form source from a .NET representation to the appropriate HTTP form encoded representation.
+            </summary>
+            <remarks>Performs field renaming and value formatting as specified in <see cref="T:Refit.QueryAttribute"/>s and
+            <see cref="P:Refit.RefitSettings.FormUrlEncodedParameterFormatter"/>. A given key may appear multiple times with the
+            same or different values.</remarks>
+        </member>
+        <member name="P:Refit.FormValueMultimap.Keys">
+            <summary>
+            Returns a key for each entry. If multiple entries share the same key, the key is returned multiple times.
+            </summary>
+        </member>
+        <member name="T:Refit.HttpRequestMessageOptions">
+            <summary>
+            Contains Refit-defined properties on the HttpRequestMessage.Properties/Options
+            </summary>
+        </member>
+        <member name="P:Refit.HttpRequestMessageOptions.InterfaceType">
+            <summary>
+            Returns the <see cref="T:System.Type"/> of the top-level interface where the method was called from
+            </summary>
+        </member>
+        <member name="P:Refit.HttpRequestMessageOptions.RestMethodInfo">
+            <summary>
+            Returns the <see cref="T:Refit.RestMethodInfo"/> of the top-level interface
+            </summary>
+        </member>
+        <member name="T:Refit.JsonContentSerializer">
+            <summary>
+            JsonContentSerializer.
+            </summary>
+            <seealso cref="T:Refit.IHttpContentSerializer" />
+        </member>
+        <member name="M:Refit.JsonContentSerializer.ToHttpContent``1(``0)">
+            <summary>
+            Converts to httpcontent.
+            </summary>
+            <typeparam name="T">Type of the object to serialize from.</typeparam>
+            <param name="item">Object to serialize.</param>
+            <returns>
+              <see cref="T:System.Net.Http.HttpContent" /> that contains the serialized <typeparamref name="T" /> object.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Refit.JsonContentSerializer.FromHttpContentAsync``1(System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            Deserializes an object of type <typeparamref name="T" /> from an <see cref="T:System.Net.Http.HttpContent" /> object.
+            </summary>
+            <typeparam name="T">Type of the object to serialize to.</typeparam>
+            <param name="content">HttpContent object to deserialize.</param>
+            <param name="cancellationToken">CancellationToken to abort the deserialization.</param>
+            <returns>
+            The deserialized object of type <typeparamref name="T" />.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Refit.JsonContentSerializer.GetFieldNameForProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Calculates what the field name should be for the given property. This may be affected by custom attributes the serializer understands
+            </summary>
+            <param name="propertyInfo">A PropertyInfo object.</param>
+            <returns>
+            The calculated field name.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:Refit.MultipartItem">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.MultipartItem"/> class.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <exception cref="T:System.ArgumentNullException">fileName</exception>
+        </member>
+        <member name="M:Refit.MultipartItem.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.MultipartItem"/> class.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <exception cref="T:System.ArgumentNullException">fileName</exception>
+        </member>
+        <member name="M:Refit.MultipartItem.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.MultipartItem"/> class.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <param name="name">The name.</param>
+        </member>
+        <member name="P:Refit.MultipartItem.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:Refit.MultipartItem.ContentType">
+            <summary>
+            Gets the type of the content.
+            </summary>
+            <value>
+            The type of the content.
+            </value>
+        </member>
+        <member name="P:Refit.MultipartItem.FileName">
+            <summary>
+            Gets the name of the file.
+            </summary>
+            <value>
+            The name of the file.
+            </value>
+        </member>
+        <member name="M:Refit.MultipartItem.ToContent">
+            <summary>
+            Converts to content.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Refit.MultipartItem.CreateContent">
+            <summary>
+            Creates the content.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.StreamPart">
+            <summary>
+            Allows the use of a generic <see cref="T:System.IO.Stream"/> in a multipart form body.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.StreamPart"/> class.
+            </remarks>
+            <param name="value">The value.</param>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <param name="name">The name.</param>
+            <exception cref="T:System.ArgumentNullException">value</exception>
+        </member>
+        <member name="M:Refit.StreamPart.#ctor(System.IO.Stream,System.String,System.String,System.String)">
+            <summary>
+            Allows the use of a generic <see cref="T:System.IO.Stream"/> in a multipart form body.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.StreamPart"/> class.
+            </remarks>
+            <param name="value">The value.</param>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <param name="name">The name.</param>
+            <exception cref="T:System.ArgumentNullException">value</exception>
+        </member>
+        <member name="P:Refit.StreamPart.Value">
+            <summary>
+            Gets the value.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="M:Refit.StreamPart.CreateContent">
+            <summary>
+            Creates the content.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.ByteArrayPart">
+            <summary>
+            Allows the use of a <see cref="T:System.Byte"/> array in a multipart form body.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.ByteArrayPart"/> class.
+            </remarks>
+            <param name="value">The value.</param>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <param name="name">The name.</param>
+            <exception cref="T:System.ArgumentNullException">value</exception>
+        </member>
+        <member name="M:Refit.ByteArrayPart.#ctor(System.Byte[],System.String,System.String,System.String)">
+            <summary>
+            Allows the use of a <see cref="T:System.Byte"/> array in a multipart form body.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.ByteArrayPart"/> class.
+            </remarks>
+            <param name="value">The value.</param>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <param name="name">The name.</param>
+            <exception cref="T:System.ArgumentNullException">value</exception>
+        </member>
+        <member name="P:Refit.ByteArrayPart.Value">
+            <summary>
+            Gets the value.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="M:Refit.ByteArrayPart.CreateContent">
+            <summary>
+            Creates the content.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.FileInfoPart">
+            <summary>
+            Allows the use of a <see cref="T:System.IO.FileInfo"/> object in a multipart form body.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.FileInfoPart"/> class.
+            </remarks>
+            <param name="value">The value.</param>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <param name="name">The name.</param>
+            <exception cref="T:System.ArgumentNullException">value</exception>
+        </member>
+        <member name="M:Refit.FileInfoPart.#ctor(System.IO.FileInfo,System.String,System.String,System.String)">
+            <summary>
+            Allows the use of a <see cref="T:System.IO.FileInfo"/> object in a multipart form body.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Refit.FileInfoPart"/> class.
+            </remarks>
+            <param name="value">The value.</param>
+            <param name="fileName">Name of the file.</param>
+            <param name="contentType">Type of the content.</param>
+            <param name="name">The name.</param>
+            <exception cref="T:System.ArgumentNullException">value</exception>
+        </member>
+        <member name="P:Refit.FileInfoPart.Value">
+            <summary>
+            Gets the value.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="M:Refit.FileInfoPart.CreateContent">
+            <summary>
+            Creates the content.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.ProblemDetails">
+            <summary>
+            The object representing the details about a ValidationException caught by a service implementing RFC 7807.
+            </summary>
+        </member>
+        <member name="P:Refit.ProblemDetails.Errors">
+            <summary>
+            Collection of resulting errors for the request.
+            </summary>
+        </member>
+        <member name="P:Refit.ProblemDetails.Extensions">
+            <summary>
+            Collection of ProblemDetails extensions
+            </summary>
+        </member>
+        <member name="P:Refit.ProblemDetails.Type">
+            <summary>
+            A URI reference that identifies the problem type.
+            </summary>
+        </member>
+        <member name="P:Refit.ProblemDetails.Title">
+            <summary>
+            A short, human-readable summary of the problem type.
+            </summary>
+        </member>
+        <member name="P:Refit.ProblemDetails.Status">
+            <summary>
+            The HTTP status code generated by the origin server for this occurrence of the problem.
+            </summary>
+        </member>
+        <member name="P:Refit.ProblemDetails.Detail">
+            <summary>
+            A human-readable explanation specific to this occurrence of the problem.
+            </summary>
+        </member>
+        <member name="P:Refit.ProblemDetails.Instance">
+            <summary>
+            A URI reference that identifies the specific occurrence of the problem.
+            </summary>
+        </member>
+        <member name="T:Refit.RefitSettings">
+            <summary>
+            Defines various parameters on how Refit should work.
+            </summary>
+        </member>
+        <member name="M:Refit.RefitSettings.#ctor">
+            <summary>
+            Creates a new <see cref="T:Refit.RefitSettings"/> instance with the default parameters
+            </summary>
+        </member>
+        <member name="M:Refit.RefitSettings.#ctor(Refit.IHttpContentSerializer,Refit.IUrlParameterFormatter,Refit.IFormUrlEncodedParameterFormatter)">
+            <summary>
+            Creates a new <see cref="T:Refit.RefitSettings"/> instance with the specified parameters
+            </summary>
+            <param name="contentSerializer">The <see cref="T:Refit.IHttpContentSerializer"/> instance to use</param>
+            <param name="urlParameterFormatter">The <see cref="T:Refit.IUrlParameterFormatter"/> instance to use (defaults to <see cref="T:Refit.DefaultUrlParameterFormatter"/>)</param>
+            <param name="formUrlEncodedParameterFormatter">The <see cref="T:Refit.IFormUrlEncodedParameterFormatter"/> instance to use (defaults to <see cref="T:Refit.DefaultFormUrlEncodedParameterFormatter"/>)</param>
+        </member>
+        <member name="M:Refit.RefitSettings.#ctor(Refit.IHttpContentSerializer,Refit.IUrlParameterFormatter,Refit.IFormUrlEncodedParameterFormatter,Refit.IUrlParameterKeyFormatter)">
+            <summary>
+            Creates a new <see cref="T:Refit.RefitSettings"/> instance with the specified parameters
+            </summary>
+            <param name="contentSerializer">The <see cref="T:Refit.IHttpContentSerializer"/> instance to use</param>
+            <param name="urlParameterFormatter">The <see cref="T:Refit.IUrlParameterFormatter"/> instance to use (defaults to <see cref="T:Refit.DefaultUrlParameterFormatter"/>)</param>
+            <param name="formUrlEncodedParameterFormatter">The <see cref="T:Refit.IFormUrlEncodedParameterFormatter"/> instance to use (defaults to <see cref="T:Refit.DefaultFormUrlEncodedParameterFormatter"/>)</param>
+            <param name="urlParameterKeyFormatter">The <see cref="T:Refit.IUrlParameterKeyFormatter"/> instance to use (defaults to <see cref="T:Refit.DefaultUrlParameterKeyFormatter"/>)</param>
+        </member>
+        <member name="P:Refit.RefitSettings.AuthorizationHeaderValueGetter">
+            <summary>
+            Supply a function to provide the Authorization header. Does not work if you supply an HttpClient instance.
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.HttpMessageHandlerFactory">
+            <summary>
+            Supply a custom inner HttpMessageHandler. Does not work if you supply an HttpClient instance.
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.ExceptionFactory">
+            <summary>
+            Supply a function to provide <see cref="T:System.Exception"/> based on <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            If function returns null - no exception is thrown.
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.DeserializationExceptionFactory">
+            <summary>
+            Supply a function to provide <see cref="T:System.Exception"/> when deserialization exception is encountered.
+            If function returns null - no exception is thrown.
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.ContentSerializer">
+            <summary>
+            Defines how requests' content should be serialized. (defaults to <see cref="T:Refit.SystemTextJsonContentSerializer"/>)
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.UrlParameterKeyFormatter">
+            <summary>
+            The <see cref="T:Refit.IUrlParameterKeyFormatter"/> instance to use for formatting URL parameter keys (defaults to <see cref="T:Refit.DefaultUrlParameterKeyFormatter" />.
+            Allows customization of key naming conventions.
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.UrlParameterFormatter">
+            <summary>
+            The <see cref="T:Refit.IUrlParameterFormatter"/> instance to use (defaults to <see cref="T:Refit.DefaultUrlParameterFormatter"/>)
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.FormUrlEncodedParameterFormatter">
+            <summary>
+            The <see cref="T:Refit.IFormUrlEncodedParameterFormatter"/> instance to use (defaults to <see cref="T:Refit.DefaultFormUrlEncodedParameterFormatter"/>)
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.CollectionFormat">
+            <summary>
+            Sets the default collection format to use. (defaults to <see cref="F:Refit.CollectionFormat.RefitParameterFormatter"/>)
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.Buffered">
+            <summary>
+            Sets the default behavior when sending a request's body content. (defaults to false, request body is not streamed to the server)
+            </summary>
+        </member>
+        <member name="P:Refit.RefitSettings.HttpRequestMessageOptions">
+            <summary>
+            Optional Key-Value pairs, which are displayed in the property <see cref="P:System.Net.Http.HttpRequestMessage.Properties"/>.
+            </summary>
+        </member>
+        <member name="T:Refit.IHttpContentSerializer">
+            <summary>
+            Provides content serialization to <see cref="T:System.Net.Http.HttpContent"/>.
+            </summary>
+        </member>
+        <member name="M:Refit.IHttpContentSerializer.ToHttpContent``1(``0)">
+            <summary>
+            Serializes an object of type <typeparamref name="T"/> to <see cref="T:System.Net.Http.HttpContent"/>
+            </summary>
+            <typeparam name="T">Type of the object to serialize from.</typeparam>
+            <param name="item">Object to serialize.</param>
+            <returns><see cref="T:System.Net.Http.HttpContent"/> that contains the serialized <typeparamref name="T"/> object.</returns>
+        </member>
+        <member name="M:Refit.IHttpContentSerializer.FromHttpContentAsync``1(System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            Deserializes an object of type <typeparamref name="T"/> from an <see cref="T:System.Net.Http.HttpContent"/> object.
+            </summary>
+            <typeparam name="T">Type of the object to serialize to.</typeparam>
+            <param name="content">HttpContent object to deserialize.</param>
+            <param name="cancellationToken">CancellationToken to abort the deserialization.</param>
+            <returns>The deserialized object of type <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Refit.IHttpContentSerializer.GetFieldNameForProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Calculates what the field name should be for the given property. This may be affected by custom attributes the serializer understands
+            </summary>
+            <param name="propertyInfo">A PropertyInfo object.</param>
+            <returns>The calculated field name.</returns>
+        </member>
+        <member name="T:Refit.IUrlParameterKeyFormatter">
+            <summary>
+            Provides a mechanism for formatting URL parameter keys, allowing customization of key naming conventions.
+            </summary>
+        </member>
+        <member name="M:Refit.IUrlParameterKeyFormatter.Format(System.String)">
+            <summary>
+            Formats the specified key.
+            </summary>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.IUrlParameterFormatter">
+            <summary>
+            Provides Url parameter formatting.
+            </summary>
+        </member>
+        <member name="M:Refit.IUrlParameterFormatter.Format(System.Object,System.Reflection.ICustomAttributeProvider,System.Type)">
+            <summary>
+            Formats the specified value.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="attributeProvider">The attribute provider.</param>
+            <param name="type">Container class type.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.IFormUrlEncodedParameterFormatter">
+            <summary>
+            Provides form Url-encoded parameter formatting.
+            </summary>
+        </member>
+        <member name="M:Refit.IFormUrlEncodedParameterFormatter.Format(System.Object,System.String)">
+            <summary>
+            Formats the specified value.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="formatString">The format string.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.DefaultUrlParameterKeyFormatter">
+            <summary>
+            Default Url parameter key formatter. Does not do any formatting.
+            </summary>
+        </member>
+        <member name="M:Refit.DefaultUrlParameterKeyFormatter.Format(System.String)">
+            <summary>
+            Formats the specified key.
+            </summary>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.DefaultUrlParameterFormatter">
+            <summary>
+            Default Url parameter formater.
+            </summary>
+        </member>
+        <member name="M:Refit.DefaultUrlParameterFormatter.AddFormat``2(System.String)">
+            <summary>
+            Add format for specified parameter type contained within container class of specified type.
+            Might be suppressed by a QueryAttribute format.
+            </summary>
+            <param name="format">The format string.</param>
+            <typeparam name="TContainer">Container class type.</typeparam>
+            <typeparam name="TParameter">Parameter type.</typeparam>
+        </member>
+        <member name="M:Refit.DefaultUrlParameterFormatter.AddFormat``1(System.String)">
+            <summary>
+            Add format for specified parameter type.
+            Might be suppressed by a QueryAttribute format or a container specific format.
+            </summary>
+            <param name="format">The format string.</param>
+            <typeparam name="TParameter">Parameter type.</typeparam>
+        </member>
+        <member name="M:Refit.DefaultUrlParameterFormatter.Format(System.Object,System.Reflection.ICustomAttributeProvider,System.Type)">
+            <summary>
+            Formats the specified parameter value.
+            </summary>
+            <param name="parameterValue">The parameter value.</param>
+            <param name="attributeProvider">The attribute provider.</param>
+            <param name="type">Container class type.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">attributeProvider</exception>
+        </member>
+        <member name="T:Refit.DefaultFormUrlEncodedParameterFormatter">
+            <summary>
+            Default form Url-encoded parameter formatter.
+            </summary>
+        </member>
+        <member name="M:Refit.DefaultFormUrlEncodedParameterFormatter.Format(System.Object,System.String)">
+            <summary>
+            Formats the specified parameter value.
+            </summary>
+            <param name="parameterValue">The parameter value.</param>
+            <param name="formatString">The format string.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.DefaultApiExceptionFactory">
+            <summary>
+            Default Api exception factory.
+            </summary>
+        </member>
+        <member name="M:Refit.DefaultApiExceptionFactory.#ctor(Refit.RefitSettings)">
+            <summary>
+            Default Api exception factory.
+            </summary>
+        </member>
+        <member name="M:Refit.DefaultApiExceptionFactory.CreateAsync(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Creates the asynchronous.
+            </summary>
+            <param name="responseMessage">The response message.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.IRequestBuilder">
+            <summary>
+            IRequestBuilder.
+            </summary>
+        </member>
+        <member name="M:Refit.IRequestBuilder.BuildRestResultFuncForMethod(System.String,System.Type[],System.Type[])">
+            <summary>
+            Builds the rest result function for method.
+            </summary>
+            <param name="methodName">Name of the method.</param>
+            <param name="parameterTypes">The parameter types.</param>
+            <param name="genericArgumentTypes">The generic argument types.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.IRequestBuilder`1">
+             <summary>
+            
+             </summary>
+             <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Refit.RequestBuilder">
+            <summary>
+            RequestBuilder.
+            </summary>
+        </member>
+        <member name="M:Refit.RequestBuilder.ForType``1(Refit.RefitSettings)">
+            <summary>
+            Fors the type.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="settings">The settings.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Refit.RequestBuilder.ForType``1">
+            <summary>
+            Fors the type.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Refit.RequestBuilder.ForType(System.Type,Refit.RefitSettings)">
+            <summary>
+            Fors the type.
+            </summary>
+            <param name="refitInterfaceType">Type of the refit interface.</param>
+            <param name="settings">The settings.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Refit.RequestBuilder.ForType(System.Type)">
+            <summary>
+            Fors the type.
+            </summary>
+            <param name="refitInterfaceType">Type of the refit interface.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Refit.RestMethodInfo">
+            <summary>
+            RestMethodInfo
+            </summary>
+        </member>
+        <member name="M:Refit.RestMethodInfo.#ctor(System.String,System.Type,System.Reflection.MethodInfo,System.String,System.Type)">
+            <summary>
+            RestMethodInfo
+            </summary>
+        </member>
+        <member name="T:Refit.RestMethodParameterInfo">
+            <summary>
+            RestMethodParameterInfo.
+            </summary>
+        </member>
+        <member name="M:Refit.RestMethodParameterInfo.#ctor(System.String,System.Reflection.ParameterInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.RestMethodParameterInfo"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="parameterInfo">The parameter information.</param>
+        </member>
+        <member name="M:Refit.RestMethodParameterInfo.#ctor(System.Boolean,System.Reflection.ParameterInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.RestMethodParameterInfo"/> class.
+            </summary>
+            <param name="isObjectPropertyParameter">if set to <c>true</c> [is object property parameter].</param>
+            <param name="parameterInfo">The parameter information.</param>
+        </member>
+        <member name="P:Refit.RestMethodParameterInfo.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:Refit.RestMethodParameterInfo.ParameterInfo">
+            <summary>
+            Gets or sets the parameter information.
+            </summary>
+            <value>
+            The parameter information.
+            </value>
+        </member>
+        <member name="P:Refit.RestMethodParameterInfo.IsObjectPropertyParameter">
+            <summary>
+            Gets or sets a value indicating whether this instance is object property parameter.
+            </summary>
+            <value>
+              <c>true</c> if this instance is object property parameter; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Refit.RestMethodParameterInfo.ParameterProperties">
+            <summary>
+            Gets or sets the parameter properties.
+            </summary>
+            <value>
+            The parameter properties.
+            </value>
+        </member>
+        <member name="P:Refit.RestMethodParameterInfo.Type">
+            <summary>
+            Gets or sets the type.
+            </summary>
+            <value>
+            The type.
+            </value>
+        </member>
+        <member name="T:Refit.RestMethodParameterProperty">
+            <summary>
+            RestMethodParameterProperty.
+            </summary>
+        </member>
+        <member name="M:Refit.RestMethodParameterProperty.#ctor(System.String,System.Reflection.PropertyInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Refit.RestMethodParameterProperty"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="propertyInfo">The property information.</param>
+        </member>
+        <member name="P:Refit.RestMethodParameterProperty.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:Refit.RestMethodParameterProperty.PropertyInfo">
+            <summary>
+            Gets or sets the property information.
+            </summary>
+            <value>
+            The property information.
+            </value>
+        </member>
+        <member name="T:Refit.ParameterType">
+            <summary>
+            ParameterType.
+            </summary>
+        </member>
+        <member name="F:Refit.ParameterType.Normal">
+            <summary>
+            The normal
+            </summary>
+        </member>
+        <member name="F:Refit.ParameterType.RoundTripping">
+            <summary>
+            The round tripping
+            </summary>
+        </member>
+        <member name="T:Refit.RestService">
+            <summary>
+            RestService.
+            </summary>
+        </member>
+        <member name="M:Refit.RestService.For``1(System.Net.Http.HttpClient,Refit.IRequestBuilder{``0})">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <typeparam name="T">Interface to create the implementation for.</typeparam>
+            <param name="client">The <see cref="T:System.Net.Http.HttpClient"/> the implementation will use to send requests.</param>
+            <param name="builder"><see cref="T:Refit.IRequestBuilder"/> to use to build requests.</param>
+            <returns>An instance that implements <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For``1(System.Net.Http.HttpClient,Refit.RefitSettings)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <typeparam name="T">Interface to create the implementation for.</typeparam>
+            <param name="client">The <see cref="T:System.Net.Http.HttpClient"/> the implementation will use to send requests.</param>
+            <param name="settings"><see cref="T:Refit.RefitSettings"/> to use to configure the HttpClient.</param>
+            <returns>An instance that implements <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For``1(System.Net.Http.HttpClient)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <typeparam name="T">Interface to create the implementation for.</typeparam>
+            <param name="client">The <see cref="T:System.Net.Http.HttpClient"/> the implementation will use to send requests.</param>
+            <returns>An instance that implements <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For``1(System.String,Refit.RefitSettings)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <typeparam name="T">Interface to create the implementation for.</typeparam>
+            <param name="hostUrl">Base address the implementation will use.</param>
+            <param name="settings"><see cref="T:Refit.RefitSettings"/> to use to configure the HttpClient.</param>
+            <returns>An instance that implements <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For``1(System.String)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <typeparam name="T">Interface to create the implementation for.</typeparam>
+            <param name="hostUrl">Base address the implementation will use.</param>
+            <returns>An instance that implements <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For(System.Type,System.Net.Http.HttpClient,Refit.IRequestBuilder)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <param name="refitInterfaceType">Interface to create the implementation for.</param>
+            <param name="client">The <see cref="T:System.Net.Http.HttpClient"/> the implementation will use to send requests.</param>
+            <param name="builder"><see cref="T:Refit.IRequestBuilder"/> to use to build requests.</param>
+            <returns>An instance that implements <paramref name="refitInterfaceType"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For(System.Type,System.Net.Http.HttpClient,Refit.RefitSettings)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <param name="refitInterfaceType">Interface to create the implementation for.</param>
+            <param name="client">The <see cref="T:System.Net.Http.HttpClient"/> the implementation will use to send requests.</param>
+            <param name="settings"><see cref="T:Refit.RefitSettings"/> to use to configure the HttpClient.</param>
+            <returns>An instance that implements <paramref name="refitInterfaceType"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For(System.Type,System.Net.Http.HttpClient)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <param name="refitInterfaceType">Interface to create the implementation for.</param>
+            <param name="client">The <see cref="T:System.Net.Http.HttpClient"/> the implementation will use to send requests.</param>
+            <returns>An instance that implements <paramref name="refitInterfaceType"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For(System.Type,System.String,Refit.RefitSettings)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <param name="refitInterfaceType">Interface to create the implementation for.</param>
+            <param name="hostUrl">Base address the implementation will use.</param>
+            <param name="settings"><see cref="T:Refit.RefitSettings"/> to use to configure the HttpClient.</param>
+            <returns>An instance that implements <paramref name="refitInterfaceType"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.For(System.Type,System.String)">
+            <summary>
+            Generate a Refit implementation of the specified interface.
+            </summary>
+            <param name="refitInterfaceType">Interface to create the implementation for.</param>
+            <param name="hostUrl">Base address the implementation will use.</param>
+            <returns>An instance that implements <paramref name="refitInterfaceType"/>.</returns>
+        </member>
+        <member name="M:Refit.RestService.CreateHttpClient(System.String,Refit.RefitSettings)">
+            <summary>
+            Create an <see cref="T:System.Net.Http.HttpClient"/> with <paramref name="hostUrl"/> as the base address.
+            </summary>
+            <param name="hostUrl">Base address.</param>
+            <param name="settings"><see cref="T:Refit.RefitSettings"/> to use to configure the HttpClient.</param>
+            <returns>A <see cref="T:System.Net.Http.HttpClient"/> with the various parameters provided.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="T:Refit.SystemTextJsonContentSerializer">
+            <summary>
+            A <see langword="class"/> implementing <see cref="T:Refit.IHttpContentSerializer"/> using the System.Text.Json APIs
+            </summary>
+        </member>
+        <member name="F:Refit.SystemTextJsonContentSerializer.jsonSerializerOptions">
+            <summary>
+            The JSON serialization options to use
+            </summary>
+        </member>
+        <member name="M:Refit.SystemTextJsonContentSerializer.#ctor">
+            <summary>
+            Creates a new <see cref="T:Refit.SystemTextJsonContentSerializer"/> instance
+            </summary>
+        </member>
+        <member name="M:Refit.SystemTextJsonContentSerializer.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Creates a new <see cref="T:Refit.SystemTextJsonContentSerializer"/> instance with the specified parameters
+            </summary>
+            <param name="jsonSerializerOptions">The serialization options to use for the current instance</param>
+        </member>
+        <member name="M:Refit.SystemTextJsonContentSerializer.ToHttpContent``1(``0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.SystemTextJsonContentSerializer.FromHttpContentAsync``1(System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Refit.SystemTextJsonContentSerializer.GetFieldNameForProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Calculates what the field name should be for the given property. This may be affected by custom attributes the serializer understands
+            </summary>
+            <param name="propertyInfo">A PropertyInfo object.</param>
+            <returns>
+            The calculated field name.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">propertyInfo</exception>
+        </member>
+        <member name="M:Refit.SystemTextJsonContentSerializer.GetDefaultJsonSerializerOptions">
+            <summary>
+            Creates new <see cref="T:System.Text.Json.JsonSerializerOptions"/> and fills it with default parameters
+            </summary>
+        </member>
+        <member name="T:Refit.ObjectToInferredTypesConverter">
+            <summary>
+            ObjectToInferredTypesConverter.
+            From https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-converters-how-to?pivots=dotnet-5-0#deserialize-inferred-types-to-object-properties
+            </summary>
+        </member>
+        <member name="M:Refit.ObjectToInferredTypesConverter.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Reads and converts the JSON to type <typeparamref name="T" />.
+            </summary>
+            <param name="reader">The reader.</param>
+            <param name="typeToConvert">The type to convert.</param>
+            <param name="options">An object that specifies serialization options to use.</param>
+            <returns>
+            The converted value.
+            </returns>
+        </member>
+        <member name="M:Refit.ObjectToInferredTypesConverter.Write(System.Text.Json.Utf8JsonWriter,System.Object,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Writes the specified writer.
+            </summary>
+            <param name="writer">The writer.</param>
+            <param name="objectToWrite">The object to write.</param>
+            <param name="options">The options.</param>
+        </member>
+        <member name="T:Refit.ValidationApiException">
+            <summary>
+            An ApiException that is raised according to RFC 7807, which contains problem details for validation exceptions.
+            </summary>
+        </member>
+        <member name="M:Refit.ValidationApiException.Create(Refit.ApiException)">
+            <summary>
+            Creates a new instance of a ValidationException from an existing ApiException.
+            </summary>
+            <param name="exception">An instance of an ApiException to use to build a ValidationException.</param>
+            <returns>ValidationApiException</returns>
+        </member>
+        <member name="P:Refit.ValidationApiException.Content">
+            <summary>
+            The problem details of the RFC 7807 validation exception.
+            </summary>
+        </member>
+        <member name="M:Refit.ValueStringBuilder.GetPinnableReference">
+            <summary>
+            Get a pinnable reference to the builder.
+            Does not ensure there is a null char after <see cref="P:Refit.ValueStringBuilder.Length"/>
+            This overload is pattern matched in the C# 7.3+ compiler so you can omit
+            the explicit method call, and write eg "fixed (char* c = builder)"
+            </summary>
+        </member>
+        <member name="M:Refit.ValueStringBuilder.GetPinnableReference(System.Boolean)">
+            <summary>
+            Get a pinnable reference to the builder.
+            </summary>
+            <param name="terminate">Ensures that the builder has a null char after <see cref="P:Refit.ValueStringBuilder.Length"/></param>
+        </member>
+        <member name="P:Refit.ValueStringBuilder.RawChars">
+            <summary>Returns the underlying storage of the builder.</summary>
+        </member>
+        <member name="M:Refit.ValueStringBuilder.AsSpan(System.Boolean)">
+            <summary>
+            Returns a span around the contents of the builder.
+            </summary>
+            <param name="terminate">Ensures that the builder has a null char after <see cref="P:Refit.ValueStringBuilder.Length"/></param>
+        </member>
+        <member name="M:Refit.ValueStringBuilder.Grow(System.Int32)">
+            <summary>
+            Resize the internal buffer either by doubling current buffer size or
+            by adding <paramref name="additionalCapacityBeyondPos"/> to
+            <see cref="F:Refit.ValueStringBuilder._pos"/> whichever is greater.
+            </summary>
+            <param name="additionalCapacityBeyondPos">
+            Number of chars requested beyond current position.
+            </param>
+        </member>
+        <member name="T:System.Net.Http.PushStreamContent">
+            <summary>
+            Provides an <see cref="T:System.Net.Http.HttpContent"/> implementation that exposes an output <see cref="T:System.IO.Stream"/>
+            which can be written to directly. The ability to push data to the output stream differs from the
+            <see cref="T:System.Net.Http.StreamContent"/> where data is pulled and not pushed.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class. The
+            <paramref name="onStreamAvailable"/> action is called when an output stream
+            has become available allowing the action to write to it directly. When the
+            stream is closed, it will signal to the content that is has completed and the
+            HTTP request or response will be completed.
+            </summary>
+            <param name="onStreamAvailable">The action to call when an output stream is available.</param>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class.
+            </summary>
+            <param name="onStreamAvailable">The action to call when an output stream is available. The stream is automatically
+            closed when the return task is completed.</param>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class with the given media type.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class with the given media type.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext},System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class with the given <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task},System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class with the given <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue"/>.
+            </summary>
+        </member>
+        <member name="T:System.Net.Http.PushStreamContent.AsyncVoid">
+            <summary>
+            Used as the T in a "conversion" of a Task into a Task{T}
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.SerializeToStreamAsync(System.IO.Stream,System.Net.TransportContext)">
+            <summary>
+            When this method is called, it calls the action provided in the constructor with the output
+            stream to write to. Once the action has completed its work it closes the stream which will
+            close this content instance and complete the HTTP request or response.
+            </summary>
+            <param name="stream">The <see cref="T:System.IO.Stream"/> to which to write.</param>
+            <param name="context">The associated <see cref="T:System.Net.TransportContext"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> instance that is asynchronously serializing the object's content.</returns>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.TryComputeLength(System.Int64@)">
+            <summary>
+            Computes the length of the stream if possible.
+            </summary>
+            <param name="length">The computed length of the stream.</param>
+            <returns><c>true</c> if the length has been computed; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:System.Net.Http.DelegatingStream">
+            <summary>
+            Stream that delegates to inner stream.
+            This is taken from System.Net.Http
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.DelegatingStream.#ctor(System.IO.Stream)">
+            <summary>
+            Stream that delegates to inner stream.
+            This is taken from System.Net.Http
+            </summary>
+        </member>
+    </members>
+</doc>
