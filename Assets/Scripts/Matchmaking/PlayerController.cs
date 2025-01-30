@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
         }
+        Debug.Log(gold + " gold " + xp + " xp " + name + " name " + " &&& DestributeGoldAndXPForPlayer");
         playerGainedGold += gold;
         playerGainedXP += xp;
         totalGold += gold;
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private void DistributeGoldAndXP(int gold, int xp, int totalGold, int totalXP)
     {
         EnemyController enemyController = gameboardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
+        Debug.Log(gold + " gold " + xp + " xp " + totalGold + " total gold " + totalXP + " total xp in rpc");
         enemyController.enemyGainedGold = gold;
         enemyController.enemyGainedXP = xp;
         enemyController.totalGold = totalGold;

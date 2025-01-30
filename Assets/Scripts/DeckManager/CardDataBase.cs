@@ -72,6 +72,7 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Mimic, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Mimic));
         requirements.Add(CardAbility.Endgame, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Endgame));
         requirements.Add(CardAbility.Silence, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Silence));
+        requirements.Add(CardAbility.Stifle, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Stifle));
     }
 
     public void GetAbilityType()
@@ -110,6 +111,7 @@ public class CardDataBase : MonoBehaviour
         abilityTypeMap.Add(CardAbility.Mimic, typeof(Mimic));
         abilityTypeMap.Add(CardAbility.Endgame, typeof(EndGame));
         abilityTypeMap.Add(CardAbility.Silence, typeof(Silence));
+        abilityTypeMap.Add(CardAbility.Stifle, typeof(Stifle));
     }
 
     public List<int> GetSurroundingPositions(int selectedPosition)

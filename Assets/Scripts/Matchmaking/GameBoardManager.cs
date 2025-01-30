@@ -1414,9 +1414,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 //Debug.Log(string.Join(", ", enemyFieldList) + "  player field list ");
 
                 DamagingToTheSurroundingCard(enemyFieldList, enemyField, attacking, pv, scattershot.damageAmount);
-
-
             }
+            // else if (attacking.GetComponent<Stifle>() && !attacking.isNone)
+            // {
+            //     Stifle stifle = attacking.GetComponent<Stifle>();
+            //     Debug.Log(target.XP + " target xp before stifle");
+            //     float actualXP = stifle.UseStifleAbility(target.XP);
+            //     target.XP = (int)actualXP;
+            //     Debug.Log(target.XP + " target xp after stifle");
+            // }
             else
             {
                 Debug.Log("normal card attack called");
@@ -1435,7 +1441,20 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             {
                 enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
                 //enemyController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
-                enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "master");
+                var (isStifled, dropXP) = IsStifled(playerField);
+                Debug.Log(isStifled + " is stifle destroy player master " + playerCard.GetComponent<Card>().XP);
+                if (isStifled)
+                {
+                    float actualXP = playerCard.GetComponent<Card>().XP * (1 - dropXP / 100f);
+                    Debug.Log(actualXP + " actual xp ");
+                    enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, (int)actualXP, "master");
+                }
+                else
+                {
+                    Debug.Log(" not stifle actual xp " + playerCard.GetComponent<Card>().XP);
+                    enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "master");
+                }
+                
                 //InitCards();
                 //int goldPlayer = attacking.gold;
                 //int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
@@ -1472,7 +1491,21 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.LogError(" Destroy enemy called mastyer");
                 playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
                 //playerController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
-                playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
+                 var (isStifled, dropXP) = IsStifled(enemyField);
+                Debug.Log(isStifled + " is stifle destroy enemy master " + enemyCard.GetComponent<Card>().XP);
+                if(isStifled)
+                {
+                    float actualXP = enemyCard.GetComponent<Card>().XP * (1 - dropXP / 100f);
+                    Debug.Log(actualXP + " actual xp ");
+                    playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, (int)actualXP, "master");
+                }
+                else
+                {
+                    Debug.Log(" not stifle actual xp " + enemyCard.GetComponent<Card>().XP);
+                    playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
+                }
+
+                //playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
                 //InitCards();
                 //int goldEnemy = target.gold;
                 //int goldPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
@@ -1728,7 +1761,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.LogError(" Destroy player called client ");
                 enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
                 //enemyController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
-                enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
+                 var (isStifled, dropXP) = IsStifled(playerField);
+                Debug.Log(isStifled + " is stifle destroy player not master " + playerCard.GetComponent<Card>().XP);
+
+                if(isStifled)
+                {
+                    float actualXP = playerCard.GetComponent<Card>().XP * (1 - dropXP / 100f);
+                    Debug.Log(actualXP + " actual xp ");
+                    enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, (int)actualXP, "client");
+                }
+                else
+                {
+                    Debug.Log(" not stifle actual xp " + enemyCard.GetComponent<Card>().XP);
+                    enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
+                }
+
+                //enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
                 //InitCards();
                 //int goldPlayer = attacking.gold;
                 //int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
@@ -1761,7 +1809,23 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.LogError(" destroy enemy called ");
                 playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
                 //playerController.totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
-                playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
+
+                var (isStifled, dropXP) = IsStifled(enemyField);
+                Debug.Log(isStifled + " is stifle destroy enemy not master " + enemyCard.GetComponent<Card>().XP);
+
+                if(isStifled)
+                {
+                    float actualXP = enemyCard.GetComponent<Card>().XP * (1 - dropXP / 100f);
+                    Debug.Log(actualXP + " actual xp ");
+                    playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, (int)actualXP, "client");
+                }
+                else
+                {
+                    Debug.Log(" not stifle actual xp " + enemyCard.GetComponent<Card>().XP);
+                    playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
+                }
+
+                //playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
                 //InitCards();
                 //int goldEnemy = target.gold;
                 //int goldPlayerDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
@@ -2543,6 +2607,10 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             case CardAbility.Silence:
                 Silence silence = card.gameObject.AddComponent<Silence>();
                 silence.ability = CardAbility.Silence;
+                break;
+            case CardAbility.Stifle:
+                Stifle stifle = card.gameObject.AddComponent<Stifle>();
+                stifle.ability = CardAbility.Stifle;
                 break;
             default: break;
         }
@@ -3393,7 +3461,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log("**## inside MoveCard " + prevPos + " previousPos " + currPos + " currentPos " + hCount + " handCount " + fCount + " fieldCount " + id + " cardId ");
         Debug.Log($"MoveCard called with prevPos: {prevPos}, currPos: {currPos}, hCount: {hCount}, fCount: {fCount}, id: {id}");
-        
+
         //Debug.Log(" move card " + hCount + " h count " + fCount + " f count");
         CardDetails clickedCard = cardDetails.Find(card => card.id == id);
         //Debug.Log(clickedCard.id + " click card id");
@@ -3413,17 +3481,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             return;
         }
 
-        if(enemyHand.transform.GetChild(prevPos - 1).childCount <= 0)
+        if (enemyHand.transform.GetChild(prevPos - 1).childCount <= 0)
         {
             GameObject go = gameBoardParent.transform.Find("TestGameObject").gameObject;
             Debug.LogError($"child count prevPos is 0 enemyHand.transform.GetChild(prevPos - 1)");
             go.SetActive(true);
             return;
         }
-        
-        if(enemyField.transform.GetChild(currPos - 1).childCount > 0)
+
+        if (enemyField.transform.GetChild(currPos - 1).childCount > 0)
         {
-            GameObject go =  gameBoardParent.transform.Find("TestGameObject").gameObject;
+            GameObject go = gameBoardParent.transform.Find("TestGameObject").gameObject;
             Debug.Log(go.name + " gameobject name enemyField.transform.GetChild(currPos - 1)");
             go.SetActive(true);
             Debug.LogError($"child count currPos is >s 0");
@@ -3909,7 +3977,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 turnCounter++;
                 customProp["totalTurnCount"] = turnCounter;
                 PhotonNetwork.CurrentRoom.SetCustomProperties(customProp);
-                playerGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Glass").gameObject; 
+                playerGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Glass").gameObject;
                 enemyGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Glass").gameObject;
                 Debug.Log(playerGlass + " playerGlass " + enemyGlass + " enemyGlass " + enemyGlass.transform.parent.parent);
                 EnableOrDisablePointerImage(playerGlass, false);
@@ -4111,7 +4179,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     else if (cardObj.GetComponent<None>().constraint == NoneConstraint.TurnBased)
                     {
                         int noneVal = cardObj.GetComponent<None>().UpdateValue(-1);
-                         Debug.Log("turn based " + noneVal);
+                        Debug.Log("turn based " + noneVal);
                         if (noneVal == 0)
                         {
                             cardObj.GetComponent<Card>().isNone = false;
@@ -4535,6 +4603,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         pv = gameBoardParent.transform.GetChild(1).GetComponent<PhotonView>();
         yield return new WaitForSeconds(time);
         //Debug.Log("==> set the NPC " + isMaster + " isMaster " + gameObject.name + " name");
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        
         if (isMaster && !gameObject.name.ToLower().Contains("clone"))
         {
             //Debug.Log(" parent id = 4 " + parentId);
@@ -4543,7 +4613,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             //Debug.Log(totalPlayerGold + " ==> before gold " + selectedNPC.GetComponent<NPCManager>().gold + " NPC gold");
             totalPlayerGold += (2 * selectedNPC.GetComponent<NPCManager>().gold);
             //Debug.Log(totalPlayerGold + "==> total player gold after");
-            totalMasterXP += selectedNPC.GetComponent<NPCManager>().XP;
+            
+
+            var (isStifled, dropXP) = IsStifled(enemyField);
+            Debug.Log(isStifled + " is stifle destroy enemy not master " + selectedNPC.GetComponent<NPCManager>().XP);
+
+            if(isStifled)
+            {
+                float actualXP = selectedNPC.GetComponent<NPCManager>().XP * (1 - dropXP / 100f);
+                Debug.Log(actualXP + " actual xp in isMaster");
+                totalMasterXP += (int)actualXP;
+            }
+            else
+            {
+                Debug.Log(" normal xp in isMaster");
+                totalMasterXP += selectedNPC.GetComponent<NPCManager>().XP;
+            }
             PhotonNetwork.CurrentRoom.CustomProperties["masterGold"] = totalPlayerGold;
             PhotonNetwork.CurrentRoom.CustomProperties["masterXP"] = totalMasterXP;
             Gold.instance.SetGold(totalPlayerGold);
@@ -4557,6 +4642,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             //Debug.Log(" parentId == 4 " + parentId);
             int totalClientGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
             int totalClientXP = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientXP"];
+
+            var (isStifled, dropXP) = IsStifled(enemyField);
+            Debug.Log(isStifled + " is stifle destroy enemy not master " + selectedNPC.GetComponent<NPCManager>().XP);
+
+            if(isStifled)
+            {
+                float actualXP = selectedNPC.GetComponent<NPCManager>().XP * (1 - dropXP / 100f);
+                Debug.Log(actualXP + " actual xp in client");
+                totalClientXP += (int)actualXP;
+            }
+            else
+            {
+                Debug.Log(" normal xp in client");
+                totalClientXP += selectedNPC.GetComponent<NPCManager>().XP;
+            }
+
             //Debug.Log(totalClientGold + " ==> before gold " + selectedNPC.GetComponent<NPCManager>().gold + " NPC gold");
             totalClientGold += (2 * selectedNPC.GetComponent<NPCManager>().gold);
             PhotonNetwork.CurrentRoom.CustomProperties["clientGold"] = totalClientGold;
@@ -5511,6 +5612,27 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         return goaded;
     }
 
+    private (bool isStifled, int dropXP) IsStifled(GameObject field)
+    {
+        for (int i = 0; i < field.transform.childCount; i++)
+        {
+            Transform child = field.transform.GetChild(i);
+            if (child.tag.Contains("Front Line") && child.childCount == 1)
+            {
+                Transform firstChild = child.GetChild(0);
+                if (firstChild.childCount == 1)
+                {
+                    Card card = firstChild.GetChild(0).GetComponent<Card>();
+                    if (card.ability == CardAbility.Stifle && !card.isNone)
+                    {
+                        return (true, (int)card.GetComponent<Stifle>().dropXP); // Return both stifle status and dropXP
+                    }
+                }
+            }
+        }
+        return (false, 0); // Return false and 0 if no Stifle card is found
+    }
+
     public bool IsSatisfyRequirements(Card card, GameObject playerField, GameObject position, bool commingFromDrag)
     {
         FieldManager.instance.ResetCounters();
@@ -5994,7 +6116,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 bool foundChild = false;
                 for (int i = 0; i < enemyFieldCount; i++)
                 {
-                    if(enemyField.transform.GetChild(i).childCount > 0)
+                    if (enemyField.transform.GetChild(i).childCount > 0)
                     {
                         foundChild = true;
                         break;
@@ -6143,7 +6265,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 int parentId = int.Parse(parent.name.Split(" ")[2]);
                 BlurCardsForSacrifice(0.8f, true, true, true, false, sacrifice, message, parentId);
             }
-            
+
         }
         else if (card.GetComponent<Mimic>())
         {
@@ -6182,9 +6304,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (parent.gameObject.tag.Contains("Front Line"))
             {
                 Silence silence = card.GetComponent<Silence>();
-                for(int i = 0; i < enemyField.transform.childCount; i++)
+                for (int i = 0; i < enemyField.transform.childCount; i++)
                 {
-                    if(enemyField.transform.GetChild(i).childCount == 1)
+                    if (enemyField.transform.GetChild(i).childCount == 1)
                     {
                         Debug.Log(enemyField.transform.GetChild(i) + " get child i");
                         Debug.Log(enemyField.transform.GetChild(i).childCount + " get child i child count");
@@ -6195,7 +6317,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         //None none = enemyCard.GetComponent<None>();
                         //Debug.Log(none + " none alled ");
                         if (null == enemyCard.GetComponent<None>())
-                        { 
+                        {
                             None noneCard = enemyCard.gameObject.AddComponent<None>();
                             noneCard.constraint = NoneConstraint.TurnBased;
                             silence.SetRoundNumber(silence.turnToDeactivate);
@@ -6205,7 +6327,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                         else if (enemyCard.GetComponent<None>() != null)
                         {
                             None noneCard = enemyCard.gameObject.AddComponent<None>();
-                            if(noneCard.constraint == NoneConstraint.TurnBased)
+                            if (noneCard.constraint == NoneConstraint.TurnBased)
                             {
                                 enemyCard.isNone = true;
                                 silence.SetRoundNumber(silence.turnToDeactivate);
@@ -6225,17 +6347,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 {
                                     Debug.LogWarning("Ability type not found: ");
                                 }
-                                
+
                             }
                         }
-                       
+
                         pv.RPC("SetNoneAbilityToOthers", RpcTarget.Others, i, silence.turnToDeactivate);
                     }
-                } 
+                }
 
             }
         }
-       
+
         FieldManager.instance.ResetCounters();
         FieldManager.instance.CalculateAbilityCounter(playerField);
     }
@@ -6283,14 +6405,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             if (parentId - 1 < 0 || parentId - 1 >= enemyField.transform.childCount)
             {
                 Debug.LogError($"prevPos {parentId} is out of bounds for enemyHand with {enemyField.transform.childCount} children.");
-                if(enemyField.transform.GetChild(parentId - 1).childCount == 0)
+                if (enemyField.transform.GetChild(parentId - 1).childCount == 0)
                 {
                     Debug.LogError($"No child or card found.");
                 }
-                else if(enemyField.transform.GetChild(parentId - 1).childCount > 1)
+                else if (enemyField.transform.GetChild(parentId - 1).childCount > 1)
                 {
                     Debug.LogError($"Morethan one child found");
-                }else if(enemyField.transform.GetChild(parentId - 1).childCount == 1)
+                }
+                else if (enemyField.transform.GetChild(parentId - 1).childCount == 1)
                 {
                     Debug.LogError($"only one child ");
                 }
@@ -6494,16 +6617,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             miniCard.gameObject.SetActive(false);
         }
-        //int parentId = int.Parse(parId);
-        //Debug.Log(enemyField + " enemy field " + parentId + " parent id " + " health set to other " + attack + " attack set to other player " + health + " health " + gold + " gold " + xp + " xp");
-        //if (enemyField.transform.GetChild(parentId - 1) != null)
-        //{
-        //    //Card card = enemyField.transform.GetChild(parentId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
-        //    //card.SetHP(health);
-        //    //card.SetAttack(attack);
-        //    //card.SetGold(gold);
-        //    //card.SetXP(xp);
-        //}
     }
 
     [PunRPC]
@@ -6511,7 +6624,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log(" MalignantOnOthers called ");
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
-        //Debug.Log(playerField + " playerField " + parentId + " parentId " + health + " attackValue " + destroyed);
         if (destroyed)
         {
             if (playerField.transform.GetChild(parentId - 1) != null)
@@ -6584,11 +6696,8 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 GameObject miniCardParent = PhotonNetwork.Instantiate("Mini_Card_Parent", enemyField.transform.GetChild(positions[i] - 1).position, enemyField.transform.GetChild(positions[i] - 1).rotation);
                 miniCardParent.transform.SetParent(enemyField.transform.GetChild(positions[i] - 1));
                 miniCardParent.transform.localScale = enemyField.transform.GetChild(positions[i] - 1).localScale;
-                //Debug.Log(bigCard.cardImage.name + " big card name ");
                 Card miniCard = miniCardParent.transform.GetChild(0).GetComponent<Card>();
-                miniCard.SetMiniCard(bigCard.id, bigCard.ergoTokenId, bigCard.ergoTokenAmount, bigCard.cardName, bigCard.attack, bigCard.HP, bigCard.gold, bigCard.XP, bigCard.cardImage, CardAbility.None
-                    //, sortedList[i].requirements, sortedList[i].abilityLevel
-                    );
+                miniCard.SetMiniCard(bigCard.id, bigCard.ergoTokenId, bigCard.ergoTokenAmount, bigCard.cardName, bigCard.attack, bigCard.HP, bigCard.gold, bigCard.XP, bigCard.cardImage, CardAbility.None);
                 Destroy(miniCardParent?.GetComponent<DragFieldCard>());
                 miniCardParent.AddComponent<DragMiniCards>();
                 miniCardParent.AddComponent<DropFieldCard>();
@@ -6596,7 +6705,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 {
                     miniCard.gameObject.SetActive(false);
                 }
-                //Debug.Log(miniCard.cardImage.name + " mini card name");
             }
         }
     }
@@ -6606,7 +6714,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log("SetWallHealthToOthers called " + health);
         enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
-        //Debug.Log("enemy wall " + enemyWall + " health " + enemyWall.transform.Find("Remaining Health"));
         enemyWall.transform.Find("Remaining Health").gameObject.GetComponent<TMP_Text>().SetText(health.ToString());
     }
 
@@ -6626,7 +6733,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             + health + " health "
             + pos + " pos ");
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
-        //Debug.Log(" enemy field " + enemyField);
         if (pos < 0 || pos >= enemyField.transform.childCount)
         {
             Debug.LogError($"prevPos {pos} is out of bounds for enemyHand with {enemyField.transform.childCount} children.");
@@ -6646,7 +6752,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
 
         Card currentCard = enemyField.transform.GetChild(pos).GetChild(0).GetChild(0).GetComponent<Card>();
-        //Debug.Log(currentCard + " current card");
         currentCard.SetHP(health);
     }
 
@@ -6655,7 +6760,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log("SetWallHealthToOthers called " + health);
         enemyWall = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Wall").gameObject;
-        //Debug.Log("enemy wall " + enemyWall + " health " + enemyWall.transform.Find("Remaining Health"));
         enemyWall.transform.Find("Remaining Health").gameObject.GetComponent<TMP_Text>().SetText(health.ToString());
     }
 
@@ -6664,7 +6768,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         Debug.Log("ParalyzeCardInOthers on others " + position + " position " + turns);
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
-        //Debug.Log(playerField + " player field on others");
         if (position < 0 || position >= playerField.transform.childCount)
         {
             Debug.LogError($"prevPos {position} is out of bounds for enemyHand with {playerField.transform.childCount} children.");
@@ -6835,21 +6938,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             return;
         }
 
-        //for (int i = 0; i < playerField.transform.childCount; i++)
-        //{
-        //    if (playerField.transform.GetChild(i).childCount == 1)
-        //    {
-        //        Debug.Log(" child found " + i + " value " + playerField.transform.GetChild(i).GetChild(0));
-        //    }
-        //}
-        //for (int i = 0; i < enemyField.transform.childCount; i++)
-        //{
-        //    if (enemyField.transform.GetChild(i).childCount == 1)
-        //    {
-        //        Debug.Log(" child found " + i + " value " + enemyField.transform.GetChild(i).GetChild(0));
-        //    }
-        //}
-
         GameObject playerRandomCard = playerField.transform.GetChild(enemyPos).GetChild(0).gameObject;
         Debug.Log(playerRandomCard + " *#* playerRandomCard ");
         GameObject enemyRandomCard = enemyField.transform.GetChild(playerPos).GetChild(0).gameObject;
@@ -6941,7 +7029,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log(" SmiteOnOthers called ");
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         int parentId = int.Parse(parId);
-        //Debug.Log(playerField + " playerField  " + parentId + " parent id");
         if (playerField.transform.GetChild(parentId - 1) != null)
         {
             if (parentId - 1 < 0 || parentId - 1 >= playerField.transform.childCount)
@@ -6973,7 +7060,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log(" MimicOnOthers called ");
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
         int parentId = int.Parse(parId);
-        //Debug.Log(playerField + " playerField  " + parentId + " parent id");
         if (playerField.transform.GetChild(parentId - 1) != null)
         {
             if (parentId - 1 < 0 || parentId - 1 >= playerField.transform.childCount)
@@ -6999,13 +7085,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             Card currentCard = playerField.transform.GetChild(parentId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
             Debug.Log(enemyCardToBeCopy + " enemyCardToBeCopy " + currentCard + " currentCard");
             Debug.Log(enemyCardToBeCopy.id + " enemyCardToBeCopy.id " + currentCard.ergoTokenId + " currentCard.ergoTokenId " + currentCard.ergoTokenAmount + " currentCard.ergoTokenAmount " + currentCard.cardName + " currentCard.cardName " + enemyCardToBeCopy.attack + " enemyCardToBeCopy.attack " + enemyCardToBeCopy.HP + " enemyCardToBeCopy.HP " + enemyCardToBeCopy.gold + " enemyCardToBeCopy.gold " + enemyCardToBeCopy.XP + " enemyCardToBeCopy.XP " + currentCard.cardImage + "  currentCard.cardImage " + enemyCardToBeCopy.ability + " enemyCardToBeCopy.ability");
-            currentCard.SetMiniCard(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName,  enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, currentCard.image.sprite, enemyCardToBeCopy.ability);
+            currentCard.SetMiniCard(enemyCardToBeCopy.id, currentCard.ergoTokenId, currentCard.ergoTokenAmount, currentCard.cardName, enemyCardToBeCopy.attack, enemyCardToBeCopy.HP, enemyCardToBeCopy.gold, enemyCardToBeCopy.XP, currentCard.image.sprite, enemyCardToBeCopy.ability);
 
-                
+
             Destroy(currentCard.GetComponent<Mimic>());
             Type cardType = FieldManager.instance.GetAbility(enemyCardToBeCopy.ability);
             currentCard.gameObject.AddComponent(cardType);
-            //Debug.Log(cardType + " card type");
         }
     }
 
@@ -7023,7 +7108,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
         enemyXPProgressBar.GetComponent<ProgressBar>().SetFillValue(gainedXP);
         int parentId = int.Parse(parId);
-        //Debug.Log(enemyField + " playerField  " + parentId + " parent id");
         if (enemyField.transform.GetChild(parentId - 1) != null)
         {
             if (parentId - 1 < 0 || parentId - 1 >= enemyField.transform.childCount)
@@ -7055,7 +7139,6 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log(" EndGameInOthers called " + attackVal + " atta " + healthVal + " health " + parId + " parentId");
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
         int parentId = int.Parse(parId);
-        //Debug.Log(enemyField + " playerField  " + parentId + " parent id");
         if (enemyField.transform.GetChild(parentId - 1) != null)
         {
             if (parentId - 1 < 0 || parentId - 1 >= enemyField.transform.childCount)
@@ -7086,10 +7169,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     private void SetNoneAbilityToOthers(int position, int deActivateValue)
     {
-        Debug.Log(" SetNoneAbilityToOthers called " + position + " pos " );
+        Debug.Log(" SetNoneAbilityToOthers called " + position + " pos ");
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
 
-        //Debug.Log(enemyField + " playerField  " + parentId + " parent id");
         if (playerField.transform.GetChild(position) != null)
         {
 
@@ -7181,7 +7263,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         cardParent = parent;
         Component[] components = currentCard.GetComponents<Component>();
 
-       
+
         //foreach (Component component in components)
         //{
         //    Debug.Log("*** Component Name: " + component.GetType().Name);
@@ -7195,11 +7277,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 Debug.Log("enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>() choose " + enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>());
                 enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().isEnabled = cardEnabled;
                 Card selectedCard = enemyField.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Card>();
-                if(currentCard.ability == CardAbility.Smite)
+                if (currentCard.ability == CardAbility.Smite)
                 {
                     enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectSmiteCard(selectedCard));
-                }   
-                else if(currentCard.ability == CardAbility.Mimic)
+                }
+                else if (currentCard.ability == CardAbility.Mimic)
                 {
                     enemyField.transform.GetChild(i).GetChild(0).GetComponent<ChooseCard>().OnSelected.AddListener(() => SelectMimicCard(selectedCard));
                 }
@@ -7233,7 +7315,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             if (playerField.transform.GetChild(i).childCount == 1)
             {
-                if(id - 1 == i)
+                if (id - 1 == i)
                 {
                     continue;
                 }
@@ -7262,7 +7344,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         Debug.Log("Card selected " + cardParent);
         Card toCard = cardParent.GetChild(0).GetChild(0).GetComponent<Card>();
         Debug.Log(toCard + " to card name");
-        if(fromCard == null || toCard == null)
+        if (fromCard == null || toCard == null)
         {
             Debug.Log("any one card null");
             return;
@@ -7334,7 +7416,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         {
             Debug.Log("inside enemy child == 1");
             Debug.Log("enemyField.transform.GetChild(i).childCount " + enemyField.transform.GetChild(i).childCount);
-            
+
             if (enemyField.transform.GetChild(i).childCount == 1)
             {
                 Debug.Log("enemyField.transform.GetChild(i).childCount " + enemyField.transform.GetChild(i).childCount);
@@ -7347,7 +7429,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     cardError.transform.GetChild(0).gameObject.SetActive(false);
                     //enemyField.transform.GetChild(i).GetChild(0).GetComponent<Button>().interactable = false;
                 }
-            } 
+            }
         }
 
     }
@@ -7386,11 +7468,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
         GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
 
-        if (playerField != null) 
-        { 
-            for(int i = 0; i < playerField.transform.childCount; i++)
+        if (playerField != null)
+        {
+            for (int i = 0; i < playerField.transform.childCount; i++)
             {
-                if(playerField.transform.GetChild(i).childCount > 0)
+                if (playerField.transform.GetChild(i).childCount > 0)
                 {
                     playerField.transform.GetChild(i).GetChild(0).GetChild(0).Find("Image").GetComponent<Image>().color = normalColor;
                     playerField.transform.GetChild(i).GetChild(0).GetChild(0).Find("Frame").GetComponent<Image>().color = normalColor;
@@ -7399,7 +7481,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
             }
         }
 
-        if (enemyField != null) 
+        if (enemyField != null)
         {
             for (int i = 0; i < enemyField.transform.childCount; i++)
             {

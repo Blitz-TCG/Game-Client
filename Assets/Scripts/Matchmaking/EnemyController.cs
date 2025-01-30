@@ -30,6 +30,7 @@ public class EnemyController : MonoBehaviourPunCallbacks
         {
             totalGold = (int)(PhotonNetwork.CurrentRoom.CustomProperties["masterGold"]);
         }
+        Debug.Log("&&& DestributeGoldAndXPForEnemy");
         enemyGainedGold += gold;
         enemyGainedXP += xp;
         totalGold += gold;
