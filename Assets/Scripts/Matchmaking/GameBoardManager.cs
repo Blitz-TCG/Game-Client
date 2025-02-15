@@ -2441,7 +2441,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     miniCard.SetMiniCard(sortedList[i].id, sortedList[i].ergoTokenId, sortedList[i].ergoTokenAmount, sortedList[i].cardName, sortedList[i].attack, sortedList[i].HP, sortedList[i].gold, sortedList[i].XP, sortedList[i].cardImage, sortedList[i].ability
                         //, sortedList[i].requirements, sortedList[i].abilityLevel
                         );
-                    UpdateSkill(sortedList[i].ability, miniCard);
+                    CardDataBase.instance.UpdateSkill(sortedList[i].ability, miniCard);
                     miniCard.name = sortedList[i].cardName;
                     miniCardParent.name = sortedList[i].cardName;
                     miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
@@ -2474,148 +2474,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     //    return cards;
     //}
 
-    public void UpdateSkill(CardAbility ability, Card card)
-    {
-        switch (ability)
-        {
-            case CardAbility.GoodFavor:
-                GoodFavor favor = card.gameObject.AddComponent<GoodFavor>();
-                favor.ability = CardAbility.GoodFavor;
-                favor.SetAbility();
-                break;
-            case CardAbility.Crit:
-                Crit crit = card.gameObject.AddComponent<Crit>();
-                crit.ability = CardAbility.Crit;
-                crit.SetAbility();
-                break;
-            case CardAbility.Goad:
-                Goad goad = card.gameObject.AddComponent<Goad>();
-                goad.ability = CardAbility.Goad;
-                break;
-            case CardAbility.Meteor:
-                Meteor meteor = card.gameObject.AddComponent<Meteor>();
-                meteor.ability = CardAbility.Meteor;
-                meteor.InitializedCard();
-                break;
-            case CardAbility.Kamikaze:
-                Kamikaze kamikaze = card.gameObject.AddComponent<Kamikaze>();
-                kamikaze.ability = CardAbility.Kamikaze;
-                break;
-            case CardAbility.Renewal:
-                Renewal renewal = card.gameObject.AddComponent<Renewal>();
-                renewal.ability = CardAbility.Renewal;
-                break;
-            case CardAbility.Hunger:
-                Hunger hunger = card.gameObject.AddComponent<Hunger>();
-                hunger.ability = CardAbility.Hunger;
-                break;
-            case CardAbility.Evolve:
-                Evolve evolve = card.gameObject.AddComponent<Evolve>();
-                evolve.ability = CardAbility.Evolve;
-                evolve.InitializedCard();
-                break;
-            case CardAbility.Clone:
-                Clone clone = card.gameObject.AddComponent<Clone>();
-                clone.ability = CardAbility.Clone;
-                clone.InitializedCard();
-                break;
-            case CardAbility.Mutate:
-                Mutate mutate = card.gameObject.AddComponent<Mutate>();
-                mutate.ability = CardAbility.Mutate;
-                break;
-            case CardAbility.Malignant:
-                Malignant malignant = card.gameObject.AddComponent<Malignant>();
-                malignant.ability = CardAbility.Malignant;
-                break;
-            case CardAbility.Farmer:
-                Farmer farmer = card.gameObject.AddComponent<Farmer>();
-                farmer.ability = CardAbility.Farmer;
-                break;
-            case CardAbility.Buster:
-                Buster buster = card.gameObject.AddComponent<Buster>();
-                buster.ability = CardAbility.Buster;
-                break;
-            case CardAbility.Summon:
-                Summon summon = card.gameObject.AddComponent<Summon>();
-                summon.ability = CardAbility.Summon;
-                break;
-            case CardAbility.Repair:
-                Repair repair = card.gameObject.AddComponent<Repair>();
-                repair.ability = CardAbility.Repair;
-                break;
-            case CardAbility.GeneralBoon:
-                GeneralBoon boon = card.gameObject.AddComponent<GeneralBoon>();
-                boon.ability = CardAbility.GeneralBoon;
-                break;
-            case CardAbility.Serenity:
-                Serenity serenity = card.gameObject.AddComponent<Serenity>();
-                serenity.ability = CardAbility.Serenity;
-                break;
-            case CardAbility.Scattershot:
-                Scattershot scattershot = card.gameObject.AddComponent<Scattershot>();
-                scattershot.ability = CardAbility.Serenity;
-                break;
-            case CardAbility.Berserker:
-                Berserker berserker = card.gameObject.AddComponent<Berserker>();
-                berserker.ability = CardAbility.Berserker;
-                break;
-            case CardAbility.Mason:
-                Mason mason = card.gameObject.AddComponent<Mason>();
-                mason.ability = CardAbility.Mason;
-                break;
-            case CardAbility.Paralyze:
-                Paralyze paralyze = card.gameObject.AddComponent<Paralyze>();
-                paralyze.ability = CardAbility.Paralyze;
-                break;
-            case CardAbility.Curse:
-                Curse curse = card.gameObject.AddComponent<Curse>();
-                curse.ability = CardAbility.Curse;
-                break;
-            case CardAbility.Smite:
-                Smite smite = card.gameObject.AddComponent<Smite>();
-                smite.ability = CardAbility.Smite;
-                break;
-            case CardAbility.Doom:
-                Doom doom = card.gameObject.AddComponent<Doom>();
-                doom.ability = CardAbility.Doom;
-                break;
-            case CardAbility.Gambit:
-                Gambit gambit = card.gameObject.AddComponent<Gambit>();
-                gambit.ability = CardAbility.Gambit;
-                break;
-            case CardAbility.GeneralBane:
-                GeneralBane generalBane = card.gameObject.AddComponent<GeneralBane>();
-                generalBane.ability = CardAbility.GeneralBane;
-                break;
-            case CardAbility.Blackhole:
-                Blackhole blackHole = card.gameObject.AddComponent<Blackhole>();
-                blackHole.ability = CardAbility.Blackhole;
-                break;
-            case CardAbility.Sacrifice:
-                Sacrifice sacrifice = card.gameObject.AddComponent<Sacrifice>();
-                sacrifice.ability = CardAbility.Sacrifice;
-                break;
-            case CardAbility.Mimic:
-                Mimic mimic = card.gameObject.AddComponent<Mimic>();
-                mimic.ability = CardAbility.Mimic;
-                break;
-            case CardAbility.Endgame:
-                EndGame endGame = card.gameObject.AddComponent<EndGame>();
-                endGame.ability = CardAbility.Endgame;
-                endGame.SetAbility();
-                break;
-            case CardAbility.Silence:
-                Silence silence = card.gameObject.AddComponent<Silence>();
-                silence.ability = CardAbility.Silence;
-                break;
-            case CardAbility.Stifle:
-                Stifle stifle = card.gameObject.AddComponent<Stifle>();
-                stifle.ability = CardAbility.Stifle;
-                break;
-            default: break;
-        }
-    }
-
+    
     private Type GetTheType(CardAbility ability)
     {
         Type currentType = null;
@@ -2790,7 +2649,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 miniCard.SetMiniCard(selectedCardList[i].id, selectedCardList[i].ergoTokenId, selectedCardList[i].ergoTokenAmount, selectedCardList[i].cardName, selectedCardList[i].attack, selectedCardList[i].HP, selectedCardList[i].gold, selectedCardList[i].XP, selectedCardList[i].cardImage, selectedCardList[i].ability
                 //, selectedCardList[i].requirements, selectedCardList[i].abilityLevel
                 );
-                UpdateSkill(selectedCardList[i].ability, miniCard);
+                CardDataBase.instance.UpdateSkill(selectedCardList[i].ability, miniCard);
                 miniCard.name = selectedCardList[i].cardName;
                 miniCardParent.name = selectedCardList[i].cardName;
                 miniCard.transform.GetChild(0).GetComponent<Image>().color = Color.gray;
@@ -3990,7 +3849,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 {
                     StopCoroutine(coroutine);
                 }
-                coroutine = StartCoroutine(EndTheTurn(41, false));
+                int time = 41;
+                //GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+                GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+                var (isTimeCrunch, timeToReduce) = IsTimeCrunch(enemyField);
+                if (isTimeCrunch)
+                {
+                    time -= timeToReduce;
+                }
+                Debug.Log(time + " reduced the time");
+                coroutine = StartCoroutine(EndTheTurn(time, false));
                 int totalSec = (int.Parse(minText) * 60) + int.Parse(secText);
 
                 timeUp.PauseTimer("up");
@@ -5632,6 +5500,49 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         }
         return (false, 0); // Return false and 0 if no Stifle card is found
     }
+
+    private (bool isTimeCrunch, int timeToReduce) IsTimeCrunch(GameObject field)
+    {
+        for (int i = 0; i < field.transform.childCount; i++)
+        {
+            Transform child = field.transform.GetChild(i);
+            if (child.tag.Contains("Front Line") && child.childCount == 1)
+            {
+                Transform firstChild = child.GetChild(0);
+                if (firstChild.childCount == 1)
+                {
+                    Card card = firstChild.GetChild(0).GetComponent<Card>();
+                    if (card.ability == CardAbility.Timecrunch && !card.isNone)
+                    {
+                        return (true, (int)card.GetComponent<Timecrunch>().timeToReduce);
+                    }
+                }
+            }
+        }
+        return (false, 0); // Return false and 0 if no Stifle card is found
+    }
+
+    private (bool isTaxes, int spendMoreGold) IsTaxes(GameObject field)
+    {
+        for (int i = 0; i < field.transform.childCount; i++)
+        {
+            Transform child = field.transform.GetChild(i);
+            if (child.tag.Contains("Front Line") && child.childCount == 1)
+            {
+                Transform firstChild = child.GetChild(0);
+                if (firstChild.childCount == 1)
+                {
+                    Card card = firstChild.GetChild(0).GetComponent<Card>();
+                    if (card.ability == CardAbility.Taxes && !card.isNone)
+                    {
+                        return (true, (int)card.GetComponent<Taxes>().spendMoreGold); // Return both isTaxes status and spendMoreGold
+                    }
+                }
+            }
+        }
+        return (false, 0); // Return false and 0 if no Stifle card is found
+    }
+
 
     public bool IsSatisfyRequirements(Card card, GameObject playerField, GameObject position, bool commingFromDrag)
     {

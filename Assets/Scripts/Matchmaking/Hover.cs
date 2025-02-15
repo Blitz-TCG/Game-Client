@@ -251,7 +251,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                             miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
                                 //, cardClicked.requirements, cardClicked.abilityLevel
                                 );
-                            gameboardManager.UpdateSkill(cardClicked.ability, miniCard);
+                            CardDataBase.instance.UpdateSkill(cardClicked.ability, miniCard);
                             miniCard.name = cardClicked.cardName;
                             miniCardParent.name = cardClicked.cardName;
                         }
@@ -377,7 +377,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
             miniCard.SetMiniCard(cardClicked.id, cardClicked.ergoTokenId, cardClicked.ergoTokenAmount, cardClicked.cardName, cardClicked.attack, cardClicked.HP, cardClicked.gold, cardClicked.XP, cardClicked.cardImage, cardClicked.ability
                 //, cardClicked.requirements, cardClicked.abilityLevel
                 );
-            gameboardManager.UpdateSkill(cardClicked.ability, miniCard);
+            CardDataBase.instance.UpdateSkill(cardClicked.ability, miniCard);
             miniCard.name = cardClicked.cardName;
             miniCardParent.name = cardClicked.cardName;
             miniCardParent.SetActive(false);

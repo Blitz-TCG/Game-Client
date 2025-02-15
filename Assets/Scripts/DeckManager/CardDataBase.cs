@@ -73,6 +73,8 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Endgame, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Endgame));
         requirements.Add(CardAbility.Silence, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Silence));
         requirements.Add(CardAbility.Stifle, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Stifle));
+        requirements.Add(CardAbility.Timecrunch, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Timecrunch));
+        requirements.Add(CardAbility.Taxes, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Taxes));
     }
 
     public void GetAbilityType()
@@ -112,7 +114,161 @@ public class CardDataBase : MonoBehaviour
         abilityTypeMap.Add(CardAbility.Endgame, typeof(EndGame));
         abilityTypeMap.Add(CardAbility.Silence, typeof(Silence));
         abilityTypeMap.Add(CardAbility.Stifle, typeof(Stifle));
+        abilityTypeMap.Add(CardAbility.Timecrunch, typeof(Timecrunch));
+        abilityTypeMap.Add(CardAbility.Taxes, typeof(Taxes));
     }
+
+
+    public void UpdateSkill(CardAbility ability, Card card)
+    {
+        switch (ability)
+        {
+            case CardAbility.GoodFavor:
+                GoodFavor favor = card.gameObject.AddComponent<GoodFavor>();
+                favor.ability = CardAbility.GoodFavor;
+                favor.SetAbility();
+                break;
+            case CardAbility.Crit:
+                Crit crit = card.gameObject.AddComponent<Crit>();
+                crit.ability = CardAbility.Crit;
+                crit.SetAbility();
+                break;
+            case CardAbility.Goad:
+                Goad goad = card.gameObject.AddComponent<Goad>();
+                goad.ability = CardAbility.Goad;
+                break;
+            case CardAbility.Meteor:
+                Meteor meteor = card.gameObject.AddComponent<Meteor>();
+                meteor.ability = CardAbility.Meteor;
+                meteor.InitializedCard();
+                break;
+            case CardAbility.Kamikaze:
+                Kamikaze kamikaze = card.gameObject.AddComponent<Kamikaze>();
+                kamikaze.ability = CardAbility.Kamikaze;
+                break;
+            case CardAbility.Renewal:
+                Renewal renewal = card.gameObject.AddComponent<Renewal>();
+                renewal.ability = CardAbility.Renewal;
+                break;
+            case CardAbility.Hunger:
+                Hunger hunger = card.gameObject.AddComponent<Hunger>();
+                hunger.ability = CardAbility.Hunger;
+                break;
+            case CardAbility.Evolve:
+                Evolve evolve = card.gameObject.AddComponent<Evolve>();
+                evolve.ability = CardAbility.Evolve;
+                evolve.InitializedCard();
+                break;
+            case CardAbility.Clone:
+                Clone clone = card.gameObject.AddComponent<Clone>();
+                clone.ability = CardAbility.Clone;
+                clone.InitializedCard();
+                break;
+            case CardAbility.Mutate:
+                Mutate mutate = card.gameObject.AddComponent<Mutate>();
+                mutate.ability = CardAbility.Mutate;
+                break;
+            case CardAbility.Malignant:
+                Malignant malignant = card.gameObject.AddComponent<Malignant>();
+                malignant.ability = CardAbility.Malignant;
+                break;
+            case CardAbility.Farmer:
+                Farmer farmer = card.gameObject.AddComponent<Farmer>();
+                farmer.ability = CardAbility.Farmer;
+                break;
+            case CardAbility.Buster:
+                Buster buster = card.gameObject.AddComponent<Buster>();
+                buster.ability = CardAbility.Buster;
+                break;
+            case CardAbility.Summon:
+                Summon summon = card.gameObject.AddComponent<Summon>();
+                summon.ability = CardAbility.Summon;
+                break;
+            case CardAbility.Repair:
+                Repair repair = card.gameObject.AddComponent<Repair>();
+                repair.ability = CardAbility.Repair;
+                break;
+            case CardAbility.GeneralBoon:
+                GeneralBoon boon = card.gameObject.AddComponent<GeneralBoon>();
+                boon.ability = CardAbility.GeneralBoon;
+                break;
+            case CardAbility.Serenity:
+                Serenity serenity = card.gameObject.AddComponent<Serenity>();
+                serenity.ability = CardAbility.Serenity;
+                break;
+            case CardAbility.Scattershot:
+                Scattershot scattershot = card.gameObject.AddComponent<Scattershot>();
+                scattershot.ability = CardAbility.Serenity;
+                break;
+            case CardAbility.Berserker:
+                Berserker berserker = card.gameObject.AddComponent<Berserker>();
+                berserker.ability = CardAbility.Berserker;
+                break;
+            case CardAbility.Mason:
+                Mason mason = card.gameObject.AddComponent<Mason>();
+                mason.ability = CardAbility.Mason;
+                break;
+            case CardAbility.Paralyze:
+                Paralyze paralyze = card.gameObject.AddComponent<Paralyze>();
+                paralyze.ability = CardAbility.Paralyze;
+                break;
+            case CardAbility.Curse:
+                Curse curse = card.gameObject.AddComponent<Curse>();
+                curse.ability = CardAbility.Curse;
+                break;
+            case CardAbility.Smite:
+                Smite smite = card.gameObject.AddComponent<Smite>();
+                smite.ability = CardAbility.Smite;
+                break;
+            case CardAbility.Doom:
+                Doom doom = card.gameObject.AddComponent<Doom>();
+                doom.ability = CardAbility.Doom;
+                break;
+            case CardAbility.Gambit:
+                Gambit gambit = card.gameObject.AddComponent<Gambit>();
+                gambit.ability = CardAbility.Gambit;
+                break;
+            case CardAbility.GeneralBane:
+                GeneralBane generalBane = card.gameObject.AddComponent<GeneralBane>();
+                generalBane.ability = CardAbility.GeneralBane;
+                break;
+            case CardAbility.Blackhole:
+                Blackhole blackHole = card.gameObject.AddComponent<Blackhole>();
+                blackHole.ability = CardAbility.Blackhole;
+                break;
+            case CardAbility.Sacrifice:
+                Sacrifice sacrifice = card.gameObject.AddComponent<Sacrifice>();
+                sacrifice.ability = CardAbility.Sacrifice;
+                break;
+            case CardAbility.Mimic:
+                Mimic mimic = card.gameObject.AddComponent<Mimic>();
+                mimic.ability = CardAbility.Mimic;
+                break;
+            case CardAbility.Endgame:
+                EndGame endGame = card.gameObject.AddComponent<EndGame>();
+                endGame.ability = CardAbility.Endgame;
+                endGame.SetAbility();
+                break;
+            case CardAbility.Silence:
+                Silence silence = card.gameObject.AddComponent<Silence>();
+                silence.ability = CardAbility.Silence;
+                break;
+            case CardAbility.Stifle:
+                Stifle stifle = card.gameObject.AddComponent<Stifle>();
+                stifle.ability = CardAbility.Stifle;
+                break;
+            case CardAbility.Timecrunch:
+                Timecrunch timecrunch = card.gameObject.AddComponent<Timecrunch>();
+                timecrunch.ability = CardAbility.Timecrunch;
+                break;
+            case CardAbility.Taxes:
+                Taxes taxes = card.gameObject.AddComponent<Taxes>();
+                taxes.ability = CardAbility.Taxes;
+                break;
+            default: break;
+        }
+    }
+
 
     public List<int> GetSurroundingPositions(int selectedPosition)
     {
