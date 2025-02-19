@@ -3456,6 +3456,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     public void SetDownTimeText(string min, string sec)
     {
+        Debug.Log("***SetDownTimeText " + min + " min " + sec + " sec");
         downMinText.SetText(min);
         downSecText.SetText(sec);
     }
@@ -3472,6 +3473,19 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     {
         player1Turn = value;
     }
+
+    [PunRPC]
+    public void SetUpTheUpTimer(string min, string sec)
+    {
+        Debug.Log("up min text parent " + downMinText.transform.parent.parent.parent.parent);
+        Debug.Log(" SetUpTheUpTimer " + min + " min "+ sec);
+        downMinText = timeDown.transform.GetChild(0).GetComponent<TMP_Text>();
+        downSecText = timeDown.transform.GetChild(1).GetComponent<TMP_Text>();
+        downMinText.text = min;
+        downSecText.text = sec;
+        Debug.Log(downMinText.text+ " downMinText.text " + downSecText.text  + " downSecText.text "); 
+    }
+
     #endregion
 
     [PunRPC]
@@ -3849,7 +3863,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 {
                     StopCoroutine(coroutine);
                 }
-                int time = 41;
+                float time = 41f;
                 //GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
                 GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
                 var (isTimeCrunch, timeToReduce) = IsTimeCrunch(enemyField);
@@ -3999,11 +4013,22 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 pv.RPC("SetDownTimeText", RpcTarget.Others, min, sec);
                 timeDown.InitTimers("Down", totalSec);
-                pv.RPC("CoroutineMethod", RpcTarget.Others, 41f, minText, secText);
+                if (isTimeCrunch)
+                {
+                    time -= timeToReduce;
+                }
+                Debug.Log(time + " reduced the time");
+                pv.RPC("CoroutineMethod", RpcTarget.Others, time, minText, secText);
                 pv.RPC("PauseTimerForTurnEndPlayer", RpcTarget.Others, totalSec);
+                Debug.Log("downMinText.text " + downMinText.text + " downSecText.text " +downSecText.text);
+                // string min = Mathf.FloorToInt(int.Parse(downMinText.text) / 60).ToString("0");
+                // string sec = Mathf.FloorToInt(int.Parse(downSecText.text) % 60).ToString("00");
+                //Debug.Log(min + " min value " + sec + " sec values");
+               StartCoroutine(SetTimer(0.3f));
             }
             else
             {
+                Debug.Log("*** not active player ");
                 playerGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Glass").gameObject;
                 enemyGlass = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Glass").gameObject;
                 Debug.Log(playerGlass + " playerGlass " + enemyGlass + " enemyGlass " + enemyGlass.transform.parent.parent);
@@ -4014,6 +4039,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     }
 
     #endregion
+
+    public IEnumerator SetTimer(float time)
+    {
+        Debug.Log("*** SetTimer before");
+        yield return new WaitForSeconds(time);
+        Debug.Log("*** SetTimer after");
+        upMinText = timeUp.transform.GetChild(0).GetComponent<TMP_Text>();
+        upSecText = timeUp.transform.GetChild(1).GetComponent<TMP_Text>();
+        Debug.Log("up min text parent " + upMinText.transform.parent.parent.parent.parent);
+        pv.RPC("SetUpTheUpTimer", RpcTarget.Others, upMinText.text, upSecText.text);
+    }
 
     public void StartTheTurn()
     {
@@ -5522,7 +5558,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         return (false, 0); // Return false and 0 if no Stifle card is found
     }
 
-    private (bool isTaxes, int spendMoreGold) IsTaxes(GameObject field)
+    public (bool isTaxes, int spendMoreGold) IsTaxes(GameObject field)
     {
         for (int i = 0; i < field.transform.childCount; i++)
         {

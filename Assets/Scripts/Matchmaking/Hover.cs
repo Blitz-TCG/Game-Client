@@ -195,7 +195,18 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
         Debug.Log("clicked card " + clickedCard);
         int clickedCardid = clickedCard.id;
 
-        if (Gold.instance.GetGold() >= clickedCard.gold)
+
+        var (isTaxes, spendMoreGold) = gameboardManager.IsTaxes(gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject);
+        int adjustedGold = clickedCard.gold;
+        Debug.Log(isTaxes + " *** isTaxes ");
+        if (isTaxes)
+        {
+            Taxes taxesAbility = new Taxes();
+            adjustedGold = taxesAbility.UseTaxesAbility(clickedCard.gold, spendMoreGold);
+            Debug.Log("Adjusted gold due to Taxes ability: " + adjustedGold);
+        }
+
+        if (Gold.instance.GetGold() >= adjustedGold)
         {
             PhotonView pv = gameObject.transform.GetComponent<PhotonView>();
             Debug.Log(" gold called");
@@ -263,7 +274,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                             int getGold = Gold.instance.GetGold();
                             //(int)PhotonNetwork.CurrentRoom.CustomProperties["masterGold"];
                             Debug.Log(getGold + " get gold ");
-                            int availableGold = getGold - cardClicked.gold;
+                            int availableGold = getGold - adjustedGold;
                             //goldList.Add(cardClicked.gold);
                             Debug.Log(availableGold + " available gold "); Debug.Log(getGold + " get gold " + availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
                             //UpdateGoldLocally(availableGold, PhotonNetwork.IsMasterClient, goldList);
@@ -278,7 +289,7 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
                             //int getGold = (int)PhotonNetwork.CurrentRoom.CustomProperties["clientGold"];
                             int getGold = Gold.instance.GetGold();
                             Debug.Log(getGold + " get gold ");
-                            int availableGold = getGold - cardClicked.gold;
+                            int availableGold = getGold - adjustedGold;
                             Debug.Log(availableGold + " available gold ");
                             Debug.Log(availableGold + " available gold "); Debug.Log(getGold + " get gold " + availableGold + " parent og gold " + Gold.instance.gameObject.transform.parent.parent.name);
                             //goldList.Add(cardClicked.gold);

@@ -6,9 +6,10 @@ public class Taxes : Card
 {
     public float spendMoreGold = 10f;
 
-    public float UseTaxesAbility(float gold)
+    public int UseTaxesAbility(float gold, float spendMoreGold)
     {
-        float increasedGold = gold * (spendMoreGold / 100f);
-        return increasedGold;
+        float increasedGold = gold * (1 + spendMoreGold / 100f); // for example if gold = 100 and spend = 20 => 100 * 1.2 = 120
+        Debug.Log(increasedGold + " *** Increase gold");
+        return Mathf.RoundToInt(increasedGold); // nearest int
     }
 }
