@@ -1454,7 +1454,17 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     Debug.Log(" not stifle actual xp " + playerCard.GetComponent<Card>().XP);
                     enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "master");
                 }
-                
+
+                if (target.GetComponent<Duel>() && !destroyEnemy)
+                {
+                    Debug.Log("target.GetComponent<Duel>() && !destroyEnemy ");
+                    int cardAttack = target.GetComponent<Duel>().attackAmount;
+                    int cardHP = target.GetComponent<Duel>().healthAmount;
+                    target.GetComponent<Duel>().SetCardAttack(cardAttack, target);
+                    target.GetComponent<Duel>().SetCardHealth(cardHP, target);
+                    pv.RPC("SetDuelonOthers", RpcTarget.Others, targetcardParentId, true);
+                }
+
                 //InitCards();
                 //int goldPlayer = attacking.gold;
                 //int goldOtherDeck = (int)(PhotonNetwork.CurrentRoom.CustomProperties["clientGold"]);
@@ -1485,6 +1495,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 ////enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
                 ////enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "master");
             }
+            else
+            {
+                if (attacking.GetComponent<Rage>())
+                {
+                    int rageAttack = attacking.GetComponent<Rage>().increasedAttack;
+                    int totalAttack = attacking.GetComponent<Rage>().SetCardAttack(rageAttack, attacking);
+                    Debug.Log("total attack " +  totalAttack);
+                    pv.RPC("SetRageonOthers", RpcTarget.Others, attackcardParentId, true);
+                }
+            }
 
             if (destroyEnemy)
             {
@@ -1503,6 +1523,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 {
                     Debug.Log(" not stifle actual xp " + enemyCard.GetComponent<Card>().XP);
                     playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
+                }
+
+                if (attacking.GetComponent<Duel>() && !destroyPlayer)
+                {
+                    Debug.Log("attacking.GetComponent<Duel>() && !destroyPlayer ");
+                    int cardAttack = attacking.GetComponent<Duel>().attackAmount;
+                    int cardHP = attacking.GetComponent<Duel>().healthAmount;
+                    attacking.GetComponent<Duel>().SetCardAttack(cardAttack, target);
+                    attacking.GetComponent<Duel>().SetCardHealth(cardHP, target);
+                    pv.RPC("SetDuelonOthers", RpcTarget.Others, attackcardParentId, true);
                 }
 
                 //playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
@@ -1533,6 +1563,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 ////playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
                 ////playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
+            }
+            else
+            {
+                if (target.GetComponent<Rage>())
+                {
+                    int rageAttack = target.GetComponent<Rage>().increasedAttack;
+                    int totalAttack = target.GetComponent<Rage>().SetCardAttack(rageAttack, target);
+                    Debug.Log("total attack " + totalAttack);
+                    pv.RPC("SetRageonOthers", RpcTarget.Others, targetcardParentId, false);
+                }
             }
 
             //Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
@@ -1776,6 +1816,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
                 }
 
+                if (target.GetComponent<Duel>() && !destroyEnemy)
+                {
+                    Debug.Log("target.GetComponent<Duel>() && !destroyEnemy ");
+                    int cardAttack = target.GetComponent<Duel>().attackAmount;
+                    int cardHP = target.GetComponent<Duel>().healthAmount;
+                    target.GetComponent<Duel>().SetCardAttack(cardAttack, target);
+                    target.GetComponent<Duel>().SetCardHealth(cardHP, target);
+                    pv.RPC("SetDuelonOthers", RpcTarget.Others, attackcardParentId, true);
+                }
                 //enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
                 //InitCards();
                 //int goldPlayer = attacking.gold;
@@ -1803,6 +1852,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 ////enemyController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").GetComponent<EnemyController>();
                 ////enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
             }
+            else
+            {
+                if (attacking.GetComponent<Rage>())
+                {
+                    int rageAttack = attacking.GetComponent<Rage>().increasedAttack;
+                    int totalAttack = attacking.GetComponent<Rage>().SetCardAttack(rageAttack, attacking);
+                    Debug.Log("total attack " + totalAttack);
+                    pv.RPC("SetRageonOthers", RpcTarget.Others, attackcardParentId, true);
+                }
+            }
 
             if (destroyEnemy)
             {
@@ -1825,6 +1884,15 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
                 }
 
+                if (attacking.GetComponent<Duel>() && !destroyPlayer)
+                {
+                    Debug.Log("attacking.GetComponent<Duel>() && !destroyPlayer ");
+                    int cardAttack = attacking.GetComponent<Duel>().attackAmount;
+                    int cardHP = attacking.GetComponent<Duel>().healthAmount;
+                    attacking.GetComponent<Duel>().SetCardAttack(cardAttack, target);
+                    attacking.GetComponent<Duel>().SetCardHealth(cardHP, target);
+                    pv.RPC("SetDuelonOthers", RpcTarget.Others, attackcardParentId, true);
+                }
                 //playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
                 //InitCards();
                 //int goldEnemy = target.gold;
@@ -1853,6 +1921,16 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
                 ////playerController = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").GetComponent<PlayerController>();
                 ////playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
+            }
+            else
+            {
+                if (target.GetComponent<Rage>())
+                {
+                    int rageAttack = target.GetComponent<Rage>().increasedAttack;
+                    int totalAttack = target.GetComponent<Rage>().SetCardAttack(rageAttack, target);
+                    Debug.Log("total attack " + totalAttack);
+                    pv.RPC("SetRageonOthers", RpcTarget.Others, targetcardParentId, false);
+                }
             }
 
             //Tuple<int, int, string, string> result = GetDestroyDataCount(playerField, enemyField);
@@ -2475,24 +2553,24 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     //}
 
     
-    private Type GetTheType(CardAbility ability)
-    {
-        Type currentType = null;
+    //private Type GetTheType(CardAbility ability)
+    //{
+    //    Type currentType = null;
 
-        switch (ability)
-        {
-            case CardAbility.GoodFavor:
-                currentType = typeof(GoodFavor);
-                break;
-            case CardAbility.Crit:
-                currentType = typeof(Crit);
-                break;
-            case CardAbility.Goad:
-                currentType = typeof(Goad);
-                break;
-        }
-        return currentType;
-    }
+    //    switch (ability)
+    //    {
+    //        case CardAbility.GoodFavor:
+    //            currentType = typeof(GoodFavor);
+    //            break;
+    //        case CardAbility.Crit:
+    //            currentType = typeof(Crit);
+    //            break;
+    //        case CardAbility.Goad:
+    //            currentType = typeof(Goad);
+    //            break;
+    //    }
+    //    return currentType;
+    //}
 
 
     private int SortByLevelAndOrder(CardDetails a, CardDetails b)
@@ -5555,7 +5633,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 }
             }
         }
-        return (false, 0); // Return false and 0 if no Stifle card is found
+        return (false, 0); 
     }
 
     public (bool isTaxes, int spendMoreGold) IsTaxes(GameObject field)
@@ -5571,12 +5649,12 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     Card card = firstChild.GetChild(0).GetComponent<Card>();
                     if (card.ability == CardAbility.Taxes && !card.isNone)
                     {
-                        return (true, (int)card.GetComponent<Taxes>().spendMoreGold); // Return both isTaxes status and spendMoreGold
+                        return (true, (int)card.GetComponent<Taxes>().spendMoreGold); 
                     }
                 }
             }
         }
-        return (false, 0); // Return false and 0 if no Stifle card is found
+        return (false, 0); 
     }
 
 
@@ -7176,6 +7254,30 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     Debug.LogWarning("Ability type not found: ");
                 }
             }
+        }
+    }
+
+    [PunRPC]
+    public void SetRageonOthers(int parId, bool isPlayer)
+    {
+        Debug.Log("SetRageonOthers " + parId + " isPlayer " + isPlayer);
+        if (isPlayer)
+        {
+            Debug.Log("On enemy's field ");
+            GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+            Card currentCard = enemyField.transform.GetChild(parId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+
+            int rageAttack = currentCard.GetComponent<Rage>().increasedAttack;
+            int totalAttack = currentCard.GetComponent<Rage>().SetCardAttack(rageAttack, currentCard);
+        }
+        else
+        {
+            Debug.Log("On player's field");
+            GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+            Card currentCard = playerField.transform.GetChild(parId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+
+            int rageAttack = currentCard.GetComponent<Rage>().increasedAttack;
+            int totalAttack = currentCard.GetComponent<Rage>().SetCardAttack(rageAttack, currentCard);
         }
     }
 

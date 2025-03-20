@@ -239,49 +239,63 @@ public class FieldManager : MonoBehaviour
                 {
                     SilenceCounter++;
                 }
-                //else if (playerCard.GetComponent<Meteor>())
+                else if (playerCard.GetComponent<Stifle>())
+                {
+                   StifleCounter++;
+                }
+                else if (playerCard.GetComponent<Timecrunch>())
+                {
+                   TimecrunchCounter++;
+                }
+                else if (playerCard.GetComponent<Taxes>())
+                {
+                   TaxesCounter++;
+                }
+                else if (playerCard.GetComponent<Rage>())
+                {
+                   RageCounter++;
+                }
+                else if (playerCard.GetComponent<Duel>())
+                {
+                    DuelCounter++;
+                }
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}else if (playerCard.GetComponent<Meteor>())
+                //}
+                // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
                 //}else if (playerCard.GetComponent<Meteor>())
@@ -457,155 +471,11 @@ public class FieldManager : MonoBehaviour
             case CardAbility.Mimic: return MimicCounter;
             case CardAbility.Endgame: return EndgameCounter;
             case CardAbility.Silence: return SilenceCounter;
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
+            case CardAbility.Stifle: return StifleCounter;
+            case CardAbility.Timecrunch: return TimecrunchCounter;
+            case CardAbility.Taxes: return TaxesCounter;
+            case CardAbility.Rage: return RageCounter;
+            case CardAbility.Duel: return DuelCounter;
             default:
                 return 0; 
         }
@@ -651,155 +521,11 @@ public class FieldManager : MonoBehaviour
             case CardAbility.Mimic: return typeof(Mimic);
             case CardAbility.Endgame: return typeof(EndGame);
             case CardAbility.Silence: return typeof(Silence);
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
-            //case CardAbility.Clone:
-            //    CloneCounter++;
-            //    return CloneCounter;
+            case CardAbility.Stifle: return typeof(Stifle);
+            case CardAbility.Timecrunch: return typeof(Timecrunch);
+            case CardAbility.Taxes: return typeof(Taxes);
+            case CardAbility.Rage: return typeof(Rage);
+            case CardAbility.Duel: return typeof(Duel);
             default:
                 return typeof(None);
         }

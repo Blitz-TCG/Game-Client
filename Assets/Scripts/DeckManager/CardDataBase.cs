@@ -75,6 +75,8 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Stifle, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Stifle));
         requirements.Add(CardAbility.Timecrunch, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Timecrunch));
         requirements.Add(CardAbility.Taxes, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Taxes));
+        requirements.Add(CardAbility.Rage, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Rage));
+        requirements.Add(CardAbility.Duel, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Duel));
     }
 
     public void GetAbilityType()
@@ -116,6 +118,8 @@ public class CardDataBase : MonoBehaviour
         abilityTypeMap.Add(CardAbility.Stifle, typeof(Stifle));
         abilityTypeMap.Add(CardAbility.Timecrunch, typeof(Timecrunch));
         abilityTypeMap.Add(CardAbility.Taxes, typeof(Taxes));
+        abilityTypeMap.Add(CardAbility.Rage, typeof(Rage));
+        abilityTypeMap.Add(CardAbility.Rage, typeof(Duel));
     }
 
 
@@ -264,6 +268,14 @@ public class CardDataBase : MonoBehaviour
             case CardAbility.Taxes:
                 Taxes taxes = card.gameObject.AddComponent<Taxes>();
                 taxes.ability = CardAbility.Taxes;
+                break;
+            case CardAbility.Rage:
+                Rage rage = card.gameObject.AddComponent<Rage>();
+                rage.ability = CardAbility.Rage;
+                break;
+            case CardAbility.Duel:
+                Duel duel = card.gameObject.AddComponent<Duel>();
+                duel.ability = CardAbility.Duel;
                 break;
             default: break;
         }

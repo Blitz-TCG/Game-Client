@@ -270,8 +270,8 @@ public class Card : MonoBehaviour
     {
         attack += attackAmount;
         Debug.Log(attackAmount + " attack Amount " + attack + " attack value");
-        if(attack > maxCardAttack) {  attack = maxCardAttack; }
-        if(attack <= 0) { attack = 0; }
+        if (attack > maxCardAttack) { attack = maxCardAttack; }
+        if (attack <= 0) { attack = 0; }
         attackText.SetText(attack.ToString());
         return attack;
     }
