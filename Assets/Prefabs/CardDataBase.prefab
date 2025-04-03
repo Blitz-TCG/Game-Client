@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8022256210553369985}
   - component: {fileID: 8022256210553369990}
+  - component: {fileID: 3108977373398886356}
+  - component: {fileID: 1827866541973945854}
   m_Layer: 0
   m_Name: CardDataBase
   m_TagString: Untagged
@@ -44,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e85b561260084f74e8d70f066fce10b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardPath: Cards/
   cardDetails:
   - id: 1
     ergoTokenId: 30974274078845f263b4f21787e33cc99e9ec19a17ad85a5bc6da2cca91c5a2e
@@ -54,12 +57,17 @@ MonoBehaviour:
     HP: 4
     gold: 3
     XP: 2
-    race: 1
-    levelRequired: Level 1
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Cardano
     cardClass: 1
     cardImage: {fileID: 21300000, guid: 98abb504f8229174db4b79aeecf5e3d5, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 2
     ergoTokenId: fbbaac7337d051c10fc3da0ccb864f4d32d40027551e1c3ea3ce361f39b91e40
     ergoTokenAmount: 0
@@ -69,12 +77,17 @@ MonoBehaviour:
     HP: 9
     gold: 8
     XP: 7
-    race: 6
-    levelRequired: Level 5
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Ergo
     cardClass: 1
     cardImage: {fileID: 21300000, guid: 751394e5dd4209042bb4564048cf74bd, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 3
     ergoTokenId: ef802b475c06189fdbf844153cdc1d449a5ba87cce13d11bb47b5a539f27f12b
     ergoTokenAmount: 0
@@ -84,12 +97,17 @@ MonoBehaviour:
     HP: 2
     gold: 3
     XP: 4
-    race: 5
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 21300000, guid: fb1aebf285f7aff47b0fba708d07ef14, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 4
     ergoTokenId: e91cbc48016eb390f8f872aa2962772863e2e840708517d1ab85e57451f91bed
     ergoTokenAmount: 0
@@ -99,12 +117,17 @@ MonoBehaviour:
     HP: 2
     gold: 3
     XP: 4
-    race: 5
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 21300000, guid: 1410287b86eedfd4ea8d268f5325ce15, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 5
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -114,12 +137,17 @@ MonoBehaviour:
     HP: 3
     gold: 5
     XP: 7
-    race: 9
-    levelRequired: Level 7
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Factionless
     cardClass: 0
     cardImage: {fileID: 1306624806, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 6
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -129,12 +157,17 @@ MonoBehaviour:
     HP: 5
     gold: 6
     XP: 7
-    race: 8
-    levelRequired: Level 9
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Factionless
     cardClass: 0
     cardImage: {fileID: 648587001, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 7
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -144,12 +177,17 @@ MonoBehaviour:
     HP: 4
     gold: 6
     XP: 8
-    race: 6
-    levelRequired: Level 4
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Factionless
     cardClass: 0
     cardImage: {fileID: 225385897, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 8
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -159,12 +197,17 @@ MonoBehaviour:
     HP: 8
     gold: 4
     XP: 6
-    race: 3
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Factionless
     cardClass: 0
     cardImage: {fileID: 826491672, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 9
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -174,12 +217,17 @@ MonoBehaviour:
     HP: 6
     gold: 3
     XP: 8
-    race: 5
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: -157011035, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 10
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -189,12 +237,17 @@ MonoBehaviour:
     HP: 4
     gold: 1
     XP: 8
-    race: 5
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 11
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -204,12 +257,17 @@ MonoBehaviour:
     HP: 4
     gold: 5
     XP: 4
-    race: 3
-    levelRequired: Level 1
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 12
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -219,12 +277,17 @@ MonoBehaviour:
     HP: 2
     gold: 4
     XP: 3
-    race: 7
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 13
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -234,12 +297,17 @@ MonoBehaviour:
     HP: 4
     gold: 5
     XP: 6
-    race: 3
-    levelRequired: Level 3
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 14
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -249,12 +317,17 @@ MonoBehaviour:
     HP: 8
     gold: 5
     XP: 4
-    race: 9
-    levelRequired: Level 4
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 15
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -264,12 +337,17 @@ MonoBehaviour:
     HP: 2
     gold: 4
     XP: 3
-    race: 5
-    levelRequired: Level 5
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 16
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -279,12 +357,17 @@ MonoBehaviour:
     HP: 8
     gold: 6
     XP: 4
-    race: 8
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 17
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -294,12 +377,17 @@ MonoBehaviour:
     HP: 4
     gold: 4
     XP: 7
-    race: 1
-    levelRequired: Level 7
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 18
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -309,12 +397,17 @@ MonoBehaviour:
     HP: 5
     gold: 7
     XP: 5
-    race: 3
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 19
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -324,12 +417,17 @@ MonoBehaviour:
     HP: 5
     gold: 5
     XP: 8
-    race: 7
-    levelRequired: Level 9
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 20
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -339,12 +437,17 @@ MonoBehaviour:
     HP: 7
     gold: 4
     XP: 2
-    race: 9
-    levelRequired: Level 10
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 21
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -354,12 +457,17 @@ MonoBehaviour:
     HP: 5
     gold: 6
     XP: 2
-    race: 9
-    levelRequired: Level 1
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 22
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -369,12 +477,17 @@ MonoBehaviour:
     HP: 8
     gold: 4
     XP: 9
-    race: 7
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 23
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -384,12 +497,17 @@ MonoBehaviour:
     HP: 7
     gold: 5
     XP: 4
-    race: 3
-    levelRequired: Level 3
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 24
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -399,12 +517,17 @@ MonoBehaviour:
     HP: 8
     gold: 4
     XP: 1
-    race: 9
-    levelRequired: Level 4
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 25
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -414,12 +537,17 @@ MonoBehaviour:
     HP: 4
     gold: 4
     XP: 3
-    race: 3
-    levelRequired: Level 5
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 26
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -429,12 +557,17 @@ MonoBehaviour:
     HP: 4
     gold: 6
     XP: 8
-    race: 4
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 27
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -444,12 +577,17 @@ MonoBehaviour:
     HP: 5
     gold: 4
     XP: 4
-    race: 7
-    levelRequired: Level 7
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 28
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -459,12 +597,17 @@ MonoBehaviour:
     HP: 8
     gold: 9
     XP: 7
-    race: 7
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 29
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -474,12 +617,17 @@ MonoBehaviour:
     HP: 5
     gold: 9
     XP: 2
-    race: 2
-    levelRequired: Level 9
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 30
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -489,12 +637,17 @@ MonoBehaviour:
     HP: 7
     gold: 9
     XP: 5
-    race: 7
-    levelRequired: Level 10
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 31
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -504,12 +657,17 @@ MonoBehaviour:
     HP: 5
     gold: 1
     XP: 7
-    race: 1
-    levelRequired: Level 1
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 32
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -519,12 +677,17 @@ MonoBehaviour:
     HP: 7
     gold: 6
     XP: 7
-    race: 9
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 33
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -534,12 +697,17 @@ MonoBehaviour:
     HP: 4
     gold: 7
     XP: 3
-    race: 7
-    levelRequired: Level 3
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 34
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -549,12 +717,17 @@ MonoBehaviour:
     HP: 8
     gold: 9
     XP: 4
-    race: 5
-    levelRequired: Level 4
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 35
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -564,12 +737,17 @@ MonoBehaviour:
     HP: 4
     gold: 5
     XP: 1
-    race: 9
-    levelRequired: Level 5
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 36
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -579,12 +757,17 @@ MonoBehaviour:
     HP: 5
     gold: 9
     XP: 6
-    race: 7
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 37
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -594,12 +777,17 @@ MonoBehaviour:
     HP: 4
     gold: 6
     XP: 4
-    race: 1
-    levelRequired: Level 7
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 38
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -609,12 +797,17 @@ MonoBehaviour:
     HP: 5
     gold: 4
     XP: 9
-    race: 8
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 39
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -624,12 +817,17 @@ MonoBehaviour:
     HP: 5
     gold: 8
     XP: 7
-    race: 8
-    levelRequired: Level 9
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 40
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -639,12 +837,17 @@ MonoBehaviour:
     HP: 7
     gold: 7
     XP: 9
-    race: 8
-    levelRequired: Level 10
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 41
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -654,12 +857,17 @@ MonoBehaviour:
     HP: 5
     gold: 8
     XP: 9
-    race: 1
-    levelRequired: Level 1
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 42
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -669,12 +877,17 @@ MonoBehaviour:
     HP: 7
     gold: 9
     XP: 7
-    race: 3
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 43
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -684,12 +897,17 @@ MonoBehaviour:
     HP: 7
     gold: 3
     XP: 7
-    race: 8
-    levelRequired: Level 3
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 44
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -699,12 +917,17 @@ MonoBehaviour:
     HP: 5
     gold: 4
     XP: 7
-    race: 4
-    levelRequired: Level 4
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 45
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -714,12 +937,17 @@ MonoBehaviour:
     HP: 8
     gold: 9
     XP: 4
-    race: 8
-    levelRequired: Level 5
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 46
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -729,12 +957,17 @@ MonoBehaviour:
     HP: 5
     gold: 7
     XP: 8
-    race: 9
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 713a0b0e35193154f8a168bbbe875af7, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 47
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -744,12 +977,17 @@ MonoBehaviour:
     HP: 4
     gold: 7
     XP: 5
-    race: 8
-    levelRequired: Level 7
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 48
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -759,12 +997,17 @@ MonoBehaviour:
     HP: 7
     gold: 8
     XP: 5
-    race: 4
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 49
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -774,12 +1017,17 @@ MonoBehaviour:
     HP: 7
     gold: 7
     XP: 8
-    race: 9
-    levelRequired: Level 9
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 50
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -789,12 +1037,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 10
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 51
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -804,12 +1057,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 1
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 52
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -819,12 +1077,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 53
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -834,12 +1097,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 3
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 54
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -849,12 +1117,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 4
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 55
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -864,12 +1137,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 5
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 56
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -879,12 +1157,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 57
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -894,12 +1177,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 7
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 58
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -909,12 +1197,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 59
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -924,12 +1217,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 9
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 60
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -939,12 +1237,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 10
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 61
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -954,12 +1257,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 1
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 62
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -969,12 +1277,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 63
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -984,12 +1297,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 3
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 64
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -999,12 +1317,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 4
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 65
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1014,12 +1337,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 5
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 66
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1029,12 +1357,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 1fe041d42ae3dd84c81a99bba1ef8883, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 67
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1044,12 +1377,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 7
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Fairytales
     cardClass: 3
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 68
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1059,12 +1397,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Dark Matter
     cardClass: 4
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 69
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1074,12 +1417,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 9
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Dark Matter
     cardClass: 4
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 70
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1089,12 +1437,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 10
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Dark Matter
     cardClass: 4
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 4e17c518450f08847a54564d581e07e6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 71
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1104,12 +1457,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 1
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 72
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1119,12 +1477,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 2
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Masquerades
     cardClass: 1
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 73
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1134,12 +1497,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 3
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 74
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1149,12 +1517,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 4
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: The Old Kingdom
     cardClass: 2
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 8b070dd1cba643844a1f5b0565549606, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 75
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1164,12 +1537,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 5
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Dark Matter
     cardClass: 4
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 300c514b73a74c748a7f35e797ee3ac5, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 76
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1179,12 +1557,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 6
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Dark Matter
     cardClass: 4
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: e6e6e54b9c82f6d4c9d0c42fa6c9a89e, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 77
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1194,12 +1577,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 7
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Tinkerers
     cardClass: 5
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 0e263a957c5c4e049900fbb273ef38ae, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 78
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1209,12 +1597,17 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Tinkerers
     cardClass: 5
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
   - id: 78
     ergoTokenId: 
     ergoTokenAmount: 0
@@ -1224,9 +1617,40 @@ MonoBehaviour:
     HP: 4
     gold: 8
     XP: 9
-    race: 4
-    levelRequired: Level 8
+    fieldLimit: 0
+    fieldPosition: 
+    levelRequired: 0
     clan: Tinkerers
     cardClass: 5
     cardImage: {fileID: 714443585, guid: 6b088b1316d48dd409e3b8d30e9741e0, type: 3}
     cardFrame: {fileID: 21300000, guid: 45699a41da6ab6f479dd4d8278c66fa6, type: 3}
+    ability: 0
+    showMultiplierAndFailureChance: 0
+    showHealth: 0
+    showDamage: 0
+--- !u!114 &3108977373398886356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8022256210553369991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c349814432ff90c4eb5de3cd21f7a019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardDataBase: {fileID: 8022256210553369990}
+--- !u!114 &1827866541973945854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8022256210553369991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e21c73551ba0854aa9d9c8f3f174df1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardDataBase: {fileID: 8022256210553369990}

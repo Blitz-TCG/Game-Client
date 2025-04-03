@@ -259,10 +259,10 @@ public class FieldManager : MonoBehaviour
                 {
                     DuelCounter++;
                 }
-                // else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}
+                else if (playerCard.GetComponent<GeneralWard>())
+                {
+                    GeneralWardCounter++;
+                }
                 // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
@@ -476,6 +476,7 @@ public class FieldManager : MonoBehaviour
             case CardAbility.Taxes: return TaxesCounter;
             case CardAbility.Rage: return RageCounter;
             case CardAbility.Duel: return DuelCounter;
+            case CardAbility.GeneralWard: return GeneralWardCounter;
             default:
                 return 0; 
         }
@@ -526,6 +527,7 @@ public class FieldManager : MonoBehaviour
             case CardAbility.Taxes: return typeof(Taxes);
             case CardAbility.Rage: return typeof(Rage);
             case CardAbility.Duel: return typeof(Duel);
+            case CardAbility.GeneralWard: return typeof(GeneralWard);
             default:
                 return typeof(None);
         }

@@ -293,6 +293,13 @@ namespace Photon.Realtime
         /// </summary>
         public LoadBalancingPeer LoadBalancingPeer { get; private set; }
 
+        #if PHOTON_LOCATION
+        public LocationInfo LocationInfo
+        {
+            get { return this.RegionHandler?.Location?.LocationInfo; }
+        }
+        #endif
+
         /// <summary>
         /// Gets or sets the binary protocol version used by this client
         /// </summary>
@@ -449,6 +456,10 @@ namespace Photon.Realtime
         /// </remarks>
         public string ProxyServerAddress;
 
+        /// <summary>Count of connections made to any server.</summary>
+        /// <remarks>Statistical value. Increased by OnStatusChanged(StatusCode.Connect).</remarks>
+        public int ConnectCount { get; private set; }
+
         /// <summary>Backing field for property.</summary>
         private ClientState state = ClientState.PeerCreated;
 
@@ -585,6 +596,17 @@ namespace Photon.Realtime
         /// state value which can be used to display (or debug) the cause for disconnection.
         /// </remarks>
         public DisconnectCause DisconnectedCause { get; protected set; }
+
+        /// <summary>Defaults to null. Set when the client receives a disconnect info message with a debug string. Reset to null in connect methods.</summary>
+        public string DisconnectMessage;
+
+        /// <summary>Defines if this client sends telemetry / analytics about how the connection ends.</summary>
+        public bool TelemetryEnabled = false;
+
+        /// <summary>Tells us if "this session" was already reported. We want to send only one report in best case. Re-set on connect.</summary>
+        #pragma warning disable CS0414
+        private bool telemetrySent = false;
+        #pragma warning restore CS0414
 
 
         /// <summary>
@@ -982,6 +1004,7 @@ namespace Photon.Realtime
 
             this.bestRegionSummaryFromStorage = appSettings.BestRegionSummaryFromStorage;
             this.DisconnectedCause = DisconnectCause.None;
+            this.DisconnectMessage = null;
             this.SystemConnectionSummary = null;
 
 
@@ -1068,6 +1091,7 @@ namespace Photon.Realtime
             this.CheckConnectSetupWebGl();
 
             this.DisconnectedCause = DisconnectCause.None;
+            this.DisconnectMessage = null;
             this.SystemConnectionSummary = null;
             if (this.LoadBalancingPeer.Connect(this.MasterServerAddress, this.ProxyServerAddress, this.AppId, this.TokenForInit))
             {
@@ -1111,6 +1135,7 @@ namespace Photon.Realtime
             }
 
             this.DisconnectedCause = DisconnectCause.None;
+            this.DisconnectMessage = null;
             this.SystemConnectionSummary = null;
             if (this.LoadBalancingPeer.Connect(this.NameServerAddress, this.ProxyServerAddress, "NameServer", this.TokenForInit))
             {
@@ -1196,6 +1221,7 @@ namespace Photon.Realtime
 
             this.connectToBestRegion = false;
             this.DisconnectedCause = DisconnectCause.None;
+            this.DisconnectMessage = null;
             this.SystemConnectionSummary = null;
             if (!this.LoadBalancingPeer.Connect(this.NameServerAddress, this.ProxyServerAddress, "NameServer", null))
             {
@@ -1343,6 +1369,7 @@ namespace Photon.Realtime
             {
                 this.lastJoinType = JoinType.JoinRoom;
                 this.enterRoomParamsCache.JoinMode = JoinMode.RejoinOnly;
+                this.enterRoomParamsCache.Ticket = null;
                 return this.Connect(this.GameServerAddress, this.ProxyServerAddress, ServerConnection.GameServer);
             }
 
@@ -2026,10 +2053,15 @@ namespace Photon.Realtime
                 return false;
             }
 
-            this.State = ClientState.Leaving;
-            this.GameServerAddress = String.Empty;
-            this.enterRoomParamsCache = null;
-            return this.LoadBalancingPeer.OpLeaveRoom(becomeInactive, sendAuthCookie);
+            if (this.LoadBalancingPeer.OpLeaveRoom(becomeInactive, sendAuthCookie))
+            {
+                this.State = ClientState.Leaving;
+                this.GameServerAddress = String.Empty;
+                this.enterRoomParamsCache = null;
+                return true;
+            }
+
+            return false;
         }
 
 
@@ -2406,14 +2438,12 @@ namespace Photon.Realtime
                 return;
             }
 
-            if (applyUserId)
+
+            if (applyUserId && string.IsNullOrEmpty(this.LocalPlayer.UserId))
             {
                 this.LocalPlayer.UserId = this.AuthValues == null || string.IsNullOrEmpty(this.AuthValues.UserId) ? new System.Guid().ToString() : this.AuthValues.UserId;
             }
-            else
-            {
-                this.LocalPlayer.UserId = null;
-            }
+
 
             if (this.CurrentRoom == null)
             {
@@ -2671,6 +2701,24 @@ namespace Photon.Realtime
             return this.IsConnected;
         }
 
+        #if PHOTON_TELEMETRY
+        /// <summary>If enabled, sends telemetry about the connection to a Photon service.</summary>
+        /// <returns>True if a current report was sent. False if telemetry is disabled or a report was sent already.</returns>
+        public bool SendTelemetry()
+        {
+            if (!this.TelemetryEnabled || this.telemetrySent)
+            {
+                return false;
+            }
+
+            this.telemetrySent = true;
+            TelemetryReport report = new TelemetryReport(this);
+            report.Send();
+
+            return true;
+        }
+        #endif
+
         #endregion
 
         #region Implementation of IPhotonPeerListener
@@ -2766,6 +2814,11 @@ namespace Photon.Realtime
                 case OperationCode.Authenticate:
                 case OperationCode.AuthenticateOnce:
                     {
+                        if (operationResponse.Parameters.ContainsKey(ParameterCode.ReportQos))
+                        {
+                            this.TelemetryEnabled = (bool)operationResponse[ParameterCode.ReportQos];
+                        }
+
                         if (operationResponse.ReturnCode != 0)
                         {
                             this.DebugReturn(DebugLevel.ERROR, operationResponse.ToStringFull() + " Server: " + this.Server + " Address: " + this.LoadBalancingPeer.ServerAddress);
@@ -2794,6 +2847,7 @@ namespace Photon.Realtime
                                     break;
                             }
 
+                            this.DisconnectMessage = $"Op: {operationResponse.OperationCode} ReturnCode: {operationResponse.ReturnCode} '{operationResponse.DebugMessage}'";
                             this.Disconnect(this.DisconnectedCause);
                             break;  // if auth didn't succeed, we disconnect (above) and exit this operation's handling
                         }
@@ -3077,6 +3131,9 @@ namespace Photon.Realtime
             switch (statusCode)
             {
                 case StatusCode.Connect:
+                    this.ConnectCount++;
+                    this.telemetrySent = false;
+
                     if (this.State == ClientState.ConnectingToNameServer)
                     {
                         if (this.LoadBalancingPeer.DebugOut >= DebugLevel.ALL)
@@ -3202,6 +3259,10 @@ namespace Photon.Realtime
                             {
                                 this.AuthValues.Token = null; // when leaving the server, invalidate the secret (but not the auth values)
                             }
+
+                            #if PHOTON_TELEMETRY
+                            this.SendTelemetry();
+                            #endif
 
                             this.State = ClientState.Disconnected;
                             this.ConnectionCallbackTargets.OnDisconnected(this.DisconnectedCause);
@@ -3527,6 +3588,7 @@ namespace Photon.Realtime
         private void OnDisconnectMessageReceived(DisconnectMessage obj)
         {
             this.DebugReturn(DebugLevel.ERROR, string.Format("Got DisconnectMessage. Code: {0} Msg: \"{1}\". Debug Info: {2}", obj.Code, obj.DebugMessage, obj.Parameters.ToStringFull()));
+            this.DisconnectMessage = $"DisconnectMessage {obj.Code}: {obj.DebugMessage}";
             this.Disconnect(DisconnectCause.DisconnectByDisconnectMessage);
         }
 

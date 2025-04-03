@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 {
@@ -700,6 +701,14 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                                 Debug.Log("goaded called");
                                 cardError.transform.GetChild(0).gameObject.SetActive(true);
                                 cardError.GetComponentInChildren<TMP_Text>().SetText("You must attack enemy's goaded card.");
+                                Invoke("RemoveErrorObject", 2f);
+                                return;
+                            }
+                            if (IsGeneralWarded(enemyField))
+                            {
+                                Debug.Log("General ward");
+                                cardError.transform.GetChild(0).gameObject.SetActive(true);
+                                cardError.GetComponentInChildren<TMP_Text>().SetText("You cannot attack due to the General Ward's ability.");
                                 Invoke("RemoveErrorObject", 2f);
                                 return;
                             }
@@ -1530,9 +1539,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     Debug.Log("attacking.GetComponent<Duel>() && !destroyPlayer ");
                     int cardAttack = attacking.GetComponent<Duel>().attackAmount;
                     int cardHP = attacking.GetComponent<Duel>().healthAmount;
-                    attacking.GetComponent<Duel>().SetCardAttack(cardAttack, target);
-                    attacking.GetComponent<Duel>().SetCardHealth(cardHP, target);
-                    pv.RPC("SetDuelonOthers", RpcTarget.Others, attackcardParentId, true);
+                    attacking.GetComponent<Duel>().SetCardAttack(cardAttack, attacking);
+                    attacking.GetComponent<Duel>().SetCardHealth(cardHP, attacking);
+                    pv.RPC("SetDuelonOthers", RpcTarget.Others, attackcardParentId, false);
                 }
 
                 //playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "master");
@@ -1823,7 +1832,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     int cardHP = target.GetComponent<Duel>().healthAmount;
                     target.GetComponent<Duel>().SetCardAttack(cardAttack, target);
                     target.GetComponent<Duel>().SetCardHealth(cardHP, target);
-                    pv.RPC("SetDuelonOthers", RpcTarget.Others, attackcardParentId, true);
+                    pv.RPC("SetDuelonOthers", RpcTarget.Others, targetcardParentId, true);
                 }
                 //enemyController.DestributeGoldAndXPForEnemy(enemyCard.transform.parent.GetComponent<PhotonView>(), playerCard.GetComponent<Card>().gold, playerCard.GetComponent<Card>().XP, "client");
                 //InitCards();
@@ -1889,9 +1898,9 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                     Debug.Log("attacking.GetComponent<Duel>() && !destroyPlayer ");
                     int cardAttack = attacking.GetComponent<Duel>().attackAmount;
                     int cardHP = attacking.GetComponent<Duel>().healthAmount;
-                    attacking.GetComponent<Duel>().SetCardAttack(cardAttack, target);
-                    attacking.GetComponent<Duel>().SetCardHealth(cardHP, target);
-                    pv.RPC("SetDuelonOthers", RpcTarget.Others, attackcardParentId, true);
+                    attacking.GetComponent<Duel>().SetCardAttack(cardAttack, attacking);
+                    attacking.GetComponent<Duel>().SetCardHealth(cardHP, attacking);
+                    pv.RPC("SetDuelonOthers", RpcTarget.Others, attackcardParentId, false);
                 }
                 //playerController.DestributeGoldAndXPForPlayer(playerCard.transform.parent.GetComponent<PhotonView>(), enemyCard.GetComponent<Card>().gold, enemyCard.GetComponent<Card>().XP, "client");
                 //InitCards();
@@ -4203,11 +4212,11 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
                 {
                     Card currentCard = cardObj.GetComponent<Card>();
                     int count = currentCard.GetParalyzedCardCount();
-                    //int parentId = int.Parse(playerField.transform.GetChild(i).name.Split(" ")[2]);
+                    int parentId = int.Parse(playerField.transform.GetChild(i).name.Split(" ")[2]);
                     int paralyzedVal = count > 0 ? -1 : 0;
                     Debug.Log(currentCard + " currentCard " + count + " count " + paralyzedVal);
                     currentCard.SetParalyzedCard(paralyzedVal, currentCard.id);
-                    //pv.RPC("ChangesOnParalyzedCount", RpcTarget.Others, parentId, paralyzedVal);
+                    pv.RPC("ChangesOnParalyzedCount", RpcTarget.Others, parentId - 1, paralyzedVal);
                 }
 
                 //Debug.Log("i value before " + i);
@@ -5657,6 +5666,27 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         return (false, 0); 
     }
 
+    private bool IsGeneralWarded(GameObject field)
+    {
+        for (int i = 0; i < field.transform.childCount; i++)
+        {
+            Transform child = field.transform.GetChild(i);
+            if (child.tag.Contains("Front Line") && child.childCount == 1)
+            {
+                Transform firstChild = child.GetChild(0);
+                if (firstChild.childCount == 1)
+                {
+                    Card card = firstChild.GetChild(0).GetComponent<Card>();
+                    if (card.ability == CardAbility.GeneralWard && !card.isNone)
+                    {
+                        return (true); 
+                    }
+                }
+            }
+        }
+        return (false); 
+    }
+
 
     public bool IsSatisfyRequirements(Card card, GameObject playerField, GameObject position, bool commingFromDrag)
     {
@@ -6820,26 +6850,26 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
     [PunRPC]
     private void ChangesOnParalyzedCount(int position, int turns)
     {
-        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
-        if (position < 0 || position >= playerField.transform.childCount)
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        if (position < 0 || position >= enemyField.transform.childCount)
         {
-            Debug.LogError($"prevPos {position} is out of bounds for enemyHand with {playerField.transform.childCount} children.");
-            if (playerField.transform.GetChild(position).childCount == 0)
+            Debug.LogError($"prevPos {position} is out of bounds for enemyHand with {enemyField.transform.childCount} children.");
+            if (enemyField.transform.GetChild(position).childCount == 0)
             {
                 Debug.LogError($"No child or card found.");
             }
-            else if (playerField.transform.GetChild(position).childCount > 1)
+            else if (enemyField.transform.GetChild(position).childCount > 1)
             {
                 Debug.LogError($"Morethan one child found");
             }
-            else if (playerField.transform.GetChild(position).childCount == 1)
+            else if (enemyField.transform.GetChild(position).childCount == 1)
             {
                 Debug.LogError($"only one child ");
             }
             return;
         }
 
-        Card currentCard = playerField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
+        Card currentCard = enemyField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
         currentCard.SetParalyzedCard(turns, currentCard.id);
         currentCard.ability = CardAbility.None;
     }
@@ -7278,6 +7308,37 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
             int rageAttack = currentCard.GetComponent<Rage>().increasedAttack;
             int totalAttack = currentCard.GetComponent<Rage>().SetCardAttack(rageAttack, currentCard);
+        }
+    }
+
+
+    [PunRPC]
+    public void SetDuelonOthers(int parId, bool isPlayer)
+    {
+        Debug.Log("SetDuelonOthers " + parId + " isPlayer " + isPlayer);
+        GameObject enemyField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject;
+        GameObject playerField = gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject;
+        if (isPlayer)
+        {
+            Debug.Log("On player's field ");
+
+            Card currentCard = playerField.transform.GetChild(parId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+
+            int cardAttack = currentCard.GetComponent<Duel>().attackAmount;
+            int cardHP = currentCard.GetComponent<Duel>().healthAmount;
+            currentCard.GetComponent<Duel>().SetCardAttack(cardAttack, currentCard);
+            currentCard.GetComponent<Duel>().SetCardHealth(cardHP, currentCard);
+        }
+        else
+        {
+            Debug.Log("On enemy's field");
+
+            Card currentCard = enemyField.transform.GetChild(parId - 1).GetChild(0).GetChild(0).GetComponent<Card>();
+
+            int cardAttack = currentCard.GetComponent<Duel>().attackAmount;
+            int cardHP = currentCard.GetComponent<Duel>().healthAmount;
+            currentCard.GetComponent<Duel>().SetCardAttack(cardAttack, currentCard);
+            currentCard.GetComponent<Duel>().SetCardHealth(cardHP, currentCard);
         }
     }
 
