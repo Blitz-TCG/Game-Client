@@ -263,10 +263,10 @@ public class FieldManager : MonoBehaviour
                 {
                     GeneralWardCounter++;
                 }
-                // else if (playerCard.GetComponent<Meteor>())
-                //{
-                //    MeteorCounter++;
-                //}
+                else if (playerCard.GetComponent<Subsidy>())
+                {
+                    SubsidyCounter++;
+                }
                 // else if (playerCard.GetComponent<Meteor>())
                 //{
                 //    MeteorCounter++;
@@ -400,35 +400,35 @@ public class FieldManager : MonoBehaviour
                 //}
             }
         }
-        Debug.Log(CloneCounter + " CloneCounter");
-        Debug.Log(MeteorCounter + " MeteorCounter");
-        Debug.Log(EvolveCounter + " EvolveCounter");
-        Debug.Log(MalignantCounter + " MalignantCounter");
-        Debug.Log(GoodFavorCounter + " GoodFavorCounter");
-        Debug.Log(SummonCounter + " SummonCounter");
-        Debug.Log(SerenityCounter + " SerenityCounter");
-        Debug.Log(MutateCounter + " MutateCounter");
-        Debug.Log(RenewalCounter + " RenewalCounter");
-        Debug.Log(GoadCounter + " GoadCounter");
-        Debug.Log(KamikazeCounter + " KamikazeCounter");
-        Debug.Log(BerserkerCounter + " BerserkerCounter");
-        Debug.Log(CritCounter + " CritCounter");
-        Debug.Log(HungerCounter + " HungerCounter");
-        Debug.Log(ScattershotCounter + " ScattershotCounter");
-        Debug.Log(FarmerCounter + " FarmerCounter");
-        Debug.Log(BusterCounter + " BusterCounter");
-        Debug.Log(MasonCounter + " MasonCounter");
-        Debug.Log(ParalyzeCounter + " ParalyzeCounter");
-        Debug.Log(CurseCounter + " CurseCounter");
-        Debug.Log(DoomCounter + " DoomCounter");
-        Debug.Log(GambitCounter + " GambitCounter");
-        Debug.Log(SmiteCounter + " SmiteCounter");
-        Debug.Log(GeneralBaneCounter + " GeneralBaneCounter");
-        Debug.Log(BlackholeCounter + " BlackholeCounter");
-        Debug.Log(NuclearCounter + " NuclearCounter");
-        Debug.Log(RepairCounter + " RepairCounter");
-        Debug.Log(GeneralBoonCounter + " GeneralBoonCounter");
-        Debug.Log(EndgameCounter + " EndgameCounter");
+        //Debug.Log(CloneCounter + " CloneCounter");
+        //Debug.Log(MeteorCounter + " MeteorCounter");
+        //Debug.Log(EvolveCounter + " EvolveCounter");
+        //Debug.Log(MalignantCounter + " MalignantCounter");
+        //Debug.Log(GoodFavorCounter + " GoodFavorCounter");
+        //Debug.Log(SummonCounter + " SummonCounter");
+        //Debug.Log(SerenityCounter + " SerenityCounter");
+        //Debug.Log(MutateCounter + " MutateCounter");
+        //Debug.Log(RenewalCounter + " RenewalCounter");
+        //Debug.Log(GoadCounter + " GoadCounter");
+        //Debug.Log(KamikazeCounter + " KamikazeCounter");
+        //Debug.Log(BerserkerCounter + " BerserkerCounter");
+        //Debug.Log(CritCounter + " CritCounter");
+        //Debug.Log(HungerCounter + " HungerCounter");
+        //Debug.Log(ScattershotCounter + " ScattershotCounter");
+        //Debug.Log(FarmerCounter + " FarmerCounter");
+        //Debug.Log(BusterCounter + " BusterCounter");
+        //Debug.Log(MasonCounter + " MasonCounter");
+        //Debug.Log(ParalyzeCounter + " ParalyzeCounter");
+        //Debug.Log(CurseCounter + " CurseCounter");
+        //Debug.Log(DoomCounter + " DoomCounter");
+        //Debug.Log(GambitCounter + " GambitCounter");
+        //Debug.Log(SmiteCounter + " SmiteCounter");
+        //Debug.Log(GeneralBaneCounter + " GeneralBaneCounter");
+        //Debug.Log(BlackholeCounter + " BlackholeCounter");
+        //Debug.Log(NuclearCounter + " NuclearCounter");
+        //Debug.Log(RepairCounter + " RepairCounter");
+        //Debug.Log(GeneralBoonCounter + " GeneralBoonCounter");
+        //Debug.Log(EndgameCounter + " EndgameCounter");
     }
 
     public int GetAbilityCounter(CardAbility cardAbility)
@@ -477,6 +477,7 @@ public class FieldManager : MonoBehaviour
             case CardAbility.Rage: return RageCounter;
             case CardAbility.Duel: return DuelCounter;
             case CardAbility.GeneralWard: return GeneralWardCounter;
+            case CardAbility.Subsidy: return SubsidyCounter;
             default:
                 return 0; 
         }
@@ -528,6 +529,7 @@ public class FieldManager : MonoBehaviour
             case CardAbility.Rage: return typeof(Rage);
             case CardAbility.Duel: return typeof(Duel);
             case CardAbility.GeneralWard: return typeof(GeneralWard);
+            case CardAbility.Subsidy: return typeof(Subsidy);
             default:
                 return typeof(None);
         }

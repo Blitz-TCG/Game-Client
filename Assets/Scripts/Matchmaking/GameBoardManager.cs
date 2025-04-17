@@ -5687,6 +5687,27 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
         return (false); 
     }
 
+    public (bool isSubsidized, int spendLessGold) IsSubsidized(GameObject field)
+    {
+        for (int i = 0; i < field.transform.childCount; i++)
+        {
+            Transform child = field.transform.GetChild(i);
+            if (child.tag.Contains("Front Line") && child.childCount == 1)
+            {
+                Transform firstChild = child.GetChild(0);
+                if (firstChild.childCount == 1)
+                {
+                    Card card = firstChild.GetChild(0).GetComponent<Card>();
+                    if (card.ability == CardAbility.Subsidy && !card.isNone)
+                    {
+                        return (true, (int)card.GetComponent<Subsidy>().spendLessGold);
+                    }
+                }
+            }
+        }
+        return (false, 0);
+    }
+
 
     public bool IsSatisfyRequirements(Card card, GameObject playerField, GameObject position, bool commingFromDrag)
     {
@@ -6871,7 +6892,7 @@ public class GameBoardManager : MonoBehaviourPunCallbacks, IPointerClickHandler
 
         Card currentCard = enemyField.transform.GetChild(position).GetChild(0).GetChild(0).GetComponent<Card>();
         currentCard.SetParalyzedCard(turns, currentCard.id);
-        currentCard.ability = CardAbility.None;
+        //currentCard.ability = CardAbility.None;
     }
 
     [PunRPC]

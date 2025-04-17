@@ -197,13 +197,22 @@ public class Hover : MonoBehaviourPunCallbacks, IPointerEnterHandler, IPointerEx
 
 
         var (isTaxes, spendMoreGold) = gameboardManager.IsTaxes(gameBoardParent.transform.GetChild(1).GetChild(0).Find("Enemy Field").gameObject);
+        var (isSubsidized, spendLessGold) = gameboardManager.IsSubsidized(gameBoardParent.transform.GetChild(1).GetChild(0).Find("Player Field").gameObject);
         int adjustedGold = clickedCard.gold;
         Debug.Log(isTaxes + " *** isTaxes ");
+        Debug.Log(isSubsidized + " *** isSubsidized ");
         if (isTaxes)
         {
             Taxes taxesAbility = new Taxes();
             adjustedGold = taxesAbility.UseTaxesAbility(clickedCard.gold, spendMoreGold);
             Debug.Log("Adjusted gold due to Taxes ability: " + adjustedGold);
+        }
+
+        if (isSubsidized)
+        {
+            Subsidy subsidyAbility = new Subsidy();
+            adjustedGold = subsidyAbility.UseSubsidyAbility(clickedCard.gold, spendLessGold);
+            Debug.Log("Adjusted gold due to Subsidy ability: " + adjustedGold);
         }
 
         if (Gold.instance.GetGold() >= adjustedGold)

@@ -78,6 +78,7 @@ public class CardDataBase : MonoBehaviour
         requirements.Add(CardAbility.Rage, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Rage));
         requirements.Add(CardAbility.Duel, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Duel));
         requirements.Add(CardAbility.GeneralWard, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.GeneralWard));
+        requirements.Add(CardAbility.Subsidy, FieldManager.instance.fieldsLimit.Find(field => field.ability == CardAbility.Subsidy));
     }
 
     public void GetAbilityType()
@@ -122,6 +123,7 @@ public class CardDataBase : MonoBehaviour
         abilityTypeMap.Add(CardAbility.Rage, typeof(Rage));
         abilityTypeMap.Add(CardAbility.Duel, typeof(Duel));
         abilityTypeMap.Add(CardAbility.GeneralWard, typeof(GeneralWard));
+        abilityTypeMap.Add(CardAbility.Subsidy, typeof(Subsidy));
     }
 
 
@@ -282,6 +284,10 @@ public class CardDataBase : MonoBehaviour
             case CardAbility.GeneralWard:
                 GeneralWard generalWard = card.gameObject.AddComponent<GeneralWard>();
                 generalWard.ability = CardAbility.GeneralWard;
+                break;
+            case CardAbility.Subsidy:
+                Subsidy subsidy = card.gameObject.AddComponent<Subsidy>();
+                subsidy.ability = CardAbility.Subsidy;
                 break;
             default: break;
         }
